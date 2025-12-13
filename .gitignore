@@ -1,10 +1,23 @@
-# Devenv
+node_modules
+
+# Build Output
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Development & OS
+.env
+.env.*
+!.env.example
+!.env.test
+.DS_Store
+Thumbs.db
+*.db
 .devenv*
-devenv.local.nix
-devenv.local.yaml
-
-# direnv
+devenv.local*
 .direnv
-
-# pre-commit
-.pre-commit-config.yaml
