@@ -10,7 +10,7 @@
     "prepare": "svelte-kit sync",
     "check": "bun type-check && bun lint && bun format-check",
     "fix": "bun lint-fix && bun format",
-    "tidy": "bun type-check && bun lint-fix && bun format",
+    "tidy": "bun type-check && bun lint-fix --quiet && bun format --log-level silent",
     "type-check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "format": "prettier --write .",
