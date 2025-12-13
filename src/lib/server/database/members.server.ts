@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "$lib/shared/db/db.server";
 import { member } from "$lib/shared/models/schema";
-import { requireOrgMember } from "./auth";
+import { requireOrgMember } from "./auth.server";
 
 export type Member = typeof member.$inferSelect;
 export type NewMember = typeof member.$inferInsert;

@@ -1,7 +1,7 @@
 import { eq, and } from "drizzle-orm";
 import { db } from "$lib/shared/db/db.server";
 import { project, projectMember } from "$lib/shared/models/schema";
-import { requireOrgMember } from "./auth";
+import { requireOrgMember } from "./auth.server";
 
 export type Project = typeof project.$inferSelect;
 export type NewProject = typeof project.$inferInsert;
@@ -45,6 +45,7 @@ export async function getProjectById(id: string) {
 export async function createProject(data: NewProject, leadMemberId: string) {
   await requireOrgMember();
   const [created] = await db.insert(project).values(data).returning();
+  if (!created) throw new Error("Failed to create project");
   await db.insert(projectMember).values({
     projectId: created.id,
     memberId: leadMemberId,
