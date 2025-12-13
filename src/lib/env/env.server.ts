@@ -3,7 +3,7 @@ import * as v from "valibot";
 const TursoEnv = v.union([
   v.object({
     DATABASE_URL: v.pipe(v.string(), v.startsWith("file:")),
-    DATABASE_AUTH_TOKEN: v.union([v.string(), v.undefined()]),
+    DATABASE_AUTH_TOKEN: v.optional(v.string()),
   }),
   v.object({
     DATABASE_URL: v.pipe(v.string(), v.startsWith("libsql:")),
@@ -11,6 +11,13 @@ const TursoEnv = v.union([
   }),
 ]);
 
-const Env = v.intersect([TursoEnv]);
+const AuthEnv = v.object({
+  GITHUB_CLIENT_ID: v.string(),
+  GITHUB_CLIENT_SECRET: v.string(),
+  BETTER_AUTH_SECRET: v.string(),
+  BETTER_AUTH_URL: v.string(),
+});
+
+const Env = v.intersect([TursoEnv, AuthEnv]);
 
 export const env = v.parse(Env, process.env);

@@ -46,6 +46,7 @@
     "vite": "^7.2.6"
   },
   "dependencies": {
+    "better-auth": "^1.4.6",
     "valibot": "^1.2.0"
   }
 }

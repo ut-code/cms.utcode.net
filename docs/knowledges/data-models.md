@@ -1,0 +1,109 @@
+# Data Models
+
+## Schema
+
+```
+user (Better Auth)
+  │ 1:1 (optional)
+  ▼
+members ◄────────────────┐
+  │                      │
+  │ 1:N                  │ N:M
+  ▼                      │
+articles    projects ────┘
+                projectMembers
+```
+
+### Better Auth (自動管理)
+
+- `user` - id, name, email, emailVerified, image, timestamps
+- `session` - id, token, expiresAt, userId, ipAddress, userAgent
+- `account` - id, accountId, providerId, userId, tokens, ...
+- `verification` - id, identifier, value, expiresAt, timestamps
+
+### CMS Tables
+
+```
+members
+├── id           TEXT PK
+├── userId       TEXT FK → user.id UNIQUE NULL  -- 未リンク可 (OB等)
+├── slug         TEXT UNIQUE NOT NULL
+├── name         TEXT NOT NULL
+├── bio          TEXT
+├── imageUrl     TEXT
+├── pageContent  TEXT
+├── createdAt    INTEGER NOT NULL
+└── updatedAt    INTEGER NOT NULL
+
+articles
+├── id           TEXT PK
+├── slug         TEXT UNIQUE NOT NULL
+├── title        TEXT NOT NULL
+├── content      TEXT NOT NULL
+├── excerpt      TEXT
+├── coverUrl     TEXT
+├── authorId     TEXT FK → members.id
+├── published    INTEGER NOT NULL (0/1)
+├── publishedAt  INTEGER
+├── createdAt    INTEGER NOT NULL
+└── updatedAt    INTEGER NOT NULL
+
+projects
+├── id           TEXT PK
+├── slug         TEXT UNIQUE NOT NULL
+├── name         TEXT NOT NULL
+├── description  TEXT
+├── content      TEXT
+├── coverUrl     TEXT
+├── repoUrl      TEXT
+├── demoUrl      TEXT
+├── createdAt    INTEGER NOT NULL
+└── updatedAt    INTEGER NOT NULL
+
+projectMembers
+├── projectId    TEXT FK → projects.id  ┐
+├── memberId     TEXT FK → members.id   ┘ PK
+└── role         TEXT                      -- "lead", "member"
+```
+
+## Actions
+
+### Members
+
+| アクション                 | 公開 |
+| -------------------------- | ---- |
+| メンバーを登録する         |      |
+| プロフィールを編集する     |      |
+| 自己紹介ページを書く       |      |
+| プロフィール画像を変更する |      |
+| GitHubアカウントを連携する |      |
+| メンバーを削除する         |      |
+| メンバー一覧を見る         | ✓    |
+| メンバー詳細を見る         | ✓    |
+
+### Articles
+
+| アクション               | 公開 |
+| ------------------------ | ---- |
+| 記事を書く               |      |
+| 記事を編集する           |      |
+| 記事を公開する           |      |
+| 記事を非公開にする       |      |
+| 記事を削除する           |      |
+| 公開記事一覧を見る       | ✓    |
+| 公開記事を読む           | ✓    |
+| 下書き含む記事一覧を見る |      |
+| 下書きを読む             |      |
+
+### Projects
+
+| アクション                       | 公開 |
+| -------------------------------- | ---- |
+| プロジェクトを登録する           |      |
+| プロジェクト情報を編集する       |      |
+| プロジェクトにメンバーを追加する |      |
+| プロジェクトからメンバーを外す   |      |
+| リードを引き継ぐ                 |      |
+| プロジェクトを削除する           |      |
+| プロジェクト一覧を見る           | ✓    |
+| プロジェクト詳細を見る           | ✓    |

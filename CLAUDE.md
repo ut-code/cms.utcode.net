@@ -14,9 +14,23 @@ ls ./docs/knowledges
 
 # Available Tools
 
-- Svelte v5 + Remote Functions + Async
-- Tailwind CSS v4
-- DaisyUI v5
+- core: Svelte v5 + Remote Functions + Async
+- data: Drizzle + Valibot
+- visuals design: Tailwind CSS v4, DaisyUI v5
+
+# Data Access Layer
+
+Always import from `$lib/server/data/*` instead of using bare db/drizzle logic.
+
+```ts
+// Good
+import { listMembers, createMember } from "$lib/server/data/members";
+
+// Bad - don't use db directly
+import { db } from "$lib/shared/db/db.server";
+```
+
+Admin functions automatically check auth via `getRequestEvent()`.
 
 ```sh
 # server control
