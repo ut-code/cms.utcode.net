@@ -80,9 +80,18 @@
     location.reload();
   }
 
-  async function handleRemoveMember(memberId: string) {
-    await removeMember({ projectId: id, memberId });
-    location.reload();
+  async function handleRemoveMember(memberId: string, memberName: string) {
+    const confirmed = await confirm({
+      title: "Remove Member",
+      description: `Remove ${memberName} from this project?`,
+      confirmText: "Remove",
+      variant: "danger",
+    });
+
+    if (confirmed) {
+      await removeMember({ projectId: id, memberId });
+      location.reload();
+    }
   }
 </script>
 
@@ -182,7 +191,7 @@
               {#if pm.role !== "lead"}
                 <button
                   type="button"
-                  onclick={() => handleRemoveMember(pm.memberId)}
+                  onclick={() => handleRemoveMember(pm.memberId, pm.member.name)}
                   class="text-sm text-red-500 hover:underline"
                 >
                   Remove
