@@ -113,7 +113,10 @@
                 {/if}
               </div>
 
-              <a href="/admin/projects/{project.id}" class="text-sm text-[#00D372] hover:underline">
+              <a
+                href="/admin/projects/edit/{project.id}"
+                class="text-sm text-[#00D372] hover:underline"
+              >
                 Edit →
               </a>
             </div>

@@ -40,10 +40,11 @@ Component → *.remote.ts (DAL) → *.server.ts (DB)
 - **DB** (`*.server.ts`): Pure DB queries, no auth
 
 ```ts
-// public
+// $lib/data/members.remote.ts (auth happens here)
+// public endpoint
 export const getMembers = query(async () => listMembers());
 
-// private (admin)
+// private endpoint (admin)
 export const deleteMember = command(v.string(), async (id) => {
   await requireAuth();
   return removeMember(id);

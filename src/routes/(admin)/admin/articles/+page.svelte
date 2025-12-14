@@ -127,7 +127,7 @@
                 </td>
                 <td class="px-6 py-4 text-right">
                   <a
-                    href="/admin/articles/{article.id}"
+                    href="/admin/articles/edit/{article.id}"
                     class="text-sm text-[#00D372] hover:underline"
                   >
                     Edit

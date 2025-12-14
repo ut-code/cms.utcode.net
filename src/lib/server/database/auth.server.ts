@@ -1,7 +1,11 @@
+import { eq } from "drizzle-orm";
 import { getRequestEvent } from "$app/server";
 import { env } from "$env/dynamic/private";
 import { auth } from "$lib/server/auth";
 import { db } from "$lib/shared/db/db.server";
+import { user } from "$lib/shared/models/schema";
+
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 export class AuthError extends Error {
   constructor(
@@ -44,35 +48,56 @@ function getRequest(): Request {
 
 export async function getSession() {
   if (env.UNSAFE_DISABLE_AUTH === "true") {
-    console.log("skipping login because UNSAFE_DISABLE_AUTH is set");
     return mockSession;
   }
   return auth.api.getSession({ headers: getRequest().headers });
 }
 
-export async function requireAuth(): Promise<Session> {
+async function requireLogin(): Promise<Session> {
   const session = await getSession();
-  if (!session) throw new AuthError("Not authenticated", "UNAUTHENTICATED");
+  if (!session) throw new AuthError("Not logged in", "UNAUTHENTICATED");
   return session;
 }
 
-export async function requireOrgMember(): Promise<Session> {
-  const session = await requireAuth();
+export async function requireUtCodeMember(): Promise<Session> {
+  const session = await requireLogin();
 
-  const isMember = await isUtCodeMember(session);
+  if (env.UNSAFE_DISABLE_AUTH) {
+    return session;
+  }
+
+  const isMember = await checkUtCodeMembership(session.user.id);
   if (!isMember) throw new AuthError("Not a ut-code member", "UNAUTHORIZED");
 
   return session;
 }
 
-async function isUtCodeMember(session: Session): Promise<boolean> {
-  if (env.UNSAFE_DISABLE_AUTH) {
-    console.log("skipping utcode member check because UNSAFE_DISABLE_AUTH is set");
-    return true;
+async function checkUtCodeMembership(userId: string): Promise<boolean> {
+  const dbUser = await db.query.user.findFirst({
+    where: eq(user.id, userId),
+  });
+
+  // Check cache
+  if (dbUser?.utCodeMemberAt) {
+    const cacheAge = Date.now() - dbUser.utCodeMemberAt.getTime();
+    if (cacheAge < CACHE_TTL_MS) {
+      return true;
+    }
   }
 
+  // Cache miss or stale - check GitHub API
+  const isMember = await verifyUtCodeMemberViaGitHub(userId);
+
+  if (isMember) {
+    await db.update(user).set({ utCodeMemberAt: new Date() }).where(eq(user.id, userId));
+  }
+
+  return isMember;
+}
+
+async function verifyUtCodeMemberViaGitHub(userId: string): Promise<boolean> {
   const account = await db.query.account.findFirst({
-    where: (t, { and, eq }) => and(eq(t.userId, session.user.id), eq(t.providerId, "github")),
+    where: (t, { and, eq }) => and(eq(t.userId, userId), eq(t.providerId, "github")),
   });
 
   if (!account?.accessToken) return false;
