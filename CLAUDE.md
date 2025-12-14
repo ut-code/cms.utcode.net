@@ -1,5 +1,7 @@
 <workflow>
-{Read knowledge}
+{Read knowledge database}
+{Make desicions}
+{Note decisions to knowledge database}
 {Main work}
 {Run bun tidy}
 </workflow>
@@ -18,19 +20,35 @@ ls ./docs/knowledges
 - data: Drizzle + Valibot
 - visuals design: Tailwind CSS v4, DaisyUI v5
 
+# Remote Functions
+
+`$app/server` exports:
+
+- `query` - read data (cached, deduped)
+- `command` - mutate data
+- `form` - form submissions
+- `prerender` - prerendered queries
+- `getRequestEvent` - access cookies/locals
+
 # Data Access Layer
 
-Always import from `$lib/server/data/*` instead of using bare db/drizzle logic.
-
-```ts
-// Good
-import { listMembers, createMember } from "$lib/server/data/members";
-
-// Bad - don't use db directly
-import { db } from "$lib/shared/db/db.server";
+```
+Component → *.remote.ts (DAL) → *.server.ts (DB)
 ```
 
-Admin functions automatically check auth via `getRequestEvent()`.
+- **DAL** (`*.remote.ts`): Auth guard via `getRequestEvent()`, exports `query`/`command`/`form`
+- **DB** (`*.server.ts`): Pure DB queries, no auth
+
+```ts
+// public
+export const getMembers = query(async () => listMembers());
+
+// private (admin)
+export const deleteMember = command(v.string(), async (id) => {
+  await requireAuth();
+  return removeMember(id);
+});
+```
 
 ```sh
 # server control
