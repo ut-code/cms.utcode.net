@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { snapshot } from "$lib/utils/snapshot.svelte";
 
   type MemberData = {
     slug: string;
@@ -20,7 +21,7 @@
     isSubmitting?: boolean;
   } = $props();
 
-  let formData = $state({ ...initialData });
+  let formData = $state(snapshot(() => initialData));
   let errors = $state<Record<string, string>>({});
 
   function validateSlug(slug: string): boolean {
@@ -66,13 +67,13 @@
   }
 </script>
 
-<form onsubmit={handleSubmit} class="space-y-8">
+<form onsubmit={handleSubmit} class="space-y-6">
   <!-- Basic Info Section -->
-  <div class="rounded-xl border border-zinc-200 bg-white p-6">
-    <h2 class="mb-6 text-lg font-semibold text-zinc-900">Basic Information</h2>
+  <div class="rounded-xl border border-zinc-100 bg-white p-5 transition-shadow hover:shadow-sm">
+    <h2 class="mb-5 text-sm font-semibold text-zinc-900">Basic Information</h2>
 
-    <div class="grid gap-6 md:grid-cols-2">
-      <div class="space-y-2">
+    <div class="grid gap-5 md:grid-cols-2">
+      <div class="space-y-1.5">
         <label for="name" class="block text-sm font-medium text-zinc-700">
           Name <span class="text-red-500">*</span>
         </label>
@@ -81,56 +82,56 @@
           id="name"
           bind:value={formData.name}
           oninput={handleNameChange}
-          class="w-full rounded-lg border border-zinc-300 px-4 py-2.5 text-zinc-900 transition-colors focus:border-[#00D372] focus:ring-2 focus:ring-[#00D372]/20 focus:outline-none"
-          class:border-red-500={errors["name"]}
+          class="w-full rounded-lg border border-zinc-200 bg-white px-3.5 py-2.5 text-sm text-zinc-900 transition-all duration-150 placeholder:text-zinc-400 hover:border-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100 focus:outline-none"
+          class:border-red-300={errors["name"]}
           placeholder="Taro Yamada"
         />
         {#if errors["name"]}
-          <p class="text-sm text-red-500">{errors["name"]}</p>
+          <p class="text-xs text-red-500">{errors["name"]}</p>
         {/if}
       </div>
 
-      <div class="space-y-2">
+      <div class="space-y-1.5">
         <label for="slug" class="block text-sm font-medium text-zinc-700">
           Slug <span class="text-red-500">*</span>
         </label>
         <div class="flex">
           <span
-            class="inline-flex items-center rounded-l-lg border border-r-0 border-zinc-300 bg-zinc-50 px-3 text-sm text-zinc-500"
+            class="inline-flex items-center rounded-l-lg border border-r-0 border-zinc-200 bg-zinc-50 px-3 text-sm text-zinc-400"
           >
-            /members/
+            @
           </span>
           <input
             type="text"
             id="slug"
             bind:value={formData.slug}
-            class="w-full rounded-r-lg border border-zinc-300 px-4 py-2.5 font-mono text-sm text-zinc-900 transition-colors focus:border-[#00D372] focus:ring-2 focus:ring-[#00D372]/20 focus:outline-none"
-            class:border-red-500={errors["slug"]}
+            class="w-full rounded-r-lg border border-zinc-200 bg-white px-3.5 py-2.5 font-[JetBrains_Mono,monospace] text-sm text-zinc-900 transition-all duration-150 placeholder:text-zinc-400 hover:border-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100 focus:outline-none"
+            class:border-red-300={errors["slug"]}
             placeholder="taro-yamada"
           />
         </div>
         {#if errors["slug"]}
-          <p class="text-sm text-red-500">{errors["slug"]}</p>
+          <p class="text-xs text-red-500">{errors["slug"]}</p>
         {/if}
       </div>
     </div>
   </div>
 
   <!-- Profile Section -->
-  <div class="rounded-xl border border-zinc-200 bg-white p-6">
-    <h2 class="mb-6 text-lg font-semibold text-zinc-900">Profile</h2>
+  <div class="rounded-xl border border-zinc-100 bg-white p-5 transition-shadow hover:shadow-sm">
+    <h2 class="mb-5 text-sm font-semibold text-zinc-900">Profile</h2>
 
-    <div class="space-y-6">
-      <div class="space-y-2">
+    <div class="space-y-5">
+      <div class="space-y-1.5">
         <label for="imageUrl" class="block text-sm font-medium text-zinc-700"
           >Profile Image URL</label
         >
-        <div class="flex gap-4">
+        <div class="flex items-center gap-3">
           <input
             type="url"
             id="imageUrl"
             bind:value={formData.imageUrl}
-            class="flex-1 rounded-lg border border-zinc-300 px-4 py-2.5 text-zinc-900 transition-colors focus:border-[#00D372] focus:ring-2 focus:ring-[#00D372]/20 focus:outline-none"
+            class="flex-1 rounded-lg border border-zinc-200 bg-white px-3.5 py-2.5 text-sm text-zinc-900 transition-all duration-150 placeholder:text-zinc-400 hover:border-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100 focus:outline-none"
             placeholder="https://example.com/avatar.jpg"
           />
           {#if formData.imageUrl}
@@ -138,7 +139,7 @@
               <img
                 src={formData.imageUrl}
                 alt="Preview"
-                class="h-11 w-11 rounded-full border border-zinc-200 object-cover"
+                class="h-10 w-10 rounded-full object-cover ring-2 ring-zinc-100 transition-all duration-150 hover:ring-zinc-200"
                 onerror={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}
@@ -148,13 +149,13 @@
         </div>
       </div>
 
-      <div class="space-y-2">
+      <div class="space-y-1.5">
         <label for="bio" class="block text-sm font-medium text-zinc-700">Bio</label>
         <textarea
           id="bio"
           bind:value={formData.bio}
           rows={4}
-          class="w-full rounded-lg border border-zinc-300 px-4 py-2.5 text-zinc-900 transition-colors focus:border-[#00D372] focus:ring-2 focus:ring-[#00D372]/20 focus:outline-none"
+          class="w-full rounded-lg border border-zinc-200 bg-white px-3.5 py-2.5 text-sm text-zinc-900 transition-all duration-150 placeholder:text-zinc-400 hover:border-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100 focus:outline-none"
           placeholder="A short bio about this member..."
         ></textarea>
       </div>
@@ -162,21 +163,29 @@
   </div>
 
   <!-- Actions -->
-  <div class="flex items-center justify-between">
+  <div class="flex items-center justify-between pt-2">
     <button
       type="button"
       onclick={() => goto("/admin/members")}
-      class="rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50"
+      class="rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition-all duration-150 hover:border-zinc-300 hover:bg-zinc-50 active:scale-[0.98]"
     >
       Cancel
     </button>
     <button
       type="submit"
       disabled={isSubmitting}
-      class="inline-flex items-center gap-2 rounded-lg bg-[#00D372] px-6 py-2.5 text-sm font-semibold text-zinc-900 transition-colors hover:bg-[#00C066] disabled:cursor-not-allowed disabled:opacity-50"
+      class="inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-150 hover:bg-zinc-800 hover:shadow active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
     >
       {#if isSubmitting}
-        <span class="loading loading-sm loading-spinner"></span>
+        <svg class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
+        </svg>
       {/if}
       {submitLabel}
     </button>

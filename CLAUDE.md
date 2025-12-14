@@ -4,6 +4,7 @@
 {Note decisions to knowledge database}
 {Main work}
 {Run bun tidy}
+{Update knowledge database as needed}
 </workflow>
 
 # Knowledge Database
@@ -19,6 +20,10 @@ ls ./docs/knowledges
 - core: Svelte v5 + Remote Functions + Async
 - data: Drizzle + Valibot
 - visuals design: Tailwind CSS v4, DaisyUI v5
+
+# TypeScript
+
+Never use `as` or `any`. Let TypeScript infer types properly.
 
 # Remote Functions
 

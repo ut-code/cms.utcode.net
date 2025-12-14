@@ -2,6 +2,7 @@
   import { goto } from "$app/navigation";
   import { page } from "$app/state";
   import ProjectForm from "$lib/components/ProjectForm.svelte";
+  import { confirm } from "$lib/components/confirm-modal.svelte";
   import {
     getProject,
     getMembers,
@@ -15,8 +16,6 @@
   const project = $derived(await getProject(id));
   const members = $derived(await getMembers());
   let isSubmitting = $state(false);
-  let isDeleting = $state(false);
-  let showDeleteConfirm = $state(false);
   let showAddMember = $state(false);
   let newMemberId = $state<string | null>(null);
   let newMemberRole = $state("member");
@@ -31,6 +30,16 @@
     demoUrl: string;
     leadMemberId: string | null;
   }) {
+    if (project && data.slug !== project.slug) {
+      const confirmed = await confirm({
+        title: "Change URL slug?",
+        description: `Changing the slug will break existing links. The URL will change from /projects/${project.slug} to /projects/${data.slug}.`,
+        confirmText: "Change Slug",
+        variant: "warning",
+      });
+      if (!confirmed) return;
+    }
+
     await editProject({
       id,
       data: {
@@ -47,12 +56,18 @@
   }
 
   async function handleDelete() {
-    isDeleting = true;
-    try {
+    if (!project) return;
+
+    const confirmed = await confirm({
+      title: "Delete Project",
+      description: `Are you sure you want to delete "${project.name}"? This action cannot be undone.`,
+      confirmText: "Delete",
+      variant: "danger",
+    });
+
+    if (confirmed) {
       await removeProject(id);
       goto("/admin/projects");
-    } finally {
-      isDeleting = false;
     }
   }
 
@@ -117,8 +132,8 @@
 
         <button
           type="button"
-          onclick={() => (showDeleteConfirm = true)}
-          class="rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-100"
+          onclick={handleDelete}
+          class="shrink-0 rounded-lg border border-red-200 bg-white px-3 py-2 text-sm font-medium text-red-600 transition-all duration-150 hover:border-red-300 hover:bg-red-50 active:scale-[0.98]"
         >
           Delete
         </button>
@@ -242,39 +257,6 @@
               class="rounded-lg bg-[#00D372] px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-[#00C066] disabled:opacity-50"
             >
               Add Member
-            </button>
-          </div>
-        </div>
-      </div>
-    {/if}
-
-    <!-- Delete Confirmation Modal -->
-    {#if showDeleteConfirm}
-      <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
-          <h3 class="text-lg font-semibold text-zinc-900">Delete Project</h3>
-          <p class="mt-2 text-zinc-600">
-            Are you sure you want to delete <strong>{project.name}</strong>? This action cannot be
-            undone.
-          </p>
-          <div class="mt-6 flex justify-end gap-3">
-            <button
-              type="button"
-              onclick={() => (showDeleteConfirm = false)}
-              class="rounded-lg border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              onclick={handleDelete}
-              disabled={isDeleting}
-              class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
-            >
-              {#if isDeleting}
-                <span class="loading loading-sm loading-spinner"></span>
-              {/if}
-              Delete
             </button>
           </div>
         </div>

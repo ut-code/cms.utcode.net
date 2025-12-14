@@ -1,16 +1,23 @@
 <script lang="ts">
   import "../../app.css";
+  import { page } from "$app/state";
   import { getAdminSession } from "$lib/data/auth.remote";
+  import ConfirmModal from "$lib/components/confirm-modal.svelte";
 
   let { children } = $props();
   const session = $derived(await getAdminSession());
 
   const navItems = [
-    { href: "/admin", label: "Dashboard", icon: "grid" },
-    { href: "/admin/members", label: "Members", icon: "users" },
-    { href: "/admin/articles", label: "Articles", icon: "file-text" },
-    { href: "/admin/projects", label: "Projects", icon: "folder" },
+    { href: "/admin", label: "Dashboard", icon: "grid", exact: true },
+    { href: "/admin/members", label: "Members", icon: "users", exact: false },
+    { href: "/admin/articles", label: "Articles", icon: "file-text", exact: false },
+    { href: "/admin/projects", label: "Projects", icon: "folder", exact: false },
   ];
+
+  function isActive(item: (typeof navItems)[0]) {
+    if (item.exact) return page.url.pathname === item.href;
+    return page.url.pathname.startsWith(item.href);
+  }
 </script>
 
 <svelte:boundary>
@@ -34,25 +41,35 @@
     {/if}
   {/snippet}
 
-  <div class="flex min-h-screen bg-zinc-50">
+  <div class="flex min-h-screen bg-[#fafafa]">
     <!-- Sidebar -->
-    <aside class="fixed top-0 left-0 z-40 h-screen w-64 border-r border-zinc-200 bg-white">
-      <div class="flex h-16 items-center border-b border-zinc-200 px-6">
-        <a href="/" class="font-[JetBrains_Mono,monospace] text-lg font-semibold">
+    <aside
+      class="fixed top-0 left-0 z-40 flex h-screen w-56 flex-col border-r border-zinc-100 bg-white"
+    >
+      <div class="flex h-14 shrink-0 items-center px-5">
+        <a
+          href="/"
+          class="group flex items-center gap-2 font-[JetBrains_Mono,monospace] text-base font-semibold transition-opacity hover:opacity-70"
+        >
           ut.code<span class="text-[#00D372]">();</span>
         </a>
-        <span class="ml-2 rounded bg-zinc-100 px-2 py-0.5 text-xs text-zinc-500">CMS</span>
       </div>
 
-      <nav class="p-4">
-        <ul class="space-y-1">
+      <nav class="flex-1 overflow-y-auto px-3 py-2">
+        <ul class="space-y-0.5">
           {#each navItems as item (item.href)}
+            {@const active = isActive(item)}
             <li>
               <a
                 href={item.href}
-                class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
+                class="group relative flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium transition-all duration-150
+                  {active
+                  ? 'bg-zinc-900 text-white'
+                  : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900'}"
               >
-                <span class="h-5 w-5">
+                <span
+                  class="h-4 w-4 shrink-0 transition-transform duration-150 group-hover:scale-105"
+                >
                   {#if item.icon === "grid"}
                     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                       <rect x="3" y="3" width="7" height="7" rx="1" />
@@ -73,7 +90,6 @@
                       <polyline points="14 2 14 8 20 8" />
                       <line x1="16" y1="13" x2="8" y2="13" />
                       <line x1="16" y1="17" x2="8" y2="17" />
-                      <polyline points="10 9 9 9 8 9" />
                     </svg>
                   {:else if item.icon === "folder"}
                     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -91,26 +107,38 @@
       </nav>
 
       <!-- User info at bottom -->
-      <div class="absolute right-0 bottom-0 left-0 border-t border-zinc-200 p-4">
-        <div class="flex items-center gap-3">
+      <div class="shrink-0 border-t border-zinc-100 p-3">
+        <div
+          class="flex items-center gap-2.5 rounded-lg p-2 transition-colors duration-150 hover:bg-zinc-50"
+        >
           {#if session.user.image}
-            <img src={session.user.image} alt="" class="h-8 w-8 rounded-full" />
+            <img
+              src={session.user.image}
+              alt=""
+              class="h-8 w-8 rounded-full ring-2 ring-zinc-100 transition-all duration-150 hover:ring-zinc-200"
+            />
           {:else}
-            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-200">
-              <span class="text-sm text-zinc-600">{session.user.name?.charAt(0) ?? "?"}</span>
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100">
+              <span class="text-sm font-medium text-zinc-600"
+                >{session.user.name?.charAt(0) ?? "?"}</span
+              >
             </div>
           {/if}
           <div class="min-w-0 flex-1">
             <p class="truncate text-sm font-medium text-zinc-900">{session.user.name}</p>
-            <p class="truncate text-xs text-zinc-500">{session.user.email}</p>
+            <p class="truncate text-xs text-zinc-400">{session.user.email}</p>
           </div>
         </div>
       </div>
     </aside>
 
     <!-- Main content -->
-    <main class="ml-64 flex-1 p-8">
-      {@render children()}
+    <main class="ml-56 min-h-screen flex-1">
+      <div class="mx-auto max-w-5xl px-6 py-8">
+        {@render children()}
+      </div>
     </main>
   </div>
+
+  <ConfirmModal />
 </svelte:boundary>
