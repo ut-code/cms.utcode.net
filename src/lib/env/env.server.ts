@@ -18,6 +18,13 @@ const AuthEnv = v.object({
   BETTER_AUTH_URL: v.string(),
 });
 
-const Env = v.intersect([TursoEnv, AuthEnv]);
+const S3Env = v.object({
+  S3_ENDPOINT: v.string(),
+  S3_ACCESS_KEY: v.string(),
+  S3_SECRET_KEY: v.string(),
+  S3_BUCKET: v.string(),
+});
+
+const Env = v.intersect([TursoEnv, AuthEnv, S3Env]);
 
 export const env = v.parse(Env, process.env);

@@ -13,7 +13,7 @@ vite.config.ts.timestamp-*
 # Development & OS
 .env
 .env.*
-!.env.example
+!.env.sample
 !.env.test
 .DS_Store
 Thumbs.db

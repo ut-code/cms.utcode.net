@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
 import { getRequestEvent } from "$app/server";
 import { env } from "$env/dynamic/private";
-import { auth } from "$lib/server/auth";
-import { db } from "$lib/shared/db/db.server";
+import { auth } from "$lib/server/drivers/auth";
+import { db } from "$lib/server/drivers/db";
 import { user } from "$lib/shared/models/schema";
 
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours

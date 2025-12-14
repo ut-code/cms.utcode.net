@@ -4,7 +4,7 @@
 {Note decisions to knowledge database}
 {Main work}
 {Run bun tidy}
-{Update knowledge database as needed}
+{Update knowledge database and CLAUDE.md as needed}
 </workflow>
 
 # Knowledge Database

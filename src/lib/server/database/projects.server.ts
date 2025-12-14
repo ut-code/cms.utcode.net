@@ -1,5 +1,5 @@
 import { eq, and } from "drizzle-orm";
-import { db } from "$lib/shared/db/db.server";
+import { db } from "$lib/server/drivers/db";
 import { project, projectMember } from "$lib/shared/models/schema";
 
 export type Project = typeof project.$inferSelect;

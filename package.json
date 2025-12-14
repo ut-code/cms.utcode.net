@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "better-auth": "^1.4.6",
+    "minio": "^8.0.6",
     "valibot": "^1.2.0"
   }
 }

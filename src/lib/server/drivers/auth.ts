@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "$lib/shared/db/db.server";
+import { db } from "$lib/server/drivers/db";
 import { env } from "$lib/env/env.server";
 import * as schema from "$lib/shared/models/schema";
 
