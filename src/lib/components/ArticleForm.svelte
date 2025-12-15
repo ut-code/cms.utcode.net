@@ -2,6 +2,7 @@
   import { goto } from "$app/navigation";
   import { snapshot } from "$lib/utils/snapshot.svelte";
   import { onSaveShortcut } from "$lib/utils/keyboard";
+  import { validateSlug, generateSlug } from "$lib/shared/logic/slugs";
   import ImageUpload from "./image-upload.svelte";
   import Markdown from "./Markdown.svelte";
   import { Loader2 } from "lucide-svelte";
@@ -47,19 +48,6 @@
   let formData = $state(snapshot(() => initialData));
   let errors = $state<Record<string, string>>({});
   let activeTab = $state<"edit" | "preview">("edit");
-
-  function validateSlug(slug: string): boolean {
-    return /^[a-z0-9-]+$/.test(slug);
-  }
-
-  function generateSlug(title: string): string {
-    return title
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-")
-      .trim();
-  }
 
   function handleTitleChange() {
     if (!formData.slug || formData.slug === generateSlug(initialData.title)) {

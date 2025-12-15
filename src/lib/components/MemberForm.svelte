@@ -2,6 +2,7 @@
   import { goto } from "$app/navigation";
   import { snapshot } from "$lib/utils/snapshot.svelte";
   import { onSaveShortcut } from "$lib/utils/keyboard";
+  import { validateSlug, generateSlug } from "$lib/shared/logic/slugs";
   import ImageUpload from "./image-upload.svelte";
   import { Loader2 } from "lucide-svelte";
 
@@ -26,19 +27,6 @@
 
   let formData = $state(snapshot(() => initialData));
   let errors = $state<Record<string, string>>({});
-
-  function validateSlug(slug: string): boolean {
-    return /^[a-z0-9-]+$/.test(slug);
-  }
-
-  function generateSlug(name: string): string {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-")
-      .trim();
-  }
 
   function handleNameChange() {
     if (!formData.slug || formData.slug === generateSlug(initialData.name)) {

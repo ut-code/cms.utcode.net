@@ -64,11 +64,23 @@ bun run build # builds the application
 # database control
 bun drizzle-kit # drizzle-kit is installed.
 
+# testing
+
 # static checks
 bun check # runs all checks, including these three:
+bun test-check # runs unit tests (pure logic in $lib/shared/logic/)
 bun type-check # runs type check
 bun lint-check # runs lint check
 bun format-check # runs format check
 bun fix # runs all automated fixes (format+lint)
 bun tidy # runs all automated checks and fixes as necessary (type+format+lint)
 ```
+
+# Bun Commands
+
+IMPORTANT: `bun <script>` and `bun run <script>` are sometimes different:
+
+- `bun test` - runs bun's built-in test runner directly
+- `bun run test` - runs the `test` script from package.json
+
+Always use `bun run <script>` to run `build` or `test`.
