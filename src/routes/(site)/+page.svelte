@@ -1,3 +1,8 @@
+<svelte:head>
+  <title>ut.code(); - 東京大学ソフトウェアエンジニアリングサークル</title>
+  <meta property="og:title" content="ut.code(); - 東京大学ソフトウェアエンジニアリングサークル" />
+</svelte:head>
+
 <!-- Hero -->
 <section class="flex min-h-screen items-center">
   <div class="mx-auto grid max-w-6xl items-center gap-16 px-6 lg:grid-cols-2">

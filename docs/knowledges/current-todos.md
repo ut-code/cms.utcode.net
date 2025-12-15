@@ -17,13 +17,12 @@
 - [x] Public-facing pages (articles, projects, members)
 - [x] Add image management feature (ImageUpload component + S3 integration)
 - [x] UI cleanup (nav links, home page consistency)
+- [x] Markdown rendering for article/project content
+- [x] SEO meta tags for public pages
 
 ## Pending
 
 [short-term]
-
-- Markdown rendering for article/project content
-- SEO meta tags for public pages
 
 [roadmap]
 

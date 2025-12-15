@@ -7,6 +7,20 @@
   const project = $derived(await getPublicProject(slug));
 </script>
 
+<svelte:head>
+  {#if project}
+    <title>{project.name} | ut.code();</title>
+    <meta property="og:title" content={project.name} />
+    {#if project.description}
+      <meta name="description" content={project.description} />
+      <meta property="og:description" content={project.description} />
+    {/if}
+    {#if project.coverUrl}
+      <meta property="og:image" content={project.coverUrl} />
+    {/if}
+  {/if}
+</svelte:head>
+
 {#if project}
   <article class="mx-auto max-w-3xl px-6 py-16">
     <a

@@ -6,6 +6,20 @@
   const member = $derived(await getPublicMember(slug));
 </script>
 
+<svelte:head>
+  {#if member}
+    <title>{member.name} | ut.code();</title>
+    <meta property="og:title" content={member.name} />
+    {#if member.bio}
+      <meta name="description" content={member.bio} />
+      <meta property="og:description" content={member.bio} />
+    {/if}
+    {#if member.imageUrl}
+      <meta property="og:image" content={member.imageUrl} />
+    {/if}
+  {/if}
+</svelte:head>
+
 {#if member}
   <article class="mx-auto max-w-3xl px-6 py-16">
     <a

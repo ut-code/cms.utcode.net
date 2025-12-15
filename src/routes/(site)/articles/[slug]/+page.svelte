@@ -7,6 +7,21 @@
   const article = $derived(await getPublicArticle(slug));
 </script>
 
+<svelte:head>
+  {#if article}
+    <title>{article.title} | ut.code();</title>
+    <meta property="og:title" content={article.title} />
+    {#if article.excerpt}
+      <meta name="description" content={article.excerpt} />
+      <meta property="og:description" content={article.excerpt} />
+    {/if}
+    {#if article.coverUrl}
+      <meta property="og:image" content={article.coverUrl} />
+    {/if}
+    <meta property="og:type" content="article" />
+  {/if}
+</svelte:head>
+
 {#if article}
   <article class="mx-auto max-w-3xl px-6 py-16">
     <a

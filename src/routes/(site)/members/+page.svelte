@@ -4,6 +4,11 @@
   const members = $derived(await getPublicMembers());
 </script>
 
+<svelte:head>
+  <title>メンバー一覧 | ut.code();</title>
+  <meta property="og:title" content="メンバー一覧 | ut.code();" />
+</svelte:head>
+
 <div class="mx-auto max-w-6xl px-6 py-16">
   <div
     class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-[#00D372] uppercase"
