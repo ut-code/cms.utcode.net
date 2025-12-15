@@ -132,6 +132,7 @@ export const article = sqliteTable(
     }),
     published: integer("published", { mode: "boolean" }).default(false).notNull(),
     publishedAt: integer("published_at", { mode: "timestamp_ms" }),
+    viewCount: integer("view_count").notNull().default(0),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .default(sql`(unixepoch() * 1000)`)
       .notNull(),
@@ -221,5 +222,3 @@ export const projectMemberRelations = relations(projectMember, ({ one }) => ({
     references: [member.id],
   }),
 }));
-
-export const Project = null; // TODO:

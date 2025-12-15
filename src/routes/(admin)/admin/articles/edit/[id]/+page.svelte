@@ -167,6 +167,7 @@
         onSubmit={handleSubmit}
         submitLabel="Save Changes"
         bind:isSubmitting
+        articleId={article.id}
       />
     </div>
   {/if}

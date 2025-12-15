@@ -1,8 +1,18 @@
 <script lang="ts">
   import logo from "$lib/assets/favicon.svg";
-  import { Menu } from "lucide-svelte";
+  import { Menu, Search } from "lucide-svelte";
+  import { goto } from "$app/navigation";
 
   let { children } = $props();
+
+  let searchQuery = $state("");
+
+  function handleSearch(e: Event) {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      goto(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  }
 </script>
 
 <svelte:head>
@@ -33,7 +43,16 @@
             <img src={logo} alt="ut.code();" class="h-8" />
           </a>
         </div>
-        <div class="hidden items-center gap-8 md:flex">
+        <div class="hidden items-center gap-4 md:flex">
+          <form onsubmit={handleSearch} class="relative">
+            <input
+              type="search"
+              bind:value={searchQuery}
+              placeholder="検索..."
+              class="w-48 rounded-lg border border-zinc-200 bg-white py-1.5 pr-3 pl-9 text-sm transition-all placeholder:text-zinc-400 focus:w-64 focus:border-[#00D372] focus:ring-1 focus:ring-[#00D372] focus:outline-none"
+            />
+            <Search class="absolute top-1/2 left-2.5 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+          </form>
           <a href="/articles" class="text-sm text-zinc-500 transition-colors hover:text-zinc-900"
             >Articles</a
           >
@@ -82,6 +101,15 @@
     <label for="site-drawer" class="drawer-overlay"></label>
     <div class="min-h-full w-64 bg-white p-4">
       <img src={logo} alt="ut.code();" class="mb-6 h-8" />
+      <form onsubmit={handleSearch} class="relative mb-4">
+        <input
+          type="search"
+          bind:value={searchQuery}
+          placeholder="検索..."
+          class="w-full rounded-lg border border-zinc-200 bg-white py-2 pr-3 pl-9 text-sm transition-colors placeholder:text-zinc-400 focus:border-[#00D372] focus:ring-1 focus:ring-[#00D372] focus:outline-none"
+        />
+        <Search class="absolute top-1/2 left-2.5 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+      </form>
       <ul class="space-y-2">
         <li>
           <a

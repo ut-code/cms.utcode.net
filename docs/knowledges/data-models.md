@@ -45,6 +45,7 @@ articles
 ├── authorId     TEXT FK → members.id
 ├── published    INTEGER NOT NULL (0/1)
 ├── publishedAt  INTEGER
+├── viewCount    INTEGER NOT NULL DEFAULT 0
 ├── createdAt    INTEGER NOT NULL
 └── updatedAt    INTEGER NOT NULL
 
@@ -94,17 +95,19 @@ projectMembers
 
 ### Articles
 
-| アクション               | 公開 |
-| ------------------------ | ---- |
-| 記事を書く               |      |
-| 記事を編集する           |      |
-| 記事を公開する           |      |
-| 記事を非公開にする       |      |
-| 記事を削除する           |      |
-| 公開記事一覧を見る       | ✓    |
-| 公開記事を読む           | ✓    |
-| 下書き含む記事一覧を見る |      |
-| 下書きを読む             |      |
+| アクション                 | 公開 |
+| -------------------------- | ---- |
+| 記事を書く                 |      |
+| 記事を編集する             |      |
+| 記事を公開する             |      |
+| 記事を非公開にする         |      |
+| 記事を削除する             |      |
+| 公開記事一覧を見る         | ✓    |
+| 公開記事を読む             | ✓    |
+| 記事閲覧数をインクリメント | ✓    |
+| 下書き含む記事一覧を見る   |      |
+| 下書きを読む               |      |
+| 記事をプレビューする       |      |
 
 ### Projects
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/state";
   import { getArticles } from "$lib/data/articles.remote";
-  import { FileText, Plus, ChevronRight } from "lucide-svelte";
+  import { FileText, Plus, ChevronRight, Eye } from "lucide-svelte";
 
   const allArticles = $derived(await getArticles());
   const statusFilter = $derived(page.url.searchParams.get("status"));
@@ -187,7 +187,7 @@
                   {/if}
                 </div>
 
-                <!-- Author -->
+                <!-- Author and View Count -->
                 <div class="mt-2 flex items-center gap-4">
                   {#if article.author}
                     <div class="flex items-center gap-1.5">
@@ -201,6 +201,12 @@
                       <span class="text-xs text-base-content/50">{article.author.name}</span>
                     </div>
                   {/if}
+
+                  <!-- View count -->
+                  <div class="flex items-center gap-1 text-xs text-base-content/50">
+                    <Eye class="h-3.5 w-3.5" />
+                    <span>{article.viewCount.toLocaleString()}</span>
+                  </div>
 
                   <!-- Arrow indicator -->
                   <div class="ml-auto">

@@ -1,4 +1,4 @@
-import { eq, and } from "drizzle-orm";
+import { eq, and, or, like } from "drizzle-orm";
 import { db } from "$lib/server/drivers/db";
 import { project, projectMember } from "$lib/shared/models/schema";
 
@@ -80,4 +80,24 @@ export async function updateProjectMemberRole(projectId: string, memberId: strin
 export async function transferLead(projectId: string, fromMemberId: string, toMemberId: string) {
   await updateProjectMemberRole(projectId, fromMemberId, "member");
   await updateProjectMemberRole(projectId, toMemberId, "lead");
+}
+
+export async function searchProjects(query: string) {
+  if (!query.trim()) {
+    return [];
+  }
+
+  const searchPattern = `%${query}%`;
+
+  return db.query.project.findMany({
+    where: or(
+      like(project.name, searchPattern),
+      like(project.description, searchPattern),
+      like(project.content, searchPattern),
+    ),
+    orderBy: (t, { desc }) => desc(t.createdAt),
+    with: {
+      projectMembers: { with: { member: true } },
+    },
+  });
 }

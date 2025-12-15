@@ -37,12 +37,14 @@
     onSubmit,
     submitLabel = "Save",
     isSubmitting = $bindable(false),
+    articleId = null,
   }: {
     initialData?: ArticleData;
     authors?: Author[];
     onSubmit: (data: ArticleData) => Promise<void>;
     submitLabel?: string;
     isSubmitting?: boolean;
+    articleId?: string | null;
   } = $props();
 
   let formData = $state(snapshot(() => initialData));
@@ -83,6 +85,12 @@
 
   function triggerSubmit() {
     if (!isSubmitting) handleSubmit(new SubmitEvent("submit"));
+  }
+
+  function openPreview() {
+    if (articleId) {
+      window.open(`/admin/articles/${articleId}/preview`, "_blank");
+    }
   }
 </script>
 
@@ -252,13 +260,24 @@
 
   <!-- Actions -->
   <div class="flex items-center justify-between pt-2">
-    <button
-      type="button"
-      onclick={() => goto("/admin/articles")}
-      class="rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition-all duration-150 hover:border-zinc-300 hover:bg-zinc-50 active:scale-[0.98]"
-    >
-      Cancel
-    </button>
+    <div class="flex items-center gap-2">
+      <button
+        type="button"
+        onclick={() => goto("/admin/articles")}
+        class="rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition-all duration-150 hover:border-zinc-300 hover:bg-zinc-50 active:scale-[0.98]"
+      >
+        Cancel
+      </button>
+      {#if articleId}
+        <button
+          type="button"
+          onclick={openPreview}
+          class="rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition-all duration-150 hover:border-zinc-300 hover:bg-zinc-50 active:scale-[0.98]"
+        >
+          Preview
+        </button>
+      {/if}
+    </div>
     <button
       type="submit"
       disabled={isSubmitting}

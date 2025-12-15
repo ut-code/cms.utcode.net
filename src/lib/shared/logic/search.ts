@@ -1,0 +1,41 @@
+export type SearchResult =
+  | {
+      type: "article";
+      id: string;
+      slug: string;
+      title: string;
+      excerpt: string | null;
+      coverUrl: string | null;
+      publishedAt: Date | null;
+      author: { name: string } | null;
+    }
+  | {
+      type: "project";
+      id: string;
+      slug: string;
+      name: string;
+      description: string | null;
+      coverUrl: string | null;
+    };
+
+export function filterSearchResults(results: SearchResult[], query: string): SearchResult[] {
+  if (!query.trim()) {
+    return results;
+  }
+
+  const lowerQuery = query.toLowerCase();
+
+  return results.filter((result) => {
+    if (result.type === "article") {
+      return (
+        result.title.toLowerCase().includes(lowerQuery) ||
+        (result.excerpt && result.excerpt.toLowerCase().includes(lowerQuery))
+      );
+    } else {
+      return (
+        result.name.toLowerCase().includes(lowerQuery) ||
+        (result.description && result.description.toLowerCase().includes(lowerQuery))
+      );
+    }
+  });
+}

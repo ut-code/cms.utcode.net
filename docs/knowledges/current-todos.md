@@ -19,6 +19,8 @@
 - [x] UI cleanup (nav links, home page consistency)
 - [x] Markdown rendering for article/project content
 - [x] SEO meta tags for public pages
+- [x] Article view count tracking
+- [x] Related articles display on article detail pages
 
 ## Pending
 

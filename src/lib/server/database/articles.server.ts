@@ -1,4 +1,4 @@
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, sql, or, like } from "drizzle-orm";
 import { db } from "$lib/server/drivers/db";
 import { article } from "$lib/shared/models/schema";
 
@@ -67,4 +67,75 @@ export async function publishArticle(id: string) {
 
 export async function unpublishArticle(id: string) {
   return updateArticle(id, { published: false, publishedAt: null });
+}
+
+export async function incrementViewCount(slug: string) {
+  const [updated] = await db
+    .update(article)
+    .set({ viewCount: sql`${article.viewCount} + 1` })
+    .where(eq(article.slug, slug))
+    .returning();
+  return updated;
+}
+
+export async function getRelatedArticles(
+  articleId: string,
+  authorId: string | null,
+  limit: number,
+) {
+  // まず同じ著者の記事を取得（現在の記事は除外）
+  const sameAuthorArticles = authorId
+    ? await db.query.article.findMany({
+        where: and(
+          eq(article.published, true),
+          eq(article.authorId, authorId),
+          // 現在の記事を除外
+          sql`${article.id} != ${articleId}`,
+        ),
+        orderBy: desc(article.publishedAt),
+        limit,
+        with: { author: true },
+      })
+    : [];
+
+  // 不足している場合は最新の公開記事で埋める
+  if (sameAuthorArticles.length < limit) {
+    const needed = limit - sameAuthorArticles.length;
+    const recentArticles = await db.query.article.findMany({
+      where: and(
+        eq(article.published, true),
+        // 現在の記事と既に取得した記事を除外
+        sql`${article.id} != ${articleId}`,
+        authorId ? sql`${article.authorId} != ${authorId}` : undefined,
+      ),
+      orderBy: desc(article.publishedAt),
+      limit: needed,
+      with: { author: true },
+    });
+
+    return [...sameAuthorArticles, ...recentArticles];
+  }
+
+  return sameAuthorArticles;
+}
+
+export async function searchPublishedArticles(query: string) {
+  if (!query.trim()) {
+    return [];
+  }
+
+  const searchPattern = `%${query}%`;
+
+  return db.query.article.findMany({
+    where: and(
+      eq(article.published, true),
+      or(
+        like(article.title, searchPattern),
+        like(article.content, searchPattern),
+        like(article.excerpt, searchPattern),
+      ),
+    ),
+    orderBy: desc(article.publishedAt),
+    with: { author: true },
+  });
 }
