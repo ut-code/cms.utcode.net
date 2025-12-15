@@ -1,34 +1,91 @@
 <script lang="ts">
   import { upload } from "$lib/data/storage.remote";
+  import { Loader2, Upload, AlertCircle, X } from "lucide-svelte";
+
+  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
   let {
     value = $bindable(""),
     folder = "images",
     label = "Image",
+    aspect = "5/3",
   }: {
     value?: string;
     folder?: string;
     label?: string;
+    aspect?: "5/3" | "1/1" | "16/9" | "4/3";
   } = $props();
 
+  // States
+  let previewUrl = $state<string | null>(null);
   let isUploading = $state(false);
   let dragOver = $state(false);
-  let containerEl: HTMLDivElement;
+  let pasteFlash = $state(false);
+  let error = $state<string | null>(null);
 
-  async function handleFile(file: File) {
-    if (!file.type.startsWith("image/")) return;
+  // Show preview or final value
+  const displayUrl = $derived(previewUrl ?? value);
+
+  function arrayBufferToBase64(buffer: ArrayBuffer): string {
+    const bytes = new Uint8Array(buffer);
+    let binary = "";
+    for (const byte of bytes) {
+      binary += String.fromCharCode(byte);
+    }
+    return btoa(binary);
+  }
+
+  async function handleFile(file: File, fromPaste = false) {
+    error = null;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      error = "Please select an image file";
+      return;
+    }
+
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      error = `File too large (max ${MAX_FILE_SIZE / 1024 / 1024}MB)`;
+      return;
+    }
+
+    // Show paste feedback
+    if (fromPaste) {
+      pasteFlash = true;
+      setTimeout(() => (pasteFlash = false), 600);
+    }
+
+    // Immediate preview
+    previewUrl = URL.createObjectURL(file);
     isUploading = true;
+
     try {
-      const result = await upload({ file, folder });
+      const arrayBuffer = await file.arrayBuffer();
+      const base64 = arrayBufferToBase64(arrayBuffer);
+      const result = await upload({
+        data: base64,
+        type: file.type,
+        name: file.name,
+        folder,
+      });
       value = result.url;
+    } catch {
+      error = "Upload failed. Please try again.";
+      previewUrl = null;
     } finally {
       isUploading = false;
+      // Clean up object URL after upload completes
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+        previewUrl = null;
+      }
     }
   }
 
   function handleInput(e: Event) {
-    const input = e.target as HTMLInputElement;
-    const file = input.files?.[0];
+    if (!(e.target instanceof HTMLInputElement)) return;
+    const file = e.target.files?.[0];
     if (file) handleFile(file);
   }
 
@@ -48,7 +105,11 @@
     dragOver = false;
   }
 
-  function handlePaste(e: ClipboardEvent) {
+  function handleGlobalPaste(e: ClipboardEvent) {
+    // Skip if user is typing in an input/textarea
+    if (!(e.target instanceof HTMLElement)) return;
+    if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+
     const items = e.clipboardData?.items;
     if (!items) return;
     for (const item of items) {
@@ -56,7 +117,7 @@
         const file = item.getAsFile();
         if (file) {
           e.preventDefault();
-          handleFile(file);
+          handleFile(file, true);
           return;
         }
       }
@@ -65,75 +126,88 @@
 
   function clearImage() {
     value = "";
+    previewUrl = null;
+    error = null;
   }
 </script>
 
-<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-<div
-  class="space-y-1.5"
-  bind:this={containerEl}
-  tabindex="0"
-  onpaste={handlePaste}
-  onfocus={() => containerEl.classList.add("ring-2", "ring-[#00D372]/20", "rounded-lg")}
-  onblur={() => containerEl.classList.remove("ring-2", "ring-[#00D372]/20", "rounded-lg")}
->
+<svelte:window onpaste={handleGlobalPaste} />
+
+<div class="space-y-1.5">
   <span class="block text-sm font-medium text-zinc-700">{label}</span>
 
-  {#if value}
-    <div class="relative overflow-hidden rounded-lg border border-zinc-200">
-      <img src={value} alt="" class="h-40 w-full object-cover" />
-      <div
-        class="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity hover:opacity-100"
-      >
-        <label
-          class="cursor-pointer rounded-lg bg-white px-3 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-100"
+  {#if displayUrl}
+    <!-- Image preview/uploaded state -->
+    <div
+      class="relative max-w-xs overflow-hidden rounded-lg border transition-all duration-200
+        {isUploading ? 'border-[#00D372]' : 'border-zinc-200'}"
+    >
+      <img src={displayUrl} alt="" class="w-full object-cover" style="aspect-ratio: {aspect}" />
+
+      {#if isUploading}
+        <!-- Upload progress overlay -->
+        <div class="absolute inset-0 flex flex-col items-center justify-center bg-black/60">
+          <div class="mb-2 flex items-center gap-2">
+            <Loader2 class="h-5 w-5 animate-spin text-white" />
+            <span class="text-sm font-medium text-white">Uploading...</span>
+          </div>
+          <!-- Progress bar -->
+          <div class="h-1 w-32 overflow-hidden rounded-full bg-white/30">
+            <div class="h-full animate-pulse rounded-full bg-[#00D372]" style="width: 60%"></div>
+          </div>
+        </div>
+      {:else}
+        <!-- Hover controls -->
+        <div
+          class="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity hover:opacity-100"
         >
-          Change
-          <input type="file" accept="image/*" class="hidden" oninput={handleInput} />
-        </label>
-        <button
-          type="button"
-          onclick={clearImage}
-          class="rounded-lg bg-red-500 px-3 py-2 text-sm font-medium text-white hover:bg-red-600"
-        >
-          Remove
-        </button>
-      </div>
+          <label
+            class="cursor-pointer rounded-lg bg-white px-3 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-100"
+          >
+            Change
+            <input type="file" accept="image/*" class="hidden" oninput={handleInput} />
+          </label>
+          <button
+            type="button"
+            onclick={clearImage}
+            class="rounded-lg bg-red-500 px-3 py-2 text-sm font-medium text-white hover:bg-red-600"
+          >
+            Remove
+          </button>
+        </div>
+      {/if}
     </div>
   {:else}
+    <!-- Empty/drop state -->
     <label
-      class="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 transition-colors
+      class="relative flex max-w-xs cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-dashed transition-all duration-200
         {dragOver
-        ? 'border-[#00D372] bg-[#00D372]/5'
-        : 'border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50'}"
+        ? 'scale-[1.02] border-[#00D372] bg-[#00D372]/10'
+        : pasteFlash
+          ? 'border-[#00D372] bg-[#00D372]/20'
+          : 'border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50'}"
+      style="aspect-ratio: {aspect}"
       ondrop={handleDrop}
       ondragover={handleDragOver}
       ondragleave={handleDragLeave}
     >
       {#if isUploading}
-        <svg class="mb-2 h-8 w-8 animate-spin text-zinc-400" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
-          ></circle>
-          <path
-            class="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-          ></path>
-        </svg>
+        <Loader2 class="mb-2 h-8 w-8 animate-spin text-[#00D372]" />
         <span class="text-sm text-zinc-500">Uploading...</span>
       {:else}
-        <svg
-          class="mb-2 h-8 w-8 text-zinc-400"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          viewBox="0 0 24 24"
-        >
-          <path
-            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-          />
-        </svg>
-        <span class="text-sm text-zinc-600">Drop, click, or paste (Ctrl+V) to upload</span>
+        <Upload
+          class="mb-2 h-8 w-8 transition-transform duration-200
+            {dragOver ? 'scale-110 text-[#00D372]' : 'text-zinc-400'}"
+        />
+        <span class="text-sm text-zinc-600">
+          {#if dragOver}
+            Drop to upload
+          {:else if pasteFlash}
+            Pasting...
+          {:else}
+            Drop, click, or paste (Ctrl+V)
+          {/if}
+        </span>
         <span class="mt-1 text-xs text-zinc-400">PNG, JPG, GIF up to 10MB</span>
       {/if}
       <input
@@ -144,5 +218,23 @@
         disabled={isUploading}
       />
     </label>
+  {/if}
+
+  <!-- Error message -->
+  {#if error}
+    <div
+      class="animate-in fade-in slide-in-from-top-1 flex items-center gap-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600"
+    >
+      <AlertCircle class="h-4 w-4 shrink-0" />
+      <span>{error}</span>
+      <button
+        type="button"
+        onclick={() => (error = null)}
+        class="ml-auto text-red-400 hover:text-red-600"
+        aria-label="Dismiss error"
+      >
+        <X class="h-4 w-4" />
+      </button>
+    </div>
   {/if}
 </div>

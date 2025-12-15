@@ -33,14 +33,14 @@
       {#if member.imageUrl}
         <img
           src={member.imageUrl}
-          alt=""
-          class="mb-6 h-32 w-32 rounded-full object-cover sm:mr-8 sm:mb-0"
+          alt={member.name}
+          class="mb-6 h-20 w-20 rounded-full object-cover sm:mr-6 sm:mb-0"
         />
       {:else}
         <div
-          class="mb-6 flex h-32 w-32 items-center justify-center rounded-full bg-zinc-100 sm:mr-8 sm:mb-0"
+          class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-zinc-100 sm:mr-6 sm:mb-0"
         >
-          <span class="text-4xl font-medium text-zinc-600">
+          <span class="text-2xl font-medium text-zinc-600">
             {member.name.charAt(0)}
           </span>
         </div>
@@ -53,6 +53,40 @@
         {/if}
       </div>
     </div>
+
+    {#if member.projectMembers && member.projectMembers.length > 0}
+      <section class="mt-12 border-t border-zinc-200 pt-8">
+        <h2 class="mb-4 text-xl font-semibold">参加プロジェクト</h2>
+        <div class="flex flex-wrap gap-4">
+          {#each member.projectMembers as pm (pm.projectId)}
+            <a
+              href="/projects/{pm.project.slug}"
+              class="flex items-center gap-3 rounded-lg border border-zinc-200 px-4 py-3 hover:border-[#00D372]"
+            >
+              {#if pm.project.coverUrl}
+                <img
+                  src={pm.project.coverUrl}
+                  alt={pm.project.name}
+                  class="h-10 w-10 rounded object-cover"
+                />
+              {:else}
+                <div class="flex h-10 w-10 items-center justify-center rounded bg-zinc-100">
+                  <span class="text-sm font-medium text-zinc-600">
+                    {pm.project.name.charAt(0)}
+                  </span>
+                </div>
+              {/if}
+              <div>
+                <div class="font-medium">{pm.project.name}</div>
+                {#if pm.role}
+                  <div class="text-xs text-zinc-500">{pm.role}</div>
+                {/if}
+              </div>
+            </a>
+          {/each}
+        </div>
+      </section>
+    {/if}
   </article>
 {:else}
   <div class="mx-auto max-w-3xl px-6 py-16 text-center">

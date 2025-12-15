@@ -1,5 +1,15 @@
 <script lang="ts">
   import { getStats } from "$lib/data/stats.remote";
+  import {
+    LayoutGrid,
+    FileText,
+    SquarePen,
+    Folder,
+    Users,
+    UserPlus,
+    Pencil,
+    ExternalLink,
+  } from "lucide-svelte";
 
   const stats = $derived(await getStats());
 </script>
@@ -10,212 +20,184 @@
 
 <svelte:boundary>
   {#snippet pending()}
-    <div class="space-y-6">
+    <div class="space-y-8">
+      <!-- Header skeleton -->
       <div class="space-y-2">
-        <div class="h-7 w-28 animate-pulse rounded bg-zinc-200"></div>
-        <div class="h-4 w-40 animate-pulse rounded bg-zinc-100"></div>
+        <div class="h-8 w-32 skeleton"></div>
+        <div class="h-4 w-48 skeleton"></div>
       </div>
+
+      <!-- Stats skeleton -->
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {#each Array.from({ length: 4 }, (_, i) => i) as i (i)}
-          <div class="rounded-xl border border-zinc-100 bg-white p-5">
-            <div class="h-4 w-16 animate-pulse rounded bg-zinc-100"></div>
-            <div class="mt-3 h-8 w-12 animate-pulse rounded bg-zinc-200"></div>
+          <div class="card bg-base-100 shadow-sm">
+            <div class="card-body p-5">
+              <div class="h-4 w-20 skeleton"></div>
+              <div class="mt-3 h-9 w-14 skeleton"></div>
+            </div>
           </div>
         {/each}
+      </div>
+
+      <!-- Quick actions skeleton -->
+      <div class="space-y-4">
+        <div class="flex items-center gap-2">
+          <div class="h-px flex-1 bg-base-300"></div>
+          <div class="h-3 w-24 skeleton"></div>
+          <div class="h-px flex-1 bg-base-300"></div>
+        </div>
+        <div class="flex gap-3">
+          {#each Array.from({ length: 4 }, (_, i) => i) as i (i)}
+            <div class="h-8 w-28 skeleton rounded-lg"></div>
+          {/each}
+        </div>
       </div>
     </div>
   {/snippet}
 
-  <div>
+  <div class="space-y-8">
     <!-- Header -->
-    <div class="mb-6">
-      <h1 class="text-xl font-bold text-zinc-900">Dashboard</h1>
-      <p class="mt-0.5 text-sm text-zinc-500">Overview of your CMS content</p>
-    </div>
+    <header class="animate-fade-slide-in">
+      <div class="flex items-center gap-3">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+          <LayoutGrid class="h-5 w-5 text-primary" />
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-base-content">Dashboard</h1>
+          <p class="text-sm text-base-content/60">Overview of your CMS content</p>
+        </div>
+      </div>
+    </header>
 
     <!-- Stats Grid -->
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <!-- Published Articles -->
       <a
-        href="/admin/members"
-        class="group rounded-xl border border-zinc-100 bg-white p-5 transition-all duration-150 hover:border-zinc-200 hover:shadow-sm"
-        style="animation: fadeSlideIn 0.2s ease-out 0s both"
+        href="/admin/articles?status=published"
+        class="group animate-fade-slide-in stagger-1 card bg-base-100 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
       >
-        <div class="flex items-center justify-between">
-          <p class="text-sm font-medium text-zinc-500">Members</p>
-          <div
-            class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-500 transition-transform duration-150 group-hover:scale-110"
-          >
-            <svg
-              class="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewBox="0 0 24 24"
+        <div class="card-body p-5">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium text-base-content/60">Published</span>
+            <div
+              class="flex h-9 w-9 items-center justify-center rounded-lg bg-success/10 text-success transition-transform group-hover:scale-110"
             >
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
+              <FileText class="h-4 w-4" />
+            </div>
           </div>
+          <p class="mt-3 font-mono text-3xl font-bold text-base-content">
+            {stats.publishedArticles}
+          </p>
+          <div class="mt-1 text-xs text-base-content/40">articles</div>
         </div>
-        <p class="mt-3 font-[JetBrains_Mono,monospace] text-3xl font-bold text-zinc-900">
-          {stats.members}
-        </p>
       </a>
 
+      <!-- Drafts -->
       <a
-        href="/admin/articles"
-        class="group rounded-xl border border-zinc-100 bg-white p-5 transition-all duration-150 hover:border-zinc-200 hover:shadow-sm"
-        style="animation: fadeSlideIn 0.2s ease-out 0.05s both"
+        href="/admin/articles?status=draft"
+        class="group animate-fade-slide-in stagger-2 card bg-base-100 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
       >
-        <div class="flex items-center justify-between">
-          <p class="text-sm font-medium text-zinc-500">Articles</p>
-          <div
-            class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-500 transition-transform duration-150 group-hover:scale-110"
-          >
-            <svg
-              class="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewBox="0 0 24 24"
+        <div class="card-body p-5">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium text-base-content/60">Drafts</span>
+            <div
+              class="flex h-9 w-9 items-center justify-center rounded-lg bg-warning/10 text-warning transition-transform group-hover:scale-110"
             >
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-              <polyline points="14 2 14 8 20 8" />
-              <line x1="16" y1="13" x2="8" y2="13" />
-              <line x1="16" y1="17" x2="8" y2="17" />
-            </svg>
+              <SquarePen class="h-4 w-4" />
+            </div>
           </div>
+          <p class="mt-3 font-mono text-3xl font-bold text-base-content">
+            {stats.articles - stats.publishedArticles}
+          </p>
+          <div class="mt-1 text-xs text-base-content/40">articles</div>
         </div>
-        <p class="mt-3 font-[JetBrains_Mono,monospace] text-3xl font-bold text-zinc-900">
-          {stats.articles}
-        </p>
-        <p class="mt-1 text-xs text-zinc-400">{stats.publishedArticles} published</p>
       </a>
 
+      <!-- Projects -->
       <a
         href="/admin/projects"
-        class="group rounded-xl border border-zinc-100 bg-white p-5 transition-all duration-150 hover:border-zinc-200 hover:shadow-sm"
-        style="animation: fadeSlideIn 0.2s ease-out 0.1s both"
+        class="group animate-fade-slide-in stagger-3 card bg-base-100 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
       >
-        <div class="flex items-center justify-between">
-          <p class="text-sm font-medium text-zinc-500">Projects</p>
-          <div
-            class="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50 text-purple-500 transition-transform duration-150 group-hover:scale-110"
-          >
-            <svg
-              class="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewBox="0 0 24 24"
+        <div class="card-body p-5">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium text-base-content/60">Projects</span>
+            <div
+              class="flex h-9 w-9 items-center justify-center rounded-lg bg-secondary/10 text-secondary transition-transform group-hover:scale-110"
             >
-              <path
-                d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"
-              />
-            </svg>
+              <Folder class="h-4 w-4" />
+            </div>
           </div>
+          <p class="mt-3 font-mono text-3xl font-bold text-base-content">
+            {stats.projects}
+          </p>
+          <div class="mt-1 text-xs text-base-content/40">projects</div>
         </div>
-        <p class="mt-3 font-[JetBrains_Mono,monospace] text-3xl font-bold text-zinc-900">
-          {stats.projects}
-        </p>
       </a>
 
-      <div
-        class="rounded-xl border border-zinc-100 bg-white p-5"
-        style="animation: fadeSlideIn 0.2s ease-out 0.15s both"
+      <!-- Members -->
+      <a
+        href="/admin/members"
+        class="group animate-fade-slide-in stagger-4 card bg-base-100 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
       >
-        <div class="flex items-center justify-between">
-          <p class="text-sm font-medium text-zinc-500">Published</p>
-          <div
-            class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-500"
-          >
-            <svg
-              class="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewBox="0 0 24 24"
+        <div class="card-body p-5">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium text-base-content/60">Members</span>
+            <div
+              class="flex h-9 w-9 items-center justify-center rounded-lg bg-info/10 text-info transition-transform group-hover:scale-110"
             >
-              <circle cx="12" cy="12" r="10" />
-              <polyline points="12 6 12 12 16 14" />
-            </svg>
+              <Users class="h-4 w-4" />
+            </div>
           </div>
+          <p class="mt-3 font-mono text-3xl font-bold text-base-content">
+            {stats.members}
+          </p>
+          <div class="mt-1 text-xs text-base-content/40">members</div>
         </div>
-        <p class="mt-3 font-[JetBrains_Mono,monospace] text-3xl font-bold text-zinc-900">
-          {stats.publishedArticles}
-        </p>
-        <p class="mt-1 text-xs text-zinc-400">{stats.articles - stats.publishedArticles} drafts</p>
-      </div>
-    </div>
+      </a>
+    </section>
 
     <!-- Quick Actions -->
-    <div class="mt-8" style="animation: fadeSlideIn 0.2s ease-out 0.2s both">
-      <h2 class="mb-3 text-sm font-semibold text-zinc-900">Quick Actions</h2>
-      <div class="flex flex-wrap gap-2">
+    <section class="animate-fade-slide-in stagger-5">
+      <div class="mb-4 flex items-center gap-2">
+        <div class="h-px flex-1 bg-base-300"></div>
+        <span
+          class="font-mono text-[10px] font-semibold tracking-widest text-base-content/40 uppercase"
+        >
+          Quick Actions
+        </span>
+        <div class="h-px flex-1 bg-base-300"></div>
+      </div>
+      <div class="flex flex-wrap gap-3">
         <a
           href="/admin/members/new"
-          class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-700 transition-all duration-150 hover:border-zinc-300 hover:bg-zinc-50 active:scale-[0.98]"
+          class="btn gap-2 font-medium transition-all btn-outline btn-sm hover:gap-3"
         >
-          <svg
-            class="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-          >
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
+          <UserPlus class="h-4 w-4" />
           Add Member
         </a>
         <a
           href="/admin/articles/new"
-          class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-700 transition-all duration-150 hover:border-zinc-300 hover:bg-zinc-50 active:scale-[0.98]"
+          class="btn gap-2 font-medium transition-all btn-outline btn-sm hover:gap-3"
         >
-          <svg
-            class="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-          >
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
+          <Pencil class="h-4 w-4" />
           New Article
         </a>
         <a
           href="/admin/projects/new"
-          class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-700 transition-all duration-150 hover:border-zinc-300 hover:bg-zinc-50 active:scale-[0.98]"
+          class="btn gap-2 font-medium transition-all btn-outline btn-sm hover:gap-3"
         >
-          <svg
-            class="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-          >
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
+          <Folder class="h-4 w-4" />
           New Project
         </a>
+        <a
+          href="/"
+          target="_blank"
+          class="btn gap-2 font-medium transition-all btn-outline btn-sm hover:gap-3"
+        >
+          <ExternalLink class="h-4 w-4" />
+          View Site
+        </a>
       </div>
-    </div>
+    </section>
   </div>
 </svelte:boundary>
-
-<style>
-  @keyframes fadeSlideIn {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-</style>

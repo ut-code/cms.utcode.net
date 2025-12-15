@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { getRequestEvent } from "$app/server";
 import { env } from "$env/dynamic/private";
+import * as v from "valibot";
 import { auth } from "$lib/server/drivers/auth";
 import { db } from "$lib/server/drivers/db";
 import { user } from "$lib/shared/models/schema";
@@ -95,6 +96,8 @@ async function checkUtCodeMembership(userId: string): Promise<boolean> {
   return isMember;
 }
 
+const GitHubOrgSchema = v.array(v.object({ login: v.string() }));
+
 async function verifyUtCodeMemberViaGitHub(userId: string): Promise<boolean> {
   const account = await db.query.account.findFirst({
     where: (t, { and, eq }) => and(eq(t.userId, userId), eq(t.providerId, "github")),
@@ -111,6 +114,11 @@ async function verifyUtCodeMemberViaGitHub(userId: string): Promise<boolean> {
 
   if (!res.ok) return false;
 
-  const orgs = (await res.json()) as { login: string }[];
-  return orgs.some((org) => org.login === "ut-code");
+  try {
+    const data = await res.json();
+    const orgs = v.parse(GitHubOrgSchema, data);
+    return orgs.some((org) => org.login === "ut-code");
+  } catch {
+    return false;
+  }
 }

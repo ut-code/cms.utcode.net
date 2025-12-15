@@ -3,6 +3,8 @@
   import { snapshot } from "$lib/utils/snapshot.svelte";
   import { onSaveShortcut } from "$lib/utils/keyboard";
   import ImageUpload from "./image-upload.svelte";
+  import Markdown from "./Markdown.svelte";
+  import { Loader2 } from "lucide-svelte";
 
   type Author = {
     id: string;
@@ -44,6 +46,7 @@
 
   let formData = $state(snapshot(() => initialData));
   let errors = $state<Record<string, string>>({});
+  let activeTab = $state<"edit" | "preview">("edit");
 
   function validateSlug(slug: string): boolean {
     return /^[a-z0-9-]+$/.test(slug);
@@ -182,20 +185,58 @@
   <div class="rounded-xl border border-zinc-100 bg-white p-5 transition-shadow hover:shadow-sm">
     <div class="mb-5 flex items-center justify-between">
       <h2 class="text-sm font-semibold text-zinc-900">Content</h2>
-      <span class="rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500"
-        >Markdown</span
-      >
+      <div class="flex items-center gap-2">
+        <div class="inline-flex rounded-lg border border-zinc-200 p-1">
+          <button
+            type="button"
+            onclick={() => (activeTab = "edit")}
+            class="rounded px-3 py-1 text-xs font-medium transition-all duration-150"
+            class:bg-zinc-900={activeTab === "edit"}
+            class:text-white={activeTab === "edit"}
+            class:text-zinc-600={activeTab !== "edit"}
+            class:hover:text-zinc-900={activeTab !== "edit"}
+          >
+            Edit
+          </button>
+          <button
+            type="button"
+            onclick={() => (activeTab = "preview")}
+            class="rounded px-3 py-1 text-xs font-medium transition-all duration-150"
+            class:bg-zinc-900={activeTab === "preview"}
+            class:text-white={activeTab === "preview"}
+            class:text-zinc-600={activeTab !== "preview"}
+            class:hover:text-zinc-900={activeTab !== "preview"}
+          >
+            Preview
+          </button>
+        </div>
+        <span class="rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500"
+          >Markdown</span
+        >
+      </div>
     </div>
 
     <div class="space-y-1.5">
-      <textarea
-        id="content"
-        bind:value={formData.content}
-        rows={16}
-        class="w-full rounded-lg border border-zinc-200 bg-white px-3.5 py-3 font-[JetBrains_Mono,monospace] text-sm text-zinc-900 transition-all duration-150 placeholder:text-zinc-400 hover:border-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100 focus:outline-none"
-        class:border-red-300={errors["content"]}
-        placeholder="Write your article content here..."
-      ></textarea>
+      {#if activeTab === "edit"}
+        <textarea
+          id="content"
+          bind:value={formData.content}
+          rows={16}
+          class="w-full rounded-lg border border-zinc-200 bg-white px-3.5 py-3 font-[JetBrains_Mono,monospace] text-sm text-zinc-900 transition-all duration-150 placeholder:text-zinc-400 hover:border-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100 focus:outline-none"
+          class:border-red-300={errors["content"]}
+          placeholder="Write your article content here..."
+        ></textarea>
+      {:else}
+        <div
+          class="min-h-[400px] w-full rounded-lg border border-zinc-200 bg-white px-3.5 py-3 text-sm"
+        >
+          {#if formData.content.trim()}
+            <Markdown content={formData.content} />
+          {:else}
+            <p class="text-zinc-400">No content to preview</p>
+          {/if}
+        </div>
+      {/if}
       {#if errors["content"]}
         <p class="text-xs text-red-500">{errors["content"]}</p>
       {/if}
@@ -236,15 +277,7 @@
       class="inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-150 hover:bg-zinc-800 hover:shadow active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
     >
       {#if isSubmitting}
-        <svg class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
-          ></circle>
-          <path
-            class="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-          ></path>
-        </svg>
+        <Loader2 class="h-4 w-4 animate-spin" />
       {/if}
       {submitLabel}
     </button>

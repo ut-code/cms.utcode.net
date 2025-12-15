@@ -14,6 +14,9 @@ export async function listMembers() {
 export async function getMemberBySlug(slug: string) {
   return db.query.member.findFirst({
     where: eq(member.slug, slug),
+    with: {
+      projectMembers: { with: { project: true } },
+    },
   });
 }
 
@@ -31,6 +34,7 @@ export async function getMemberByUserId(userId: string) {
 
 export async function createMember(data: NewMember) {
   const [created] = await db.insert(member).values(data).returning();
+  if (!created) throw new Error("Failed to create member");
   return created;
 }
 
@@ -40,6 +44,7 @@ export async function updateMember(id: string, data: Partial<Omit<NewMember, "id
     .set({ ...data, updatedAt: new Date() })
     .where(eq(member.id, id))
     .returning();
+  if (!updated) throw new Error("Failed to update member");
   return updated;
 }
 

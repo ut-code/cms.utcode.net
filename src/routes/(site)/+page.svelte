@@ -1,3 +1,12 @@
+<script lang="ts">
+  import { getStats } from "$lib/data/stats.remote";
+  import { Code, BookOpen, Users, ArrowUpRight } from "lucide-svelte";
+
+  const stats = $derived(await getStats());
+  const currentYear = new Date().getFullYear();
+  const years = currentYear - 2019;
+</script>
+
 <svelte:head>
   <title>ut.code(); - 東京大学ソフトウェアエンジニアリングサークル</title>
   <meta property="og:title" content="ut.code(); - 東京大学ソフトウェアエンジニアリングサークル" />
@@ -56,15 +65,19 @@
 <section class="border-y border-zinc-200 py-16">
   <div class="mx-auto flex max-w-6xl justify-center gap-16 px-6 lg:gap-24">
     <div class="text-center">
-      <div class="font-[JetBrains_Mono,monospace] text-4xl font-bold">50+</div>
+      <div class="font-[JetBrains_Mono,monospace] text-4xl font-bold">
+        {stats.members}
+      </div>
       <div class="mt-1 text-sm tracking-wide text-zinc-500 uppercase">Members</div>
     </div>
     <div class="text-center">
-      <div class="font-[JetBrains_Mono,monospace] text-4xl font-bold">20+</div>
+      <div class="font-[JetBrains_Mono,monospace] text-4xl font-bold">
+        {stats.projects}
+      </div>
       <div class="mt-1 text-sm tracking-wide text-zinc-500 uppercase">Projects</div>
     </div>
     <div class="text-center">
-      <div class="font-[JetBrains_Mono,monospace] text-4xl font-bold">5</div>
+      <div class="font-[JetBrains_Mono,monospace] text-4xl font-bold">{years}</div>
       <div class="mt-1 text-sm tracking-wide text-zinc-500 uppercase">Years</div>
     </div>
   </div>
@@ -90,15 +103,7 @@
         class="rounded-xl border border-zinc-200 bg-zinc-50 p-6 transition-colors hover:border-[#00D372]"
       >
         <div class="mb-4 flex h-10 w-10 items-center justify-center text-[#00D372]">
-          <svg
-            class="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-          >
-            <polyline points="16,18 22,12 16,6" /><polyline points="8,6 2,12 8,18" />
-          </svg>
+          <Code class="h-6 w-6" />
         </div>
         <h3 class="mb-1 font-semibold">開発</h3>
         <p class="text-sm text-zinc-500">Webアプリ、モバイル、インフラまで幅広く</p>
@@ -107,17 +112,7 @@
         class="rounded-xl border border-zinc-200 bg-zinc-50 p-6 transition-colors hover:border-[#00D372]"
       >
         <div class="mb-4 flex h-10 w-10 items-center justify-center text-[#00D372]">
-          <svg
-            class="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-          >
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path
-              d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"
-            />
-          </svg>
+          <BookOpen class="h-6 w-6" />
         </div>
         <h3 class="mb-1 font-semibold">学習</h3>
         <p class="text-sm text-zinc-500">初心者歓迎。基礎から丁寧にサポート</p>
@@ -126,19 +121,7 @@
         class="rounded-xl border border-zinc-200 bg-zinc-50 p-6 transition-colors hover:border-[#00D372]"
       >
         <div class="mb-4 flex h-10 w-10 items-center justify-center text-[#00D372]">
-          <svg
-            class="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-          >
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle
-              cx="9"
-              cy="7"
-              r="4"
-            /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
-          </svg>
+          <Users class="h-6 w-6" />
         </div>
         <h3 class="mb-1 font-semibold">交流</h3>
         <p class="text-sm text-zinc-500">企業連携、OB/OGとの繋がり</p>
@@ -229,9 +212,12 @@
     <p class="mb-8 text-zinc-500">経験不問。興味があれば誰でも。</p>
     <a
       href="https://utcode.net"
-      class="inline-block rounded-lg bg-[#00D372] px-8 py-4 text-lg font-semibold text-zinc-900 transition-colors hover:bg-[#00C066]"
+      target="_blank"
+      rel="noopener"
+      class="inline-flex items-center gap-2 rounded-lg bg-[#00D372] px-8 py-4 text-lg font-semibold text-zinc-900 transition-colors hover:bg-[#00C066]"
     >
       ut.code(); に参加
+      <ArrowUpRight class="h-4 w-4" />
     </a>
   </div>
 </section>

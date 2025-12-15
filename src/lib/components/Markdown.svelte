@@ -1,5 +1,6 @@
 <script lang="ts">
   import { marked } from "marked";
+  import DOMPurify from "isomorphic-dompurify";
 
   interface Props {
     content: string;
@@ -7,7 +8,10 @@
 
   const { content }: Props = $props();
 
-  const html = $derived(marked.parse(content, { async: false }) as string);
+  const html = $derived(() => {
+    const rawHtml = marked.parse(content, { async: false });
+    return DOMPurify.sanitize(rawHtml);
+  });
 </script>
 
 <div class="prose-zinc prose max-w-none">

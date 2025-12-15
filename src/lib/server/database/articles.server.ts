@@ -43,6 +43,7 @@ export async function getArticleById(id: string) {
 
 export async function createArticle(data: NewArticle) {
   const [created] = await db.insert(article).values(data).returning();
+  if (!created) throw new Error("Failed to create article");
   return created;
 }
 
@@ -52,6 +53,7 @@ export async function updateArticle(id: string, data: Partial<Omit<NewArticle, "
     .set({ ...data, updatedAt: new Date() })
     .where(eq(article.id, id))
     .returning();
+  if (!updated) throw new Error("Failed to update article");
   return updated;
 }
 

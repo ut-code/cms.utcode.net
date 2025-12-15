@@ -11,7 +11,10 @@
     addMember,
     removeMember,
   } from "$lib/data/projects.remote";
+  import { useToast } from "$lib/components/toast/controls.svelte";
+  import { ChevronRight } from "lucide-svelte";
 
+  const toast = useToast();
   const id = $derived(page.params.id ?? "");
   const project = $derived(await getProject(id));
   const members = $derived(await getMembers());
@@ -30,67 +33,83 @@
     demoUrl: string;
     leadMemberId: string | null;
   }) {
-    if (project && data.slug !== project.slug) {
-      const confirmed = await confirm({
-        title: "Change URL slug?",
-        description: `Changing the slug will break existing links. The URL will change from /projects/${project.slug} to /projects/${data.slug}.`,
-        confirmText: "Change Slug",
-        variant: "warning",
-      });
-      if (!confirmed) return;
-    }
+    try {
+      if (project && data.slug !== project.slug) {
+        const confirmed = await confirm({
+          title: "Change URL slug?",
+          description: `Changing the slug will break existing links. The URL will change from /projects/${project.slug} to /projects/${data.slug}.`,
+          confirmText: "Change Slug",
+          variant: "warning",
+        });
+        if (!confirmed) return;
+      }
 
-    await editProject({
-      id,
-      data: {
-        slug: data.slug,
-        name: data.name,
-        description: data.description || null,
-        content: data.content || null,
-        coverUrl: data.coverUrl || null,
-        repoUrl: data.repoUrl || null,
-        demoUrl: data.demoUrl || null,
-      },
-    });
-    goto("/admin/projects");
+      await editProject({
+        id,
+        data: {
+          slug: data.slug,
+          name: data.name,
+          description: data.description || null,
+          content: data.content || null,
+          coverUrl: data.coverUrl || null,
+          repoUrl: data.repoUrl || null,
+          demoUrl: data.demoUrl || null,
+        },
+      });
+      goto("/admin/projects");
+    } catch (error) {
+      toast.show(error instanceof Error ? error.message : "保存に失敗しました");
+    }
   }
 
   async function handleDelete() {
     if (!project) return;
 
-    const confirmed = await confirm({
-      title: "Delete Project",
-      description: `Are you sure you want to delete "${project.name}"? This action cannot be undone.`,
-      confirmText: "Delete",
-      variant: "danger",
-    });
+    try {
+      const confirmed = await confirm({
+        title: "Delete Project",
+        description: `Are you sure you want to delete "${project.name}"? This action cannot be undone.`,
+        confirmText: "Delete",
+        variant: "danger",
+      });
 
-    if (confirmed) {
-      await removeProject(id);
-      goto("/admin/projects");
+      if (confirmed) {
+        await removeProject(id);
+        goto("/admin/projects");
+      }
+    } catch (error) {
+      toast.show(error instanceof Error ? error.message : "削除に失敗しました");
     }
   }
 
   async function handleAddMember() {
     if (!newMemberId) return;
-    await addMember({ projectId: id, memberId: newMemberId, role: newMemberRole });
-    showAddMember = false;
-    newMemberId = null;
-    newMemberRole = "member";
-    location.reload();
+    try {
+      await addMember({ projectId: id, memberId: newMemberId, role: newMemberRole }).updates(
+        getProject(id),
+      );
+      showAddMember = false;
+      newMemberId = null;
+      newMemberRole = "member";
+    } catch (error) {
+      toast.show(error instanceof Error ? error.message : "メンバーの追加に失敗しました");
+    }
   }
 
   async function handleRemoveMember(memberId: string, memberName: string) {
-    const confirmed = await confirm({
-      title: "Remove Member",
-      description: `Remove ${memberName} from this project?`,
-      confirmText: "Remove",
-      variant: "danger",
-    });
+    try {
+      const confirmed = await confirm({
+        title: "Remove Member",
+        description: `Remove ${memberName} from this project?`,
+        confirmText: "Remove",
+        variant: "danger",
+      });
 
-    if (confirmed) {
-      await removeMember({ projectId: id, memberId });
-      location.reload();
+      if (confirmed) {
+        await removeMember({ projectId: id, memberId }).updates(getProject(id));
+      }
+    } catch (error) {
+      toast.show(error instanceof Error ? error.message : "メンバーの削除に失敗しました");
     }
   }
 </script>
@@ -124,15 +143,7 @@
         <div>
           <nav class="mb-4 flex items-center gap-2 text-sm text-zinc-500">
             <a href="/admin/projects" class="hover:text-zinc-700">Projects</a>
-            <svg
-              class="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-            >
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
+            <ChevronRight class="h-4 w-4" />
             <span class="text-zinc-900">{project.name}</span>
           </nav>
           <h1 class="text-2xl font-bold text-zinc-900">Edit Project</h1>
@@ -168,7 +179,7 @@
             >
               <div class="flex items-center gap-3">
                 {#if pm.member.imageUrl}
-                  <img src={pm.member.imageUrl} alt="" class="h-8 w-8 rounded-full" />
+                  <img src={pm.member.imageUrl} alt={pm.member.name} class="h-8 w-8 rounded-full" />
                 {:else}
                   <div class="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-200">
                     <span class="text-xs font-medium text-zinc-600">{pm.member.name.charAt(0)}</span

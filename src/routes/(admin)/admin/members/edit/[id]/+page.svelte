@@ -4,47 +4,58 @@
   import MemberForm from "$lib/components/MemberForm.svelte";
   import { confirm } from "$lib/components/confirm-modal.svelte";
   import { getMember, editMember, removeMember } from "$lib/data/members.remote";
+  import { useToast } from "$lib/components/toast/controls.svelte";
+  import { ChevronRight } from "lucide-svelte";
 
+  const toast = useToast();
   const id = $derived(page.params.id ?? "");
   const member = $derived(await getMember(id));
   let isSubmitting = $state(false);
 
   async function handleSubmit(data: { slug: string; name: string; bio: string; imageUrl: string }) {
-    if (member && data.slug !== member.slug) {
-      const confirmed = await confirm({
-        title: "Change URL slug?",
-        description: `Changing the slug will break existing links. The URL will change from /@${member.slug} to /@${data.slug}.`,
-        confirmText: "Change Slug",
-        variant: "warning",
-      });
-      if (!confirmed) return;
-    }
+    try {
+      if (member && data.slug !== member.slug) {
+        const confirmed = await confirm({
+          title: "Change URL slug?",
+          description: `Changing the slug will break existing links. The URL will change from /@${member.slug} to /@${data.slug}.`,
+          confirmText: "Change Slug",
+          variant: "warning",
+        });
+        if (!confirmed) return;
+      }
 
-    await editMember({
-      id,
-      data: {
-        slug: data.slug,
-        name: data.name,
-        bio: data.bio || null,
-        imageUrl: data.imageUrl || null,
-      },
-    });
-    goto("/admin/members");
+      await editMember({
+        id,
+        data: {
+          slug: data.slug,
+          name: data.name,
+          bio: data.bio || null,
+          imageUrl: data.imageUrl || null,
+        },
+      });
+      goto("/admin/members");
+    } catch (error) {
+      toast.show(error instanceof Error ? error.message : "保存に失敗しました");
+    }
   }
 
   async function handleDelete() {
     if (!member) return;
 
-    const confirmed = await confirm({
-      title: "Delete Member",
-      description: `Are you sure you want to delete "${member.name}"? This action cannot be undone.`,
-      confirmText: "Delete",
-      variant: "danger",
-    });
+    try {
+      const confirmed = await confirm({
+        title: "Delete Member",
+        description: `Are you sure you want to delete "${member.name}"? This action cannot be undone.`,
+        confirmText: "Delete",
+        variant: "danger",
+      });
 
-    if (confirmed) {
-      await removeMember(id);
-      goto("/admin/members");
+      if (confirmed) {
+        await removeMember(id);
+        goto("/admin/members");
+      }
+    } catch (error) {
+      toast.show(error instanceof Error ? error.message : "削除に失敗しました");
     }
   }
 </script>
@@ -78,15 +89,7 @@
         <div>
           <nav class="mb-4 flex items-center gap-2 text-sm text-zinc-500">
             <a href="/admin/members" class="hover:text-zinc-700">Members</a>
-            <svg
-              class="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-            >
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
+            <ChevronRight class="h-4 w-4" />
             <span class="text-zinc-900">{member.name}</span>
           </nav>
           <h1 class="text-2xl font-bold text-zinc-900">Edit Member</h1>

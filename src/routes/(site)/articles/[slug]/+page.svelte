@@ -32,7 +32,12 @@
     </a>
 
     {#if article.coverUrl}
-      <img src={article.coverUrl} alt="" class="mb-8 aspect-video w-full rounded-xl object-cover" />
+      <img
+        src={article.coverUrl}
+        alt={article.title}
+        class="mb-8 max-h-64 w-full rounded-xl object-cover"
+        style="aspect-ratio: 5/3"
+      />
     {/if}
 
     <h1 class="mb-4 text-4xl font-bold">{article.title}</h1>
@@ -44,7 +49,11 @@
           class="flex items-center gap-2 hover:text-zinc-900"
         >
           {#if article.author.imageUrl}
-            <img src={article.author.imageUrl} alt="" class="h-6 w-6 rounded-full" />
+            <img
+              src={article.author.imageUrl}
+              alt={article.author.name}
+              class="h-6 w-6 rounded-full"
+            />
           {/if}
           {article.author.name}
         </a>

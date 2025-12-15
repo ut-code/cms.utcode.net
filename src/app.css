@@ -2,3 +2,122 @@
 @plugin "daisyui" {
   logs: false;
 }
+
+/* ut.code(); Admin Theme */
+@plugin "daisyui/theme" {
+  name: "utcode";
+  default: true;
+  --color-primary: oklch(72% 0.19 145); /* Lime green #00D372 */
+  --color-primary-content: oklch(15% 0.03 145);
+  --color-secondary: oklch(20% 0.01 260); /* Near black */
+  --color-secondary-content: oklch(98% 0.01 260);
+  --color-accent: oklch(72% 0.19 145);
+  --color-accent-content: oklch(15% 0.03 145);
+  --color-neutral: oklch(25% 0.015 260);
+  --color-neutral-content: oklch(98% 0.01 260);
+  --color-base-100: oklch(99% 0.002 260);
+  --color-base-200: oklch(97% 0.003 260);
+  --color-base-300: oklch(94% 0.004 260);
+  --color-base-content: oklch(20% 0.02 260);
+  --color-info: oklch(65% 0.19 240);
+  --color-info-content: oklch(98% 0.01 240);
+  --color-success: oklch(72% 0.19 145);
+  --color-success-content: oklch(15% 0.03 145);
+  --color-warning: oklch(75% 0.18 75);
+  --color-warning-content: oklch(20% 0.04 75);
+  --color-error: oklch(65% 0.22 25);
+  --color-error-content: oklch(98% 0.01 25);
+  --radius-btn: 0.5rem;
+  --radius-box: 0.75rem;
+}
+
+/* Typography */
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjPVmUsaaDhw.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("https://fonts.gstatic.com/s/dmsans/v14/rP2Hp2ywxg089UriCZOIHTWEBlwu8Q.woff2")
+    format("woff2");
+}
+
+/* Base styles */
+html {
+  font-family: "DM Sans", system-ui, sans-serif;
+}
+
+code,
+pre,
+.font-mono {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* Animations */
+@keyframes fade-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-slide-in {
+  animation: fade-slide-in 0.25s ease-out both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out both;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.2s ease-out both;
+}
+
+/* Stagger delays */
+.stagger-1 {
+  animation-delay: 0.03s;
+}
+.stagger-2 {
+  animation-delay: 0.06s;
+}
+.stagger-3 {
+  animation-delay: 0.09s;
+}
+.stagger-4 {
+  animation-delay: 0.12s;
+}
+.stagger-5 {
+  animation-delay: 0.15s;
+}

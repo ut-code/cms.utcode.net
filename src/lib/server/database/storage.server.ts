@@ -1,12 +1,18 @@
-import { s3, bucket } from "$lib/server/drivers/s3";
+import { s3, bucket, ensureBucket } from "$lib/server/drivers/s3";
 import { env } from "$lib/env/env.server";
 
-export async function uploadFile(file: File, path: string): Promise<{ url: string; key: string }> {
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const key = `${path}/${crypto.randomUUID()}-${file.name}`;
+export async function uploadBuffer(
+  buffer: Buffer,
+  contentType: string,
+  fileName: string,
+  path: string,
+): Promise<{ url: string; key: string }> {
+  await ensureBucket();
 
-  await s3.putObject(bucket, key, buffer, file.size, {
-    "Content-Type": file.type,
+  const key = `${path}/${crypto.randomUUID()}-${fileName}`;
+
+  await s3.putObject(bucket, key, buffer, buffer.length, {
+    "Content-Type": contentType,
   });
 
   const url = `${env.S3_PUBLIC_URL}/${key}`;

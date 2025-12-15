@@ -1,8 +1,11 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import ArticleForm from "$lib/components/ArticleForm.svelte";
+  import { useToast } from "$lib/components/toast/controls.svelte";
   import { saveArticle, getAuthors } from "$lib/data/articles.remote";
+  import { ChevronRight } from "lucide-svelte";
 
+  const toast = useToast();
   const authors = $derived(await getAuthors());
   let isSubmitting = $state(false);
 
@@ -15,18 +18,22 @@
     authorId: string | null;
     published: boolean;
   }) {
-    const result = await saveArticle({
-      slug: data.slug,
-      title: data.title,
-      content: data.content,
-      excerpt: data.excerpt || null,
-      coverUrl: data.coverUrl || null,
-      authorId: data.authorId,
-      published: data.published,
-      publishedAt: data.published ? new Date() : null,
-    });
-    if (result) {
-      goto("/admin/articles");
+    try {
+      const result = await saveArticle({
+        slug: data.slug,
+        title: data.title,
+        content: data.content,
+        excerpt: data.excerpt || null,
+        coverUrl: data.coverUrl || null,
+        authorId: data.authorId,
+        published: data.published,
+        publishedAt: data.published ? new Date() : null,
+      });
+      if (result) {
+        goto("/admin/articles");
+      }
+    } catch (error) {
+      toast.show(error instanceof Error ? error.message : "保存に失敗しました");
     }
   }
 </script>
@@ -56,15 +63,7 @@
         >
           Articles
         </a>
-        <svg
-          class="h-3.5 w-3.5 text-zinc-300"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          viewBox="0 0 24 24"
-        >
-          <polyline points="9 18 15 12 9 6" />
-        </svg>
+        <ChevronRight class="h-3.5 w-3.5 text-zinc-300" />
         <span class="text-zinc-900">New</span>
       </nav>
       <h1 class="text-xl font-bold text-zinc-900">New Article</h1>

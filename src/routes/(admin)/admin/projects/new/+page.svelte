@@ -2,7 +2,10 @@
   import { goto } from "$app/navigation";
   import ProjectForm from "$lib/components/ProjectForm.svelte";
   import { saveProject, getMembers } from "$lib/data/projects.remote";
+  import { useToast } from "$lib/components/toast/controls.svelte";
+  import { ChevronRight } from "lucide-svelte";
 
+  const toast = useToast();
   const members = $derived(await getMembers());
   let isSubmitting = $state(false);
 
@@ -18,20 +21,24 @@
   }) {
     if (!data.leadMemberId) return;
 
-    const result = await saveProject({
-      data: {
-        slug: data.slug,
-        name: data.name,
-        description: data.description || null,
-        content: data.content || null,
-        coverUrl: data.coverUrl || null,
-        repoUrl: data.repoUrl || null,
-        demoUrl: data.demoUrl || null,
-      },
-      leadMemberId: data.leadMemberId,
-    });
-    if (result) {
-      goto("/admin/projects");
+    try {
+      const result = await saveProject({
+        data: {
+          slug: data.slug,
+          name: data.name,
+          description: data.description || null,
+          content: data.content || null,
+          coverUrl: data.coverUrl || null,
+          repoUrl: data.repoUrl || null,
+          demoUrl: data.demoUrl || null,
+        },
+        leadMemberId: data.leadMemberId,
+      });
+      if (result) {
+        goto("/admin/projects");
+      }
+    } catch (error) {
+      toast.show(error instanceof Error ? error.message : "保存に失敗しました");
     }
   }
 </script>
@@ -52,9 +59,7 @@
     <div class="mb-8">
       <nav class="mb-4 flex items-center gap-2 text-sm text-zinc-500">
         <a href="/admin/projects" class="hover:text-zinc-700">Projects</a>
-        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <polyline points="9 18 15 12 9 6" />
-        </svg>
+        <ChevronRight class="h-4 w-4" />
         <span class="text-zinc-900">New</span>
       </nav>
       <h1 class="text-2xl font-bold text-zinc-900">New Project</h1>

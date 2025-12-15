@@ -29,6 +29,8 @@
 </script>
 
 <script lang="ts">
+  import { Trash2, AlertTriangle, Info } from "lucide-svelte";
+
   const variantStyles = {
     default: {
       icon: "bg-zinc-100 text-zinc-600",
@@ -78,42 +80,11 @@
       <!-- Icon -->
       <div class="mx-auto flex h-10 w-10 items-center justify-center rounded-full {styles.icon}">
         {#if variant === "danger"}
-          <svg
-            class="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-          >
-            <polyline points="3 6 5 6 21 6" />
-            <path
-              d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-            />
-          </svg>
+          <Trash2 class="h-5 w-5" />
         {:else if variant === "warning"}
-          <svg
-            class="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-            />
-          </svg>
+          <AlertTriangle class="h-5 w-5" />
         {:else}
-          <svg
-            class="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 16v-4" />
-            <path d="M12 8h.01" />
-          </svg>
+          <Info class="h-5 w-5" />
         {/if}
       </div>
 

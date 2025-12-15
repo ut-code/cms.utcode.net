@@ -3,7 +3,11 @@
   import { page } from "$app/state";
   import ArticleForm from "$lib/components/ArticleForm.svelte";
   import { confirm } from "$lib/components/confirm-modal.svelte";
+  import { useToast } from "$lib/components/toast/controls.svelte";
   import { getArticle, getAuthors, editArticle, removeArticle } from "$lib/data/articles.remote";
+  import { ChevronRight, FileText } from "lucide-svelte";
+
+  const toast = useToast();
 
   const id = $derived(page.params.id ?? "");
   const article = $derived(await getArticle(id));
@@ -19,46 +23,56 @@
     authorId: string | null;
     published: boolean;
   }) {
-    // Confirm slug change
-    if (article && data.slug !== article.slug) {
-      const confirmed = await confirm({
-        title: "Change URL slug?",
-        description: `Changing the slug will break existing links. The URL will change from /${article.slug} to /${data.slug}.`,
-        confirmText: "Change Slug",
-        variant: "warning",
-      });
-      if (!confirmed) return;
-    }
+    if (!article) return;
 
-    await editArticle({
-      id,
-      data: {
-        slug: data.slug,
-        title: data.title,
-        content: data.content,
-        excerpt: data.excerpt || null,
-        coverUrl: data.coverUrl || null,
-        authorId: data.authorId,
-        published: data.published,
-        publishedAt: data.published ? new Date() : null,
-      },
-    });
-    goto("/admin/articles");
+    try {
+      // Confirm slug change
+      if (data.slug !== article.slug) {
+        const confirmed = await confirm({
+          title: "Change URL slug?",
+          description: `Changing the slug will break existing links. The URL will change from /${article.slug} to /${data.slug}.`,
+          confirmText: "Change Slug",
+          variant: "warning",
+        });
+        if (!confirmed) return;
+      }
+
+      await editArticle({
+        id,
+        data: {
+          slug: data.slug,
+          title: data.title,
+          content: data.content,
+          excerpt: data.excerpt || null,
+          coverUrl: data.coverUrl || null,
+          authorId: data.authorId,
+          published: data.published,
+          publishedAt: data.published ? (article!.publishedAt ?? new Date()) : article!.publishedAt,
+        },
+      });
+      goto("/admin/articles");
+    } catch (error) {
+      toast.show(error instanceof Error ? error.message : "保存に失敗しました");
+    }
   }
 
   async function handleDelete() {
     if (!article) return;
 
-    const confirmed = await confirm({
-      title: "Delete Article",
-      description: `Are you sure you want to delete "${article.title}"? This action cannot be undone.`,
-      confirmText: "Delete",
-      variant: "danger",
-    });
+    try {
+      const confirmed = await confirm({
+        title: "Delete Article",
+        description: `Are you sure you want to delete "${article.title}"? This action cannot be undone.`,
+        confirmText: "Delete",
+        variant: "danger",
+      });
 
-    if (confirmed) {
-      await removeArticle(id);
-      goto("/admin/articles");
+      if (confirmed) {
+        await removeArticle(id);
+        goto("/admin/articles");
+      }
+    } catch (error) {
+      toast.show(error instanceof Error ? error.message : "削除に失敗しました");
     }
   }
 </script>
@@ -85,16 +99,7 @@
       <div
         class="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-zinc-400"
       >
-        <svg
-          class="h-6 w-6"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          viewBox="0 0 24 24"
-        >
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-        </svg>
+        <FileText class="h-6 w-6" />
       </div>
       <h2 class="mt-4 text-sm font-semibold text-zinc-900">Article not found</h2>
       <p class="mt-1 text-sm text-zinc-500">The article you're looking for doesn't exist.</p>
@@ -117,15 +122,7 @@
             >
               Articles
             </a>
-            <svg
-              class="h-3.5 w-3.5 text-zinc-300"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-            >
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
+            <ChevronRight class="h-3.5 w-3.5 text-zinc-300" />
             <span class="truncate text-zinc-900">{article.title}</span>
           </nav>
           <div class="flex items-center gap-2">
