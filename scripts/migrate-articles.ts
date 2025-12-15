@@ -15,9 +15,27 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { parse as parseYaml } from "yaml";
-import { db } from "../src/lib/server/drivers/db";
+import { drizzle } from "drizzle-orm/libsql";
+import { createClient } from "@libsql/client";
 import { article, member } from "../src/lib/shared/models/schema";
 import { eq } from "drizzle-orm";
+
+// Create database client directly (not using SvelteKit path aliases)
+const DATABASE_URL = process.env.DATABASE_URL;
+const DATABASE_AUTH_TOKEN = process.env.DATABASE_AUTH_TOKEN;
+
+if (!DATABASE_URL) {
+  console.error("ERROR: DATABASE_URL environment variable is required");
+  console.error("Usage: DATABASE_URL=... bun run scripts/migrate-articles.ts");
+  process.exit(1);
+}
+
+const client = createClient({
+  url: DATABASE_URL,
+  authToken: DATABASE_AUTH_TOKEN,
+});
+
+const db = drizzle(client, { schema: { article, member } });
 
 const OLD_SITE_PATH = join(import.meta.dirname, "../../utcode.net");
 const ARTICLES_PATH = join(OLD_SITE_PATH, "contents/articles");
@@ -126,20 +144,80 @@ async function articleExists(slug: string): Promise<boolean> {
   return result.length > 0;
 }
 
+function extractErrorMessage(error: unknown): string {
+  if (!(error instanceof Error)) return String(error);
+
+  // Drizzle errors include full SQL with params - extract just the error type
+  const message = error.message;
+
+  // Check for common SQLite/Drizzle errors
+  if (message.includes("UNIQUE constraint failed")) {
+    const match = message.match(/UNIQUE constraint failed: (\S+)/);
+    return match ? `Duplicate ${match[1]}` : "Unique constraint violation";
+  }
+  if (message.includes("FOREIGN KEY constraint failed")) {
+    return "Foreign key constraint failed (invalid reference)";
+  }
+  if (message.includes("NOT NULL constraint failed")) {
+    const match = message.match(/NOT NULL constraint failed: (\S+)/);
+    return match ? `Missing required field: ${match[1]}` : "Missing required field";
+  }
+
+  // libsql/turso error format: "Failed query: ... \n params: ..." followed by cause
+  // Try to extract meaningful error from the cause chain
+  if ("cause" in error && error.cause) {
+    const cause = error.cause;
+    if (cause instanceof Error) {
+      return extractErrorMessage(cause);
+    }
+    return String(cause);
+  }
+
+  // For "Failed query" messages, the actual error may be truncated
+  if (message.startsWith("Failed query:")) {
+    // Look for error details after params
+    const paramsIdx = message.indexOf("params:");
+    if (paramsIdx !== -1) {
+      // Find any error info after the params section
+      const afterParams = message.slice(paramsIdx);
+      const errorMatch = afterParams.match(/error[:\s]+(.+)/i);
+      if (errorMatch) {
+        return errorMatch[1].slice(0, 200);
+      }
+    }
+    return "Database insert failed (check connection/migration)";
+  }
+
+  // For other errors, truncate if it contains SQL params
+  if (message.includes("params:")) {
+    const idx = message.indexOf("params:");
+    return message.slice(0, idx).trim();
+  }
+
+  // Truncate very long messages
+  if (message.length > 200) {
+    return message.slice(0, 200) + "...";
+  }
+
+  return message;
+}
+
 async function migrateArticle(filePath: string, dryRun: boolean): Promise<MigrationResult> {
   const relPath = filePath.replace(ARTICLES_PATH + "/", "");
   const dirPath = dirname(relPath);
   const slug = generateSlug(dirPath);
 
+  let title = "";
   try {
-    // Check if already exists
-    if (await articleExists(slug)) {
-      return { slug, title: "", status: "skipped", reason: "Already exists" };
-    }
-
-    // Parse file
+    // Parse file first to get title for error reporting
     const content = await readFile(filePath, "utf-8");
     const { frontmatter, body } = parseFrontmatter(content);
+    title = frontmatter.title;
+
+    // Check if already exists
+    if (await articleExists(slug)) {
+      return { slug, title, status: "skipped", reason: "Already exists" };
+    }
 
     // Resolve author
     const memberSlug = extractMemberSlug(frontmatter.author);
@@ -162,7 +240,7 @@ async function migrateArticle(filePath: string, dryRun: boolean): Promise<Migrat
       console.log(`  Author: ${memberSlug ?? "none"} -> ${authorId ?? "null"}`);
       console.log(`  Excerpt: ${excerpt.slice(0, 50)}...`);
       console.log();
-      return { slug, title: frontmatter.title, status: "created" };
+      return { slug, title, status: "created" };
     }
 
     // Insert into database
@@ -178,10 +256,11 @@ async function migrateArticle(filePath: string, dryRun: boolean): Promise<Migrat
       viewCount: 0,
     });
 
-    return { slug, title: frontmatter.title, status: "created" };
+    console.log(`✓ Created: ${slug}`);
+    return { slug, title, status: "created" };
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    return { slug, title: "", status: "error", reason: message };
+    const reason = extractErrorMessage(error);
+    return { slug, title, status: "error", reason };
   }
 }
 
