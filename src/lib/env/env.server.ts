@@ -23,6 +23,7 @@ const S3Env = v.object({
   S3_ACCESS_KEY: v.string(),
   S3_SECRET_KEY: v.string(),
   S3_BUCKET: v.string(),
+  S3_PUBLIC_URL: v.string(),
 });
 
 const Env = v.intersect([TursoEnv, AuthEnv, S3Env]);

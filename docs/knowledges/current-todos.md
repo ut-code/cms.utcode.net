@@ -11,20 +11,20 @@
 - [x] Edit/new forms for articles
 - [x] Edit/new forms for projects
 - [x] ut-code membership caching (24h TTL)
+- [x] Add a S3-compatible object storage (will use cloudflare in prod. find a development-only solution)
+- [x] Use devenv to automatically launch dev services
+- [x] GitHub login page (`/login`)
+- [x] Public-facing pages (articles, projects, members)
+- [x] Add image management feature (ImageUpload component + S3 integration)
+- [x] UI cleanup (nav links, home page consistency)
 
 ## Pending
 
-[near]
+[short-term]
 
-- GitHub login page (`/login`)
-- Public-facing pages (articles, projects, members)
-- Add a S3-compatible object storage (will use cloudflare in prod. find a development-only solution)
-- Add image management feature
+- Markdown rendering for article/project content
+- SEO meta tags for public pages
 
 [roadmap]
 
 - Add a script that migrates previous utcode.net data into the new one
-
-[development]
-
-- Use devenv to automatically launch dev services

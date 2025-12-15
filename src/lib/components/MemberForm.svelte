@@ -1,6 +1,8 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { snapshot } from "$lib/utils/snapshot.svelte";
+  import { onSaveShortcut } from "$lib/utils/keyboard";
+  import ImageUpload from "./image-upload.svelte";
 
   type MemberData = {
     slug: string;
@@ -65,7 +67,13 @@
       isSubmitting = false;
     }
   }
+
+  function triggerSubmit() {
+    if (!isSubmitting) handleSubmit(new SubmitEvent("submit"));
+  }
 </script>
+
+<svelte:window onkeydown={onSaveShortcut(triggerSubmit)} />
 
 <form onsubmit={handleSubmit} class="space-y-6">
   <!-- Basic Info Section -->
@@ -122,32 +130,7 @@
     <h2 class="mb-5 text-sm font-semibold text-zinc-900">Profile</h2>
 
     <div class="space-y-5">
-      <div class="space-y-1.5">
-        <label for="imageUrl" class="block text-sm font-medium text-zinc-700"
-          >Profile Image URL</label
-        >
-        <div class="flex items-center gap-3">
-          <input
-            type="url"
-            id="imageUrl"
-            bind:value={formData.imageUrl}
-            class="flex-1 rounded-lg border border-zinc-200 bg-white px-3.5 py-2.5 text-sm text-zinc-900 transition-all duration-150 placeholder:text-zinc-400 hover:border-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100 focus:outline-none"
-            placeholder="https://example.com/avatar.jpg"
-          />
-          {#if formData.imageUrl}
-            <div class="shrink-0">
-              <img
-                src={formData.imageUrl}
-                alt="Preview"
-                class="h-10 w-10 rounded-full object-cover ring-2 ring-zinc-100 transition-all duration-150 hover:ring-zinc-200"
-                onerror={(e) => {
-                  (e.target as HTMLImageElement).style.display = "none";
-                }}
-              />
-            </div>
-          {/if}
-        </div>
-      </div>
+      <ImageUpload bind:value={formData.imageUrl} folder="members" label="Profile Image" />
 
       <div class="space-y-1.5">
         <label for="bio" class="block text-sm font-medium text-zinc-700">Bio</label>

@@ -1,6 +1,8 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { snapshot } from "$lib/utils/snapshot.svelte";
+  import { onSaveShortcut } from "$lib/utils/keyboard";
+  import ImageUpload from "./image-upload.svelte";
 
   type Author = {
     id: string;
@@ -87,7 +89,13 @@
       isSubmitting = false;
     }
   }
+
+  function triggerSubmit() {
+    if (!isSubmitting) handleSubmit(new SubmitEvent("submit"));
+  }
 </script>
+
+<svelte:window onkeydown={onSaveShortcut(triggerSubmit)} />
 
 <form onsubmit={handleSubmit} class="space-y-6">
   <!-- Basic Info Section -->
@@ -166,31 +174,7 @@
         ></textarea>
       </div>
 
-      <div class="space-y-1.5">
-        <label for="coverUrl" class="block text-sm font-medium text-zinc-700">Cover Image URL</label
-        >
-        <input
-          type="url"
-          id="coverUrl"
-          bind:value={formData.coverUrl}
-          class="w-full rounded-lg border border-zinc-200 bg-white px-3.5 py-2.5 text-sm text-zinc-900 transition-all duration-150 placeholder:text-zinc-400 hover:border-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100 focus:outline-none"
-          placeholder="https://example.com/cover.jpg"
-        />
-        {#if formData.coverUrl}
-          <div
-            class="mt-2 overflow-hidden rounded-lg border border-zinc-100 transition-all duration-150 hover:border-zinc-200"
-          >
-            <img
-              src={formData.coverUrl}
-              alt="Cover preview"
-              class="h-32 w-full object-cover"
-              onerror={(e) => {
-                (e.target as HTMLImageElement).style.display = "none";
-              }}
-            />
-          </div>
-        {/if}
-      </div>
+      <ImageUpload bind:value={formData.coverUrl} folder="articles" label="Cover Image" />
     </div>
   </div>
 
