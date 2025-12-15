@@ -4,6 +4,7 @@
   import { saveProject, getMembers } from "$lib/data/projects.remote";
   import { useToast } from "$lib/components/toast/controls.svelte";
   import { ChevronRight } from "lucide-svelte";
+  import type { ProjectCategory } from "$lib/shared/models/schema";
 
   const toast = useToast();
   const members = $derived(await getMembers());
@@ -17,6 +18,7 @@
     coverUrl: string;
     repoUrl: string;
     demoUrl: string;
+    category: ProjectCategory;
     leadMemberId: string | null;
   }) {
     if (!data.leadMemberId) return;
@@ -31,6 +33,7 @@
           coverUrl: data.coverUrl || null,
           repoUrl: data.repoUrl || null,
           demoUrl: data.demoUrl || null,
+          category: data.category,
         },
         leadMemberId: data.leadMemberId,
       });

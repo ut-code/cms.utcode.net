@@ -11,6 +11,10 @@ import {
   removeProjectMember,
 } from "$lib/server/database/projects.server";
 import { listMembers } from "$lib/server/database/members.server";
+import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
+
+const categoryValues = Object.keys(PROJECT_CATEGORIES) as [ProjectCategory, ...ProjectCategory[]];
+const categorySchema = v.picklist(categoryValues);
 
 export const getProjects = query(async () => {
   await requireUtCodeMember();
@@ -37,6 +41,7 @@ export const saveProject = command(
       coverUrl: v.nullable(v.string()),
       repoUrl: v.nullable(v.string()),
       demoUrl: v.nullable(v.string()),
+      category: categorySchema,
     }),
     leadMemberId: v.string(),
   }),
@@ -57,6 +62,7 @@ export const editProject = command(
       coverUrl: v.optional(v.nullable(v.string())),
       repoUrl: v.optional(v.nullable(v.string())),
       demoUrl: v.optional(v.nullable(v.string())),
+      category: v.optional(categorySchema),
     }),
   }),
   async ({ id, data }) => {

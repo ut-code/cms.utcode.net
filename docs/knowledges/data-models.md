@@ -57,8 +57,19 @@ projects
 ├── coverUrl     TEXT
 ├── repoUrl      TEXT
 ├── demoUrl      TEXT
+├── category     TEXT NOT NULL DEFAULT 'active'  -- "active" | "ended" | "hackathon" | "festival" | "personal"
 ├── createdAt    INTEGER NOT NULL
 └── updatedAt    INTEGER NOT NULL
+
+## Project Categories
+
+| Key         | Label              |
+| ----------- | ------------------ |
+| `active`    | 稼働中プロジェクト |
+| `ended`     | 終了済みプロジェクト |
+| `hackathon` | ハッカソン         |
+| `festival`  | 学園祭             |
+| `personal`  | 個人プロジェクト   |
 
 projectMembers
 ├── projectId    TEXT FK → projects.id  ┐

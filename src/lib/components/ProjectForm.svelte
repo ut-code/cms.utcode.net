@@ -5,6 +5,7 @@
   import ImageUpload from "./image-upload.svelte";
   import Markdown from "./Markdown.svelte";
   import { Loader2, Github, ExternalLink } from "lucide-svelte";
+  import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
 
   type Member = {
     id: string;
@@ -20,6 +21,7 @@
     coverUrl: string;
     repoUrl: string;
     demoUrl: string;
+    category: ProjectCategory;
     leadMemberId: string | null;
   };
 
@@ -32,6 +34,7 @@
       coverUrl: "",
       repoUrl: "",
       demoUrl: "",
+      category: "active" as ProjectCategory,
       leadMemberId: null,
     },
     members = [],
@@ -163,6 +166,26 @@
           class="w-full rounded-lg border border-zinc-200 bg-white px-3.5 py-2.5 text-sm text-zinc-900 transition-all duration-150 placeholder:text-zinc-400 hover:border-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100 focus:outline-none"
           placeholder="A brief description of the project..."
         ></textarea>
+      </div>
+
+      <div class="space-y-1.5">
+        <label class="block text-sm font-medium text-zinc-700">
+          Category <span class="text-red-500">*</span>
+        </label>
+        <div class="flex flex-wrap gap-2">
+          {#each Object.entries(PROJECT_CATEGORIES) as [key, label] (key)}
+            <button
+              type="button"
+              onclick={() => (formData.category = key as ProjectCategory)}
+              class="rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-150 {formData.category ===
+              key
+                ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                : 'border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300'}"
+            >
+              {label}
+            </button>
+          {/each}
+        </div>
       </div>
 
       {#if isNew}

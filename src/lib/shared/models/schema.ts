@@ -142,6 +142,17 @@ export const article = sqliteTable(
   (table) => [index("article_authorId_idx").on(table.authorId)],
 );
 
+// Project categories
+export const PROJECT_CATEGORIES = {
+  active: "稼働中プロジェクト",
+  ended: "終了済みプロジェクト",
+  hackathon: "ハッカソン",
+  festival: "学園祭",
+  personal: "個人プロジェクト",
+} as const;
+
+export type ProjectCategory = keyof typeof PROJECT_CATEGORIES;
+
 export const project = sqliteTable("project", {
   id: text("id")
     .primaryKey()
@@ -153,6 +164,7 @@ export const project = sqliteTable("project", {
   coverUrl: text("cover_url"),
   repoUrl: text("repo_url"),
   demoUrl: text("demo_url"),
+  category: text("category").$type<ProjectCategory>().notNull().default("active"),
   createdAt: integer("created_at", { mode: "timestamp_ms" })
     .default(sql`(unixepoch() * 1000)`)
     .notNull(),
@@ -209,3 +221,5 @@ export const projectMemberRelations = relations(projectMember, ({ one }) => ({
     references: [member.id],
   }),
 }));
+
+export const Project = null; // TODO:

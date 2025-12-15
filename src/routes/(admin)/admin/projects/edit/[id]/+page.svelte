@@ -13,6 +13,7 @@
   } from "$lib/data/projects.remote";
   import { useToast } from "$lib/components/toast/controls.svelte";
   import { ChevronRight } from "lucide-svelte";
+  import type { ProjectCategory } from "$lib/shared/models/schema";
 
   const toast = useToast();
   const id = $derived(page.params.id ?? "");
@@ -31,6 +32,7 @@
     coverUrl: string;
     repoUrl: string;
     demoUrl: string;
+    category: ProjectCategory;
     leadMemberId: string | null;
   }) {
     try {
@@ -54,6 +56,7 @@
           coverUrl: data.coverUrl || null,
           repoUrl: data.repoUrl || null,
           demoUrl: data.demoUrl || null,
+          category: data.category,
         },
       });
       goto("/admin/projects");
@@ -222,6 +225,7 @@
           coverUrl: project.coverUrl ?? "",
           repoUrl: project.repoUrl ?? "",
           demoUrl: project.demoUrl ?? "",
+          category: project.category,
           leadMemberId: null,
         }}
         {members}

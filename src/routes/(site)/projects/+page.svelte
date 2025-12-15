@@ -1,15 +1,34 @@
 <script lang="ts">
   import { getPublicProjects } from "$lib/data/public.remote";
+  import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
 
   const projects = $derived(await getPublicProjects());
 
+  let selectedCategory = $state<ProjectCategory | "all">("all");
   let currentPage = $state(1);
   const itemsPerPage = 12;
 
-  const totalPages = $derived(Math.ceil(projects.length / itemsPerPage));
-  const paginatedProjects = $derived(
-    projects.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage),
+  const filteredProjects = $derived(
+    selectedCategory === "all" ? projects : projects.filter((p) => p.category === selectedCategory),
   );
+
+  const totalPages = $derived(Math.ceil(filteredProjects.length / itemsPerPage));
+  const paginatedProjects = $derived(
+    filteredProjects.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage),
+  );
+
+  const categoryColors: Record<ProjectCategory, string> = {
+    active: "bg-emerald-100 text-emerald-700 border-emerald-200",
+    ended: "bg-zinc-100 text-zinc-600 border-zinc-200",
+    hackathon: "bg-purple-100 text-purple-700 border-purple-200",
+    festival: "bg-pink-100 text-pink-700 border-pink-200",
+    personal: "bg-amber-100 text-amber-700 border-amber-200",
+  };
+
+  function selectCategory(category: ProjectCategory | "all") {
+    selectedCategory = category;
+    currentPage = 1;
+  }
 
   function goToPage(page: number) {
     currentPage = page;
@@ -28,10 +47,42 @@
   >
     Projects
   </div>
-  <h1 class="mb-8 text-3xl font-bold">プロジェクト一覧</h1>
+  <h1 class="mb-4 text-3xl font-bold">プロジェクト一覧</h1>
 
-  {#if projects.length === 0}
-    <p class="text-zinc-500">まだプロジェクトがありません。</p>
+  <!-- Category filter -->
+  <div class="mb-8 flex flex-wrap gap-2">
+    <button
+      onclick={() => selectCategory("all")}
+      class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-all"
+      class:border-[#00D372]={selectedCategory === "all"}
+      class:bg-[#00D372]={selectedCategory === "all"}
+      class:text-white={selectedCategory === "all"}
+      class:border-zinc-200={selectedCategory !== "all"}
+      class:bg-white={selectedCategory !== "all"}
+      class:text-zinc-700={selectedCategory !== "all"}
+      class:hover:border-zinc-300={selectedCategory !== "all"}
+    >
+      すべて
+    </button>
+    {#each Object.entries(PROJECT_CATEGORIES) as [key, label] (key)}
+      <button
+        onclick={() => selectCategory(key as ProjectCategory)}
+        class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-all"
+        class:border-[#00D372]={selectedCategory === key}
+        class:bg-[#00D372]={selectedCategory === key}
+        class:text-white={selectedCategory === key}
+        class:border-zinc-200={selectedCategory !== key}
+        class:bg-white={selectedCategory !== key}
+        class:text-zinc-700={selectedCategory !== key}
+        class:hover:border-zinc-300={selectedCategory !== key}
+      >
+        {label}
+      </button>
+    {/each}
+  </div>
+
+  {#if filteredProjects.length === 0}
+    <p class="text-zinc-500">該当するプロジェクトがありません。</p>
   {:else}
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {#each paginatedProjects as project (project.id)}
@@ -46,7 +97,16 @@
               class="mb-4 aspect-video w-full rounded-lg object-cover"
             />
           {/if}
-          <h2 class="mb-2 font-semibold group-hover:text-[#00D372]">{project.name}</h2>
+          <div class="mb-2 flex items-start justify-between gap-2">
+            <h2 class="font-semibold group-hover:text-[#00D372]">{project.name}</h2>
+            <span
+              class="shrink-0 rounded border px-1.5 py-0.5 text-[10px] font-medium {categoryColors[
+                project.category
+              ]}"
+            >
+              {PROJECT_CATEGORIES[project.category]}
+            </span>
+          </div>
           {#if project.description}
             <p class="mb-4 line-clamp-2 text-sm text-zinc-500">{project.description}</p>
           {/if}
@@ -66,7 +126,7 @@
       {/each}
     </div>
 
-    {#if projects.length > itemsPerPage}
+    {#if filteredProjects.length > itemsPerPage}
       <div class="mt-8 flex items-center justify-center gap-2">
         <button
           onclick={() => goToPage(currentPage - 1)}

@@ -3,9 +3,18 @@
   import Markdown from "$lib/components/Markdown.svelte";
   import { getPublicProject } from "$lib/data/public.remote";
   import { Github } from "lucide-svelte";
+  import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
 
   const slug = $derived(page.params.slug ?? "");
   const project = $derived(await getPublicProject(slug));
+
+  const categoryColors: Record<ProjectCategory, string> = {
+    active: "bg-emerald-100 text-emerald-700 border-emerald-200",
+    ended: "bg-zinc-100 text-zinc-600 border-zinc-200",
+    hackathon: "bg-purple-100 text-purple-700 border-purple-200",
+    festival: "bg-pink-100 text-pink-700 border-pink-200",
+    personal: "bg-amber-100 text-amber-700 border-amber-200",
+  };
 </script>
 
 <svelte:head>
@@ -39,7 +48,12 @@
       />
     {/if}
 
-    <h1 class="mb-4 text-4xl font-bold">{project.name}</h1>
+    <div class="mb-4 flex flex-wrap items-center gap-3">
+      <h1 class="text-4xl font-bold">{project.name}</h1>
+      <span class="rounded border px-2 py-1 text-xs font-medium {categoryColors[project.category]}">
+        {PROJECT_CATEGORIES[project.category]}
+      </span>
+    </div>
 
     {#if project.description}
       <p class="mb-6 text-lg text-zinc-500">{project.description}</p>

@@ -1,8 +1,17 @@
 <script lang="ts">
   import { getProjects } from "$lib/data/projects.remote";
   import { Folder, Plus, ChevronRight, Github, ExternalLink } from "lucide-svelte";
+  import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
 
   const projects = $derived(await getProjects());
+
+  const categoryColors: Record<ProjectCategory, string> = {
+    active: "bg-emerald-100 text-emerald-700",
+    ended: "bg-zinc-100 text-zinc-600",
+    hackathon: "bg-purple-100 text-purple-700",
+    festival: "bg-pink-100 text-pink-700",
+    personal: "bg-amber-100 text-amber-700",
+  };
 </script>
 
 <svelte:head>
@@ -104,11 +113,20 @@
 
             <!-- Content -->
             <div class="card-body p-4">
-              <h3
-                class="font-medium text-base-content transition-colors duration-150 group-hover:text-base-content/80"
-              >
-                {project.name}
-              </h3>
+              <div class="flex items-start justify-between gap-2">
+                <h3
+                  class="font-medium text-base-content transition-colors duration-150 group-hover:text-base-content/80"
+                >
+                  {project.name}
+                </h3>
+                <span
+                  class="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium {categoryColors[
+                    project.category
+                  ]}"
+                >
+                  {PROJECT_CATEGORIES[project.category]}
+                </span>
+              </div>
               <code class="block font-mono text-xs text-base-content/40">/{project.slug}</code>
 
               {#if project.description}
