@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getPublicArticles } from "$lib/data/public.remote";
+  import { getPublicArticles } from "$lib/data/public/index.remote";
 
   const articles = $derived(await getPublicArticles());
 

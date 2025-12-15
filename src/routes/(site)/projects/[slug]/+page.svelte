@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/state";
   import Markdown from "$lib/components/Markdown.svelte";
-  import { getPublicProject } from "$lib/data/public.remote";
+  import { getPublicProject } from "$lib/data/public/index.remote";
   import { Github } from "lucide-svelte";
   import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
 

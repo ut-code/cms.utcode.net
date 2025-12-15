@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getPublicProjects } from "$lib/data/public.remote";
+  import { getPublicProjects } from "$lib/data/public/index.remote";
   import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
 
   const projects = $derived(await getPublicProjects());

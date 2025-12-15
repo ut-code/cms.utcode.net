@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/state";
   import Markdown from "$lib/components/Markdown.svelte";
-  import { getArticle } from "$lib/data/articles.remote";
+  import { getArticle } from "$lib/data/private/articles.remote";
 
   const id = $derived(page.params.id ?? "");
   const article = $derived(await getArticle(id));

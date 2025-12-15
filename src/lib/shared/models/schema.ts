@@ -154,6 +154,13 @@ export const PROJECT_CATEGORIES = {
 
 export type ProjectCategory = keyof typeof PROJECT_CATEGORIES;
 
+export const PROJECT_ROLES = {
+  lead: "リード",
+  member: "メンバー",
+} as const;
+
+export type ProjectRole = keyof typeof PROJECT_ROLES;
+
 export const project = sqliteTable("project", {
   id: text("id")
     .primaryKey()

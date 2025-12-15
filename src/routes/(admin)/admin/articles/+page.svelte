@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import { getArticles } from "$lib/data/articles.remote";
+  import { getArticles } from "$lib/data/private/articles.remote";
   import { FileText, Plus, ChevronRight, Eye } from "lucide-svelte";
 
   const allArticles = $derived(await getArticles());

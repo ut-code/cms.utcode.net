@@ -1,6 +1,6 @@
 import { eq, and, or, like } from "drizzle-orm";
 import { db } from "$lib/server/drivers/db";
-import { project, projectMember } from "$lib/shared/models/schema";
+import { project, projectMember, type ProjectRole } from "$lib/shared/models/schema";
 
 export type Project = typeof project.$inferSelect;
 export type NewProject = typeof project.$inferInsert;
@@ -59,7 +59,7 @@ export async function deleteProject(id: string) {
 export async function addProjectMember(
   projectId: string,
   memberId: string,
-  role: string = "member",
+  role: ProjectRole = "member",
 ) {
   await db.insert(projectMember).values({ projectId, memberId, role });
 }
@@ -70,7 +70,11 @@ export async function removeProjectMember(projectId: string, memberId: string) {
     .where(and(eq(projectMember.projectId, projectId), eq(projectMember.memberId, memberId)));
 }
 
-export async function updateProjectMemberRole(projectId: string, memberId: string, role: string) {
+export async function updateProjectMemberRole(
+  projectId: string,
+  memberId: string,
+  role: ProjectRole,
+) {
   await db
     .update(projectMember)
     .set({ role })

@@ -10,7 +10,7 @@
     removeProject,
     addMember,
     removeMember,
-  } from "$lib/data/projects.remote";
+  } from "$lib/data/private/projects.remote";
   import { useToast } from "$lib/components/toast/controls.svelte";
   import { ChevronRight } from "lucide-svelte";
   import type { ProjectCategory } from "$lib/shared/models/schema";
@@ -22,7 +22,7 @@
   let isSubmitting = $state(false);
   let showAddMember = $state(false);
   let newMemberId = $state<string | null>(null);
-  let newMemberRole = $state("member");
+  let newMemberRole = $state<"member" | "lead">("member");
 
   async function handleSubmit(data: {
     slug: string;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getStats } from "$lib/data/stats.remote";
+  import { getStats } from "$lib/data/public/stats.remote";
   import {
     LayoutGrid,
     FileText,

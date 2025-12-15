@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import { getPublicMember } from "$lib/data/public.remote";
+  import { getPublicMember } from "$lib/data/public/index.remote";
 
   const slug = $derived(page.params.slug ?? "");
   const member = $derived(await getPublicMember(slug));

@@ -4,7 +4,12 @@
   import ArticleForm from "$lib/components/ArticleForm.svelte";
   import { confirm } from "$lib/components/confirm-modal.svelte";
   import { useToast } from "$lib/components/toast/controls.svelte";
-  import { getArticle, getAuthors, editArticle, removeArticle } from "$lib/data/articles.remote";
+  import {
+    getArticle,
+    getAuthors,
+    editArticle,
+    removeArticle,
+  } from "$lib/data/private/articles.remote";
   import { ChevronRight, FileText } from "lucide-svelte";
 
   const toast = useToast();

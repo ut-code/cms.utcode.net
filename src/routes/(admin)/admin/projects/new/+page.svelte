@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import ProjectForm from "$lib/components/ProjectForm.svelte";
-  import { saveProject, getMembers } from "$lib/data/projects.remote";
+  import { saveProject, getMembers } from "$lib/data/private/projects.remote";
   import { useToast } from "$lib/components/toast/controls.svelte";
   import { ChevronRight } from "lucide-svelte";
   import type { ProjectCategory } from "$lib/shared/models/schema";

@@ -11,10 +11,18 @@ import {
   removeProjectMember,
 } from "$lib/server/database/projects.server";
 import { listMembers } from "$lib/server/database/members.server";
-import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
+import {
+  PROJECT_CATEGORIES,
+  type ProjectCategory,
+  PROJECT_ROLES,
+  type ProjectRole,
+} from "$lib/shared/models/schema";
 
 const categoryValues = Object.keys(PROJECT_CATEGORIES) as [ProjectCategory, ...ProjectCategory[]];
 const categorySchema = v.picklist(categoryValues);
+
+const roleValues = Object.keys(PROJECT_ROLES) as [ProjectRole, ...ProjectRole[]];
+const roleSchema = v.picklist(roleValues);
 
 export const getProjects = query(async () => {
   await requireUtCodeMember();
@@ -80,7 +88,7 @@ export const addMember = command(
   v.object({
     projectId: v.string(),
     memberId: v.string(),
-    role: v.optional(v.string()),
+    role: v.optional(roleSchema),
   }),
   async ({ projectId, memberId, role }) => {
     await requireUtCodeMember();

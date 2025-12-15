@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getProjects } from "$lib/data/projects.remote";
+  import { getProjects } from "$lib/data/private/projects.remote";
   import { Folder, Plus, ChevronRight, Github, ExternalLink } from "lucide-svelte";
   import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
 

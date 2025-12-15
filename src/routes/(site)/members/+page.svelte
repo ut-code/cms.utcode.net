@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getPublicMembers } from "$lib/data/public.remote";
+  import { getPublicMembers } from "$lib/data/public/index.remote";
 
   const members = $derived(await getPublicMembers());
 

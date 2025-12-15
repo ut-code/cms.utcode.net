@@ -6,7 +6,7 @@
     getPublicArticle,
     getPublicRelatedArticles,
     incrementArticleViewCount,
-  } from "$lib/data/public.remote";
+  } from "$lib/data/public/index.remote";
 
   const slug = $derived(page.params.slug ?? "");
   const article = $derived(await getPublicArticle(slug));

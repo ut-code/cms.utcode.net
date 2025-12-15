@@ -2,7 +2,7 @@
   import { goto } from "$app/navigation";
   import MemberForm from "$lib/components/MemberForm.svelte";
   import { useToast } from "$lib/components/toast/controls.svelte";
-  import { saveMember } from "$lib/data/members.remote";
+  import { saveMember } from "$lib/data/private/members.remote";
   import { ChevronRight } from "lucide-svelte";
 
   const toast = useToast();

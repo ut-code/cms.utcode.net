@@ -2,8 +2,11 @@ import { query } from "$app/server";
 import { listMembers } from "$lib/server/database/members.server";
 import { listAllArticles } from "$lib/server/database/articles.server";
 import { listProjects } from "$lib/server/database/projects.server";
+import { requireUtCodeMember } from "$lib/server/database/auth.server";
 
 export const getStats = query(async () => {
+  await requireUtCodeMember();
+
   const [members, articles, projects] = await Promise.all([
     listMembers(),
     listAllArticles(),

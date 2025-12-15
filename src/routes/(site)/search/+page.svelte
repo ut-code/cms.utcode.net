@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { searchPublic } from "$lib/data/public.remote";
+  import { searchPublic } from "$lib/data/public/index.remote";
   import { page } from "$app/state";
   import { Search } from "lucide-svelte";
 

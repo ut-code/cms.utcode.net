@@ -1,7 +1,7 @@
 <script lang="ts">
   import "../../app.css";
   import { page } from "$app/state";
-  import { getAdminSession } from "$lib/data/auth.remote";
+  import { getAdminSession } from "$lib/data/private/auth.remote";
   import ConfirmModal from "$lib/components/confirm-modal.svelte";
   import Toast from "$lib/components/toast/toast.svelte";
   import { setupToast } from "$lib/components/toast/controls.svelte";

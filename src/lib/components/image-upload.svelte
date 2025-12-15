@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { upload } from "$lib/data/storage.remote";
+  import { upload } from "$lib/data/private/storage.remote";
   import { Loader2, Upload, AlertCircle, X } from "lucide-svelte";
 
   const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -35,6 +35,60 @@
     return btoa(binary);
   }
 
+  async function compressImage(file: File, maxSize = 1920, quality = 0.85): Promise<File> {
+    // Skip if not an image that can be compressed
+    if (!file.type.startsWith("image/") || file.type === "image/gif") {
+      return file;
+    }
+
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        // Calculate new dimensions
+        let { width, height } = img;
+        if (width > maxSize || height > maxSize) {
+          if (width > height) {
+            height = (height / width) * maxSize;
+            width = maxSize;
+          } else {
+            width = (width / height) * maxSize;
+            height = maxSize;
+          }
+        }
+
+        // Draw to canvas
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          resolve(file);
+          return;
+        }
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Convert to blob
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              resolve(file);
+              return;
+            }
+            const compressed = new File([blob], file.name.replace(/\.[^.]+$/, ".jpg"), {
+              type: "image/jpeg",
+            });
+            // Use compressed only if smaller
+            resolve(compressed.size < file.size ? compressed : file);
+          },
+          "image/jpeg",
+          quality,
+        );
+      };
+      img.onerror = () => resolve(file);
+      img.src = URL.createObjectURL(file);
+    });
+  }
+
   async function handleFile(file: File, fromPaste = false) {
     error = null;
 
@@ -56,17 +110,20 @@
       setTimeout(() => (pasteFlash = false), 600);
     }
 
+    // Compress image before upload
+    const processedFile = await compressImage(file);
+
     // Immediate preview
-    previewUrl = URL.createObjectURL(file);
+    previewUrl = URL.createObjectURL(processedFile);
     isUploading = true;
 
     try {
-      const arrayBuffer = await file.arrayBuffer();
+      const arrayBuffer = await processedFile.arrayBuffer();
       const base64 = arrayBufferToBase64(arrayBuffer);
       const result = await upload({
         data: base64,
-        type: file.type,
-        name: file.name,
+        type: processedFile.type,
+        name: processedFile.name,
         folder,
       });
       value = result.url;

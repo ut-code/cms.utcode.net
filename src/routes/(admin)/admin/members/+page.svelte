@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getMembers } from "$lib/data/members.remote";
+  import { getMembers } from "$lib/data/private/members.remote";
   import { Users, Plus, ChevronRight } from "lucide-svelte";
 
   const members = $derived(await getMembers());

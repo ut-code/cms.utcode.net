@@ -3,7 +3,7 @@
   import { page } from "$app/state";
   import MemberForm from "$lib/components/MemberForm.svelte";
   import { confirm } from "$lib/components/confirm-modal.svelte";
-  import { getMember, editMember, removeMember } from "$lib/data/members.remote";
+  import { getMember, editMember, removeMember } from "$lib/data/private/members.remote";
   import { useToast } from "$lib/components/toast/controls.svelte";
   import { ChevronRight } from "lucide-svelte";
 

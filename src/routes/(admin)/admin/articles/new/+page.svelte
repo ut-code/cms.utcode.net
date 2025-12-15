@@ -2,7 +2,7 @@
   import { goto } from "$app/navigation";
   import ArticleForm from "$lib/components/ArticleForm.svelte";
   import { useToast } from "$lib/components/toast/controls.svelte";
-  import { saveArticle, getAuthors } from "$lib/data/articles.remote";
+  import { saveArticle, getAuthors } from "$lib/data/private/articles.remote";
   import { ChevronRight } from "lucide-svelte";
 
   const toast = useToast();
