@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from "$app/state";
+  import Markdown from "$lib/components/Markdown.svelte";
   import { getPublicProject } from "$lib/data/public.remote";
 
   const slug = $derived(page.params.slug ?? "");
@@ -54,9 +55,7 @@
     </div>
 
     {#if project.content}
-      <div class="prose-zinc prose max-w-none">
-        {project.content}
-      </div>
+      <Markdown content={project.content} />
     {/if}
 
     <section class="mt-12 border-t border-zinc-200 pt-8">
