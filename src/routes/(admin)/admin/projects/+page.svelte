@@ -1,16 +1,16 @@
 <script lang="ts">
   import { getProjects } from "$lib/data/private/projects.remote";
-  import { Folder, Plus, ChevronRight, Github, ExternalLink } from "lucide-svelte";
+  import { Folder, Plus, ChevronRight, Github, ExternalLink, Users } from "lucide-svelte";
   import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
 
   const projects = $derived(await getProjects());
 
-  const categoryColors: Record<ProjectCategory, string> = {
-    active: "bg-emerald-100 text-emerald-700",
-    ended: "bg-zinc-100 text-zinc-600",
-    hackathon: "bg-purple-100 text-purple-700",
-    festival: "bg-pink-100 text-pink-700",
-    personal: "bg-amber-100 text-amber-700",
+  const categoryColors: Record<ProjectCategory, { bg: string; text: string }> = {
+    active: { bg: "bg-emerald-500/10", text: "text-emerald-600" },
+    ended: { bg: "bg-zinc-500/10", text: "text-zinc-600" },
+    hackathon: { bg: "bg-purple-500/10", text: "text-purple-600" },
+    festival: { bg: "bg-pink-500/10", text: "text-pink-600" },
+    personal: { bg: "bg-amber-500/10", text: "text-amber-600" },
   };
 </script>
 
@@ -21,25 +21,10 @@
 <svelte:boundary>
   {#snippet pending()}
     <div class="space-y-6">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="h-10 w-10 skeleton rounded-xl"></div>
-          <div class="space-y-2">
-            <div class="h-7 w-24 skeleton"></div>
-            <div class="h-4 w-32 skeleton"></div>
-          </div>
-        </div>
-        <div class="h-9 w-28 skeleton rounded-lg"></div>
-      </div>
+      <div class="h-24 w-full skeleton rounded-2xl"></div>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {#each Array.from({ length: 3 }, (_, i) => i) as i (i)}
-          <div class="card bg-base-100 shadow-sm">
-            <div class="h-32 w-full skeleton rounded-t-xl rounded-b-none"></div>
-            <div class="card-body p-4">
-              <div class="h-5 w-32 skeleton"></div>
-              <div class="h-4 w-24 skeleton"></div>
-            </div>
-          </div>
+        {#each Array.from({ length: 6 }, (_, i) => i) as i (i)}
+          <div class="h-64 skeleton rounded-2xl"></div>
         {/each}
       </div>
     </div>
@@ -47,40 +32,49 @@
 
   <div class="space-y-6">
     <!-- Header -->
-    <header class="animate-fade-slide-in flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary/10">
-          <Folder class="h-5 w-5 text-secondary" />
+    <header class="animate-fade-slide-in gradient-dark relative overflow-hidden rounded-2xl p-6">
+      <!-- Decorative elements -->
+      <div class="absolute top-0 -right-10 h-32 w-32 rounded-full bg-secondary/30 blur-3xl"></div>
+      <div
+        class="absolute -bottom-10 left-1/3 h-24 w-24 rounded-full bg-purple-500/20 blur-3xl"
+      ></div>
+
+      <div class="relative flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10">
+            <Folder class="h-6 w-6 text-white" />
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-white">Projects</h1>
+            <p class="text-sm text-white/60">{projects.length} projects registered</p>
+          </div>
         </div>
-        <div>
-          <h1 class="text-2xl font-bold text-base-content">Projects</h1>
-          <p class="text-sm text-base-content/60">{projects.length} projects registered</p>
-        </div>
+        <a
+          href="/admin/projects/new"
+          class="gradient-primary glow-primary btn gap-2 border-none text-white"
+        >
+          <Plus class="h-4 w-4" />
+          New Project
+        </a>
       </div>
-      <a href="/admin/projects/new" class="btn gap-2 btn-sm btn-secondary">
-        <Plus class="h-4 w-4" />
-        New Project
-      </a>
     </header>
 
     {#if projects.length === 0}
       <!-- Empty state -->
       <div
-        class="animate-fade-slide-in stagger-1 card border-2 border-dashed border-base-300 bg-base-100"
+        class="animate-fade-slide-in stagger-1 rounded-2xl border-2 border-dashed border-base-300 bg-base-100 p-12 text-center"
       >
-        <div class="card-body items-center py-12 text-center">
-          <div
-            class="flex h-14 w-14 items-center justify-center rounded-2xl bg-base-200 text-base-content/40"
-          >
-            <Folder class="h-7 w-7" />
-          </div>
-          <h3 class="mt-4 text-lg font-semibold text-base-content">No projects yet</h3>
-          <p class="text-base-content/60">Get started by creating a project.</p>
-          <a href="/admin/projects/new" class="btn mt-4 gap-2 btn-secondary">
-            <Plus class="h-4 w-4" />
-            New Project
-          </a>
+        <div
+          class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-base-200 text-base-content/40"
+        >
+          <Folder class="h-8 w-8" />
         </div>
+        <h3 class="mt-4 text-lg font-semibold text-base-content">No projects yet</h3>
+        <p class="mt-1 text-base-content/60">Get started by creating a project.</p>
+        <a href="/admin/projects/new" class="gradient-primary btn mt-6 gap-2 text-white">
+          <Plus class="h-4 w-4" />
+          New Project
+        </a>
       </div>
     {:else}
       <!-- Projects grid -->
@@ -88,104 +82,114 @@
         {#each projects as project, i (project.id)}
           <a
             href="/admin/projects/edit/{project.id}"
-            class="group animate-fade-slide-in card bg-base-100 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+            class="group animate-fade-slide-in card-hover glow-soft relative flex flex-col overflow-hidden rounded-2xl bg-base-100"
             style="animation-delay: {i * 40}ms"
           >
             <!-- Cover -->
             {#if project.coverUrl}
-              <figure class="overflow-hidden rounded-t-xl">
+              <figure class="relative h-36 overflow-hidden">
                 <img
                   src={project.coverUrl}
                   alt={project.name}
-                  class="h-32 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   loading="lazy"
                 />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
               </figure>
             {:else}
               <figure
-                class="flex h-32 items-center justify-center rounded-t-xl bg-gradient-to-br from-base-200 to-base-300 transition-colors duration-150 group-hover:from-base-300 group-hover:to-base-200"
+                class="relative flex h-36 items-center justify-center bg-gradient-to-br from-base-200 via-base-200 to-base-300"
               >
                 <Folder
-                  class="h-10 w-10 text-base-content/20 transition-transform duration-150 group-hover:scale-110"
+                  class="h-12 w-12 text-base-content/10 transition-transform duration-300 group-hover:scale-110"
                 />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </figure>
             {/if}
 
+            <!-- Category badge overlaid -->
+            <span
+              class="absolute top-3 right-3 rounded-lg px-2.5 py-1 text-xs font-semibold backdrop-blur-sm {categoryColors[
+                project.category
+              ].bg} {categoryColors[project.category].text}"
+            >
+              {PROJECT_CATEGORIES[project.category]}
+            </span>
+
             <!-- Content -->
-            <div class="card-body p-4">
-              <div class="flex items-start justify-between gap-2">
-                <h3
-                  class="font-medium text-base-content transition-colors duration-150 group-hover:text-base-content/80"
-                >
-                  {project.name}
-                </h3>
-                <span
-                  class="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium {categoryColors[
-                    project.category
-                  ]}"
-                >
-                  {PROJECT_CATEGORIES[project.category]}
-                </span>
-              </div>
-              <code class="block font-mono text-xs text-base-content/40">/{project.slug}</code>
+            <div class="flex flex-1 flex-col p-5">
+              <h3 class="line-clamp-1 font-semibold text-base-content">
+                {project.name}
+              </h3>
+              <code class="mt-1 font-mono text-xs text-base-content/40">/{project.slug}</code>
 
               {#if project.description}
-                <p class="mt-2 line-clamp-2 text-sm text-base-content/60">{project.description}</p>
+                <p class="mt-3 line-clamp-2 flex-1 text-sm text-base-content/60">
+                  {project.description}
+                </p>
+              {:else}
+                <div class="mt-3 flex-1"></div>
               {/if}
 
-              <!-- Members -->
-              <div class="mt-3 flex items-center justify-between">
-                <div class="avatar-group -space-x-2">
-                  {#each project.projectMembers.slice(0, 4) as pm (pm.memberId)}
-                    {#if pm.member.imageUrl}
-                      <div class="avatar border-base-100">
-                        <div class="w-6">
-                          <img
-                            src={pm.member.imageUrl}
-                            alt={pm.member.name}
-                            title={pm.member.name}
-                          />
+              <!-- Footer -->
+              <div class="mt-4 flex items-center justify-between border-t border-base-200 pt-4">
+                <!-- Members -->
+                <div class="flex items-center gap-2">
+                  {#if project.projectMembers.length > 0}
+                    <div class="avatar-group -space-x-2">
+                      {#each project.projectMembers.slice(0, 3) as pm (pm.memberId)}
+                        {#if pm.member.imageUrl}
+                          <div class="avatar border-base-100">
+                            <div class="w-6">
+                              <img
+                                src={pm.member.imageUrl}
+                                alt={pm.member.name}
+                                title={pm.member.name}
+                              />
+                            </div>
+                          </div>
+                        {:else}
+                          <div class="placeholder avatar border-base-100">
+                            <div class="gradient-primary w-6 text-white">
+                              <span class="text-[9px] font-bold">{pm.member.name.charAt(0)}</span>
+                            </div>
+                          </div>
+                        {/if}
+                      {/each}
+                      {#if project.projectMembers.length > 3}
+                        <div class="placeholder avatar border-base-100">
+                          <div class="w-6 bg-base-200 text-base-content/50">
+                            <span class="text-[9px]">+{project.projectMembers.length - 3}</span>
+                          </div>
                         </div>
-                      </div>
-                    {:else}
-                      <div class="placeholder avatar border-base-100">
-                        <div class="w-6 bg-base-200 text-base-content/60">
-                          <span class="text-[10px]">{pm.member.name.charAt(0)}</span>
-                        </div>
-                      </div>
-                    {/if}
-                  {/each}
-                  {#if project.projectMembers.length > 4}
-                    <div class="placeholder avatar border-base-100">
-                      <div class="w-6 bg-base-200 text-base-content/50">
-                        <span class="text-[10px]">+{project.projectMembers.length - 4}</span>
-                      </div>
+                      {/if}
+                    </div>
+                    <span class="text-xs text-base-content/40">
+                      {project.projectMembers.length} member{project.projectMembers.length > 1
+                        ? "s"
+                        : ""}
+                    </span>
+                  {:else}
+                    <div class="flex items-center gap-1 text-xs text-base-content/30">
+                      <Users class="h-3 w-3" />
+                      No members
                     </div>
                   {/if}
                 </div>
 
-                <ChevronRight
-                  class="h-4 w-4 text-base-content/30 transition-all duration-150 group-hover:translate-x-0.5 group-hover:text-base-content/50"
-                />
-              </div>
-
-              <!-- Links -->
-              {#if project.repoUrl || project.demoUrl}
-                <div class="mt-3 flex gap-3 border-t border-base-200 pt-3">
+                <!-- Links & Arrow -->
+                <div class="flex items-center gap-2">
                   {#if project.repoUrl}
-                    <span class="inline-flex items-center gap-1 text-xs text-base-content/40">
-                      <Github class="h-3.5 w-3.5" />
-                      Repo
-                    </span>
+                    <Github class="h-4 w-4 text-base-content/30" />
                   {/if}
                   {#if project.demoUrl}
-                    <span class="inline-flex items-center gap-1 text-xs text-base-content/40">
-                      <ExternalLink class="h-3.5 w-3.5" />
-                      Demo
-                    </span>
+                    <ExternalLink class="h-4 w-4 text-base-content/30" />
                   {/if}
+                  <ChevronRight
+                    class="h-4 w-4 text-base-content/20 transition-all duration-200 group-hover:translate-x-1 group-hover:text-primary"
+                  />
                 </div>
-              {/if}
+              </div>
             </div>
           </a>
         {/each}

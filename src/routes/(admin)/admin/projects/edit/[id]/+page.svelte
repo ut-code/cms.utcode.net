@@ -12,7 +12,7 @@
     removeMember,
   } from "$lib/data/private/projects.remote";
   import { useToast } from "$lib/components/toast/controls.svelte";
-  import { ChevronRight } from "lucide-svelte";
+  import { Folder, Plus, X } from "lucide-svelte";
   import type { ProjectCategory } from "$lib/shared/models/schema";
 
   const toast = useToast();
@@ -35,12 +35,14 @@
     category: ProjectCategory;
     leadMemberId: string | null;
   }) {
+    if (!project) return;
+
     try {
-      if (project && data.slug !== project.slug) {
+      if (data.slug !== project.slug) {
         const confirmed = await confirm({
-          title: "Change URL slug?",
-          description: `Changing the slug will break existing links. The URL will change from /projects/${project.slug} to /projects/${data.slug}.`,
-          confirmText: "Change Slug",
+          title: "Change URL?",
+          description: `This will break existing links. Change from /projects/${project.slug} to /projects/${data.slug}?`,
+          confirmText: "Change",
           variant: "warning",
         });
         if (!confirmed) return;
@@ -59,29 +61,30 @@
           category: data.category,
         },
       });
-      goto("/admin/projects");
+      toast.show("Saved", "success");
     } catch (error) {
-      toast.show(error instanceof Error ? error.message : "保存に失敗しました");
+      toast.show(error instanceof Error ? error.message : "Failed to save");
     }
   }
 
   async function handleDelete() {
     if (!project) return;
 
-    try {
-      const confirmed = await confirm({
-        title: "Delete Project",
-        description: `Are you sure you want to delete "${project.name}"? This action cannot be undone.`,
-        confirmText: "Delete",
-        variant: "danger",
-      });
+    const confirmed = await confirm({
+      title: "Delete project?",
+      description: `Delete "${project.name}"? Team associations will be removed.`,
+      confirmText: "Delete",
+      variant: "danger",
+    });
 
-      if (confirmed) {
+    if (confirmed) {
+      try {
         await removeProject(id);
+        toast.show("Deleted", "success");
         goto("/admin/projects");
+      } catch (error) {
+        toast.show(error instanceof Error ? error.message : "Failed to delete");
       }
-    } catch (error) {
-      toast.show(error instanceof Error ? error.message : "削除に失敗しました");
     }
   }
 
@@ -91,186 +94,165 @@
       await addMember({ projectId: id, memberId: newMemberId, role: newMemberRole }).updates(
         getProject(id),
       );
+      toast.show("Member added", "success");
       showAddMember = false;
       newMemberId = null;
       newMemberRole = "member";
     } catch (error) {
-      toast.show(error instanceof Error ? error.message : "メンバーの追加に失敗しました");
+      toast.show(error instanceof Error ? error.message : "Failed to add member");
     }
   }
 
   async function handleRemoveMember(memberId: string, memberName: string) {
-    try {
-      const confirmed = await confirm({
-        title: "Remove Member",
-        description: `Remove ${memberName} from this project?`,
-        confirmText: "Remove",
-        variant: "danger",
-      });
+    const confirmed = await confirm({
+      title: "Remove member?",
+      description: `Remove ${memberName} from this project?`,
+      confirmText: "Remove",
+      variant: "danger",
+    });
 
-      if (confirmed) {
+    if (confirmed) {
+      try {
         await removeMember({ projectId: id, memberId }).updates(getProject(id));
+        toast.show("Member removed", "success");
+      } catch (error) {
+        toast.show(error instanceof Error ? error.message : "Failed to remove");
       }
-    } catch (error) {
-      toast.show(error instanceof Error ? error.message : "メンバーの削除に失敗しました");
     }
   }
 </script>
 
 <svelte:head>
-  <title>Edit {project?.name ?? "Project"} - ut.code(); CMS</title>
+  <title>{project?.name ?? "Edit Project"} - ut.code(); CMS</title>
 </svelte:head>
 
 <svelte:boundary>
   {#snippet pending()}
-    <div class="flex h-64 items-center justify-center">
+    <div class="flex h-96 items-center justify-center">
       <span class="loading loading-md loading-spinner"></span>
     </div>
   {/snippet}
 
   {#if !project}
-    <div class="rounded-xl border border-zinc-200 bg-white p-12 text-center">
-      <h2 class="text-lg font-semibold text-zinc-900">Project not found</h2>
-      <p class="mt-1 text-zinc-500">The project you're looking for doesn't exist.</p>
+    <div class="flex h-96 flex-col items-center justify-center text-center">
+      <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-zinc-400">
+        <Folder class="h-6 w-6" />
+      </div>
+      <h2 class="mt-4 font-semibold text-zinc-900">Project not found</h2>
+      <p class="mt-1 text-sm text-zinc-500">This project doesn't exist.</p>
       <a
         href="/admin/projects"
-        class="mt-4 inline-block rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800"
+        class="mt-4 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800"
       >
         Back to Projects
       </a>
     </div>
   {:else}
-    <div>
-      <!-- Header -->
-      <div class="mb-8 flex items-start justify-between">
-        <div>
-          <nav class="mb-4 flex items-center gap-2 text-sm text-zinc-500">
-            <a href="/admin/projects" class="hover:text-zinc-700">Projects</a>
-            <ChevronRight class="h-4 w-4" />
-            <span class="text-zinc-900">{project.name}</span>
-          </nav>
-          <h1 class="text-2xl font-bold text-zinc-900">Edit Project</h1>
-          <p class="text-zinc-500">Update project details and team members</p>
-        </div>
-
-        <button
-          type="button"
-          onclick={handleDelete}
-          class="shrink-0 rounded-lg border border-red-200 bg-white px-3 py-2 text-sm font-medium text-red-600 transition-all duration-150 hover:border-red-300 hover:bg-red-50 active:scale-[0.98]"
-        >
-          Delete
-        </button>
-      </div>
-
-      <!-- Team Members Section -->
-      <div class="mb-8 rounded-xl border border-zinc-200 bg-white p-6">
-        <div class="mb-4 flex items-center justify-between">
-          <h2 class="text-lg font-semibold text-zinc-900">Team Members</h2>
-          <button
-            type="button"
-            onclick={() => (showAddMember = true)}
-            class="text-sm font-medium text-[#00D372] hover:underline"
-          >
-            + Add Member
-          </button>
-        </div>
-
-        <div class="space-y-3">
+    <div class="flex h-[calc(100vh-4rem)] flex-col">
+      <!-- Team Members Bar -->
+      <div class="flex items-center gap-3 border-b border-zinc-200 bg-zinc-50 px-4 py-2">
+        <span class="text-xs font-medium text-zinc-500">Team:</span>
+        <div class="flex items-center gap-1">
           {#each project.projectMembers as pm (pm.memberId)}
             <div
-              class="flex items-center justify-between rounded-lg border border-zinc-100 bg-zinc-50 p-3"
+              class="group flex items-center gap-1.5 rounded-full bg-white py-1 pr-2 pl-1 text-xs shadow-sm ring-1 ring-zinc-200"
             >
-              <div class="flex items-center gap-3">
-                {#if pm.member.imageUrl}
-                  <img src={pm.member.imageUrl} alt={pm.member.name} class="h-8 w-8 rounded-full" />
-                {:else}
-                  <div class="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-200">
-                    <span class="text-xs font-medium text-zinc-600">{pm.member.name.charAt(0)}</span
-                    >
-                  </div>
-                {/if}
-                <div>
-                  <p class="text-sm font-medium text-zinc-900">{pm.member.name}</p>
-                  <span
-                    class="inline-block rounded px-1.5 py-0.5 text-xs font-medium"
-                    class:bg-purple-100={pm.role === "lead"}
-                    class:text-purple-700={pm.role === "lead"}
-                    class:bg-zinc-100={pm.role !== "lead"}
-                    class:text-zinc-600={pm.role !== "lead"}
-                  >
-                    {pm.role}
-                  </span>
+              {#if pm.member.imageUrl}
+                <img src={pm.member.imageUrl} alt="" class="h-5 w-5 rounded-full" />
+              {:else}
+                <div
+                  class="flex h-5 w-5 items-center justify-center rounded-full bg-zinc-200 text-[10px] font-medium"
+                >
+                  {pm.member.name.charAt(0)}
                 </div>
-              </div>
+              {/if}
+              <span class="text-zinc-700">{pm.member.name}</span>
+              {#if pm.role === "lead"}
+                <span
+                  class="rounded bg-purple-100 px-1 py-0.5 text-[10px] font-medium text-purple-700"
+                  >lead</span
+                >
+              {/if}
               {#if pm.role !== "lead"}
                 <button
                   type="button"
                   onclick={() => handleRemoveMember(pm.memberId, pm.member.name)}
-                  class="text-sm text-red-500 hover:underline"
+                  class="ml-0.5 hidden rounded p-0.5 text-zinc-400 group-hover:block hover:bg-zinc-100 hover:text-red-500"
                 >
-                  Remove
+                  <X class="h-3 w-3" />
                 </button>
               {/if}
             </div>
           {/each}
+          <button
+            type="button"
+            onclick={() => (showAddMember = true)}
+            class="flex h-7 w-7 items-center justify-center rounded-full bg-white text-zinc-400 shadow-sm ring-1 ring-zinc-200 transition-colors hover:bg-zinc-50 hover:text-zinc-600"
+          >
+            <Plus class="h-4 w-4" />
+          </button>
         </div>
       </div>
 
-      <ProjectForm
-        initialData={{
-          slug: project.slug,
-          name: project.name,
-          description: project.description ?? "",
-          content: project.content ?? "",
-          coverUrl: project.coverUrl ?? "",
-          repoUrl: project.repoUrl ?? "",
-          demoUrl: project.demoUrl ?? "",
-          category: project.category,
-          leadMemberId: null,
-        }}
-        {members}
-        onSubmit={handleSubmit}
-        submitLabel="Save Changes"
-        bind:isSubmitting
-      />
+      <!-- Main Form -->
+      <div class="flex-1">
+        <ProjectForm
+          initialData={{
+            slug: project.slug,
+            name: project.name,
+            description: project.description ?? "",
+            content: project.content ?? "",
+            coverUrl: project.coverUrl ?? "",
+            repoUrl: project.repoUrl ?? "",
+            demoUrl: project.demoUrl ?? "",
+            category: project.category,
+            leadMemberId: null,
+          }}
+          {members}
+          onSubmit={handleSubmit}
+          onDelete={handleDelete}
+          submitLabel="Save"
+          bind:isSubmitting
+        />
+      </div>
     </div>
 
     <!-- Add Member Modal -->
     {#if showAddMember}
       <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
-          <h3 class="text-lg font-semibold text-zinc-900">Add Team Member</h3>
+        <div class="w-full max-w-sm rounded-xl bg-white p-5 shadow-xl">
+          <h3 class="font-semibold text-zinc-900">Add member</h3>
           <div class="mt-4 space-y-4">
-            <div class="space-y-2">
-              <label for="newMember" class="block text-sm font-medium text-zinc-700">Member</label>
+            <div class="space-y-1.5">
+              <label for="newMember" class="text-sm font-medium text-zinc-700">Member</label>
               <select
                 id="newMember"
                 bind:value={newMemberId}
-                class="w-full rounded-lg border border-zinc-300 px-4 py-2.5 text-zinc-900"
+                class="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
               >
-                <option value={null}>Select a member</option>
+                <option value={null}>Select</option>
                 {#each members.filter((m) => !project.projectMembers.some((pm) => pm.memberId === m.id)) as member (member.id)}
                   <option value={member.id}>{member.name}</option>
                 {/each}
               </select>
             </div>
-            <div class="space-y-2">
-              <label for="role" class="block text-sm font-medium text-zinc-700">Role</label>
+            <div class="space-y-1.5">
+              <label for="role" class="text-sm font-medium text-zinc-700">Role</label>
               <select
                 id="role"
                 bind:value={newMemberRole}
-                class="w-full rounded-lg border border-zinc-300 px-4 py-2.5 text-zinc-900"
+                class="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
               >
                 <option value="member">Member</option>
                 <option value="lead">Lead</option>
               </select>
             </div>
           </div>
-          <div class="mt-6 flex justify-end gap-3">
+          <div class="mt-5 flex justify-end gap-2">
             <button
               type="button"
               onclick={() => (showAddMember = false)}
-              class="rounded-lg border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
+              class="rounded-lg px-3 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100"
             >
               Cancel
             </button>
@@ -278,9 +260,9 @@
               type="button"
               onclick={handleAddMember}
               disabled={!newMemberId}
-              class="rounded-lg bg-[#00D372] px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-[#00C066] disabled:opacity-50"
+              class="rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
             >
-              Add Member
+              Add
             </button>
           </div>
         </div>
