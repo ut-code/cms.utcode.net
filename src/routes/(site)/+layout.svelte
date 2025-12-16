@@ -1,18 +1,9 @@
 <script lang="ts">
   import logo from "$lib/assets/favicon.svg";
   import { Menu, Search } from "lucide-svelte";
-  import { goto } from "$app/navigation";
+  import SiteSearchModal, { openSearch } from "$lib/components/site-search-modal.svelte";
 
   let { children } = $props();
-
-  let searchQuery = $state("");
-
-  function handleSearch(e: Event) {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      goto(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-    }
-  }
 </script>
 
 <svelte:head>
@@ -44,15 +35,18 @@
           </a>
         </div>
         <div class="hidden items-center gap-4 md:flex">
-          <form onsubmit={handleSearch} class="relative">
-            <input
-              type="search"
-              bind:value={searchQuery}
-              placeholder="検索..."
-              class="w-48 rounded-lg border border-zinc-200 bg-white py-1.5 pr-3 pl-9 text-sm transition-all placeholder:text-zinc-400 focus:w-64 focus:border-[#00D372] focus:ring-1 focus:ring-[#00D372] focus:outline-none"
-            />
-            <Search class="absolute top-1/2 left-2.5 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-          </form>
+          <button
+            type="button"
+            onclick={openSearch}
+            class="flex w-48 items-center gap-2 rounded-lg border border-zinc-200 bg-white py-1.5 pr-3 pl-2.5 text-left text-sm text-zinc-400 transition-colors hover:border-zinc-300 hover:text-zinc-500"
+          >
+            <Search class="h-4 w-4" />
+            <span class="flex-1">検索...</span>
+            <kbd
+              class="rounded border border-zinc-200 bg-zinc-100 px-1.5 py-0.5 font-[JetBrains_Mono,monospace] text-[10px]"
+              >⌘K</kbd
+            >
+          </button>
           <a href="/articles" class="text-sm text-zinc-500 transition-colors hover:text-zinc-900"
             >Articles</a
           >
@@ -138,15 +132,14 @@
     <label for="site-drawer" class="drawer-overlay"></label>
     <div class="min-h-full w-64 bg-white p-4">
       <img src={logo} alt="ut.code();" class="mb-6 h-8" />
-      <form onsubmit={handleSearch} class="relative mb-4">
-        <input
-          type="search"
-          bind:value={searchQuery}
-          placeholder="検索..."
-          class="w-full rounded-lg border border-zinc-200 bg-white py-2 pr-3 pl-9 text-sm transition-colors placeholder:text-zinc-400 focus:border-[#00D372] focus:ring-1 focus:ring-[#00D372] focus:outline-none"
-        />
-        <Search class="absolute top-1/2 left-2.5 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-      </form>
+      <button
+        type="button"
+        onclick={openSearch}
+        class="mb-4 flex w-full items-center gap-2 rounded-lg border border-zinc-200 bg-white py-2 pr-3 pl-2.5 text-left text-sm text-zinc-400 transition-colors hover:border-zinc-300"
+      >
+        <Search class="h-4 w-4" />
+        <span>検索...</span>
+      </button>
       <ul class="space-y-2">
         <li>
           <a
@@ -181,3 +174,5 @@
     </div>
   </div>
 </div>
+
+<SiteSearchModal />

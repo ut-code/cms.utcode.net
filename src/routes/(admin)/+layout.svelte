@@ -5,8 +5,9 @@
   import ConfirmModal from "$lib/components/confirm-modal.svelte";
   import Toast from "$lib/components/toast/toast.svelte";
   import { setupToast } from "$lib/components/toast/controls.svelte";
+  import AdminSearchModal, { openSearch } from "$lib/components/admin-search-modal.svelte";
   import logo from "$lib/assets/favicon.svg";
-  import { Menu, LayoutGrid, Users, FileText, Folder } from "lucide-svelte";
+  import { Menu, LayoutGrid, Users, FileText, Folder, Search } from "lucide-svelte";
 
   let { children } = $props();
 
@@ -40,9 +41,12 @@
       <label for="admin-drawer" class="btn btn-square btn-ghost btn-sm">
         <Menu class="h-5 w-5" />
       </label>
-      <a href="/" class="flex items-center transition-opacity hover:opacity-70">
+      <a href="/" class="flex flex-1 items-center transition-opacity hover:opacity-70">
         <img src={logo} alt="ut.code();" class="h-7" />
       </a>
+      <button type="button" onclick={openSearch} class="btn btn-square btn-ghost btn-sm">
+        <Search class="h-5 w-5" />
+      </button>
     </header>
 
     <main class="min-h-screen">
@@ -61,6 +65,23 @@
         <a href="/" class="flex items-center transition-opacity hover:opacity-70">
           <img src={logo} alt="ut.code();" class="h-7" />
         </a>
+      </div>
+
+      <!-- Search -->
+      <div class="px-3 pt-4">
+        <button
+          type="button"
+          onclick={openSearch}
+          class="flex w-full items-center gap-3 rounded-lg border border-base-300 bg-base-200/50 px-3 py-2 text-left text-sm text-base-content/60 transition-colors hover:border-base-content/20 hover:bg-base-200"
+        >
+          <Search class="h-4 w-4" />
+          <span class="flex-1">Search...</span>
+          <kbd
+            class="hidden rounded border border-base-300 bg-base-100 px-1.5 py-0.5 font-mono text-[10px] text-base-content/40 lg:inline"
+          >
+            ⌘K
+          </kbd>
+        </button>
       </div>
 
       <!-- Navigation -->
@@ -122,3 +143,4 @@
 
 <ConfirmModal />
 <Toast controls={toastControls} />
+<AdminSearchModal />

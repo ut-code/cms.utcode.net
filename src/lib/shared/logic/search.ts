@@ -18,6 +18,29 @@ export type SearchResult =
       coverUrl: string | null;
     };
 
+export type AdminSearchResult =
+  | {
+      type: "article";
+      id: string;
+      slug: string;
+      title: string;
+      published: boolean;
+      author: { name: string } | null;
+    }
+  | {
+      type: "project";
+      id: string;
+      slug: string;
+      name: string;
+    }
+  | {
+      type: "member";
+      id: string;
+      slug: string;
+      name: string;
+      imageUrl: string | null;
+    };
+
 export function filterSearchResults(results: SearchResult[], query: string): SearchResult[] {
   if (!query.trim()) {
     return results;

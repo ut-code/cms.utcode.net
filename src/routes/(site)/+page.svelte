@@ -364,9 +364,7 @@
       初心者から実務経験者、学年を問わずどなたでも大歓迎です。
     </p>
     <a
-      href="https://utcode.net/join/"
-      target="_blank"
-      rel="noopener noreferrer"
+      href="/join"
       class="group inline-flex items-center gap-2 rounded-lg bg-[#00D372] px-8 py-4 text-lg font-semibold text-zinc-900 shadow-lg shadow-[#00D372]/25 transition-all hover:bg-[#00C066] hover:shadow-xl"
     >
       JOIN US

@@ -139,3 +139,21 @@ export async function searchPublishedArticles(query: string) {
     with: { author: true },
   });
 }
+
+export async function searchAllArticles(query: string) {
+  if (!query.trim()) {
+    return [];
+  }
+
+  const searchPattern = `%${query}%`;
+
+  return db.query.article.findMany({
+    where: or(
+      like(article.title, searchPattern),
+      like(article.content, searchPattern),
+      like(article.excerpt, searchPattern),
+    ),
+    orderBy: desc(article.createdAt),
+    with: { author: true },
+  });
+}

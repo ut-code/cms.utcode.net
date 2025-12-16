@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, or, like } from "drizzle-orm";
 import { db } from "$lib/server/drivers/db";
 import { member } from "$lib/shared/models/schema";
 
@@ -54,4 +54,17 @@ export async function deleteMember(id: string) {
 
 export async function linkMemberToUser(memberId: string, userId: string) {
   return updateMember(memberId, { userId });
+}
+
+export async function searchMembers(query: string) {
+  if (!query.trim()) {
+    return [];
+  }
+
+  const searchPattern = `%${query}%`;
+
+  return db.query.member.findMany({
+    where: or(like(member.name, searchPattern), like(member.bio, searchPattern)),
+    orderBy: (t, { desc }) => desc(t.createdAt),
+  });
 }
