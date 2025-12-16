@@ -1,19 +1,26 @@
 <script lang="ts">
+  import { page } from "$app/state";
   import { getPublicArticles } from "$lib/data/public/index.remote";
+  import { SvelteURLSearchParams } from "svelte/reactivity";
 
   const articles = $derived(await getPublicArticles());
-
-  let currentPage = $state(1);
   const itemsPerPage = 12;
 
+  const currentPage = $derived(Number(page.url.searchParams.get("page")) || 1);
   const totalPages = $derived(Math.ceil(articles.length / itemsPerPage));
   const paginatedArticles = $derived(
     articles.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage),
   );
 
-  function goToPage(page: number) {
-    currentPage = page;
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  function pageUrl(pageNum: number): string {
+    const params = new SvelteURLSearchParams(page.url.searchParams);
+    if (pageNum === 1) {
+      params.delete("page");
+    } else {
+      params.set("page", String(pageNum));
+    }
+    const query = params.toString();
+    return query ? `?${query}` : page.url.pathname;
   }
 </script>
 
@@ -75,35 +82,49 @@
 
     {#if articles.length > itemsPerPage}
       <div class="mt-8 flex items-center justify-center gap-2">
-        <button
-          onclick={() => goToPage(currentPage - 1)}
-          disabled={currentPage === 1}
-          class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium transition-colors hover:border-[#00D372] hover:text-[#00D372] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-zinc-200 disabled:hover:text-inherit"
-        >
-          前へ
-        </button>
+        {#if currentPage > 1}
+          <a
+            href={pageUrl(currentPage - 1)}
+            class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium transition-colors hover:border-[#00D372] hover:text-[#00D372]"
+          >
+            前へ
+          </a>
+        {:else}
+          <span
+            class="cursor-not-allowed rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium opacity-50"
+          >
+            前へ
+          </span>
+        {/if}
 
         <div class="flex items-center gap-1">
-          {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page (page)}
-            <button
-              onclick={() => goToPage(page)}
+          {#each Array.from({ length: totalPages }, (_, i) => i + 1) as pageNum (pageNum)}
+            <a
+              href={pageUrl(pageNum)}
               class="rounded-lg border px-3 py-2 text-sm font-medium transition-colors {currentPage ===
-              page
+              pageNum
                 ? 'border-[#00D372] bg-[#00D372] text-white'
                 : 'border-zinc-200 bg-white hover:border-[#00D372] hover:text-[#00D372]'}"
             >
-              {page}
-            </button>
+              {pageNum}
+            </a>
           {/each}
         </div>
 
-        <button
-          onclick={() => goToPage(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium transition-colors hover:border-[#00D372] hover:text-[#00D372] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-zinc-200 disabled:hover:text-inherit"
-        >
-          次へ
-        </button>
+        {#if currentPage < totalPages}
+          <a
+            href={pageUrl(currentPage + 1)}
+            class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium transition-colors hover:border-[#00D372] hover:text-[#00D372]"
+          >
+            次へ
+          </a>
+        {:else}
+          <span
+            class="cursor-not-allowed rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium opacity-50"
+          >
+            次へ
+          </span>
+        {/if}
       </div>
     {/if}
   {/if}

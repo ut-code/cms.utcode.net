@@ -1,12 +1,19 @@
 <script lang="ts">
+  import { page } from "$app/state";
   import { getPublicProjects } from "$lib/data/public/index.remote";
   import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
+  import { SvelteURLSearchParams } from "svelte/reactivity";
 
   const projects = $derived(await getPublicProjects());
-
-  let selectedCategory = $state<ProjectCategory | "all">("all");
-  let currentPage = $state(1);
   const itemsPerPage = 12;
+
+  const categoryParam = $derived(page.url.searchParams.get("category"));
+  const selectedCategory = $derived<ProjectCategory | "all">(
+    categoryParam && categoryParam in PROJECT_CATEGORIES
+      ? (categoryParam as ProjectCategory)
+      : "all",
+  );
+  const currentPage = $derived(Number(page.url.searchParams.get("page")) || 1);
 
   const filteredProjects = $derived(
     selectedCategory === "all" ? projects : projects.filter((p) => p.category === selectedCategory),
@@ -25,14 +32,24 @@
     personal: "bg-amber-100 text-amber-700 border-amber-200",
   };
 
-  function selectCategory(category: ProjectCategory | "all") {
-    selectedCategory = category;
-    currentPage = 1;
+  function categoryUrl(category: ProjectCategory | "all"): string {
+    const params = new SvelteURLSearchParams();
+    if (category !== "all") {
+      params.set("category", category);
+    }
+    const query = params.toString();
+    return query ? `?${query}` : page.url.pathname;
   }
 
-  function goToPage(page: number) {
-    currentPage = page;
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  function pageUrl(pageNum: number): string {
+    const params = new SvelteURLSearchParams(page.url.searchParams);
+    if (pageNum === 1) {
+      params.delete("page");
+    } else {
+      params.set("page", String(pageNum));
+    }
+    const query = params.toString();
+    return query ? `?${query}` : page.url.pathname;
   }
 </script>
 
@@ -57,8 +74,8 @@
 <div class="mx-auto max-w-6xl px-6 py-12">
   <!-- Category filter -->
   <div class="mb-8 flex flex-wrap gap-2">
-    <button
-      onclick={() => selectCategory("all")}
+    <a
+      href={categoryUrl("all")}
       class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-all"
       class:border-[#00D372]={selectedCategory === "all"}
       class:bg-[#00D372]={selectedCategory === "all"}
@@ -69,10 +86,10 @@
       class:hover:border-zinc-300={selectedCategory !== "all"}
     >
       すべて
-    </button>
+    </a>
     {#each Object.entries(PROJECT_CATEGORIES) as [key, label] (key)}
-      <button
-        onclick={() => selectCategory(key as ProjectCategory)}
+      <a
+        href={categoryUrl(key as ProjectCategory)}
         class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-all"
         class:border-[#00D372]={selectedCategory === key}
         class:bg-[#00D372]={selectedCategory === key}
@@ -83,7 +100,7 @@
         class:hover:border-zinc-300={selectedCategory !== key}
       >
         {label}
-      </button>
+      </a>
     {/each}
   </div>
 
@@ -142,35 +159,49 @@
 
     {#if filteredProjects.length > itemsPerPage}
       <div class="mt-8 flex items-center justify-center gap-2">
-        <button
-          onclick={() => goToPage(currentPage - 1)}
-          disabled={currentPage === 1}
-          class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium transition-colors hover:border-[#00D372] hover:text-[#00D372] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-zinc-200 disabled:hover:text-inherit"
-        >
-          前へ
-        </button>
+        {#if currentPage > 1}
+          <a
+            href={pageUrl(currentPage - 1)}
+            class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium transition-colors hover:border-[#00D372] hover:text-[#00D372]"
+          >
+            前へ
+          </a>
+        {:else}
+          <span
+            class="cursor-not-allowed rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium opacity-50"
+          >
+            前へ
+          </span>
+        {/if}
 
         <div class="flex items-center gap-1">
-          {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page (page)}
-            <button
-              onclick={() => goToPage(page)}
+          {#each Array.from({ length: totalPages }, (_, i) => i + 1) as pageNum (pageNum)}
+            <a
+              href={pageUrl(pageNum)}
               class="rounded-lg border px-3 py-2 text-sm font-medium transition-colors {currentPage ===
-              page
+              pageNum
                 ? 'border-[#00D372] bg-[#00D372] text-white'
                 : 'border-zinc-200 bg-white hover:border-[#00D372] hover:text-[#00D372]'}"
             >
-              {page}
-            </button>
+              {pageNum}
+            </a>
           {/each}
         </div>
 
-        <button
-          onclick={() => goToPage(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium transition-colors hover:border-[#00D372] hover:text-[#00D372] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-zinc-200 disabled:hover:text-inherit"
-        >
-          次へ
-        </button>
+        {#if currentPage < totalPages}
+          <a
+            href={pageUrl(currentPage + 1)}
+            class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium transition-colors hover:border-[#00D372] hover:text-[#00D372]"
+          >
+            次へ
+          </a>
+        {:else}
+          <span
+            class="cursor-not-allowed rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium opacity-50"
+          >
+            次へ
+          </span>
+        {/if}
       </div>
     {/if}
   {/if}
