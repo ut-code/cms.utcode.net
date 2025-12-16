@@ -53,6 +53,7 @@ async function main(): Promise<void> {
     { name: "Members", script: "migrate-members.ts" },
     { name: "Articles", script: "migrate-articles.ts" },
     { name: "Projects", script: "migrate-projects.ts" },
+    { name: "Images", script: "migrate-images.ts" },
   ];
 
   const results: { name: string; success: boolean }[] = [];
