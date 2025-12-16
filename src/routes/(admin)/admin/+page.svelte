@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getStats } from "$lib/data/public/stats.remote";
+  import { getAdminStats } from "$lib/data/private/stats.remote";
   import {
     LayoutGrid,
     FileText,
@@ -11,7 +11,7 @@
     ExternalLink,
   } from "lucide-svelte";
 
-  const stats = $derived(await getStats());
+  const stats = $derived(await getAdminStats());
 </script>
 
 <svelte:head>

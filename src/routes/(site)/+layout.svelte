@@ -76,24 +76,61 @@
       {@render children()}
     </main>
 
-    <footer class="border-t border-zinc-200 py-8">
-      <div
-        class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 md:flex-row"
-      >
-        <img src={logo} alt="ut.code();" class="h-6" />
-        <div class="flex gap-6">
-          <a
-            href="https://github.com/ut-code"
-            class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">GitHub</a
-          >
-          <a
-            href="https://twitter.com/utaboratory"
-            class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">Twitter</a
-          >
+    <footer class="border-t border-zinc-200 bg-zinc-50/50 py-12">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="flex flex-col items-center justify-between gap-8 md:flex-row md:items-start">
+          <div>
+            <img src={logo} alt="ut.code();" class="h-8" />
+            <p class="mt-2 text-sm text-zinc-500">東京大学のソフトウェアエンジニアリングサークル</p>
+          </div>
+          <div class="flex flex-col items-center gap-6 md:flex-row md:items-start">
+            <div class="flex flex-col items-center gap-2 md:items-start">
+              <span
+                class="font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-zinc-400 uppercase"
+                >Links</span
+              >
+              <div class="flex gap-4">
+                <a
+                  href="/articles"
+                  class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">Articles</a
+                >
+                <a
+                  href="/projects"
+                  class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">Projects</a
+                >
+                <a
+                  href="/members"
+                  class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">Members</a
+                >
+              </div>
+            </div>
+            <div class="flex flex-col items-center gap-2 md:items-start">
+              <span
+                class="font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-zinc-400 uppercase"
+                >Social</span
+              >
+              <div class="flex gap-4">
+                <a
+                  href="https://github.com/ut-code"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">GitHub</a
+                >
+                <a
+                  href="https://twitter.com/utokyo_code"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">Twitter</a
+                >
+              </div>
+            </div>
+          </div>
         </div>
-        <p class="text-sm text-zinc-400">
-          © {new Date().getFullYear()} ut.code(); — The University of Tokyo
-        </p>
+        <div class="mt-8 border-t border-zinc-200 pt-6 text-center">
+          <p class="text-sm text-zinc-400">
+            © {new Date().getFullYear()} ut.code(); — The University of Tokyo
+          </p>
+        </div>
       </div>
     </footer>
   </div>

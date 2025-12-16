@@ -22,14 +22,20 @@
   <meta property="og:title" content="記事一覧 | ut.code();" />
 </svelte:head>
 
-<div class="mx-auto max-w-6xl px-6 py-16">
-  <div
-    class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-[#00D372] uppercase"
-  >
-    Articles
+<!-- Header -->
+<section class="border-b border-zinc-200 bg-zinc-50/50 py-16">
+  <div class="mx-auto max-w-6xl px-6">
+    <div
+      class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-[#00D372] uppercase"
+    >
+      Articles
+    </div>
+    <h1 class="mb-2 text-3xl font-bold">記事一覧</h1>
+    <p class="text-zinc-500">ut.code(); メンバーが執筆した記事やニュースをお届けします。</p>
   </div>
-  <h1 class="mb-8 text-3xl font-bold">記事一覧</h1>
+</section>
 
+<div class="mx-auto max-w-6xl px-6 py-12">
   {#if articles.length === 0}
     <p class="text-zinc-500">まだ記事がありません。</p>
   {:else}
@@ -37,18 +43,20 @@
       {#each paginatedArticles as article (article.id)}
         <a
           href="/articles/{article.slug}"
-          class="group rounded-xl border border-zinc-200 bg-white p-6 transition-all hover:border-[#00D372] hover:shadow-md"
+          class="group rounded-2xl border border-zinc-200 bg-white p-6 transition-all hover:border-[#00D372] hover:shadow-lg hover:shadow-[#00D372]/5"
         >
           {#if article.coverUrl}
             <img
               src={article.coverUrl}
               alt={article.title}
-              class="mb-4 aspect-video w-full rounded-lg object-cover"
+              class="mb-4 aspect-video w-full rounded-xl object-cover"
             />
           {/if}
-          <h2 class="mb-2 font-semibold group-hover:text-[#00D372]">{article.title}</h2>
+          <h2 class="mb-2 font-semibold transition-colors group-hover:text-[#00D372]">
+            {article.title}
+          </h2>
           {#if article.excerpt}
-            <p class="mb-4 line-clamp-2 text-sm text-zinc-500">{article.excerpt}</p>
+            <p class="mb-4 line-clamp-2 text-sm leading-relaxed text-zinc-500">{article.excerpt}</p>
           {/if}
           <div class="flex items-center gap-2 text-xs text-zinc-400">
             {#if article.author}

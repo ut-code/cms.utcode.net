@@ -22,14 +22,20 @@
   <meta property="og:title" content="メンバー一覧 | ut.code();" />
 </svelte:head>
 
-<div class="mx-auto max-w-6xl px-6 py-16">
-  <div
-    class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-[#00D372] uppercase"
-  >
-    Members
+<!-- Header -->
+<section class="border-b border-zinc-200 bg-zinc-50/50 py-16">
+  <div class="mx-auto max-w-6xl px-6">
+    <div
+      class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-[#00D372] uppercase"
+    >
+      Members
+    </div>
+    <h1 class="mb-2 text-3xl font-bold">メンバー一覧</h1>
+    <p class="text-zinc-500">ut.code(); で活動する仲間たちを紹介します。</p>
   </div>
-  <h1 class="mb-8 text-3xl font-bold">メンバー一覧</h1>
+</section>
 
+<div class="mx-auto max-w-6xl px-6 py-12">
   {#if members.length === 0}
     <p class="text-zinc-500">まだメンバーがいません。</p>
   {:else}
@@ -37,26 +43,28 @@
       {#each paginatedMembers as member (member.id)}
         <a
           href="/members/{member.slug}"
-          class="group rounded-xl border border-zinc-200 bg-white p-6 text-center transition-all hover:border-[#00D372] hover:shadow-md"
+          class="group rounded-2xl border border-zinc-200 bg-white p-6 text-center transition-all hover:border-[#00D372] hover:shadow-lg hover:shadow-[#00D372]/5"
         >
           {#if member.imageUrl}
             <img
               src={member.imageUrl}
               alt={member.name}
-              class="mx-auto mb-4 h-24 w-24 rounded-full object-cover"
+              class="mx-auto mb-4 h-24 w-24 rounded-full object-cover ring-2 ring-zinc-100 transition-all group-hover:ring-[#00D372]/30"
             />
           {:else}
             <div
-              class="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-zinc-100"
+              class="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-zinc-100 to-zinc-200 ring-2 ring-zinc-100 transition-all group-hover:from-[#00D372]/10 group-hover:to-[#00D372]/20 group-hover:ring-[#00D372]/30"
             >
-              <span class="text-2xl font-medium text-zinc-600">
+              <span
+                class="font-[JetBrains_Mono,monospace] text-2xl font-medium text-zinc-600 transition-colors group-hover:text-[#00D372]"
+              >
                 {member.name.charAt(0)}
               </span>
             </div>
           {/if}
-          <h2 class="font-semibold group-hover:text-[#00D372]">{member.name}</h2>
+          <h2 class="font-semibold transition-colors group-hover:text-[#00D372]">{member.name}</h2>
           {#if member.bio}
-            <p class="mt-2 line-clamp-2 text-sm text-zinc-500">{member.bio}</p>
+            <p class="mt-2 line-clamp-2 text-sm leading-relaxed text-zinc-500">{member.bio}</p>
           {/if}
         </a>
       {/each}
