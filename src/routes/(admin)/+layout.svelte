@@ -6,7 +6,7 @@
   import Toast from "$lib/components/toast/toast.svelte";
   import { setupToast } from "$lib/components/toast/controls.svelte";
   import AdminSearchModal, { openSearch } from "$lib/components/admin-search-modal.svelte";
-  import logo from "$lib/assets/favicon.svg";
+  import logo from "$lib/assets/logo.svg";
   import {
     Menu,
     LayoutGrid,

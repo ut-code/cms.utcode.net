@@ -1,5 +1,5 @@
 <script lang="ts">
-  import logo from "$lib/assets/favicon.svg";
+  import logo from "$lib/assets/logo.svg";
   import { Menu, Search } from "lucide-svelte";
   import SiteSearchModal, { openSearch } from "$lib/components/site-search-modal.svelte";
 
