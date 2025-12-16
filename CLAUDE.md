@@ -3,7 +3,7 @@
 {Make desicions}
 {Note decisions to knowledge database}
 {Main work}
-{Run bun tidy}
+{Run bun tidy / it muts return 0 warnings and errors}
 {Update knowledge database and CLAUDE.md as needed}
 </workflow>
 

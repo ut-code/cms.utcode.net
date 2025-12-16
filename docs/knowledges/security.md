@@ -81,13 +81,13 @@ GitHub org membership cached 24h. Removed members retain access.
 
 ## Recommendations
 
-| Priority | Issue          | Fix                                                     | Status |
-| -------- | -------------- | ------------------------------------------------------- | ------ |
-| ~~HIGH~~ | stats endpoint | Add `requireUtCodeMember()` or filter to published only | ✅ DONE |
-| MEDIUM   | File upload    | Add MIME whitelist, folder allowlist                    | Partial |
-| ~~MEDIUM~~ | Project role | Use `v.picklist(["lead", "member"])`                   | ✅ DONE |
-| LOW      | Rate limiting  | Add to public endpoints                                 | TODO   |
-| LOW      | Cache TTL      | Reduce to 4h or add invalidation                        | TODO   |
+| Priority   | Issue          | Fix                                                     | Status  |
+| ---------- | -------------- | ------------------------------------------------------- | ------- |
+| ~~HIGH~~   | stats endpoint | Add `requireUtCodeMember()` or filter to published only | ✅ DONE |
+| MEDIUM     | File upload    | Add MIME whitelist, folder allowlist                    | Partial |
+| ~~MEDIUM~~ | Project role   | Use `v.picklist(["lead", "member"])`                    | ✅ DONE |
+| LOW        | Rate limiting  | Add to public endpoints                                 | TODO    |
+| LOW        | Cache TTL      | Reduce to 4h or add invalidation                        | TODO    |
 
 ## Audit Date
 
