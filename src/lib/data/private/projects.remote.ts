@@ -11,18 +11,21 @@ import {
   removeProjectMember,
 } from "$lib/server/database/projects.server";
 import { listMembers } from "$lib/server/database/members.server";
-import {
-  PROJECT_CATEGORIES,
-  type ProjectCategory,
-  PROJECT_ROLES,
-  type ProjectRole,
-} from "$lib/shared/models/schema";
+import { type ProjectCategory, type ProjectRole } from "$lib/shared/models/schema";
 
-const categoryValues = Object.keys(PROJECT_CATEGORIES) as [ProjectCategory, ...ProjectCategory[]];
-const categorySchema = v.picklist(categoryValues);
+// Category and role values as const arrays
+const PROJECT_CATEGORY_VALUES = [
+  "active",
+  "ended",
+  "hackathon",
+  "festival",
+  "personal",
+] as const satisfies readonly ProjectCategory[];
 
-const roleValues = Object.keys(PROJECT_ROLES) as [ProjectRole, ...ProjectRole[]];
-const roleSchema = v.picklist(roleValues);
+const PROJECT_ROLE_VALUES = ["lead", "member"] as const satisfies readonly ProjectRole[];
+
+const categorySchema = v.picklist(PROJECT_CATEGORY_VALUES);
+const roleSchema = v.picklist(PROJECT_ROLE_VALUES);
 
 export const getProjects = query(async () => {
   await requireUtCodeMember();

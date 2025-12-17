@@ -1,14 +1,28 @@
 import { createInsertSchema, createSelectSchema } from "drizzle-valibot";
 import * as v from "valibot";
-import { member, article, project, projectMember, PROJECT_CATEGORIES } from "./schema";
+import {
+  member,
+  article,
+  project,
+  projectMember,
+  type ProjectCategory,
+  type ProjectRole,
+} from "./schema";
+
+// Category and role values as const arrays
+const PROJECT_CATEGORY_VALUES = [
+  "active",
+  "ended",
+  "hackathon",
+  "festival",
+  "personal",
+] as const satisfies readonly ProjectCategory[];
+
+const PROJECT_ROLE_VALUES = ["lead", "member"] as const satisfies readonly ProjectRole[];
 
 // Category schema for proper type inference
-const categorySchema = v.picklist(
-  Object.keys(PROJECT_CATEGORIES) as [
-    keyof typeof PROJECT_CATEGORIES,
-    ...(keyof typeof PROJECT_CATEGORIES)[],
-  ],
-);
+export const categorySchema = v.picklist(PROJECT_CATEGORY_VALUES);
+export const roleSchema = v.picklist(PROJECT_ROLE_VALUES);
 
 // ============================================================================
 // Insert Schemas

@@ -1,6 +1,7 @@
 import { eq, and, or, like } from "drizzle-orm";
 import { db } from "$lib/server/drivers/db";
 import { project, projectMember, type ProjectRole } from "$lib/shared/models/schema";
+import { createSearchPattern } from "./utils";
 
 export type Project = typeof project.$inferSelect;
 export type NewProject = typeof project.$inferInsert;
@@ -87,11 +88,10 @@ export async function transferLead(projectId: string, fromMemberId: string, toMe
 }
 
 export async function searchProjects(query: string) {
-  if (!query.trim()) {
+  const searchPattern = createSearchPattern(query);
+  if (!searchPattern) {
     return [];
   }
-
-  const searchPattern = `%${query}%`;
 
   return db.query.project.findMany({
     where: or(

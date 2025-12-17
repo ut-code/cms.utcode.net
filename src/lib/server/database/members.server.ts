@@ -1,6 +1,7 @@
 import { eq, or, like } from "drizzle-orm";
 import { db } from "$lib/server/drivers/db";
 import { member } from "$lib/shared/models/schema";
+import { createSearchPattern } from "./utils";
 
 export type Member = typeof member.$inferSelect;
 export type NewMember = typeof member.$inferInsert;
@@ -57,11 +58,10 @@ export async function linkMemberToUser(memberId: string, userId: string) {
 }
 
 export async function searchMembers(query: string) {
-  if (!query.trim()) {
+  const searchPattern = createSearchPattern(query);
+  if (!searchPattern) {
     return [];
   }
-
-  const searchPattern = `%${query}%`;
 
   return db.query.member.findMany({
     where: or(like(member.name, searchPattern), like(member.bio, searchPattern)),

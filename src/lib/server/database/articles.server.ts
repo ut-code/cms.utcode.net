@@ -1,6 +1,7 @@
 import { eq, desc, and, sql, or, like } from "drizzle-orm";
 import { db } from "$lib/server/drivers/db";
 import { article } from "$lib/shared/models/schema";
+import { createSearchPattern } from "./utils";
 
 export type Article = typeof article.$inferSelect;
 export type NewArticle = typeof article.$inferInsert;
@@ -120,11 +121,10 @@ export async function getRelatedArticles(
 }
 
 export async function searchPublishedArticles(query: string) {
-  if (!query.trim()) {
+  const searchPattern = createSearchPattern(query);
+  if (!searchPattern) {
     return [];
   }
-
-  const searchPattern = `%${query}%`;
 
   return db.query.article.findMany({
     where: and(
@@ -141,11 +141,10 @@ export async function searchPublishedArticles(query: string) {
 }
 
 export async function searchAllArticles(query: string) {
-  if (!query.trim()) {
+  const searchPattern = createSearchPattern(query);
+  if (!searchPattern) {
     return [];
   }
-
-  const searchPattern = `%${query}%`;
 
   return db.query.article.findMany({
     where: or(
