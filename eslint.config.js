@@ -28,6 +28,18 @@ export default defineConfig(
     },
   },
   {
+    files: ["**/*.ts"],
+    ignores: ["**/*.test.ts", "scripts/**", "drizzle.config.ts"],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+      },
+    },
+    rules: {
+      "@typescript-eslint/no-unsafe-type-assertion": "error",
+    },
+  },
+  {
     files: ["**/*.svelte", "**/*.svelte.ts", "**/*.svelte.js"],
 
     languageOptions: {
@@ -37,6 +49,9 @@ export default defineConfig(
         parser: ts.parser,
         svelteConfig,
       },
+    },
+    rules: {
+      "@typescript-eslint/no-unsafe-type-assertion": "error",
     },
   },
 );

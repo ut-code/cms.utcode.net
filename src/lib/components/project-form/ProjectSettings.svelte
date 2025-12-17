@@ -1,6 +1,10 @@
 <script lang="ts">
   import { X, Github, ExternalLink } from "lucide-svelte";
-  import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
+  import {
+    PROJECT_CATEGORIES,
+    PROJECT_CATEGORY_KEYS,
+    type ProjectCategory,
+  } from "$lib/shared/models/schema";
   import ImageUpload from "../image-upload.svelte";
 
   type Member = {
@@ -57,18 +61,18 @@
       <div class="space-y-2">
         <span class="text-sm font-medium text-zinc-700">Category</span>
         <div class="flex flex-wrap gap-2">
-          {#each Object.entries(PROJECT_CATEGORIES) as [key, label] (key)}
+          {#each PROJECT_CATEGORY_KEYS as key (key)}
             <button
               type="button"
               onclick={() => {
-                category = key as ProjectCategory;
+                category = key;
               }}
               class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-all {category ===
               key
                 ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
                 : 'border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300'}"
             >
-              {label}
+              {PROJECT_CATEGORIES[key]}
             </button>
           {/each}
         </div>

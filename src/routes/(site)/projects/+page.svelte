@@ -1,17 +1,19 @@
 <script lang="ts">
   import { page } from "$app/state";
   import { getPublicProjects } from "$lib/data/public/index.remote";
-  import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
+  import {
+    PROJECT_CATEGORIES,
+    PROJECT_CATEGORY_KEYS,
+    type ProjectCategory,
+  } from "$lib/shared/models/schema";
   import { SvelteURLSearchParams } from "svelte/reactivity";
 
   const projects = $derived(await getPublicProjects());
   const itemsPerPage = 12;
 
   const categoryParam = $derived(page.url.searchParams.get("category"));
-  const selectedCategory = $derived<ProjectCategory | "all">(
-    categoryParam && categoryParam in PROJECT_CATEGORIES
-      ? (categoryParam as ProjectCategory)
-      : "all",
+  const selectedCategory = $derived(
+    PROJECT_CATEGORY_KEYS.find((k) => k === categoryParam) ?? "all",
   );
   const currentPage = $derived(Number(page.url.searchParams.get("page")) || 1);
 
@@ -87,9 +89,9 @@
     >
       すべて
     </a>
-    {#each Object.entries(PROJECT_CATEGORIES) as [key, label] (key)}
+    {#each PROJECT_CATEGORY_KEYS as key (key)}
       <a
-        href={categoryUrl(key as ProjectCategory)}
+        href={categoryUrl(key)}
         class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-all"
         class:border-[#00D372]={selectedCategory === key}
         class:bg-[#00D372]={selectedCategory === key}
@@ -99,7 +101,7 @@
         class:text-zinc-700={selectedCategory !== key}
         class:hover:border-zinc-300={selectedCategory !== key}
       >
-        {label}
+        {PROJECT_CATEGORIES[key]}
       </a>
     {/each}
   </div>

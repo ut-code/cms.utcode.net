@@ -143,23 +143,34 @@ export const article = sqliteTable(
   (table) => [index("article_authorId_idx").on(table.authorId)],
 );
 
-// Project categories
-export const PROJECT_CATEGORIES = {
+// Project categories - keys defined first for type-safe iteration
+export const PROJECT_CATEGORY_KEYS = [
+  "active",
+  "ended",
+  "hackathon",
+  "festival",
+  "personal",
+] as const;
+
+export type ProjectCategory = (typeof PROJECT_CATEGORY_KEYS)[number];
+
+export const PROJECT_CATEGORIES: Record<ProjectCategory, string> = {
   active: "稼働中プロジェクト",
   ended: "終了済みプロジェクト",
   hackathon: "ハッカソン",
   festival: "学園祭",
   personal: "個人プロジェクト",
-} as const;
+};
 
-export type ProjectCategory = keyof typeof PROJECT_CATEGORIES;
+// Project roles - keys defined first for type-safe iteration
+export const PROJECT_ROLE_KEYS = ["lead", "member"] as const;
 
-export const PROJECT_ROLES = {
+export type ProjectRole = (typeof PROJECT_ROLE_KEYS)[number];
+
+export const PROJECT_ROLES: Record<ProjectRole, string> = {
   lead: "リード",
   member: "メンバー",
-} as const;
-
-export type ProjectRole = keyof typeof PROJECT_ROLES;
+};
 
 export const project = sqliteTable("project", {
   id: text("id")
