@@ -19,7 +19,9 @@
     "lint-check": "eslint .",
     "lint": "bun lint-check",
     "lint-fix": "eslint . --fix",
-    "db": "drizzle-kit"
+    "db": "drizzle-kit",
+    "up": "bun db push --force && devenv processes up -d",
+    "down": "devenv processes down"
   },
   "devDependencies": {
     "@eslint/compat": "^1.4.0",

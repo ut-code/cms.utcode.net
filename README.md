@@ -15,7 +15,13 @@ direnv allow
 サーバーその他全部起動
 
 ```sh
-devenv up
+bun up
+```
+
+停止
+
+```sh
+bun down
 ```
 
 ## Data Access Layer
