@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from "$app/state";
   import { getPublicMember } from "$lib/data/public/index.remote";
+  import Markdown from "$lib/components/Markdown.svelte";
 
   const slug = $derived(page.params.slug ?? "");
   const member = $derived(await getPublicMember(slug));
@@ -53,6 +54,12 @@
         {/if}
       </div>
     </div>
+
+    {#if member.pageContent}
+      <section class="mt-12 border-t border-zinc-200 pt-8">
+        <Markdown content={member.pageContent} />
+      </section>
+    {/if}
 
     {#if member.projectMembers && member.projectMembers.length > 0}
       <section class="mt-12 border-t border-zinc-200 pt-8">

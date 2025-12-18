@@ -10,9 +10,10 @@
     removeProject,
     addMember,
     removeMember,
+    transferLead,
   } from "$lib/data/private/projects.remote";
   import { useToast } from "$lib/components/toast/controls.svelte";
-  import { Folder, Plus, X } from "lucide-svelte";
+  import { Folder, Plus, X, ArrowRightLeft } from "lucide-svelte";
   import type { ProjectCategory } from "$lib/shared/models/schema";
 
   const toast = useToast();
@@ -23,6 +24,12 @@
   let showAddMember = $state(false);
   let newMemberId = $state<string | null>(null);
   let newMemberRole = $state<"member" | "lead">("member");
+  let showTransferLead = $state(false);
+  let transferTargetId = $state<string | null>(null);
+
+  const currentLead = $derived(project?.projectMembers.find((pm) => pm.role === "lead"));
+  const otherMembers = $derived(project?.projectMembers.filter((pm) => pm.role !== "lead") ?? []);
+  const canTransferLead = $derived((otherMembers?.length ?? 0) > 0);
 
   async function handleSubmit(data: {
     slug: string;
@@ -120,6 +127,33 @@
       }
     }
   }
+
+  async function handleTransferLead() {
+    if (!transferTargetId || !currentLead) return;
+
+    const targetMember = otherMembers.find((m) => m.memberId === transferTargetId);
+    if (!targetMember) return;
+
+    const confirmed = await confirm({
+      title: "Transfer lead role?",
+      description: `Transfer lead role from ${currentLead.member.name} to ${targetMember.member.name}?`,
+      confirmText: "Transfer",
+      variant: "warning",
+    });
+
+    if (confirmed) {
+      try {
+        await transferLead({ projectId: id, newLeadMemberId: transferTargetId }).updates(
+          getProject(id),
+        );
+        toast.show("Lead transferred", "success");
+        showTransferLead = false;
+        transferTargetId = null;
+      } catch (error) {
+        toast.show(error instanceof Error ? error.message : "Failed to transfer");
+      }
+    }
+  }
 </script>
 
 <svelte:head>
@@ -152,7 +186,7 @@
       <!-- Team Members Bar -->
       <div class="flex items-center gap-3 border-b border-zinc-200 bg-zinc-50 px-4 py-2">
         <span class="text-xs font-medium text-zinc-500">Team:</span>
-        <div class="flex items-center gap-1">
+        <div class="flex flex-1 items-center gap-1">
           {#each project.projectMembers as pm (pm.memberId)}
             <div
               class="group flex items-center gap-1.5 rounded-full bg-white py-1 pr-2 pl-1 text-xs shadow-sm ring-1 ring-zinc-200"
@@ -192,6 +226,16 @@
             <Plus class="h-4 w-4" />
           </button>
         </div>
+        {#if canTransferLead}
+          <button
+            type="button"
+            onclick={() => (showTransferLead = true)}
+            class="flex items-center gap-1.5 rounded-lg bg-white px-2.5 py-1.5 text-xs font-medium text-zinc-700 shadow-sm ring-1 ring-zinc-200 transition-colors hover:bg-zinc-50"
+          >
+            <ArrowRightLeft class="h-3.5 w-3.5" />
+            Transfer Lead
+          </button>
+        {/if}
       </div>
 
       <!-- Main Form -->
@@ -263,6 +307,50 @@
               class="rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
             >
               Add
+            </button>
+          </div>
+        </div>
+      </div>
+    {/if}
+
+    <!-- Transfer Lead Modal -->
+    {#if showTransferLead}
+      <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div class="w-full max-w-sm rounded-xl bg-white p-5 shadow-xl">
+          <h3 class="font-semibold text-zinc-900">Transfer lead role</h3>
+          <div class="mt-4 space-y-1.5">
+            <label for="transferTarget" class="text-sm font-medium text-zinc-700"
+              >New lead member</label
+            >
+            <select
+              id="transferTarget"
+              bind:value={transferTargetId}
+              class="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+            >
+              <option value={null}>Select</option>
+              {#each otherMembers as pm (pm.memberId)}
+                <option value={pm.memberId}>{pm.member.name}</option>
+              {/each}
+            </select>
+          </div>
+          <div class="mt-5 flex justify-end gap-2">
+            <button
+              type="button"
+              onclick={() => {
+                showTransferLead = false;
+                transferTargetId = null;
+              }}
+              class="rounded-lg px-3 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onclick={handleTransferLead}
+              disabled={!transferTargetId}
+              class="rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+            >
+              Transfer
             </button>
           </div>
         </div>

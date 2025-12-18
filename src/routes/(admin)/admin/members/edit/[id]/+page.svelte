@@ -12,7 +12,13 @@
   const member = $derived(await getMember(id));
   let isSubmitting = $state(false);
 
-  async function handleSubmit(data: { slug: string; name: string; bio: string; imageUrl: string }) {
+  async function handleSubmit(data: {
+    slug: string;
+    name: string;
+    bio: string;
+    imageUrl: string;
+    pageContent: string;
+  }) {
     if (!member) return;
 
     try {
@@ -33,6 +39,7 @@
           name: data.name,
           bio: data.bio || null,
           imageUrl: data.imageUrl || null,
+          pageContent: data.pageContent || null,
         },
       });
       toast.show("Saved", "success");
@@ -96,6 +103,7 @@
           name: member.name,
           bio: member.bio ?? "",
           imageUrl: member.imageUrl ?? "",
+          pageContent: member.pageContent ?? "",
         }}
         onSubmit={handleSubmit}
         onDelete={handleDelete}

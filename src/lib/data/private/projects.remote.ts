@@ -9,6 +9,7 @@ import {
   deleteProject,
   addProjectMember,
   removeProjectMember,
+  transferLead as serverTransferLead,
 } from "$lib/server/database/projects.server";
 import { listMembers } from "$lib/server/database/members.server";
 import { type ProjectCategory, type ProjectRole } from "$lib/shared/models/schema";
@@ -107,5 +108,29 @@ export const removeMember = command(
   async ({ projectId, memberId }) => {
     await requireUtCodeMember();
     await removeProjectMember(projectId, memberId);
+  },
+);
+
+export const transferLead = command(
+  v.object({
+    projectId: v.string(),
+    newLeadMemberId: v.string(),
+  }),
+  async ({ projectId, newLeadMemberId }) => {
+    await requireUtCodeMember();
+    const project = await getProjectById(projectId);
+    if (!project) throw new Error("Project not found");
+
+    const currentLead = project.projectMembers.find((pm) => pm.role === "lead");
+    if (!currentLead) throw new Error("No current lead found");
+
+    const newLeadMember = project.projectMembers.find((pm) => pm.memberId === newLeadMemberId);
+    if (!newLeadMember) throw new Error("New lead is not a member of this project");
+
+    if (currentLead.memberId === newLeadMemberId) {
+      throw new Error("Member is already the lead");
+    }
+
+    await serverTransferLead(projectId, currentLead.memberId, newLeadMemberId);
   },
 );

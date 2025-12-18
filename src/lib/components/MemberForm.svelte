@@ -4,6 +4,7 @@
   import { onSaveShortcut } from "$lib/utils/keyboard";
   import { validateSlug, generateSlug } from "$lib/shared/logic/slugs";
   import ImageUpload from "./image-upload.svelte";
+  import Markdown from "./Markdown.svelte";
   import { Loader2, ArrowLeft, Settings, X } from "lucide-svelte";
 
   type MemberData = {
@@ -11,10 +12,11 @@
     name: string;
     bio: string;
     imageUrl: string;
+    pageContent: string;
   };
 
   let {
-    initialData = { slug: "", name: "", bio: "", imageUrl: "" },
+    initialData = { slug: "", name: "", bio: "", imageUrl: "", pageContent: "" },
     onSubmit,
     onDelete = null,
     submitLabel = "Save",
@@ -30,6 +32,7 @@
   let formData = $state(snapshot(() => initialData));
   let errors = $state<Record<string, string>>({});
   let showSettings = $state(false);
+  let showPageContentPreview = $state(false);
 
   function handleNameChange() {
     if (!formData.slug || formData.slug === generateSlug(initialData.name)) {
@@ -164,6 +167,54 @@
             class="w-full resize-none rounded-lg border border-zinc-200 bg-white px-4 py-3 text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-0 focus:outline-none"
             placeholder="A short bio about this member..."
           ></textarea>
+        </div>
+
+        <!-- Page Content -->
+        <div class="mt-8 border-t border-zinc-200 pt-8">
+          <div class="mb-4 flex items-center justify-between">
+            <label for="pageContent" class="block text-sm font-medium text-zinc-700">
+              自己紹介ページ
+            </label>
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                onclick={() => (showPageContentPreview = false)}
+                class="rounded-lg px-3 py-1.5 text-sm font-medium transition-colors {!showPageContentPreview
+                  ? 'bg-zinc-100 text-zinc-900'
+                  : 'text-zinc-500 hover:text-zinc-700'}"
+              >
+                Write
+              </button>
+              <button
+                type="button"
+                onclick={() => (showPageContentPreview = true)}
+                class="rounded-lg px-3 py-1.5 text-sm font-medium transition-colors {showPageContentPreview
+                  ? 'bg-zinc-100 text-zinc-900'
+                  : 'text-zinc-500 hover:text-zinc-700'}"
+              >
+                Preview
+              </button>
+            </div>
+          </div>
+          <p class="mb-3 text-xs text-zinc-400">
+            Markdown supported - This will be displayed on your public profile page
+          </p>
+          {#if showPageContentPreview}
+            <div class="min-h-[40vh] rounded-lg border border-zinc-200 bg-white px-4 py-3">
+              {#if formData.pageContent.trim()}
+                <Markdown content={formData.pageContent} />
+              {:else}
+                <p class="text-zinc-400">Nothing to preview</p>
+              {/if}
+            </div>
+          {:else}
+            <textarea
+              id="pageContent"
+              bind:value={formData.pageContent}
+              class="min-h-[40vh] w-full resize-none rounded-lg border border-zinc-200 bg-white px-4 py-3 font-[JetBrains_Mono,monospace] text-sm leading-relaxed text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-0 focus:outline-none"
+              placeholder="Write detailed information about yourself using Markdown..."
+            ></textarea>
+          {/if}
         </div>
       </div>
     </main>

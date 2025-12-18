@@ -7,13 +7,20 @@
   const toast = useToast();
   let isSubmitting = $state(false);
 
-  async function handleSubmit(data: { slug: string; name: string; bio: string; imageUrl: string }) {
+  async function handleSubmit(data: {
+    slug: string;
+    name: string;
+    bio: string;
+    imageUrl: string;
+    pageContent: string;
+  }) {
     try {
       const result = await saveMember({
         slug: data.slug,
         name: data.name,
         bio: data.bio || null,
         imageUrl: data.imageUrl || null,
+        pageContent: data.pageContent || null,
       });
       if (result) {
         toast.show("Created", "success");

@@ -25,6 +25,7 @@ export const saveMember = command(
     name: v.string(),
     bio: v.nullable(v.string()),
     imageUrl: v.nullable(v.string()),
+    pageContent: v.nullable(v.string()),
   }),
   async (data) => {
     await requireUtCodeMember();
@@ -40,6 +41,7 @@ export const editMember = command(
       name: v.optional(v.string()),
       bio: v.optional(v.nullable(v.string())),
       imageUrl: v.optional(v.nullable(v.string())),
+      pageContent: v.optional(v.nullable(v.string())),
     }),
   }),
   async ({ id, data }) => {
