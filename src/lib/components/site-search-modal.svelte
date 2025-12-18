@@ -25,24 +25,17 @@
   import type { SearchResult } from "$lib/shared/logic/search";
 
   let query = $state("");
-  let inputRef: HTMLInputElement | null = $state(null);
   let selectedIndex = $state(0);
-  let prevQuery = $state("");
 
   const results = $derived(query.trim() ? await searchPublic(query) : []);
 
-  $effect(() => {
-    if (modalState.open && inputRef) {
-      inputRef.focus();
-    }
-  });
-
-  $effect(() => {
-    if (query !== prevQuery) {
-      prevQuery = query;
+  function handleQueryInput(e: Event & { currentTarget: HTMLInputElement }) {
+    const newQuery = e.currentTarget.value;
+    if (newQuery !== query) {
+      query = newQuery;
       selectedIndex = 0;
     }
-  });
+  }
 
   function handleGlobalKeydown(e: KeyboardEvent) {
     if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -163,8 +156,8 @@
       <div class="flex items-center gap-3 border-b border-zinc-200 px-4">
         <Search class="h-5 w-5 shrink-0 text-zinc-400" />
         <input
-          bind:this={inputRef}
-          bind:value={query}
+          value={query}
+          oninput={handleQueryInput}
           type="text"
           placeholder="記事やプロジェクトを検索..."
           class="h-14 flex-1 bg-transparent text-base outline-none placeholder:text-zinc-400"

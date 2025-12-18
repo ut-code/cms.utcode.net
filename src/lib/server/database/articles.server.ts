@@ -22,10 +22,20 @@ export async function getArticleBySlug(slug: string) {
 }
 
 export async function getPublishedArticle(slug: string) {
-  return db.query.article.findFirst({
+  const result = await db.query.article.findFirst({
     where: and(eq(article.slug, slug), eq(article.published, true)),
     with: { author: true },
   });
+
+  // Increment view count (fire-and-forget)
+  if (result) {
+    db.update(article)
+      .set({ viewCount: sql`${article.viewCount} + 1` })
+      .where(eq(article.slug, slug))
+      .run();
+  }
+
+  return result;
 }
 
 export async function listAllArticles() {

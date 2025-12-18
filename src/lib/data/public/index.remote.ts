@@ -1,9 +1,8 @@
 import * as v from "valibot";
-import { query, command } from "$app/server";
+import { query } from "$app/server";
 import {
   listPublishedArticles,
   getPublishedArticle,
-  incrementViewCount,
   getRelatedArticles,
   searchPublishedArticles,
 } from "$lib/server/database/articles.server";
@@ -17,7 +16,6 @@ import type { SearchResult } from "$lib/shared/logic/search";
 
 export const getPublicArticles = query(listPublishedArticles);
 export const getPublicArticle = query(v.string(), getPublishedArticle);
-export const incrementArticleViewCount = command(v.string(), incrementViewCount);
 export const getPublicRelatedArticles = query(
   v.object({
     articleId: v.string(),

@@ -2,11 +2,7 @@
   import { page } from "$app/state";
   import Markdown from "$lib/components/Markdown.svelte";
   import { Eye } from "lucide-svelte";
-  import {
-    getPublicArticle,
-    getPublicRelatedArticles,
-    incrementArticleViewCount,
-  } from "$lib/data/public/index.remote";
+  import { getPublicArticle, getPublicRelatedArticles } from "$lib/data/public/index.remote";
 
   const slug = $derived(page.params.slug ?? "");
   const article = $derived(await getPublicArticle(slug));
@@ -19,13 +15,6 @@
         })
       : [],
   );
-
-  // Increment view count when article is loaded
-  $effect(() => {
-    if (article) {
-      incrementArticleViewCount(slug);
-    }
-  });
 </script>
 
 <svelte:head>
