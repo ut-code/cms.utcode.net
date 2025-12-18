@@ -2,10 +2,10 @@
   import { goto } from "$app/navigation";
   import ArticleForm from "$lib/components/ArticleForm.svelte";
   import { useToast } from "$lib/components/toast/controls.svelte";
-  import { saveArticle, getAuthors } from "$lib/data/private/articles.remote";
+  import { saveArticle, getMembers } from "$lib/data/private/articles.remote";
 
   const toast = useToast();
-  const authors = $derived(await getAuthors());
+  const authors = $derived(await getMembers());
   let isSubmitting = $state(false);
 
   async function handleSubmit(data: {

@@ -27,7 +27,7 @@ export async function getPublishedArticle(slug: string) {
     with: { author: true },
   });
 
-  // Increment view count (fire-and-forget)
+  // Fire-and-forget: view count accuracy is not critical, so we don't await or handle errors
   if (result) {
     db.update(article)
       .set({ viewCount: sql`${article.viewCount} + 1` })
@@ -164,5 +164,33 @@ export async function searchAllArticles(query: string) {
     ),
     orderBy: desc(article.createdAt),
     with: { author: true },
+  });
+}
+
+export async function countArticles() {
+  const result = await db.select({ count: sql<number>`count(*)` }).from(article);
+  return result[0]?.count ?? 0;
+}
+
+export async function countPublishedArticles() {
+  const result = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(article)
+    .where(eq(article.published, true));
+  return result[0]?.count ?? 0;
+}
+
+export async function getRecentArticles(limit: number) {
+  return db.query.article.findMany({
+    orderBy: desc(article.updatedAt),
+    limit,
+  });
+}
+
+export async function getRecentDraftArticles(limit: number) {
+  return db.query.article.findMany({
+    where: eq(article.published, false),
+    orderBy: desc(article.updatedAt),
+    limit,
   });
 }

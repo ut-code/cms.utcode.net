@@ -1,4 +1,4 @@
-import { eq, and, or, like } from "drizzle-orm";
+import { eq, and, or, like, sql } from "drizzle-orm";
 import { db } from "$lib/server/drivers/db";
 import { project, projectMember, type ProjectRole } from "$lib/shared/models/schema";
 import { createSearchPattern } from "./utils";
@@ -103,5 +103,17 @@ export async function searchProjects(query: string) {
     with: {
       projectMembers: { with: { member: true } },
     },
+  });
+}
+
+export async function countProjects() {
+  const result = await db.select({ count: sql<number>`count(*)` }).from(project);
+  return result[0]?.count ?? 0;
+}
+
+export async function getRecentProjects(limit: number) {
+  return db.query.project.findMany({
+    orderBy: (t, { desc }) => desc(t.updatedAt),
+    limit,
   });
 }

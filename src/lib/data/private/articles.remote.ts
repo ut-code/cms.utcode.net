@@ -10,7 +10,9 @@ import {
   publishArticle,
   unpublishArticle,
 } from "$lib/server/database/articles.server";
-import { listMembers } from "$lib/server/database/members.server";
+
+// Re-export getMembers from canonical source
+export { getMembers } from "./members.remote";
 
 export const getArticles = query(async () => {
   await requireUtCodeMember();
@@ -20,11 +22,6 @@ export const getArticles = query(async () => {
 export const getArticle = query(v.string(), async (id) => {
   await requireUtCodeMember();
   return getArticleById(id);
-});
-
-export const getAuthors = query(async () => {
-  await requireUtCodeMember();
-  return listMembers();
 });
 
 export const saveArticle = command(

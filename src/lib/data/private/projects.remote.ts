@@ -11,8 +11,10 @@ import {
   removeProjectMember,
   transferLead as serverTransferLead,
 } from "$lib/server/database/projects.server";
-import { listMembers } from "$lib/server/database/members.server";
 import { type ProjectCategory, type ProjectRole } from "$lib/shared/models/schema";
+
+// Re-export getMembers from canonical source
+export { getMembers } from "./members.remote";
 
 // Category and role values as const arrays
 const PROJECT_CATEGORY_VALUES = [
@@ -36,11 +38,6 @@ export const getProjects = query(async () => {
 export const getProject = query(v.string(), async (id) => {
   await requireUtCodeMember();
   return getProjectById(id);
-});
-
-export const getMembers = query(async () => {
-  await requireUtCodeMember();
-  return listMembers();
 });
 
 export const saveProject = command(

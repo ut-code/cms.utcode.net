@@ -6,7 +6,7 @@
   import { useToast } from "$lib/components/toast/controls.svelte";
   import {
     getArticle,
-    getAuthors,
+    getMembers,
     editArticle,
     removeArticle,
   } from "$lib/data/private/articles.remote";
@@ -16,7 +16,7 @@
 
   const id = $derived(page.params.id ?? "");
   const article = $derived(await getArticle(id));
-  const authors = $derived(await getAuthors());
+  const authors = $derived(await getMembers());
   let isSubmitting = $state(false);
 
   async function handleSubmit(data: {

@@ -1,4 +1,4 @@
-import { eq, or, like } from "drizzle-orm";
+import { eq, or, like, sql } from "drizzle-orm";
 import { db } from "$lib/server/drivers/db";
 import { member } from "$lib/shared/models/schema";
 import { createSearchPattern } from "./utils";
@@ -24,6 +24,9 @@ export async function getMemberBySlug(slug: string) {
 export async function getMemberById(id: string) {
   return db.query.member.findFirst({
     where: eq(member.id, id),
+    with: {
+      projectMembers: { with: { project: true } },
+    },
   });
 }
 
@@ -67,4 +70,9 @@ export async function searchMembers(query: string) {
     where: or(like(member.name, searchPattern), like(member.bio, searchPattern)),
     orderBy: (t, { desc }) => desc(t.createdAt),
   });
+}
+
+export async function countMembers() {
+  const result = await db.select({ count: sql<number>`count(*)` }).from(member);
+  return result[0]?.count ?? 0;
 }
