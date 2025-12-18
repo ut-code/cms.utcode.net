@@ -7,6 +7,7 @@
   import ProjectsSection from "$lib/components/home/ProjectsSection.svelte";
   import ArticlesSection from "$lib/components/home/ArticlesSection.svelte";
   import JoinCTA from "$lib/components/home/JoinCTA.svelte";
+  import SponsorsSection from "$lib/components/home/SponsorsSection.svelte";
   import AboutSection from "$lib/components/home/AboutSection.svelte";
 
   const stats = $derived(await getStats());
@@ -37,5 +38,7 @@
 <ArticlesSection {articles} />
 
 <JoinCTA />
+
+<SponsorsSection />
 
 <AboutSection members={stats.members} />
