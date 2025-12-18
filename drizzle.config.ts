@@ -1,16 +1,14 @@
 import { defineConfig } from "drizzle-kit";
+import { env } from "./src/lib/env/env.server.ts";
 
-if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
+const isLocal = env.DATABASE_URL.startsWith("file:");
 
 export default defineConfig({
   schema: "./src/lib/shared/models/schema.ts",
-  dialect: "turso",
-
-  dbCredentials: {
-    authToken: process.env.DATABASE_AUTH_TOKEN,
-    url: process.env.DATABASE_URL,
-  },
-
+  dialect: isLocal ? "sqlite" : "turso",
+  dbCredentials: isLocal
+    ? { url: env.DATABASE_URL }
+    : { url: env.DATABASE_URL, authToken: env.DATABASE_AUTH_TOKEN },
   verbose: true,
   strict: true,
 });
