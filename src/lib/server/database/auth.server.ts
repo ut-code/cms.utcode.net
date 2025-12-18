@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { getRequestEvent } from "$app/server";
-import { env } from "$env/dynamic/private";
+import { env } from "$lib/env/env.server";
 import * as v from "valibot";
 import { auth } from "$lib/server/drivers/auth";
 import { db } from "$lib/server/drivers/db";
@@ -63,7 +63,7 @@ async function requireLogin(): Promise<Session> {
 export async function requireUtCodeMember(): Promise<Session> {
   const session = await requireLogin();
 
-  if (env.UNSAFE_DISABLE_AUTH) {
+  if (env.UNSAFE_DISABLE_AUTH === "true") {
     return session;
   }
 
