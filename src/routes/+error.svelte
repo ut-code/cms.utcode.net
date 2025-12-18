@@ -8,7 +8,7 @@
   <title>{page.status}: Page Not Found</title>
 </svelte:head>
 
-<div class="prose-xl mx-auto mt-40 mb-72 prose text-center">
+<div class="mx-auto prose prose-xl mt-40 mb-72 text-center">
   <h1 class="mb-4 text-5xl font-bold">{page.status}</h1>
   {#if page.status === 404}
     <p class="mt-8 text-2xl text-gray-500">ページが見つかりませんでした。</p>

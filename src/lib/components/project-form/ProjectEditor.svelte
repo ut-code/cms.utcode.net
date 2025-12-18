@@ -65,7 +65,7 @@
 
     <div class="mt-4 flex-1">
       {#if showPreview}
-        <div class="prose-zinc prose max-w-none">
+        <div class="prose max-w-none prose-zinc">
           {#if content && content.trim()}
             <Markdown {content} />
           {:else}

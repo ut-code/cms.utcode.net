@@ -24,6 +24,12 @@ bun up
 bun down
 ```
 
+ログ
+
+```sh
+bun logs
+```
+
 ## Data Access Layer
 
 データ操作は `$lib/server/data/*` から import する。直接 db を触らない。

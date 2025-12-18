@@ -21,7 +21,8 @@
     "lint-fix": "eslint . --fix",
     "db": "drizzle-kit",
     "up": "bun db push --force && devenv processes up -d",
-    "down": "devenv processes down"
+    "down": "devenv processes down",
+    "logs": "tail -f ./.devenv/processes.log"
   },
   "devDependencies": {
     "@eslint/compat": "^1.4.0",
