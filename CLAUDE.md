@@ -21,10 +21,6 @@ ls ./docs/knowledges
 - data: Drizzle + Valibot
 - visuals design: Tailwind CSS v4, DaisyUI v5
 
-# TypeScript
-
-Never use `as` or `any`. Let TypeScript infer types properly.
-
 # Remote Functions
 
 `$app/server` exports:
@@ -86,3 +82,18 @@ IMPORTANT: `bun <script>` and `bun run <script>` are sometimes different:
 - `bun run test` - runs the `test` script from package.json
 
 Always use `bun run <script>` to run `build` or `test`.
+
+# Devenv
+
+The user (usually) uses devenv's process compose to manage processes.
+You may inspect `.devenv/processes.log` for the logs.
+
+# Verification Rules
+
+run `bun type-check` whenever you write code.
+run `bun tidy` after you finish your work. i.e. before commit
+
+# Coding Rules
+
+- Never use `as` or `any`. Let TypeScript infer types properly.
+- Never just "fire and forget". it crashes the entire server. instead, catch `.catch(console.error)` then forget, if you want to dispatch the job.

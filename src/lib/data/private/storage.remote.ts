@@ -15,7 +15,7 @@ export const upload = command(
     await requireUtCodeMember();
     const path = folder ?? "uploads";
     const buffer = Buffer.from(data, "base64");
-    return uploadBuffer(buffer, type, name, path);
+    return await uploadBuffer(buffer, type, name, path);
   },
 );
 

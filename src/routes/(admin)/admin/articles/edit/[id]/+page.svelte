@@ -74,7 +74,7 @@
       try {
         await removeArticle(id);
         toast.show(`Article deleted`, "success");
-        goto("/admin/articles");
+        await goto("/admin/articles");
       } catch (error) {
         toast.show(error instanceof Error ? error.message : "Failed to delete");
       }

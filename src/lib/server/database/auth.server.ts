@@ -1,4 +1,5 @@
 import { eq } from "drizzle-orm";
+import { error } from "@sveltejs/kit";
 import { getRequestEvent } from "$app/server";
 import { env } from "$lib/env/env.server";
 import * as v from "valibot";
@@ -7,16 +8,6 @@ import { db } from "$lib/server/drivers/db";
 import { user } from "$lib/shared/models/schema";
 
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
-
-export class AuthError extends Error {
-  constructor(
-    message: string,
-    public code: "UNAUTHENTICATED" | "UNAUTHORIZED",
-  ) {
-    super(message);
-    this.name = "AuthError";
-  }
-}
 
 export type Session = typeof auth.$Infer.Session;
 
@@ -51,12 +42,12 @@ export async function getSession() {
   if (env.UNSAFE_DISABLE_AUTH === "true") {
     return mockSession;
   }
-  return auth.api.getSession({ headers: getRequest().headers });
+  return await auth.api.getSession({ headers: getRequest().headers });
 }
 
 async function requireLogin(): Promise<Session> {
   const session = await getSession();
-  if (!session) throw new AuthError("Not logged in", "UNAUTHENTICATED");
+  if (!session) throw error(401, "Not logged in");
   return session;
 }
 
@@ -68,7 +59,7 @@ export async function requireUtCodeMember(): Promise<Session> {
   }
 
   const isMember = await checkUtCodeMembership(session.user.id);
-  if (!isMember) throw new AuthError("Not a ut-code member", "UNAUTHORIZED");
+  if (!isMember) throw error(403, "Not a ut-code member");
 
   return session;
 }

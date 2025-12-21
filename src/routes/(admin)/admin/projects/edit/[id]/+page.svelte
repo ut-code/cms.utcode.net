@@ -88,7 +88,7 @@
       try {
         await removeProject(id);
         toast.show("Deleted", "success");
-        goto("/admin/projects");
+        await goto("/admin/projects");
       } catch (error) {
         toast.show(error instanceof Error ? error.message : "Failed to delete");
       }

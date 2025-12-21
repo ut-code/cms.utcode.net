@@ -143,14 +143,14 @@
   function handleInput(e: Event) {
     if (!(e.target instanceof HTMLInputElement)) return;
     const file = e.target.files?.[0];
-    if (file) handleFile(file);
+    if (file) handleFile(file).catch(console.error);
   }
 
   function handleDrop(e: DragEvent) {
     e.preventDefault();
     dragOver = false;
     const file = e.dataTransfer?.files[0];
-    if (file) handleFile(file);
+    if (file) handleFile(file).catch(console.error);
   }
 
   function handleDragOver(e: DragEvent) {
@@ -174,7 +174,7 @@
         const file = item.getAsFile();
         if (file) {
           e.preventDefault();
-          handleFile(file, true);
+          handleFile(file, true).catch(console.error);
           return;
         }
       }

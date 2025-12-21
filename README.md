@@ -6,7 +6,7 @@ utcode.net の CMS 駆動版フォーク (フォークではない) です。そ
 
 環境構築
 
-- devenv パッケージをインストールします
+- [devenv](https://devenv.sh/) パッケージをインストールします
 
 ```sh
 direnv allow
@@ -24,22 +24,32 @@ bun up
 bun down
 ```
 
+リロード
+
+```sh
+bun reload
+```
+
 ログ
 
 ```sh
 bun logs
 ```
 
+process compose に接続 (F10 + enter で退出)
+
+```sh
+bun attach
+```
+
 ## Data Access Layer
 
-データ操作は `$lib/server/data/*` から import する。直接 db を触らない。
+データ操作は DAL `$lib/server/data/*` から import します。直接 db を触りません。
 
 ```ts
 import { listMembers, createMember } from "$lib/server/data/members";
 import { listPublishedArticles } from "$lib/server/data/articles";
 ```
-
-Admin 関数は内部で自動的に認可チェックを行う。
 
 ## その他
 

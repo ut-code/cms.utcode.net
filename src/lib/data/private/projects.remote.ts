@@ -32,12 +32,12 @@ const roleSchema = v.picklist(PROJECT_ROLE_VALUES);
 
 export const getProjects = query(async () => {
   await requireUtCodeMember();
-  return listProjects();
+  return await listProjects();
 });
 
 export const getProject = query(v.string(), async (id) => {
   await requireUtCodeMember();
-  return getProjectById(id);
+  return await getProjectById(id);
 });
 
 export const saveProject = command(
@@ -56,7 +56,7 @@ export const saveProject = command(
   }),
   async ({ data, leadMemberId }) => {
     await requireUtCodeMember();
-    return createProject(data, leadMemberId);
+    return await createProject(data, leadMemberId);
   },
 );
 
@@ -76,7 +76,7 @@ export const editProject = command(
   }),
   async ({ id, data }) => {
     await requireUtCodeMember();
-    return updateProject(id, data);
+    return await updateProject(id, data);
   },
 );
 

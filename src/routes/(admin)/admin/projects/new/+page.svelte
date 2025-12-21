@@ -38,7 +38,7 @@
       });
       if (result) {
         toast.show("Created", "success");
-        goto(`/admin/projects/edit/${result.id}`);
+        await goto(`/admin/projects/edit/${result.id}`);
       }
     } catch (error) {
       toast.show(error instanceof Error ? error.message : "Failed to save");

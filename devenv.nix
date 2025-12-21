@@ -1,10 +1,13 @@
-{
+{pkgs, ...}: {
+  packages = [pkgs.sqlite];
+
   languages.javascript = {
     enable = true;
     bun = {
       enable = true;
       install.enable = true;
     };
+    pnpm.enable = true;
   };
 
   dotenv.disableHint = true;

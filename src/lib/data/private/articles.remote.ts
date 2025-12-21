@@ -16,12 +16,12 @@ export { getMembers } from "./members.remote";
 
 export const getArticles = query(async () => {
   await requireUtCodeMember();
-  return listAllArticles();
+  return await listAllArticles();
 });
 
 export const getArticle = query(v.string(), async (id) => {
   await requireUtCodeMember();
-  return getArticleById(id);
+  return await getArticleById(id);
 });
 
 export const saveArticle = command(
@@ -37,7 +37,7 @@ export const saveArticle = command(
   }),
   async (data) => {
     await requireUtCodeMember();
-    return createArticle(data);
+    return await createArticle(data);
   },
 );
 
@@ -57,7 +57,7 @@ export const editArticle = command(
   }),
   async ({ id, data }) => {
     await requireUtCodeMember();
-    return updateArticle(id, data);
+    return await updateArticle(id, data);
   },
 );
 
@@ -68,10 +68,10 @@ export const removeArticle = command(v.string(), async (id) => {
 
 export const publish = command(v.string(), async (id) => {
   await requireUtCodeMember();
-  return publishArticle(id);
+  return await publishArticle(id);
 });
 
 export const unpublish = command(v.string(), async (id) => {
   await requireUtCodeMember();
-  return unpublishArticle(id);
+  return await unpublishArticle(id);
 });

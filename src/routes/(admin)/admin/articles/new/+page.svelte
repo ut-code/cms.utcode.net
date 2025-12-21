@@ -30,7 +30,7 @@
       });
       if (result) {
         toast.show(data.published ? "Published" : "Created", "success");
-        goto(`/admin/articles/edit/${result.id}`);
+        await goto(`/admin/articles/edit/${result.id}`);
       }
     } catch (error) {
       toast.show(error instanceof Error ? error.message : "Failed to save");

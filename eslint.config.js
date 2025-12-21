@@ -37,6 +37,7 @@ export default defineConfig(
     },
     rules: {
       "@typescript-eslint/no-unsafe-type-assertion": "error",
+      "@typescript-eslint/no-floating-promises": "error",
     },
   },
   {
@@ -52,6 +53,7 @@ export default defineConfig(
     },
     rules: {
       "@typescript-eslint/no-unsafe-type-assertion": "error",
+      "@typescript-eslint/no-floating-promises": "error",
     },
   },
 );

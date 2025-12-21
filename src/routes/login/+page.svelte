@@ -3,7 +3,7 @@
   import { Github } from "lucide-svelte";
 
   function loginWithGitHub() {
-    authClient.signIn.social({ provider: "github", callbackURL: "/admin" });
+    authClient.signIn.social({ provider: "github", callbackURL: "/admin" }).catch(console.error);
   }
 </script>
 

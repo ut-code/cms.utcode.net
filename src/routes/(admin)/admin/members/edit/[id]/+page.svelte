@@ -62,7 +62,7 @@
       try {
         await removeMember(id);
         toast.show("Deleted", "success");
-        goto("/admin/members");
+        await goto("/admin/members");
       } catch (error) {
         toast.show(error instanceof Error ? error.message : "Failed to delete");
       }

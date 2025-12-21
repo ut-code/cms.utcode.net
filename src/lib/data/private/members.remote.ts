@@ -11,12 +11,12 @@ import {
 
 export const getMembers = query(async () => {
   await requireUtCodeMember();
-  return listMembers();
+  return await listMembers();
 });
 
 export const getMember = query(v.string(), async (id) => {
   await requireUtCodeMember();
-  return getMemberById(id);
+  return await getMemberById(id);
 });
 
 export const saveMember = command(
@@ -29,7 +29,7 @@ export const saveMember = command(
   }),
   async (data) => {
     await requireUtCodeMember();
-    return createMember(data);
+    return await createMember(data);
   },
 );
 
@@ -46,7 +46,7 @@ export const editMember = command(
   }),
   async ({ id, data }) => {
     await requireUtCodeMember();
-    return updateMember(id, data);
+    return await updateMember(id, data);
   },
 );
 

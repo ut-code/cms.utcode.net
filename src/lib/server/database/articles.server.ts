@@ -27,12 +27,13 @@ export async function getPublishedArticle(slug: string) {
     with: { author: true },
   });
 
-  // Fire-and-forget: view count accuracy is not critical, so we don't await or handle errors
+  // Fire-and-forget: view count accuracy is not critical
   if (result) {
     db.update(article)
       .set({ viewCount: sql`${article.viewCount} + 1` })
       .where(eq(article.slug, slug))
-      .run();
+      .run()
+      .catch(console.error);
   }
 
   return result;

@@ -67,7 +67,7 @@
   }
 
   function triggerSubmit() {
-    if (!isSubmitting) handleSubmit(new SubmitEvent("submit"));
+    if (!isSubmitting) handleSubmit(new SubmitEvent("submit")).catch(console.error);
   }
 </script>
 

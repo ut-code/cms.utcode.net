@@ -1,7 +1,6 @@
 <script lang="ts">
   import "../../app.css";
   import { page } from "$app/state";
-  import { getAdminSession } from "$lib/data/private/auth.remote";
   import ConfirmModal from "$lib/components/confirm-modal.svelte";
   import Toast from "$lib/components/toast/toast.svelte";
   import { setupToast } from "$lib/components/toast/controls.svelte";
@@ -18,12 +17,12 @@
     Sparkles,
   } from "lucide-svelte";
 
-  let { children } = $props();
+  let { children, data } = $props();
 
   // Instantiate toast context for all admin pages (must be called before any await)
   const toastControls = setupToast();
 
-  const session = $derived(await getAdminSession());
+  const session = $derived(data.session);
 
   const navItems = [
     { href: "/admin", label: "Dashboard", icon: LayoutGrid, exact: true },

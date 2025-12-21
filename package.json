@@ -11,7 +11,7 @@
     "test-check": "bun test",
     "check": "bun type-check && bun test-check && bun lint-check && bun format-check",
     "fix": "bun lint-fix && bun format",
-    "tidy": "bun type-check && bun test-check && bun lint-fix --quiet && bun format --log-level silent",
+    "tidy": "bun type-check && bun test-check && bun --bun lint-fix --quiet && bun --bun format --log-level silent",
     "type-check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "format": "prettier --write .",
@@ -22,6 +22,8 @@
     "db": "drizzle-kit",
     "up": "bun db push --force && devenv processes up -d",
     "down": "devenv processes down",
+    "reload": "bun down && bun up",
+    "attach": "devenv processes up",
     "logs": "tail -f ./.devenv/processes.log"
   },
   "devDependencies": {

@@ -128,7 +128,7 @@
   function navigateToResult(result: TResult) {
     closeSearch();
     query = "";
-    goto(getResultHref(result));
+    goto(getResultHref(result)).catch(console.error);
   }
 
   function handleBackdropClick() {
