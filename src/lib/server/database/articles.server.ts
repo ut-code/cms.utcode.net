@@ -32,8 +32,7 @@ export async function getPublishedArticle(slug: string) {
     db.update(article)
       .set({ viewCount: sql`${article.viewCount} + 1` })
       .where(eq(article.slug, slug))
-      .run()
-      .catch(console.error);
+      .then(() => {}, console.error);
   }
 
   return result;

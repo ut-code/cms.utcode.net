@@ -1,36 +1,36 @@
 import { sql, relations } from "drizzle-orm";
-import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
+import { pgTable, text, boolean, integer, timestamp, index } from "drizzle-orm/pg-core";
 
 // ============================================================================
 // Better Auth Tables
 // ============================================================================
 
-export const user = sqliteTable("user", {
+export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
-  emailVerified: integer("email_verified", { mode: "boolean" }).default(false).notNull(),
+  emailVerified: boolean("email_verified").default(false).notNull(),
   image: text("image"),
-  utCodeMemberAt: integer("utcode_member_at", { mode: "timestamp_ms" }),
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
-    .default(sql`(unixepoch() * 1000)`)
+  utCodeMemberAt: timestamp("utcode_member_at", { mode: "date", withTimezone: true }),
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
+    .default(sql`now()`)
     .notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
-    .default(sql`(unixepoch() * 1000)`)
+  updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true })
+    .default(sql`now()`)
     .notNull(),
 });
 
-export const session = sqliteTable(
+export const session = pgTable(
   "session",
   {
     id: text("id").primaryKey(),
-    expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
+    expiresAt: timestamp("expires_at", { mode: "date", withTimezone: true }).notNull(),
     token: text("token").notNull().unique(),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
-      .default(sql`(unixepoch() * 1000)`)
+    createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
+      .default(sql`now()`)
       .notNull(),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
-      .default(sql`(unixepoch() * 1000)`)
+    updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true })
+      .default(sql`now()`)
       .notNull(),
     ipAddress: text("ip_address"),
     userAgent: text("user_agent"),
@@ -41,7 +41,7 @@ export const session = sqliteTable(
   (table) => [index("session_userId_idx").on(table.userId)],
 );
 
-export const account = sqliteTable(
+export const account = pgTable(
   "account",
   {
     id: text("id").primaryKey(),
@@ -53,36 +53,38 @@ export const account = sqliteTable(
     accessToken: text("access_token"),
     refreshToken: text("refresh_token"),
     idToken: text("id_token"),
-    accessTokenExpiresAt: integer("access_token_expires_at", {
-      mode: "timestamp_ms",
+    accessTokenExpiresAt: timestamp("access_token_expires_at", {
+      mode: "date",
+      withTimezone: true,
     }),
-    refreshTokenExpiresAt: integer("refresh_token_expires_at", {
-      mode: "timestamp_ms",
+    refreshTokenExpiresAt: timestamp("refresh_token_expires_at", {
+      mode: "date",
+      withTimezone: true,
     }),
     scope: text("scope"),
     password: text("password"),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
-      .default(sql`(unixepoch() * 1000)`)
+    createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
+      .default(sql`now()`)
       .notNull(),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
-      .default(sql`(unixepoch() * 1000)`)
+    updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true })
+      .default(sql`now()`)
       .notNull(),
   },
   (table) => [index("account_userId_idx").on(table.userId)],
 );
 
-export const verification = sqliteTable(
+export const verification = pgTable(
   "verification",
   {
     id: text("id").primaryKey(),
     identifier: text("identifier").notNull(),
     value: text("value").notNull(),
-    expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
-      .default(sql`(unixepoch() * 1000)`)
+    expiresAt: timestamp("expires_at", { mode: "date", withTimezone: true }).notNull(),
+    createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
+      .default(sql`now()`)
       .notNull(),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
-      .default(sql`(unixepoch() * 1000)`)
+    updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true })
+      .default(sql`now()`)
       .notNull(),
   },
   (table) => [index("verification_identifier_idx").on(table.identifier)],
@@ -92,7 +94,7 @@ export const verification = sqliteTable(
 // CMS Tables
 // ============================================================================
 
-export const member = sqliteTable(
+export const member = pgTable(
   "member",
   {
     id: text("id")
@@ -106,17 +108,17 @@ export const member = sqliteTable(
     bio: text("bio"),
     imageUrl: text("image_url"),
     pageContent: text("page_content"),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
-      .default(sql`(unixepoch() * 1000)`)
+    createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
+      .default(sql`now()`)
       .notNull(),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
-      .default(sql`(unixepoch() * 1000)`)
+    updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true })
+      .default(sql`now()`)
       .notNull(),
   },
   (table) => [index("member_userId_idx").on(table.userId)],
 );
 
-export const article = sqliteTable(
+export const article = pgTable(
   "article",
   {
     id: text("id")
@@ -130,14 +132,14 @@ export const article = sqliteTable(
     authorId: text("author_id").references(() => member.id, {
       onDelete: "set null",
     }),
-    published: integer("published", { mode: "boolean" }).default(false).notNull(),
-    publishedAt: integer("published_at", { mode: "timestamp_ms" }),
+    published: boolean("published").default(false).notNull(),
+    publishedAt: timestamp("published_at", { mode: "date", withTimezone: true }),
     viewCount: integer("view_count").notNull().default(0),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
-      .default(sql`(unixepoch() * 1000)`)
+    createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
+      .default(sql`now()`)
       .notNull(),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
-      .default(sql`(unixepoch() * 1000)`)
+    updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true })
+      .default(sql`now()`)
       .notNull(),
   },
   (table) => [index("article_authorId_idx").on(table.authorId)],
@@ -172,7 +174,7 @@ export const PROJECT_ROLES: Record<ProjectRole, string> = {
   member: "メンバー",
 };
 
-export const project = sqliteTable("project", {
+export const project = pgTable("project", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
@@ -184,15 +186,15 @@ export const project = sqliteTable("project", {
   repoUrl: text("repo_url"),
   demoUrl: text("demo_url"),
   category: text("category").$type<ProjectCategory>().notNull().default("active"),
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
-    .default(sql`(unixepoch() * 1000)`)
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
+    .default(sql`now()`)
     .notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
-    .default(sql`(unixepoch() * 1000)`)
+  updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true })
+    .default(sql`now()`)
     .notNull(),
 });
 
-export const projectMember = sqliteTable(
+export const projectMember = pgTable(
   "project_member",
   {
     projectId: text("project_id")

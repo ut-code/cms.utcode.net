@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  packages = [pkgs.sqlite];
+  packages = [pkgs.postgresql];
 
   languages.javascript = {
     enable = true;
@@ -17,6 +17,12 @@
       restart = "on_failure";
       backoff_seconds = 10;
     };
+  };
+
+  services.postgres = {
+    enable = true;
+    initialDatabases = [{name = "cms";}];
+    listen_addresses = "127.0.0.1";
   };
 
   services.minio = {

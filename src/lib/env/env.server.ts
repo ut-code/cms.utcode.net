@@ -1,8 +1,7 @@
 import * as v from "valibot";
 
 const Env = v.object({
-  DATABASE_URL: v.pipe(v.string()),
-  DATABASE_AUTH_TOKEN: v.optional(v.string()),
+  DATABASE_URL: v.string(),
   GITHUB_CLIENT_ID: v.string(),
   GITHUB_CLIENT_SECRET: v.string(),
   BETTER_AUTH_SECRET: v.string(),
