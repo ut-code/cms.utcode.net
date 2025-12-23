@@ -1,7 +1,6 @@
-import { redirect } from "@sveltejs/kit";
-import { isHttpError } from "@sveltejs/kit";
-import type { LayoutServerLoad } from "./$types";
+import { isHttpError, redirect } from "@sveltejs/kit";
 import { requireUtCodeMember } from "$lib/server/database/auth.server";
+import type { LayoutServerLoad } from "./$types";
 
 export const load: LayoutServerLoad = async () => {
   try {

@@ -52,12 +52,12 @@ export function filterSearchResults(results: SearchResult[], query: string): Sea
     if (result.type === "article") {
       return (
         result.title.toLowerCase().includes(lowerQuery) ||
-        (result.excerpt && result.excerpt.toLowerCase().includes(lowerQuery))
+        result.excerpt?.toLowerCase().includes(lowerQuery)
       );
     } else {
       return (
         result.name.toLowerCase().includes(lowerQuery) ||
-        (result.description && result.description.toLowerCase().includes(lowerQuery))
+        result.description?.toLowerCase().includes(lowerQuery)
       );
     }
   });

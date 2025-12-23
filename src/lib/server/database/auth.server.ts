@@ -1,8 +1,8 @@
-import { eq } from "drizzle-orm";
 import { error } from "@sveltejs/kit";
+import { eq } from "drizzle-orm";
+import * as v from "valibot";
 import { getRequestEvent } from "$app/server";
 import { env } from "$lib/env/env.server";
-import * as v from "valibot";
 import { auth } from "$lib/server/drivers/auth";
 import { db } from "$lib/server/drivers/db";
 import { user } from "$lib/shared/models/schema";

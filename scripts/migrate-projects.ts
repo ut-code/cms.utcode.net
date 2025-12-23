@@ -10,17 +10,17 @@
  */
 
 import { readdir, readFile } from "node:fs/promises";
-import { join, dirname, basename } from "node:path";
-import { parse as parseYaml } from "yaml";
-import { drizzle } from "drizzle-orm/libsql";
+import { basename, dirname, join } from "node:path";
 import { createClient } from "@libsql/client";
-import {
-  project,
-  member,
-  projectMember,
-  type ProjectCategory,
-} from "../src/lib/shared/models/schema";
 import { eq } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/libsql";
+import { parse as parseYaml } from "yaml";
+import {
+  member,
+  type ProjectCategory,
+  project,
+  projectMember,
+} from "../src/lib/shared/models/schema";
 
 // Database setup
 const DATABASE_URL = process.env.DATABASE_URL;
@@ -113,7 +113,7 @@ function extractErrorMessage(error: unknown): string {
   if (message.startsWith("Failed query:")) {
     return "Database insert failed";
   }
-  return message.length > 200 ? message.slice(0, 200) + "..." : message;
+  return message.length > 200 ? `${message.slice(0, 200)}...` : message;
 }
 
 async function findProjectFiles(): Promise<string[]> {

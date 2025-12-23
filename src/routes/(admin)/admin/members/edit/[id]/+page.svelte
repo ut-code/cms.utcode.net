@@ -1,115 +1,115 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
-  import { page } from "$app/state";
-  import MemberForm from "$lib/components/MemberForm.svelte";
-  import { confirm } from "$lib/components/confirm-modal.svelte";
-  import { getMember, editMember, removeMember } from "$lib/data/private/members.remote";
-  import { useToast } from "$lib/components/toast/controls.svelte";
-  import { User } from "lucide-svelte";
+	import { User } from "lucide-svelte";
+	import { goto } from "$app/navigation";
+	import { page } from "$app/state";
+	import { confirm } from "$lib/components/confirm-modal.svelte";
+	import MemberForm from "$lib/components/MemberForm.svelte";
+	import { useToast } from "$lib/components/toast/controls.svelte";
+	import { editMember, getMember, removeMember } from "$lib/data/private/members.remote";
 
-  const toast = useToast();
-  const id = $derived(page.params.id ?? "");
-  const member = $derived(await getMember(id));
-  let isSubmitting = $state(false);
+	const toast = useToast();
+	const id = $derived(page.params.id ?? "");
+	const member = $derived(await getMember(id));
+	let isSubmitting = $state(false);
 
-  async function handleSubmit(data: {
-    slug: string;
-    name: string;
-    bio: string;
-    imageUrl: string;
-    pageContent: string;
-  }) {
-    if (!member) return;
+	async function handleSubmit(data: {
+		slug: string;
+		name: string;
+		bio: string;
+		imageUrl: string;
+		pageContent: string;
+	}) {
+		if (!member) return;
 
-    try {
-      if (data.slug !== member.slug) {
-        const confirmed = await confirm({
-          title: "Change username?",
-          description: `This will break existing links. Change from @${member.slug} to @${data.slug}?`,
-          confirmText: "Change",
-          variant: "warning",
-        });
-        if (!confirmed) return;
-      }
+		try {
+			if (data.slug !== member.slug) {
+				const confirmed = await confirm({
+					title: "Change username?",
+					description: `This will break existing links. Change from @${member.slug} to @${data.slug}?`,
+					confirmText: "Change",
+					variant: "warning",
+				});
+				if (!confirmed) return;
+			}
 
-      await editMember({
-        id,
-        data: {
-          slug: data.slug,
-          name: data.name,
-          bio: data.bio || null,
-          imageUrl: data.imageUrl || null,
-          pageContent: data.pageContent || null,
-        },
-      });
-      toast.show("Saved", "success");
-    } catch (error) {
-      toast.show(error instanceof Error ? error.message : "Failed to save");
-    }
-  }
+			await editMember({
+				id,
+				data: {
+					slug: data.slug,
+					name: data.name,
+					bio: data.bio || null,
+					imageUrl: data.imageUrl || null,
+					pageContent: data.pageContent || null,
+				},
+			});
+			toast.show("Saved", "success");
+		} catch (error) {
+			toast.show(error instanceof Error ? error.message : "Failed to save");
+		}
+	}
 
-  async function handleDelete() {
-    if (!member) return;
+	async function handleDelete() {
+		if (!member) return;
 
-    const confirmed = await confirm({
-      title: "Delete member?",
-      description: `Delete "${member.name}"? Articles will lose attribution.`,
-      confirmText: "Delete",
-      variant: "danger",
-    });
+		const confirmed = await confirm({
+			title: "Delete member?",
+			description: `Delete "${member.name}"? Articles will lose attribution.`,
+			confirmText: "Delete",
+			variant: "danger",
+		});
 
-    if (confirmed) {
-      try {
-        await removeMember(id);
-        toast.show("Deleted", "success");
-        await goto("/admin/members");
-      } catch (error) {
-        toast.show(error instanceof Error ? error.message : "Failed to delete");
-      }
-    }
-  }
+		if (confirmed) {
+			try {
+				await removeMember(id);
+				toast.show("Deleted", "success");
+				await goto("/admin/members");
+			} catch (error) {
+				toast.show(error instanceof Error ? error.message : "Failed to delete");
+			}
+		}
+	}
 </script>
 
 <svelte:head>
-  <title>{member?.name ?? "Edit Member"} - ut.code(); CMS</title>
+	<title>{member?.name ?? "Edit Member"} - ut.code(); CMS</title>
 </svelte:head>
 
 <svelte:boundary>
-  {#snippet pending()}
-    <div class="flex h-96 items-center justify-center">
-      <span class="loading loading-md loading-spinner"></span>
-    </div>
-  {/snippet}
+	{#snippet pending()}
+		<div class="flex h-96 items-center justify-center">
+			<span class="loading loading-md loading-spinner"></span>
+		</div>
+	{/snippet}
 
-  {#if !member}
-    <div class="flex h-96 flex-col items-center justify-center text-center">
-      <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-zinc-400">
-        <User class="h-6 w-6" />
-      </div>
-      <h2 class="mt-4 font-semibold text-zinc-900">Member not found</h2>
-      <p class="mt-1 text-sm text-zinc-500">This member doesn't exist.</p>
-      <a
-        href="/admin/members"
-        class="mt-4 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800"
-      >
-        Back to Members
-      </a>
-    </div>
-  {:else}
-    <div class="h-[calc(100vh-4rem)]">
-      <MemberForm
-        initialData={{
-          slug: member.slug,
-          name: member.name,
-          bio: member.bio ?? "",
-          imageUrl: member.imageUrl ?? "",
-          pageContent: member.pageContent ?? "",
-        }}
-        onSubmit={handleSubmit}
-        onDelete={handleDelete}
-        submitLabel="Save"
-        bind:isSubmitting
-      />
-    </div>
-  {/if}
+	{#if !member}
+		<div class="flex h-96 flex-col items-center justify-center text-center">
+			<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-zinc-400">
+				<User class="h-6 w-6" />
+			</div>
+			<h2 class="mt-4 font-semibold text-zinc-900">Member not found</h2>
+			<p class="mt-1 text-sm text-zinc-500">This member doesn't exist.</p>
+			<a
+				href="/admin/members"
+				class="mt-4 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800"
+			>
+				Back to Members
+			</a>
+		</div>
+	{:else}
+		<div class="h-[calc(100vh-4rem)]">
+			<MemberForm
+				initialData={{
+					slug: member.slug,
+					name: member.name,
+					bio: member.bio ?? "",
+					imageUrl: member.imageUrl ?? "",
+					pageContent: member.pageContent ?? "",
+				}}
+				onSubmit={handleSubmit}
+				onDelete={handleDelete}
+				submitLabel="Save"
+				bind:isSubmitting
+			/>
+		</div>
+	{/if}
 </svelte:boundary>

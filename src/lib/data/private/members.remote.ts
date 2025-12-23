@@ -1,12 +1,12 @@
 import * as v from "valibot";
-import { query, command } from "$app/server";
+import { command, query } from "$app/server";
 import { requireUtCodeMember } from "$lib/server/database/auth.server";
 import {
-  listMembers,
-  getMemberById,
   createMember,
-  updateMember,
   deleteMember,
+  getMemberById,
+  listMembers,
+  updateMember,
 } from "$lib/server/database/members.server";
 
 export const getMembers = query(async () => {

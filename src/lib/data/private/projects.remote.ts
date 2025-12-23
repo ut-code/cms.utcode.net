@@ -1,17 +1,17 @@
 import * as v from "valibot";
-import { query, command } from "$app/server";
+import { command, query } from "$app/server";
 import { requireUtCodeMember } from "$lib/server/database/auth.server";
 import {
-  listProjects,
-  getProjectById,
-  createProject,
-  updateProject,
-  deleteProject,
   addProjectMember,
+  createProject,
+  deleteProject,
+  getProjectById,
+  listProjects,
   removeProjectMember,
   transferLead as serverTransferLead,
+  updateProject,
 } from "$lib/server/database/projects.server";
-import { type ProjectCategory, type ProjectRole } from "$lib/shared/models/schema";
+import type { ProjectCategory, ProjectRole } from "$lib/shared/models/schema";
 
 // Re-export getMembers from canonical source
 export { getMembers } from "./members.remote";

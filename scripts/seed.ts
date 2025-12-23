@@ -2,8 +2,8 @@ import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 import * as schema from "../src/lib/shared/models/schema";
 import type {
-  MemberInsert,
   ArticleInsert,
+  MemberInsert,
   ProjectInsert,
   ProjectMemberInsert,
 } from "../src/lib/shared/models/validators";

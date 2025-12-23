@@ -1,6 +1,6 @@
-import { describe, test, expect } from "bun:test";
+import { describe, expect, test } from "bun:test";
 import * as v from "valibot";
-import { validateSlug, generateSlug, SlugSchema, SLUG_PATTERN } from "./slugs";
+import { generateSlug, SLUG_PATTERN, SlugSchema, validateSlug } from "./slugs";
 
 describe("slugs", () => {
   describe("validateSlug", () => {

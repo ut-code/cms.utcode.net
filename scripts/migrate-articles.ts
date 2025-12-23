@@ -13,12 +13,12 @@
  */
 
 import { readdir, readFile } from "node:fs/promises";
-import { join, dirname } from "node:path";
-import { parse as parseYaml } from "yaml";
-import { drizzle } from "drizzle-orm/libsql";
+import { dirname, join } from "node:path";
 import { createClient } from "@libsql/client";
-import { article, member } from "../src/lib/shared/models/schema";
 import { eq } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/libsql";
+import { parse as parseYaml } from "yaml";
+import { article, member } from "../src/lib/shared/models/schema";
 
 // Create database client directly (not using SvelteKit path aliases)
 const DATABASE_URL = process.env.DATABASE_URL;
@@ -104,7 +104,7 @@ function generateExcerpt(content: string, maxLength = 200): string {
     .trim();
 
   if (plain.length <= maxLength) return plain;
-  return plain.slice(0, maxLength).replace(/\s+\S*$/, "") + "...";
+  return `${plain.slice(0, maxLength).replace(/\s+\S*$/, "")}...`;
 }
 
 async function findArticleFiles(): Promise<string[]> {
@@ -196,14 +196,14 @@ function extractErrorMessage(error: unknown): string {
 
   // Truncate very long messages
   if (message.length > 200) {
-    return message.slice(0, 200) + "...";
+    return `${message.slice(0, 200)}...`;
   }
 
   return message;
 }
 
 async function migrateArticle(filePath: string, dryRun: boolean): Promise<MigrationResult> {
-  const relPath = filePath.replace(ARTICLES_PATH + "/", "");
+  const relPath = filePath.replace(`${ARTICLES_PATH}/`, "");
   const dirPath = dirname(relPath);
   const slug = generateSlug(dirPath);
 

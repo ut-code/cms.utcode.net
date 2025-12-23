@@ -3,8 +3,8 @@ import sharp from "sharp";
 // Re-export shared types
 export {
   ACCEPTED_IMAGE_TYPES,
-  isAcceptedImageType,
   type AcceptedImageType,
+  isAcceptedImageType,
 } from "$lib/shared/logic/image";
 
 /**

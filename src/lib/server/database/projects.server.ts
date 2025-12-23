@@ -1,6 +1,6 @@
-import { eq, and, or, like, sql } from "drizzle-orm";
+import { and, eq, like, or, sql } from "drizzle-orm";
 import { db } from "$lib/server/drivers/db";
-import { project, projectMember, type ProjectRole } from "$lib/shared/models/schema";
+import { type ProjectRole, project, projectMember } from "$lib/shared/models/schema";
 import { createSearchPattern } from "./utils";
 
 export type Project = typeof project.$inferSelect;

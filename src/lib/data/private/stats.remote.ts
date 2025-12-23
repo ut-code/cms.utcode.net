@@ -1,13 +1,13 @@
 import { query } from "$app/server";
-import { countMembers } from "$lib/server/database/members.server";
 import {
   countArticles,
   countPublishedArticles,
   getRecentArticles,
   getRecentDraftArticles,
 } from "$lib/server/database/articles.server";
-import { countProjects, getRecentProjects } from "$lib/server/database/projects.server";
 import { requireUtCodeMember } from "$lib/server/database/auth.server";
+import { countMembers } from "$lib/server/database/members.server";
+import { countProjects, getRecentProjects } from "$lib/server/database/projects.server";
 
 export const getAdminStats = query(async () => {
   await requireUtCodeMember();

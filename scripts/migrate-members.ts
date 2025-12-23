@@ -10,12 +10,12 @@
  */
 
 import { readdir, readFile } from "node:fs/promises";
-import { join, dirname } from "node:path";
-import { parse as parseYaml } from "yaml";
-import { drizzle } from "drizzle-orm/libsql";
+import { dirname, join } from "node:path";
 import { createClient } from "@libsql/client";
-import { member } from "../src/lib/shared/models/schema";
 import { eq } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/libsql";
+import { parse as parseYaml } from "yaml";
+import { member } from "../src/lib/shared/models/schema";
 
 // Database setup
 const DATABASE_URL = process.env.DATABASE_URL;
@@ -90,7 +90,7 @@ function extractErrorMessage(error: unknown): string {
   if (message.startsWith("Failed query:")) {
     return "Database insert failed";
   }
-  return message.length > 200 ? message.slice(0, 200) + "..." : message;
+  return message.length > 200 ? `${message.slice(0, 200)}...` : message;
 }
 
 async function findMemberFiles(): Promise<string[]> {
@@ -122,7 +122,7 @@ async function memberExists(slug: string): Promise<boolean> {
 }
 
 async function migrateMember(filePath: string, dryRun: boolean): Promise<MigrationResult> {
-  const relPath = filePath.replace(MEMBERS_PATH + "/", "");
+  const relPath = filePath.replace(`${MEMBERS_PATH}/`, "");
   const dirPath = dirname(relPath);
   const slug = generateSlug(dirPath);
 

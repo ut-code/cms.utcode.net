@@ -8,24 +8,24 @@
 import { spawn } from "node:child_process";
 import { readdir, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, dirname, basename } from "node:path";
-import { parse as parseYaml } from "yaml";
-import * as v from "valibot";
+import { basename, dirname, join } from "node:path";
 import { eq } from "drizzle-orm";
+import * as v from "valibot";
+import { parse as parseYaml } from "yaml";
 import { db } from "$lib/server/drivers/db";
 import {
-  member,
   article,
+  member,
+  type ProjectCategory,
   project,
   projectMember,
-  type ProjectCategory,
 } from "$lib/shared/models/schema";
 import {
-  log,
-  startMigration,
   completeMigration,
   failMigration,
   isRunning,
+  log,
+  startMigration,
 } from "./migration-state.server";
 
 const REPO_URL = "https://github.com/ut-code/utcode.net.git";
@@ -113,7 +113,7 @@ async function migrateMembers(
   let errorCount = 0;
 
   for (const file of files) {
-    const relPath = file.replace(membersPath + "/", "");
+    const relPath = file.replace(`${membersPath}/`, "");
     const parts = dirname(relPath).split("/");
     const slug = parts.at(-1);
     if (!slug) continue;
@@ -191,7 +191,7 @@ function generateExcerpt(content: string, maxLength = 200): string {
     .trim();
 
   if (plain.length <= maxLength) return plain;
-  return plain.slice(0, maxLength).replace(/\s+\S*$/, "") + "...";
+  return `${plain.slice(0, maxLength).replace(/\s+\S*$/, "")}...`;
 }
 
 async function migrateArticles(
@@ -207,7 +207,7 @@ async function migrateArticles(
   let errorCount = 0;
 
   for (const file of files) {
-    const relPath = file.replace(articlesPath + "/", "");
+    const relPath = file.replace(`${articlesPath}/`, "");
     const slug = generateArticleSlug(dirname(relPath));
 
     try {

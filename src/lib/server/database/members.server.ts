@@ -1,4 +1,4 @@
-import { eq, or, like, sql } from "drizzle-orm";
+import { eq, like, or, sql } from "drizzle-orm";
 import { db } from "$lib/server/drivers/db";
 import { member } from "$lib/shared/models/schema";
 import { createSearchPattern } from "./utils";

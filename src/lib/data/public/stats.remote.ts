@@ -1,6 +1,6 @@
 import { query } from "$app/server";
-import { listMembers } from "$lib/server/database/members.server";
 import { listPublishedArticles } from "$lib/server/database/articles.server";
+import { listMembers } from "$lib/server/database/members.server";
 import { listProjects } from "$lib/server/database/projects.server";
 
 export const getStats = query(async () => {

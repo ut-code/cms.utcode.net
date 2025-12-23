@@ -1,9 +1,9 @@
 import * as v from "valibot";
 import { query } from "$app/server";
-import { requireUtCodeMember } from "$lib/server/database/auth.server";
 import { searchAllArticles } from "$lib/server/database/articles.server";
-import { searchProjects } from "$lib/server/database/projects.server";
+import { requireUtCodeMember } from "$lib/server/database/auth.server";
 import { searchMembers } from "$lib/server/database/members.server";
+import { searchProjects } from "$lib/server/database/projects.server";
 import type { AdminSearchResult } from "$lib/shared/logic/search";
 
 export const searchAdmin = query(

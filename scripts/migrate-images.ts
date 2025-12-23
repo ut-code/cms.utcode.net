@@ -12,13 +12,13 @@
  */
 
 import { readdir, readFile, stat } from "node:fs/promises";
-import { join, dirname, basename, extname } from "node:path";
-import { parse as parseYaml } from "yaml";
-import { drizzle } from "drizzle-orm/libsql";
+import { basename, dirname, extname, join } from "node:path";
 import { createClient } from "@libsql/client";
-import { Client } from "minio";
-import { article, member, project } from "../src/lib/shared/models/schema";
 import { eq } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/libsql";
+import { Client } from "minio";
+import { parse as parseYaml } from "yaml";
+import { article, member, project } from "../src/lib/shared/models/schema";
 
 // Environment setup
 const DATABASE_URL = process.env.DATABASE_URL;
@@ -183,7 +183,7 @@ async function migrateMemberImages(dryRun: boolean): Promise<MigrationResult[]> 
 
   for (const file of files) {
     const dirPath = dirname(file);
-    const relPath = file.replace(MEMBERS_PATH + "/", "");
+    const relPath = file.replace(`${MEMBERS_PATH}/`, "");
     const parts = dirname(relPath).split("/");
     const slug = parts[parts.length - 1];
 
@@ -305,7 +305,7 @@ async function migrateArticleImages(dryRun: boolean): Promise<MigrationResult[]>
 
   for (const file of files) {
     const dirPath = dirname(file);
-    const relPath = file.replace(ARTICLES_PATH + "/", "");
+    const relPath = file.replace(`${ARTICLES_PATH}/`, "");
     const slug = generateArticleSlug(dirname(relPath));
 
     try {

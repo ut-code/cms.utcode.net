@@ -1,6 +1,6 @@
-import { describe, test, expect } from "bun:test";
+import { describe, expect, test } from "bun:test";
 import * as v from "valibot";
-import { validateS3Key, getExtensionFromKey, S3KeySchema, S3_KEY_PATTERN } from "./storage";
+import { getExtensionFromKey, S3_KEY_PATTERN, S3KeySchema, validateS3Key } from "./storage";
 
 describe("storage", () => {
   describe("validateS3Key", () => {

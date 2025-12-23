@@ -1,5 +1,5 @@
-import { s3, bucket, ensureBucket } from "$lib/server/drivers/s3";
 import { env } from "$lib/env/env.server";
+import { bucket, ensureBucket, s3 } from "$lib/server/drivers/s3";
 
 export async function uploadBuffer(
   buffer: Buffer,

@@ -1,12 +1,12 @@
 import { createInsertSchema, createSelectSchema } from "drizzle-valibot";
 import * as v from "valibot";
 import {
-  member,
   article,
-  project,
-  projectMember,
+  member,
   type ProjectCategory,
   type ProjectRole,
+  project,
+  projectMember,
 } from "./schema";
 
 // Category and role values as const arrays

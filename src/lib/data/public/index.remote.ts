@@ -1,17 +1,17 @@
 import * as v from "valibot";
 import { query } from "$app/server";
 import {
-  listPublishedArticles,
   getPublishedArticle,
   getRelatedArticles,
+  listPublishedArticles,
   searchPublishedArticles,
 } from "$lib/server/database/articles.server";
+import { getMemberBySlug, listMembers } from "$lib/server/database/members.server";
 import {
-  listProjects,
   getProjectBySlug,
+  listProjects,
   searchProjects,
 } from "$lib/server/database/projects.server";
-import { listMembers, getMemberBySlug } from "$lib/server/database/members.server";
 import type { SearchResult } from "$lib/shared/logic/search";
 
 export const getPublicArticles = query(listPublishedArticles);

@@ -1,5 +1,5 @@
-import { sql, relations } from "drizzle-orm";
-import { pgTable, text, boolean, integer, timestamp, index } from "drizzle-orm/pg-core";
+import { relations, sql } from "drizzle-orm";
+import { boolean, index, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 // ============================================================================
 // Better Auth Tables

@@ -3,8 +3,8 @@ import { requireUtCodeMember } from "$lib/server/database/auth.server";
 import { startDataMigration } from "$lib/server/services/migration.server";
 import {
   getMigrationState,
-  resetMigration,
   type MigrationState,
+  resetMigration,
 } from "$lib/server/services/migration-state.server";
 
 export const start = command(async (): Promise<{ started: boolean; message: string }> => {
