@@ -56,12 +56,6 @@
 					<a href="/members" class="text-sm text-zinc-500 transition-colors hover:text-zinc-900"
 						>Members</a
 					>
-					<a
-						href="/admin"
-						class="rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white transition-colors hover:bg-zinc-800"
-					>
-						Admin
-					</a>
 				</div>
 			</div>
 		</nav>
@@ -161,14 +155,6 @@
 						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-900"
 						>Members</a
 					>
-				</li>
-				<li>
-					<a
-						href="/admin"
-						class="block rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white transition-colors hover:bg-zinc-800"
-					>
-						Admin
-					</a>
 				</li>
 			</ul>
 		</div>
