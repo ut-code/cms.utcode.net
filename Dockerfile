@@ -23,9 +23,9 @@ RUN DATABASE_URL=postgresql://localhost/dummy \
 FROM oven/bun:1-slim
 WORKDIR /app
 
-# Install sops and age
+# Install sops, age, and git (for data migration)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl ca-certificates \
+    curl ca-certificates git \
     && curl -LO https://github.com/getsops/sops/releases/download/v3.9.4/sops-v3.9.4.linux.amd64 \
     && mv sops-v3.9.4.linux.amd64 /usr/local/bin/sops \
     && chmod +x /usr/local/bin/sops \
