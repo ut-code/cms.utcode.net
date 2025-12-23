@@ -4,8 +4,6 @@
 
 import type { MigrationState } from "$lib/shared/types/migration";
 
-export type { MigrationState };
-
 const initialState: MigrationState = {
   status: "idle",
   logs: [],

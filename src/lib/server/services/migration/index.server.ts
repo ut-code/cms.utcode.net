@@ -15,13 +15,13 @@ import {
   isRunning,
   log,
   startMigration,
-} from "./migration-state.server";
+} from "./state.server";
 import {
   migrateArticles,
   migrateImages,
   migrateMembers,
   migrateProjects,
-} from "./migration-workers.server";
+} from "./workers.server";
 
 const REPO_URL = "https://github.com/ut-code/utcode.net.git";
 
