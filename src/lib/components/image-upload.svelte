@@ -1,17 +1,22 @@
 <script lang="ts">
   import { upload } from "$lib/data/private/storage.remote";
   import { Loader2, Upload, AlertCircle, X } from "lucide-svelte";
+  import {
+    isAcceptedImageType,
+    isAllowedFolder,
+    type AllowedFolder,
+  } from "$lib/shared/logic/image";
 
   const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
   let {
     value = $bindable(""),
-    folder = "images",
+    folder = "images" as AllowedFolder,
     label = "Image",
     aspect = "5/3",
   }: {
     value?: string;
-    folder?: string;
+    folder?: AllowedFolder;
     label?: string;
     aspect?: "5/3" | "1/1" | "16/9" | "4/3";
   } = $props();
@@ -93,8 +98,14 @@
     error = null;
 
     // Validate file type
-    if (!file.type.startsWith("image/")) {
-      error = "Please select an image file";
+    if (!isAcceptedImageType(file.type)) {
+      error = "Unsupported image format";
+      return;
+    }
+
+    // Validate folder
+    if (!isAllowedFolder(folder)) {
+      error = "Invalid upload folder";
       return;
     }
 
@@ -120,9 +131,13 @@
     try {
       const arrayBuffer = await processedFile.arrayBuffer();
       const base64 = arrayBufferToBase64(arrayBuffer);
+      // Use the validated original type - server will re-compress to WebP anyway
+      const uploadType = isAcceptedImageType(processedFile.type)
+        ? processedFile.type
+        : file.type;
       const result = await upload({
         data: base64,
-        type: processedFile.type,
+        type: uploadType,
         name: processedFile.name,
         folder,
       });
@@ -265,7 +280,7 @@
             Drop, click, or paste (Ctrl+V)
           {/if}
         </span>
-        <span class="mt-1 text-xs text-zinc-400">PNG, JPG, GIF up to 10MB</span>
+        <span class="mt-1 text-xs text-zinc-400">JPG, PNG, WebP, AVIF, HEIC up to 10MB</span>
       {/if}
       <input
         type="file"
