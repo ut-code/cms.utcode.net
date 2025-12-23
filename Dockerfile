@@ -1,28 +1,5 @@
-FROM oven/bun:1 AS builder
+FROM oven/bun:1.3.2-slim AS base
 WORKDIR /app
-
-COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile
-
-COPY . .
-RUN bun run prepare
-
-# Build with dummy env vars (actual values injected at runtime)
-RUN DATABASE_URL=postgresql://localhost/dummy \
-    BETTER_AUTH_URL=http://localhost \
-    BETTER_AUTH_SECRET=dummydummydummydummydummydummydu \
-    GITHUB_CLIENT_ID=dummy \
-    GITHUB_CLIENT_SECRET=dummy \
-    S3_ENDPOINT=http://localhost \
-    S3_ACCESS_KEY=dummy \
-    S3_SECRET_KEY=dummy \
-    S3_BUCKET=dummy \
-    S3_PUBLIC_URL=http://localhost \
-    bun run build
-
-FROM oven/bun:1-slim
-WORKDIR /app
-
 # Install sops, age, and git (for data migration)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl ca-certificates git \
@@ -34,6 +11,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && mv age/age /usr/local/bin/ \
     && rm -rf age age-v1.2.0-linux-amd64.tar.gz \
     && apt-get remove -y curl && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+
+FROM base AS builder
+
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
+
+COPY . .
+RUN bun run prepare
+
+# Build with sops secrets
+ARG SOPS_AGE_KEY
+RUN sops exec-env secrets.prod.yaml 'bun run build'
+
+FROM base AS executor
+WORKDIR /app
 
 # Copy built application
 COPY --from=builder /app/build ./build
