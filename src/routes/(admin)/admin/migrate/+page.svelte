@@ -58,7 +58,9 @@
 
 <div class="space-y-6">
   <!-- Header -->
-  <header class="animate-fade-slide-in relative overflow-hidden rounded-2xl bg-gradient-to-br from-warning/20 to-error/20 p-6 border border-warning/30">
+  <header
+    class="animate-fade-slide-in relative overflow-hidden rounded-2xl border border-warning/30 bg-gradient-to-br from-warning/20 to-error/20 p-6"
+  >
     <!-- Warning decorative elements -->
     <div class="absolute top-0 -right-10 h-32 w-32 rounded-full bg-warning/30 blur-3xl"></div>
     <div class="absolute bottom-0 -left-10 h-24 w-24 rounded-full bg-error/20 blur-2xl"></div>
@@ -82,32 +84,32 @@
     <div>
       <p class="font-semibold">This is a heavy operation</p>
       <p class="text-sm opacity-80">
-        This will clone the old ut-code/utcode.net repository and import members, articles, and projects.
-        Existing entries will be skipped. This operation may take several minutes.
+        This will clone the old ut-code/utcode.net repository and import members, articles, and
+        projects. Existing entries will be skipped. This operation may take several minutes.
       </p>
     </div>
   </div>
 
   <!-- Status card -->
-  <div class="card bg-base-100 border border-base-300">
+  <div class="card border border-base-300 bg-base-100">
     <div class="card-body">
-      <div class="flex items-center justify-between mb-4">
+      <div class="mb-4 flex items-center justify-between">
         <h2 class="card-title">Migration Status</h2>
         <div class="flex items-center gap-2">
           {#if migrationState?.status === "idle"}
             <span class="badge badge-ghost">Idle</span>
           {:else if migrationState?.status === "running"}
-            <span class="badge badge-warning gap-1">
-              <span class="loading loading-spinner loading-xs"></span>
+            <span class="badge gap-1 badge-warning">
+              <span class="loading loading-xs loading-spinner"></span>
               Running
             </span>
           {:else if migrationState?.status === "completed"}
-            <span class="badge badge-success gap-1">
+            <span class="badge gap-1 badge-success">
               <CheckCircle class="h-3 w-3" />
               Completed
             </span>
           {:else if migrationState?.status === "error"}
-            <span class="badge badge-error gap-1">
+            <span class="badge gap-1 badge-error">
               <XCircle class="h-3 w-3" />
               Failed
             </span>
@@ -116,9 +118,9 @@
       </div>
 
       <!-- Action buttons -->
-      <div class="flex gap-2 mb-4">
+      <div class="mb-4 flex gap-2">
         <button
-          class="btn btn-warning gap-2"
+          class="btn gap-2 btn-warning"
           onclick={handleStart}
           disabled={migrationState?.status === "running"}
         >
@@ -126,7 +128,7 @@
           Start Migration
         </button>
         {#if migrationState?.status === "completed" || migrationState?.status === "error"}
-          <button class="btn btn-ghost gap-2" onclick={handleReset}>
+          <button class="btn gap-2 btn-ghost" onclick={handleReset}>
             <RotateCcw class="h-4 w-4" />
             Reset
           </button>
@@ -135,26 +137,35 @@
 
       <!-- Results summary -->
       {#if migrationState?.result}
-        <div class="grid grid-cols-3 gap-4 mb-4">
-          <div class="stat bg-base-200 rounded-lg p-4">
+        <div class="mb-4 grid grid-cols-3 gap-4">
+          <div class="stat rounded-lg bg-base-200 p-4">
             <div class="stat-title">Members</div>
-            <div class="stat-value text-lg text-success">{migrationState.result.members.created}</div>
+            <div class="stat-value text-lg text-success">
+              {migrationState.result.members.created}
+            </div>
             <div class="stat-desc">
-              {migrationState.result.members.skipped} skipped, {migrationState.result.members.errors} errors
+              {migrationState.result.members.skipped} skipped, {migrationState.result.members
+                .errors} errors
             </div>
           </div>
-          <div class="stat bg-base-200 rounded-lg p-4">
+          <div class="stat rounded-lg bg-base-200 p-4">
             <div class="stat-title">Articles</div>
-            <div class="stat-value text-lg text-success">{migrationState.result.articles.created}</div>
+            <div class="stat-value text-lg text-success">
+              {migrationState.result.articles.created}
+            </div>
             <div class="stat-desc">
-              {migrationState.result.articles.skipped} skipped, {migrationState.result.articles.errors} errors
+              {migrationState.result.articles.skipped} skipped, {migrationState.result.articles
+                .errors} errors
             </div>
           </div>
-          <div class="stat bg-base-200 rounded-lg p-4">
+          <div class="stat rounded-lg bg-base-200 p-4">
             <div class="stat-title">Projects</div>
-            <div class="stat-value text-lg text-success">{migrationState.result.projects.created}</div>
+            <div class="stat-value text-lg text-success">
+              {migrationState.result.projects.created}
+            </div>
             <div class="stat-desc">
-              {migrationState.result.projects.skipped} skipped, {migrationState.result.projects.errors} errors
+              {migrationState.result.projects.skipped} skipped, {migrationState.result.projects
+                .errors} errors
             </div>
           </div>
         </div>
@@ -162,7 +173,7 @@
 
       <!-- Error display -->
       {#if migrationState?.error}
-        <div class="alert alert-error mb-4">
+        <div class="mb-4 alert alert-error">
           <XCircle class="h-5 w-5" />
           <span>{migrationState.error}</span>
         </div>
@@ -179,13 +190,14 @@
         <pre
           id="logs"
           bind:this={logsContainer}
-          class="bg-base-300 rounded-lg p-4 text-xs font-mono h-80 overflow-auto whitespace-pre-wrap"
-        >{#if migrationState?.logs.length}{migrationState.logs.join("\n")}{:else}No logs yet. Click "Start Migration" to begin.{/if}</pre>
+          class="h-80 overflow-auto rounded-lg bg-base-300 p-4 font-mono text-xs whitespace-pre-wrap">{#if migrationState?.logs.length}{migrationState.logs.join(
+              "\n",
+            )}{:else}No logs yet. Click "Start Migration" to begin.{/if}</pre>
       </div>
 
       <!-- Timestamps -->
       {#if migrationState?.startedAt || migrationState?.completedAt}
-        <div class="flex gap-4 text-sm text-base-content/60 mt-4">
+        <div class="mt-4 flex gap-4 text-sm text-base-content/60">
           {#if migrationState?.startedAt}
             <span>Started: {new Date(migrationState.startedAt).toLocaleString("ja-JP")}</span>
           {/if}
