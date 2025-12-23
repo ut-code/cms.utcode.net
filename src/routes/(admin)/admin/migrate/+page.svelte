@@ -3,11 +3,13 @@
 		AlertTriangle,
 		CheckCircle,
 		DatabaseBackup,
+		ImageOff,
 		Play,
 		RotateCcw,
+		Trash2,
 		XCircle,
 	} from "lucide-svelte";
-	import { getStatus, reset, start } from "$lib/data/private/migration.remote";
+	import { cleanup, deleteAll, getStatus, reset, start } from "$lib/data/private/migration.remote";
 	import type { MigrationState } from "$lib/shared/types/migration";
 
 	let migrationState: MigrationState | null = $state(null);
@@ -43,6 +45,33 @@
 	async function handleReset() {
 		await reset();
 		migrationState = await getStatus();
+	}
+
+	async function handleCleanup() {
+		if (isDisabled) return;
+		isStarting = true;
+		try {
+			const result = await cleanup();
+			if (result.started) {
+				await fetchStatus();
+			}
+		} finally {
+			isStarting = false;
+		}
+	}
+
+	async function handleDeleteAll() {
+		if (isDisabled) return;
+		if (!confirm("Are you sure you want to delete ALL members, articles, and projects?")) return;
+		isStarting = true;
+		try {
+			const result = await deleteAll();
+			if (result.started) {
+				await fetchStatus();
+			}
+		} finally {
+			isStarting = false;
+		}
 	}
 
 	// Poll every 1s while running, cleanup on unmount
@@ -124,18 +153,30 @@
 			</div>
 
 			<!-- Action buttons -->
-			<div class="mb-4 flex gap-2">
-				<button
-					class="btn gap-2 btn-warning"
-					onclick={handleStart}
-					disabled={isDisabled}
-				>
+			<div class="mb-4 flex flex-wrap gap-2">
+				<button class="btn gap-2 btn-warning" onclick={handleStart} disabled={isDisabled}>
 					{#if isStarting}
 						<span class="loading loading-spinner loading-xs"></span>
 					{:else}
 						<Play class="h-4 w-4" />
 					{/if}
 					Start Migration
+				</button>
+				<button class="btn gap-2 btn-secondary" onclick={handleCleanup} disabled={isDisabled}>
+					{#if isStarting}
+						<span class="loading loading-spinner loading-xs"></span>
+					{:else}
+						<ImageOff class="h-4 w-4" />
+					{/if}
+					Cleanup Invalid URLs
+				</button>
+				<button class="btn gap-2 btn-error" onclick={handleDeleteAll} disabled={isDisabled}>
+					{#if isStarting}
+						<span class="loading loading-spinner loading-xs"></span>
+					{:else}
+						<Trash2 class="h-4 w-4" />
+					{/if}
+					Delete All Data
 				</button>
 				{#if migrationState?.status === "completed" || migrationState?.status === "error"}
 					<button class="btn gap-2 btn-ghost" onclick={handleReset}>

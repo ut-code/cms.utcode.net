@@ -10,7 +10,14 @@ import { rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { completeMigration, failMigration, isRunning, log, startMigration } from "./state.server";
-import { migrateArticles, migrateImages, migrateMembers, migrateProjects } from "./workers.server";
+import {
+  cleanupInvalidImageUrls,
+  deleteAllMigratedData,
+  migrateArticles,
+  migrateImages,
+  migrateMembers,
+  migrateProjects,
+} from "./workers.server";
 
 const REPO_URL = "https://github.com/ut-code/utcode.net.git";
 
@@ -49,6 +56,68 @@ export function startDataMigration(): { started: boolean; message: string } {
   runMigrationAsync().catch(console.error);
 
   return { started: true, message: "Migration started" };
+}
+
+export function startImageCleanup(): { started: boolean; message: string } {
+  if (isRunning()) {
+    return { started: false, message: "Migration already in progress" };
+  }
+
+  startMigration();
+  log("=== Image URL Cleanup Started ===");
+
+  runCleanupAsync().catch(console.error);
+
+  return { started: true, message: "Cleanup started" };
+}
+
+async function runCleanupAsync(): Promise<void> {
+  try {
+    const result = await cleanupInvalidImageUrls(log);
+
+    log("=== Cleanup Complete ===");
+    completeMigration({
+      members: { created: result.members.cleaned, skipped: result.members.skipped, errors: 0 },
+      articles: { created: result.articles.cleaned, skipped: result.articles.skipped, errors: 0 },
+      projects: { created: result.projects.cleaned, skipped: result.projects.skipped, errors: 0 },
+      images: { created: 0, skipped: 0, errors: 0 },
+    });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    log(`=== Cleanup Failed: ${msg} ===`);
+    failMigration(msg);
+  }
+}
+
+export function startDeleteAll(): { started: boolean; message: string } {
+  if (isRunning()) {
+    return { started: false, message: "Migration already in progress" };
+  }
+
+  startMigration();
+  log("=== Delete All Data Started ===");
+
+  runDeleteAllAsync().catch(console.error);
+
+  return { started: true, message: "Delete started" };
+}
+
+async function runDeleteAllAsync(): Promise<void> {
+  try {
+    const result = await deleteAllMigratedData(log);
+
+    log("=== Delete Complete ===");
+    completeMigration({
+      members: { created: result.members.deleted, skipped: 0, errors: 0 },
+      articles: { created: result.articles.deleted, skipped: 0, errors: 0 },
+      projects: { created: result.projects.deleted, skipped: 0, errors: 0 },
+      images: { created: 0, skipped: 0, errors: 0 },
+    });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    log(`=== Delete Failed: ${msg} ===`);
+    failMigration(msg);
+  }
 }
 
 async function runMigrationAsync(): Promise<void> {
