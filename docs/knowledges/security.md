@@ -56,12 +56,12 @@
 ~~`getStats` returns counts including unpublished articles without auth check.~~
 Now requires `requireUtCodeMember()` auth check.
 
-### MEDIUM: Storage upload lacks validation
+### ~~MEDIUM: Storage upload lacks validation~~ FIXED
 
-- ~~No file size limit (DoS risk)~~ Client-side 10MB limit exists
-- No MIME type whitelist (arbitrary file upload)
-- `folder` parameter not validated (path injection)
-- ✅ Client-side image compression added (max 1920px, JPEG quality 0.85)
+- ~~No file size limit (DoS risk)~~ Server-side 10MB limit + client-side validation
+- ~~No MIME type whitelist (arbitrary file upload)~~ MIME whitelist added (jpeg, png, webp, avif, heic, gif, tiff, svg, bmp)
+- ~~`folder` parameter not validated (path injection)~~ Folder allowlist added
+- ✅ Server-side WebP compression via sharp (preserves SVG and animated GIF)
 
 ### ~~MEDIUM: Project role not validated~~ FIXED
 
@@ -84,11 +84,11 @@ GitHub org membership cached 24h. Removed members retain access.
 | Priority   | Issue          | Fix                                                     | Status  |
 | ---------- | -------------- | ------------------------------------------------------- | ------- |
 | ~~HIGH~~   | stats endpoint | Add `requireUtCodeMember()` or filter to published only | ✅ DONE |
-| MEDIUM     | File upload    | Add MIME whitelist, folder allowlist                    | Partial |
+| ~~MEDIUM~~ | File upload    | Add MIME whitelist, folder allowlist, WebP compression  | ✅ DONE |
 | ~~MEDIUM~~ | Project role   | Use `v.picklist(["lead", "member"])`                    | ✅ DONE |
 | LOW        | Rate limiting  | Add to public endpoints                                 | TODO    |
 | LOW        | Cache TTL      | Reduce to 4h or add invalidation                        | TODO    |
 
 ## Audit Date
 
-2024-12-15 (Updated: 2025-12-15)
+2024-12-15 (Updated: 2025-12-23)
