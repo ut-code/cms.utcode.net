@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from "svelte";
 	import {
 		AlertTriangle,
 		CheckCircle,
@@ -80,10 +81,15 @@
 	}
 
 	// Poll every 1s to keep status in sync, cleanup on unmount
+	// Use untrack to prevent infinite loop from migrationState changes
 	$effect(() => {
-		fetchStatus().catch(console.error);
-		pollInterval = setInterval(fetchStatus, 1000);
+		// Initial fetch - wrapped in untrack to prevent reactive dependencies
+		untrack(() => {
+			fetchStatus().catch(console.error);
+		});
 
+		// Start polling
+		pollInterval = setInterval(fetchStatus, 1000);
 		return () => {
 			if (pollInterval) clearInterval(pollInterval);
 		};
@@ -94,23 +100,23 @@
 	<title>Data Migration - ut.code(); CMS</title>
 </svelte:head>
 
-<div class="space-y-6">
+<div class="space-y-4 sm:space-y-6">
 	<!-- Header -->
 	<header
-		class="animate-fade-slide-in relative overflow-hidden rounded-2xl border border-warning/30 bg-gradient-to-br from-warning/20 to-error/20 p-6"
+		class="animate-fade-slide-in relative overflow-hidden rounded-2xl border border-warning/30 bg-gradient-to-br from-warning/20 to-error/20 p-4 sm:p-6"
 	>
 		<!-- Warning decorative elements -->
 		<div class="absolute top-0 -right-10 h-32 w-32 rounded-full bg-warning/30 blur-3xl"></div>
 		<div class="absolute bottom-0 -left-10 h-24 w-24 rounded-full bg-error/20 blur-2xl"></div>
 
 		<div class="relative flex items-center justify-between">
-			<div class="flex items-center gap-4">
-				<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-warning/30">
-					<DatabaseBackup class="h-6 w-6 text-warning" />
+			<div class="flex items-center gap-3 sm:gap-4">
+				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-warning/30 sm:h-12 sm:w-12">
+					<DatabaseBackup class="h-5 w-5 text-warning sm:h-6 sm:w-6" />
 				</div>
 				<div>
-					<h1 class="text-2xl font-bold text-base-content">Legacy Data Migration</h1>
-					<p class="text-sm text-base-content/60">Import data from old utcode.net repository</p>
+					<h1 class="text-lg font-bold text-base-content sm:text-2xl">Legacy Data Migration</h1>
+					<p class="text-xs text-base-content/60 sm:text-sm">Import data from old utcode.net repository</p>
 				</div>
 			</div>
 		</div>
@@ -156,8 +162,8 @@
 			</div>
 
 			<!-- Action buttons -->
-			<div class="mb-4 flex flex-wrap gap-2">
-				<button class="btn gap-2 btn-warning" onclick={handleStart} disabled={isDisabled}>
+			<div class="mb-4 grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
+				<button class="btn btn-sm gap-2 btn-warning sm:btn-md" onclick={handleStart} disabled={isDisabled}>
 					{#if isStarting}
 						<span class="loading loading-spinner loading-xs"></span>
 					{:else}
@@ -165,7 +171,7 @@
 					{/if}
 					Start Migration
 				</button>
-				<button class="btn gap-2 btn-secondary" onclick={handleCleanup} disabled={isDisabled}>
+				<button class="btn btn-sm gap-2 btn-secondary sm:btn-md" onclick={handleCleanup} disabled={isDisabled}>
 					{#if isStarting}
 						<span class="loading loading-spinner loading-xs"></span>
 					{:else}
@@ -173,7 +179,7 @@
 					{/if}
 					Cleanup Invalid URLs
 				</button>
-				<button class="btn gap-2 btn-error" onclick={handleDeleteAll} disabled={isDisabled}>
+				<button class="btn btn-sm gap-2 btn-error sm:btn-md" onclick={handleDeleteAll} disabled={isDisabled}>
 					{#if isStarting}
 						<span class="loading loading-spinner loading-xs"></span>
 					{:else}
@@ -182,7 +188,7 @@
 					Delete All Data
 				</button>
 				{#if migrationState?.status === "completed" || migrationState?.status === "error"}
-					<button class="btn gap-2 btn-ghost" onclick={handleReset}>
+					<button class="btn btn-sm gap-2 btn-ghost sm:btn-md" onclick={handleReset}>
 						<RotateCcw class="h-4 w-4" />
 						Reset
 					</button>
@@ -191,43 +197,43 @@
 
 			<!-- Results summary -->
 			{#if migrationState?.result}
-				<div class="mb-4 grid grid-cols-2 gap-4 md:grid-cols-4">
-					<div class="stat rounded-lg bg-base-200 p-4">
-						<div class="stat-title">Members</div>
-						<div class="stat-value text-lg text-success">
+				<div class="mb-4 grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-4">
+					<div class="stat rounded-lg bg-base-200 p-3 sm:p-4">
+						<div class="stat-title text-xs sm:text-sm">Members</div>
+						<div class="stat-value text-base text-success sm:text-lg">
 							{migrationState.result.members.created}
 						</div>
-						<div class="stat-desc">
+						<div class="stat-desc text-xs">
 							{migrationState.result.members.skipped} skipped, {migrationState.result.members
 								.errors} errors
 						</div>
 					</div>
-					<div class="stat rounded-lg bg-base-200 p-4">
-						<div class="stat-title">Articles</div>
-						<div class="stat-value text-lg text-success">
+					<div class="stat rounded-lg bg-base-200 p-3 sm:p-4">
+						<div class="stat-title text-xs sm:text-sm">Articles</div>
+						<div class="stat-value text-base text-success sm:text-lg">
 							{migrationState.result.articles.created}
 						</div>
-						<div class="stat-desc">
+						<div class="stat-desc text-xs">
 							{migrationState.result.articles.skipped} skipped, {migrationState.result.articles
 								.errors} errors
 						</div>
 					</div>
-					<div class="stat rounded-lg bg-base-200 p-4">
-						<div class="stat-title">Projects</div>
-						<div class="stat-value text-lg text-success">
+					<div class="stat rounded-lg bg-base-200 p-3 sm:p-4">
+						<div class="stat-title text-xs sm:text-sm">Projects</div>
+						<div class="stat-value text-base text-success sm:text-lg">
 							{migrationState.result.projects.created}
 						</div>
-						<div class="stat-desc">
+						<div class="stat-desc text-xs">
 							{migrationState.result.projects.skipped} skipped, {migrationState.result.projects
 								.errors} errors
 						</div>
 					</div>
-					<div class="stat rounded-lg bg-base-200 p-4">
-						<div class="stat-title">Images</div>
-						<div class="stat-value text-lg text-success">
+					<div class="stat rounded-lg bg-base-200 p-3 sm:p-4">
+						<div class="stat-title text-xs sm:text-sm">Images</div>
+						<div class="stat-value text-base text-success sm:text-lg">
 							{migrationState.result.images.created}
 						</div>
-						<div class="stat-desc">
+						<div class="stat-desc text-xs">
 							{migrationState.result.images.skipped} skipped, {migrationState.result.images
 								.errors} errors
 						</div>
@@ -261,7 +267,7 @@
 
 			<!-- Timestamps -->
 			{#if migrationState?.startedAt || migrationState?.completedAt}
-				<div class="mt-4 flex gap-4 text-sm text-base-content/60">
+				<div class="mt-4 flex flex-col gap-1 text-xs text-base-content/60 sm:flex-row sm:gap-4 sm:text-sm">
 					{#if migrationState?.startedAt}
 						<span>Started: {new Date(migrationState.startedAt).toLocaleString("ja-JP")}</span>
 					{/if}

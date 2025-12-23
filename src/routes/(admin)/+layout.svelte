@@ -58,7 +58,7 @@
 		</header>
 
 		<main class="min-h-screen">
-			<div class="mx-auto max-w-5xl px-6 py-8">
+			<div class="mx-auto max-w-5xl px-4 py-4 sm:px-6 sm:py-6 lg:py-8">
 				{@render children()}
 			</div>
 		</main>

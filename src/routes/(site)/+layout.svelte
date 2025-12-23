@@ -2,8 +2,11 @@
 	import { Menu, Search } from "lucide-svelte";
 	import logo from "$lib/assets/logo.svg";
 	import SiteSearchModal, { openSearch } from "$lib/components/site-search-modal.svelte";
+	import { env } from "$env/dynamic/public";
 
 	let { children } = $props();
+
+	const showDevBanner = env.PUBLIC_SHOW_DEV_BANNER === "true";
 </script>
 
 <svelte:head>
@@ -22,8 +25,20 @@
 <div class="drawer min-h-screen bg-white font-[DM_Sans,system-ui,sans-serif] text-zinc-900">
 	<input id="site-drawer" type="checkbox" class="drawer-toggle" />
 	<div class="drawer-content">
+		<!-- Development Alert -->
+		{#if showDevBanner}
+			<div
+				role="alert"
+				class="alert fixed top-0 right-0 left-0 z-50 rounded-none border-b border-yellow-600/20 bg-yellow-50 py-3 text-center"
+			>
+				<span class="font-[JetBrains_Mono,monospace] text-sm text-yellow-900">
+					このサイトは開発中です
+				</span>
+			</div>
+		{/if}
+
 		<nav
-			class="fixed top-0 right-0 left-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-md"
+			class="fixed top-12 right-0 left-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-md"
 		>
 			<div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
 				<div class="flex items-center gap-4">
@@ -60,7 +75,7 @@
 			</div>
 		</nav>
 
-		<main class="pt-16">
+		<main class="pt-28">
 			{@render children()}
 		</main>
 

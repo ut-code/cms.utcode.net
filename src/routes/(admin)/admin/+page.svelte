@@ -23,7 +23,7 @@
 	<title>Dashboard - ut.code(); CMS</title>
 </svelte:head>
 
-<div class="space-y-8">
+<div class="space-y-4 sm:space-y-6 lg:space-y-8">
 	<DashboardHeader
 		publishedArticles={stats.publishedArticles}
 		members={stats.members}
@@ -37,7 +37,7 @@
 		members={stats.members}
 	/>
 
-	<div class="grid gap-6 lg:grid-cols-2">
+	<div class="grid gap-4 sm:gap-6 lg:grid-cols-2">
 		<NeedsAttention draftArticles={stats.draftArticles} {formatDate} />
 
 		<RecentActivity

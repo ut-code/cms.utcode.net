@@ -45,14 +45,14 @@
 			<img
 				src={article.coverUrl}
 				alt={article.title}
-				class="mb-8 max-h-64 w-full rounded-xl object-cover"
+				class="mb-6 max-h-48 w-full rounded-xl object-cover sm:mb-8 sm:max-h-64"
 				style="aspect-ratio: 5/3"
 			/>
 		{/if}
 
-		<h1 class="mb-4 text-4xl font-bold">{article.title}</h1>
+		<h1 class="mb-3 text-2xl font-bold sm:mb-4 sm:text-3xl md:text-4xl">{article.title}</h1>
 
-		<div class="mb-8 flex items-center gap-4 text-sm text-zinc-500">
+		<div class="mb-6 flex flex-wrap items-center gap-3 text-sm text-zinc-500 sm:mb-8 sm:gap-4">
 			{#if article.author}
 				<a
 					href="/members/{article.author.slug}"
@@ -84,9 +84,9 @@
 
 	{#if relatedArticles.length > 0}
 		<section class="mx-auto max-w-3xl px-6 pb-16">
-			<div class="border-t border-zinc-200 pt-12">
-				<h2 class="mb-6 text-2xl font-bold">関連記事</h2>
-				<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+			<div class="border-t border-zinc-200 pt-8 sm:pt-12">
+				<h2 class="mb-4 text-xl font-bold sm:mb-6 sm:text-2xl">関連記事</h2>
+				<div class="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
 					{#each relatedArticles as relatedArticle (relatedArticle.id)}
 						<a
 							href="/articles/{relatedArticle.slug}"

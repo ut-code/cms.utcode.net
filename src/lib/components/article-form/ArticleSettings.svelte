@@ -32,9 +32,9 @@
 </script>
 
 {#if show}
-	<aside class="w-80 shrink-0 overflow-y-auto border-l border-zinc-200 bg-zinc-50/50 lg:w-96">
+	<aside class="fixed inset-0 z-30 overflow-y-auto bg-zinc-50 lg:static lg:w-80 lg:shrink-0 lg:border-l lg:border-zinc-200 lg:bg-zinc-50/50 xl:w-96">
 		<div
-			class="sticky top-0 flex items-center justify-between border-b border-zinc-200 bg-zinc-50/80 px-4 py-3 backdrop-blur-sm"
+			class="sticky top-0 flex items-center justify-between border-b border-zinc-200 bg-zinc-50 px-4 py-3 backdrop-blur-sm lg:bg-zinc-50/80"
 		>
 			<h2 class="font-semibold text-zinc-900">Settings</h2>
 			<button

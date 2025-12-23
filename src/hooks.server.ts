@@ -1,4 +1,5 @@
 import type { Handle } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 import { svelteKitHandler } from "better-auth/svelte-kit";
 import { building } from "$app/environment";
@@ -6,6 +7,20 @@ import { auth } from "$lib/server/drivers/auth";
 
 const handleAuth: Handle = async ({ event, resolve }) => {
   return await svelteKitHandler({ event, resolve, auth, building });
+};
+
+const handleRedirect: Handle = async ({ event, resolve }) => {
+  const path = event.url.pathname;
+
+  // Redirect old article URL structure: /articles/YYYY/MM-DD_slug -> /articles/MM-DD_slug
+  const oldArticlePattern = /^\/articles\/(\d{4})\/(.+)$/;
+  const match = path.match(oldArticlePattern);
+  if (match) {
+    const slug = match[2];
+    redirect(301, `/articles/${slug}`);
+  }
+
+  return resolve(event);
 };
 
 const handleCache: Handle = async ({ event, resolve }) => {
@@ -30,4 +45,4 @@ const handleCache: Handle = async ({ event, resolve }) => {
   return response;
 };
 
-export const handle = sequence(handleAuth, handleCache);
+export const handle = sequence(handleRedirect, handleAuth, handleCache);

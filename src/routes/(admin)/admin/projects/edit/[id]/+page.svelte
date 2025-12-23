@@ -177,12 +177,12 @@
 	{:else}
 		<div class="flex h-[calc(100vh-4rem)] flex-col">
 			<!-- Team Members Bar -->
-			<div class="flex items-center gap-3 border-b border-zinc-200 bg-zinc-50 px-4 py-2">
-				<span class="text-xs font-medium text-zinc-500">Team:</span>
-				<div class="flex flex-1 items-center gap-1">
+			<div class="flex flex-col gap-2 border-b border-zinc-200 bg-zinc-50 px-3 py-2 sm:flex-row sm:items-center sm:gap-3 sm:px-4">
+				<span class="shrink-0 text-xs font-medium text-zinc-500">Team:</span>
+				<div class="flex flex-1 flex-wrap items-center gap-1 overflow-x-auto">
 					{#each project.projectMembers as pm (pm.memberId)}
 						<div
-							class="group flex items-center gap-1.5 rounded-full bg-white py-1 pr-2 pl-1 text-xs shadow-sm ring-1 ring-zinc-200"
+							class="group flex shrink-0 items-center gap-1.5 rounded-full bg-white py-1 pr-2 pl-1 text-xs shadow-sm ring-1 ring-zinc-200"
 						>
 							{#if pm.member.imageUrl}
 								<img src={pm.member.imageUrl} alt="" class="h-5 w-5 rounded-full" />
@@ -214,7 +214,7 @@
 					<button
 						type="button"
 						onclick={() => (showAddMember = true)}
-						class="flex h-7 w-7 items-center justify-center rounded-full bg-white text-zinc-400 shadow-sm ring-1 ring-zinc-200 transition-colors hover:bg-zinc-50 hover:text-zinc-600"
+						class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white text-zinc-400 shadow-sm ring-1 ring-zinc-200 transition-colors hover:bg-zinc-50 hover:text-zinc-600"
 					>
 						<Plus class="h-4 w-4" />
 					</button>
@@ -223,10 +223,11 @@
 					<button
 						type="button"
 						onclick={() => (showTransferLead = true)}
-						class="flex items-center gap-1.5 rounded-lg bg-white px-2.5 py-1.5 text-xs font-medium text-zinc-700 shadow-sm ring-1 ring-zinc-200 transition-colors hover:bg-zinc-50"
+						class="flex shrink-0 items-center gap-1.5 rounded-lg bg-white px-2.5 py-1.5 text-xs font-medium text-zinc-700 shadow-sm ring-1 ring-zinc-200 transition-colors hover:bg-zinc-50"
 					>
 						<ArrowRightLeft class="h-3.5 w-3.5" />
-						Transfer Lead
+						<span class="hidden sm:inline">Transfer Lead</span>
+						<span class="sm:hidden">Transfer</span>
 					</button>
 				{/if}
 			</div>

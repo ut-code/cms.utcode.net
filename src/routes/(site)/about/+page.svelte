@@ -36,10 +36,10 @@
 	</div>
 </section>
 
-<div class="mx-auto max-w-4xl px-6 py-12">
+<div class="mx-auto max-w-4xl px-6 py-8 sm:py-12">
 	<!-- Organization Overview -->
-	<div class="mb-12 rounded-2xl border border-[#00D372]/20 bg-[#00D372]/5 p-8">
-		<h2 class="mb-4 text-2xl font-bold">ut.code(); について</h2>
+	<div class="mb-8 rounded-2xl border border-[#00D372]/20 bg-[#00D372]/5 p-6 sm:mb-12 sm:p-8">
+		<h2 class="mb-3 text-xl font-bold sm:mb-4 sm:text-2xl">ut.code(); について</h2>
 		<p class="leading-relaxed text-zinc-700">
 			ut.code();
 			は東京大学のソフトウェアエンジニアリングサークルです。プログラミングを通じて、より良い社会を創ることを目指しています。「学習・教育」「交流」「開発」の三軸を主にして活動しています。
@@ -47,8 +47,8 @@
 	</div>
 
 	<!-- Basic Information -->
-	<section class="mb-12">
-		<h2 class="mb-6 flex items-center gap-2 text-xl font-bold">
+	<section class="mb-8 sm:mb-12">
+		<h2 class="mb-4 flex items-center gap-2 text-lg font-bold sm:mb-6 sm:text-xl">
 			<Building2 class="h-5 w-5 text-[#00D372]" />
 			基本情報
 		</h2>

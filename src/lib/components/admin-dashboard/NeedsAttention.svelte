@@ -16,14 +16,14 @@
 </script>
 
 {#if draftArticles.length > 0}
-	<section class="animate-fade-slide-in stagger-5 glow-soft rounded-2xl bg-base-100 p-6">
-		<div class="mb-4 flex items-center gap-3">
-			<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-warning/10">
+	<section class="animate-fade-slide-in stagger-5 glow-soft rounded-2xl bg-base-100 p-4 sm:p-6">
+		<div class="mb-4 flex flex-wrap items-center gap-2 sm:gap-3">
+			<div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-warning/10">
 				<AlertCircle class="h-4 w-4 text-warning" />
 			</div>
 			<h2 class="font-semibold text-base-content">Needs Attention</h2>
 			<span class="ml-auto rounded-full bg-warning/10 px-2 py-0.5 text-xs font-medium text-warning">
-				{draftArticles.length} drafts
+				{draftArticles.length} draft{draftArticles.length > 1 ? 's' : ''}
 			</span>
 		</div>
 		<div class="space-y-2">

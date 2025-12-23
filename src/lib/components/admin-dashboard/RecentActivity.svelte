@@ -18,12 +18,12 @@
 </script>
 
 <section
-	class="animate-fade-slide-in stagger-5 glow-soft rounded-2xl bg-base-100 p-6 {hasDrafts
+	class="animate-fade-slide-in stagger-5 glow-soft rounded-2xl bg-base-100 p-4 sm:p-6 {hasDrafts
 		? ''
 		: 'lg:col-span-2'}"
 >
-	<div class="mb-4 flex items-center gap-3">
-		<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+	<div class="mb-4 flex flex-wrap items-center gap-2 sm:gap-3">
+		<div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
 			<Clock class="h-4 w-4 text-primary" />
 		</div>
 		<h2 class="font-semibold text-base-content">Recent Activity</h2>

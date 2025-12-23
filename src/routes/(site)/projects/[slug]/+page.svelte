@@ -44,22 +44,22 @@
 			<img
 				src={project.coverUrl}
 				alt={project.name}
-				class="mb-8 aspect-video w-full rounded-xl object-cover"
+				class="mb-6 aspect-video w-full rounded-xl object-cover sm:mb-8"
 			/>
 		{/if}
 
-		<div class="mb-4 flex flex-wrap items-center gap-3">
-			<h1 class="text-4xl font-bold">{project.name}</h1>
+		<div class="mb-3 flex flex-wrap items-center gap-2 sm:mb-4 sm:gap-3">
+			<h1 class="text-2xl font-bold sm:text-3xl md:text-4xl">{project.name}</h1>
 			<span class="rounded border px-2 py-1 text-xs font-medium {categoryColors[project.category]}">
 				{PROJECT_CATEGORIES[project.category]}
 			</span>
 		</div>
 
 		{#if project.description}
-			<p class="mb-6 text-lg text-zinc-500">{project.description}</p>
+			<p class="mb-4 text-base text-zinc-500 sm:mb-6 sm:text-lg">{project.description}</p>
 		{/if}
 
-		<div class="mb-8 flex flex-wrap gap-3">
+		<div class="mb-6 flex flex-wrap gap-2 sm:mb-8 sm:gap-3">
 			{#if project.repoUrl}
 				<a
 					href={project.repoUrl}
@@ -87,9 +87,9 @@
 			<Markdown content={project.content} />
 		{/if}
 
-		<section class="mt-12 border-t border-zinc-200 pt-8">
-			<h2 class="mb-4 text-xl font-semibold">メンバー</h2>
-			<div class="flex flex-wrap gap-4">
+		<section class="mt-8 border-t border-zinc-200 pt-6 sm:mt-12 sm:pt-8">
+			<h2 class="mb-3 text-lg font-semibold sm:mb-4 sm:text-xl">メンバー</h2>
+			<div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
 				{#each project.projectMembers as pm (pm.memberId)}
 					<a
 						href="/members/{pm.member.slug}"

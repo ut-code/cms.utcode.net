@@ -35,36 +35,36 @@
 				<img
 					src={member.imageUrl}
 					alt={member.name}
-					class="mb-6 h-20 w-20 rounded-full object-cover sm:mr-6 sm:mb-0"
+					class="mb-4 h-16 w-16 rounded-full object-cover sm:mb-6 sm:mr-6 sm:h-20 sm:w-20 md:mb-0"
 				/>
 			{:else}
 				<div
-					class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-zinc-100 sm:mr-6 sm:mb-0"
+					class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-zinc-100 sm:mb-6 sm:mr-6 sm:h-20 sm:w-20 md:mb-0"
 				>
-					<span class="text-2xl font-medium text-zinc-600">
+					<span class="text-xl font-medium text-zinc-600 sm:text-2xl">
 						{member.name.charAt(0)}
 					</span>
 				</div>
 			{/if}
 
 			<div>
-				<h1 class="mb-2 text-3xl font-bold">{member.name}</h1>
+				<h1 class="mb-2 text-2xl font-bold sm:text-3xl">{member.name}</h1>
 				{#if member.bio}
-					<p class="text-zinc-500">{member.bio}</p>
+					<p class="text-sm text-zinc-500 sm:text-base">{member.bio}</p>
 				{/if}
 			</div>
 		</div>
 
 		{#if member.pageContent}
-			<section class="mt-12 border-t border-zinc-200 pt-8">
+			<section class="mt-8 border-t border-zinc-200 pt-6 sm:mt-12 sm:pt-8">
 				<Markdown content={member.pageContent} />
 			</section>
 		{/if}
 
 		{#if member.projectMembers && member.projectMembers.length > 0}
-			<section class="mt-12 border-t border-zinc-200 pt-8">
-				<h2 class="mb-4 text-xl font-semibold">参加プロジェクト</h2>
-				<div class="flex flex-wrap gap-4">
+			<section class="mt-8 border-t border-zinc-200 pt-6 sm:mt-12 sm:pt-8">
+				<h2 class="mb-3 text-lg font-semibold sm:mb-4 sm:text-xl">参加プロジェクト</h2>
+				<div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
 					{#each member.projectMembers as pm (pm.projectId)}
 						<a
 							href="/projects/{pm.project.slug}"

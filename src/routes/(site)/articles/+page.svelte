@@ -81,46 +81,50 @@
 		</div>
 
 		{#if articles.length > itemsPerPage}
-			<div class="mt-8 flex items-center justify-center gap-2">
+			<div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-2">
 				{#if currentPage > 1}
 					<a
 						href={pageUrl(currentPage - 1)}
-						class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium transition-colors hover:border-[#00D372] hover:text-[#00D372]"
+						class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:border-[#00D372] hover:text-[#00D372] sm:w-auto"
 					>
 						前へ
 					</a>
 				{:else}
 					<span
-						class="cursor-not-allowed rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium opacity-50"
+						class="w-full cursor-not-allowed rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium opacity-50 sm:w-auto"
 					>
 						前へ
 					</span>
 				{/if}
 
-				<div class="flex items-center gap-1">
+				<div class="flex flex-wrap items-center justify-center gap-1">
 					{#each Array.from({ length: totalPages }, (_, i) => i + 1) as pageNum (pageNum)}
-						<a
-							href={pageUrl(pageNum)}
-							class="rounded-lg border px-3 py-2 text-sm font-medium transition-colors {currentPage ===
-							pageNum
-								? 'border-[#00D372] bg-[#00D372] text-white'
-								: 'border-zinc-200 bg-white hover:border-[#00D372] hover:text-[#00D372]'}"
-						>
-							{pageNum}
-						</a>
+						{#if totalPages <= 7 || pageNum === 1 || pageNum === totalPages || Math.abs(pageNum - currentPage) <= 1}
+							<a
+								href={pageUrl(pageNum)}
+								class="min-w-[2.5rem] rounded-lg border px-3 py-2 text-center text-sm font-medium transition-colors {currentPage ===
+								pageNum
+									? 'border-[#00D372] bg-[#00D372] text-white'
+									: 'border-zinc-200 bg-white hover:border-[#00D372] hover:text-[#00D372]'}"
+							>
+								{pageNum}
+							</a>
+						{:else if pageNum === currentPage - 2 || pageNum === currentPage + 2}
+							<span class="px-1 text-zinc-400">...</span>
+						{/if}
 					{/each}
 				</div>
 
 				{#if currentPage < totalPages}
 					<a
 						href={pageUrl(currentPage + 1)}
-						class="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium transition-colors hover:border-[#00D372] hover:text-[#00D372]"
+						class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:border-[#00D372] hover:text-[#00D372] sm:w-auto"
 					>
 						次へ
 					</a>
 				{:else}
 					<span
-						class="cursor-not-allowed rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium opacity-50"
+						class="w-full cursor-not-allowed rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium opacity-50 sm:w-auto"
 					>
 						次へ
 					</span>

@@ -23,14 +23,14 @@
 		<div class="mx-auto max-w-3xl">
 			<ul class="divide-y divide-zinc-200 rounded-2xl border border-zinc-200 bg-white">
 				{#each [{ label: "団体名", value: "ut.code();" }, { label: "部員", value: `${members}名程度` }, { label: "所属", value: `東京大学工学部丁友会 (${currentYear}年度)` }, { label: "部室", value: "駒場キャンパス学生会館 313B 教室" }, { label: "活動場所", value: "オンライン, 部室, 本郷図書館プロジェクトボックス等" }] as item (item.label)}
-					<li class="flex px-6 py-4">
-						<span class="w-28 shrink-0 font-medium text-zinc-700">{item.label}</span>
+					<li class="flex flex-col gap-1 px-4 py-3 sm:flex-row sm:gap-0 sm:px-6 sm:py-4">
+						<span class="w-full shrink-0 font-medium text-zinc-700 sm:w-28">{item.label}</span>
 						<span class="text-zinc-600">{item.value}</span>
 					</li>
 				{/each}
-				<li class="flex items-center px-6 py-4">
-					<span class="w-28 shrink-0 font-medium text-zinc-700">SNS</span>
-					<div class="flex gap-4">
+				<li class="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:gap-0 sm:px-6 sm:py-4">
+					<span class="w-full shrink-0 font-medium text-zinc-700 sm:w-28">SNS</span>
+					<div class="flex flex-wrap gap-3 sm:gap-4">
 						<a
 							href="https://github.com/ut-code"
 							target="_blank"

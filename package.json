@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "build:local": "sops exec-env secrets.prod.yaml 'vite build'",
     "preview": "vite preview",
     "prepare": "svelte-kit sync",
     "test-check": "bun test",
@@ -20,8 +19,8 @@
     "lint-check": "biome lint .",
     "lint": "bun lint-check",
     "lint-fix": "biome lint --fix .",
-    "db": "drizzle-kit",
-    "up": "bun db push --force && devenv processes up -d",
+    "db": "bun drizzle-kit",
+    "up": "sops exec-env secrets.dev.yaml 'bun db push --force' && devenv processes up -d",
     "down": "devenv processes down",
     "reload": "bun down && bun up",
     "attach": "devenv processes up",

@@ -24,10 +24,10 @@
 	</div>
 </section>
 
-<div class="mx-auto max-w-4xl px-6 py-12">
+<div class="mx-auto max-w-4xl px-6 py-8 sm:py-12">
 	<!-- Welcome message -->
-	<div class="mb-12 rounded-2xl border border-[#00D372]/20 bg-[#00D372]/5 p-8">
-		<h2 class="mb-4 text-2xl font-bold">ようこそ!</h2>
+	<div class="mb-8 rounded-2xl border border-[#00D372]/20 bg-[#00D372]/5 p-6 sm:mb-12 sm:p-8">
+		<h2 class="mb-3 text-xl font-bold sm:mb-4 sm:text-2xl">ようこそ!</h2>
 		<p class="leading-relaxed text-zinc-700">
 			ut.code(); は東京大学のソフトウェアエンジニアリングサークルです。
 			プログラミング、ものづくり、デザインに興味がある学生を広く歓迎しています。
@@ -36,8 +36,8 @@
 	</div>
 
 	<!-- Requirements -->
-	<section class="mb-12">
-		<h2 class="mb-6 flex items-center gap-2 text-xl font-bold">
+	<section class="mb-8 sm:mb-12">
+		<h2 class="mb-4 flex items-center gap-2 text-lg font-bold sm:mb-6 sm:text-xl">
 			<Users class="h-5 w-5 text-[#00D372]" />
 			入部要件
 		</h2>
@@ -163,8 +163,8 @@
 	</section>
 
 	<!-- CTA -->
-	<div class="rounded-2xl bg-zinc-900 p-8 text-center text-white">
-		<h2 class="mb-4 text-2xl font-bold">一緒にソフトウェアを作ろう</h2>
+	<div class="rounded-2xl bg-zinc-900 p-6 text-center text-white sm:p-8">
+		<h2 class="mb-3 text-xl font-bold sm:mb-4 sm:text-2xl">一緒にソフトウェアを作ろう</h2>
 		<p class="mb-6 text-zinc-400">ut.code(); であなたのアイデアを形にしませんか？</p>
 		<a
 			href="/"

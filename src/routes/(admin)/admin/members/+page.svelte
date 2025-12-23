@@ -9,28 +9,29 @@
 	<title>Members - ut.code(); CMS</title>
 </svelte:head>
 
-<div class="space-y-6">
+<div class="space-y-4 sm:space-y-6">
 		<!-- Header -->
-		<header class="animate-fade-slide-in gradient-dark relative overflow-hidden rounded-2xl p-6">
+		<header class="animate-fade-slide-in gradient-dark relative overflow-hidden rounded-2xl p-4 sm:p-6 lg:p-8">
 			<!-- Decorative elements -->
 			<div class="absolute top-0 -right-10 h-32 w-32 rounded-full bg-error/20 blur-3xl"></div>
 
-			<div class="relative flex items-center justify-between">
-				<div class="flex items-center gap-4">
-					<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-error/20">
-						<Users class="h-6 w-6 text-error" />
+			<div class="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+				<div class="flex items-center gap-3 sm:gap-4">
+					<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-error/20 sm:h-12 sm:w-12">
+						<Users class="h-5 w-5 text-error sm:h-6 sm:w-6" />
 					</div>
 					<div>
-						<h1 class="text-2xl font-bold text-white">Members</h1>
-						<p class="text-sm text-white/60">{members.length} members registered</p>
+						<h1 class="text-xl font-bold text-white sm:text-2xl">Members</h1>
+						<p class="text-xs text-white/60 sm:text-sm">{members.length} members registered</p>
 					</div>
 				</div>
 				<a
 					href="/admin/members/new"
-					class="gradient-primary glow-primary btn gap-2 border-none text-white"
+					class="gradient-primary glow-primary btn btn-sm gap-2 border-none text-white sm:btn-md"
 				>
 					<Plus class="h-4 w-4" />
-					Add Member
+					<span class="hidden sm:inline">Add Member</span>
+					<span class="sm:hidden">Add</span>
 				</a>
 			</div>
 		</header>

@@ -76,9 +76,9 @@
 <form onsubmit={handleSubmit} class="flex h-full flex-col">
 	<!-- Header Bar -->
 	<header
-		class="sticky top-0 z-20 flex items-center justify-between border-b border-zinc-200 bg-white px-4 py-3"
+		class="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-2 border-b border-zinc-200 bg-white px-3 py-2 sm:px-4 sm:py-3"
 	>
-		<div class="flex items-center gap-4">
+		<div class="flex items-center gap-2 sm:gap-4">
 			<button
 				type="button"
 				onclick={() => goto("/admin/members")}
@@ -89,12 +89,12 @@
 			</button>
 		</div>
 
-		<div class="flex items-center gap-2">
+		<div class="flex items-center gap-1 sm:gap-2">
 			<!-- Settings Toggle -->
 			<button
 				type="button"
 				onclick={() => (showSettings = !showSettings)}
-				class="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm transition-colors {showSettings
+				class="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm transition-colors sm:px-3 sm:py-2 {showSettings
 					? 'bg-zinc-900 text-white'
 					: 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900'}"
 			>
@@ -106,12 +106,13 @@
 			<button
 				type="submit"
 				disabled={isSubmitting}
-				class="inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-zinc-800 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+				class="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-3 py-1.5 text-sm font-semibold text-white transition-all hover:bg-zinc-800 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 sm:gap-2 sm:px-4 sm:py-2"
 			>
 				{#if isSubmitting}
 					<Loader2 class="h-4 w-4 animate-spin" />
 				{/if}
-				{submitLabel}
+				<span class="hidden sm:inline">{submitLabel}</span>
+				<span class="sm:hidden">Save</span>
 			</button>
 		</div>
 	</header>
@@ -221,9 +222,9 @@
 
 		<!-- Settings Sidebar -->
 		{#if showSettings}
-			<aside class="w-80 shrink-0 overflow-y-auto border-l border-zinc-200 bg-zinc-50/50 lg:w-96">
+			<aside class="fixed inset-0 z-30 w-full overflow-y-auto bg-zinc-50 lg:static lg:w-80 lg:shrink-0 lg:border-l lg:border-zinc-200 lg:bg-zinc-50/50 xl:w-96">
 				<div
-					class="sticky top-0 flex items-center justify-between border-b border-zinc-200 bg-zinc-50/80 px-4 py-3 backdrop-blur-sm"
+					class="sticky top-0 flex items-center justify-between border-b border-zinc-200 bg-zinc-50 px-4 py-3 backdrop-blur-sm lg:bg-zinc-50/80"
 				>
 					<h2 class="font-semibold text-zinc-900">Settings</h2>
 					<button

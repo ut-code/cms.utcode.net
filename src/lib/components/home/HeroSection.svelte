@@ -21,15 +21,16 @@
 		style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E&quot;);"
 	></div>
 
-	<div class="relative z-10 mx-auto grid max-w-6xl items-center gap-16 px-6 lg:grid-cols-2">
+	<div class="relative z-10 mx-auto grid max-w-6xl items-center gap-8 px-6 lg:grid-cols-2 lg:gap-16">
 		<div class="animate-fade-slide-in">
 			<div
-				class="mb-6 inline-block rounded-full border border-zinc-200 bg-white px-4 py-1.5 font-[JetBrains_Mono,monospace] text-xs font-medium text-zinc-600 shadow-sm"
+				class="mb-4 inline-block rounded-full border border-zinc-200 bg-white px-3 py-1.5 font-[JetBrains_Mono,monospace] text-[10px] font-medium text-zinc-600 shadow-sm sm:px-4 sm:text-xs"
 			>
-				<span class="mr-2 inline-block h-2 w-2 animate-pulse rounded-full bg-[#00D372]"></span>
-				Est. 2019 — The University of Tokyo
+				<span class="mr-1 inline-block h-2 w-2 animate-pulse rounded-full bg-[#00D372] sm:mr-2"></span>
+				<span class="hidden sm:inline">Est. 2019 — The University of Tokyo</span>
+				<span class="sm:hidden">Est. 2019 — UTokyo</span>
 			</div>
-			<h1 class="mb-6 text-4xl leading-tight font-bold tracking-tight sm:text-5xl lg:text-6xl">
+			<h1 class="mb-4 text-3xl leading-tight font-bold tracking-tight sm:mb-6 sm:text-4xl lg:text-5xl xl:text-6xl">
 				ソフトウェアで、<br />
 				<span class="relative">
 					<span
@@ -39,7 +40,7 @@
 					</span>
 				</span>
 			</h1>
-			<p class="mb-8 max-w-md text-lg leading-relaxed text-zinc-500">
+			<p class="mb-6 max-w-md text-base leading-relaxed text-zinc-500 sm:mb-8 sm:text-lg">
 				東京大学のソフトウェアエンジニアリングサークル。学生が実際にプロダクトを作り、世に届ける。
 			</p>
 			<div class="flex flex-wrap items-center gap-4">
@@ -61,15 +62,15 @@
 		</div>
 		<div class="animate-fade-slide-in stagger-2 flex justify-center lg:justify-end">
 			<div
-				class="w-full max-w-sm rounded-2xl border border-zinc-200 bg-zinc-900 p-6 shadow-2xl shadow-zinc-900/20"
+				class="w-full max-w-sm rounded-2xl border border-zinc-200 bg-zinc-900 p-4 shadow-2xl shadow-zinc-900/20 sm:p-6"
 			>
-				<div class="mb-4 flex items-center gap-2">
-					<div class="h-3 w-3 rounded-full bg-red-500"></div>
-					<div class="h-3 w-3 rounded-full bg-yellow-500"></div>
-					<div class="h-3 w-3 rounded-full bg-green-500"></div>
-					<span class="ml-2 font-[JetBrains_Mono,monospace] text-xs text-zinc-500">utcode.ts</span>
+				<div class="mb-3 flex items-center gap-1.5 sm:mb-4 sm:gap-2">
+					<div class="h-2.5 w-2.5 rounded-full bg-red-500 sm:h-3 sm:w-3"></div>
+					<div class="h-2.5 w-2.5 rounded-full bg-yellow-500 sm:h-3 sm:w-3"></div>
+					<div class="h-2.5 w-2.5 rounded-full bg-green-500 sm:h-3 sm:w-3"></div>
+					<span class="ml-1 font-[JetBrains_Mono,monospace] text-[10px] text-zinc-500 sm:ml-2 sm:text-xs">utcode.ts</span>
 				</div>
-				<pre class="font-[JetBrains_Mono,monospace] text-sm leading-relaxed"><code
+				<pre class="overflow-x-auto font-[JetBrains_Mono,monospace] text-xs leading-relaxed sm:text-sm"><code
 						class="text-zinc-400"
 						><span class="text-purple-400">const</span> <span class="text-[#00D372]">utcode</span
 						> = {"{"}<br />  <span class="text-blue-400">members</span>: <span

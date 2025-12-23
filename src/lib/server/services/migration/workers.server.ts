@@ -29,6 +29,8 @@ export type Logger = (message: string) => void;
 export const MemberFrontmatterSchema = v.object({
   nameJa: v.string(),
   description: v.optional(v.string()),
+  image: v.optional(v.string()),
+  // Legacy fields for backward compatibility during migration
   faceImage: v.optional(v.string()),
   upperBodyImage: v.optional(v.string()),
   github: v.optional(v.string()),
@@ -245,7 +247,7 @@ export async function migrateMembers(repoPath: string, log: Logger): Promise<Mig
         slug,
         name: frontmatter.nameJa,
         bio: bioLines.join("\n") || null,
-        imageUrl: frontmatter.faceImage ?? frontmatter.upperBodyImage ?? null,
+        imageUrl: frontmatter.image ?? frontmatter.faceImage ?? frontmatter.upperBodyImage ?? null,
         pageContent: processedBody,
       });
 
@@ -520,7 +522,7 @@ export async function migrateImages(repoPath: string, log: Logger): Promise<Migr
     try {
       const content = await readFile(file, "utf-8");
       const { frontmatter } = parseFrontmatter(content, MemberFrontmatterSchema);
-      const imageRef = frontmatter.faceImage ?? frontmatter.upperBodyImage;
+      const imageRef = frontmatter.image ?? frontmatter.faceImage ?? frontmatter.upperBodyImage;
 
       if (!imageRef) continue;
 
