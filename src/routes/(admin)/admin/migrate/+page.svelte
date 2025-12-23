@@ -21,10 +21,15 @@
 	const isDisabled = $derived.by(() => isStarting || isRunning);
 
 	async function fetchStatus() {
+		// Check if user is at bottom before fetch
+		const wasAtBottom = logsContainer
+			? logsContainer.scrollHeight - logsContainer.scrollTop <= logsContainer.clientHeight + 10
+			: true;
+
 		migrationState = await getStatus();
 
-		// Auto-scroll logs to bottom
-		if (logsContainer) {
+		// Only auto-scroll if user was already at bottom
+		if (logsContainer && wasAtBottom) {
 			logsContainer.scrollTop = logsContainer.scrollHeight;
 		}
 	}
@@ -74,11 +79,9 @@
 		}
 	}
 
-	// Poll every 1s while running, cleanup on unmount
+	// Poll every 1s to keep status in sync, cleanup on unmount
 	$effect(() => {
 		fetchStatus().catch(console.error);
-
-		// Always poll every 1s to catch running migrations
 		pollInterval = setInterval(fetchStatus, 1000);
 
 		return () => {

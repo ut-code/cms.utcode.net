@@ -1,4 +1,4 @@
-import { command, query } from "$app/server";
+import { command } from "$app/server";
 import { requireUtCodeMember } from "$lib/server/database/auth.server";
 import {
   startDataMigration,
@@ -13,7 +13,8 @@ export const start = command(async (): Promise<{ started: boolean; message: stri
   return startDataMigration();
 });
 
-export const getStatus = query(async (): Promise<MigrationState> => {
+// Use command instead of query to bypass caching for real-time polling
+export const getStatus = command(async (): Promise<MigrationState> => {
   await requireUtCodeMember();
   return getMigrationState();
 });
