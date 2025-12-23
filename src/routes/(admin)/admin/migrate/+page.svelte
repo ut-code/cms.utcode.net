@@ -13,6 +13,10 @@
 	let migrationState: MigrationState | null = $state(null);
 	let pollInterval: ReturnType<typeof setInterval> | null = $state(null);
 	let logsContainer: HTMLPreElement | null = $state(null);
+	let isStarting = $state(false);
+
+	const isRunning = $derived.by(() => migrationState?.status === "running");
+	const isDisabled = $derived.by(() => isStarting || isRunning);
 
 	async function fetchStatus() {
 		migrationState = await getStatus();
@@ -24,9 +28,15 @@
 	}
 
 	async function handleStart() {
-		const result = await start();
-		if (result.started) {
-			await fetchStatus();
+		if (isDisabled) return;
+		isStarting = true;
+		try {
+			const result = await start();
+			if (result.started) {
+				await fetchStatus();
+			}
+		} finally {
+			isStarting = false;
 		}
 	}
 
@@ -118,9 +128,13 @@
 				<button
 					class="btn gap-2 btn-warning"
 					onclick={handleStart}
-					disabled={migrationState?.status === "running"}
+					disabled={isDisabled}
 				>
-					<Play class="h-4 w-4" />
+					{#if isStarting}
+						<span class="loading loading-spinner loading-xs"></span>
+					{:else}
+						<Play class="h-4 w-4" />
+					{/if}
 					Start Migration
 				</button>
 				{#if migrationState?.status === "completed" || migrationState?.status === "error"}
