@@ -9,19 +9,7 @@
 	<title>Members - ut.code(); CMS</title>
 </svelte:head>
 
-<svelte:boundary>
-	{#snippet pending()}
-		<div class="space-y-6">
-			<div class="h-24 w-full skeleton rounded-2xl"></div>
-			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-				{#each Array.from({ length: 6 }, (_, i) => i) as i (i)}
-					<div class="h-32 skeleton rounded-2xl"></div>
-				{/each}
-			</div>
-		</div>
-	{/snippet}
-
-	<div class="space-y-6">
+<div class="space-y-6">
 		<!-- Header -->
 		<header class="animate-fade-slide-in gradient-dark relative overflow-hidden rounded-2xl p-6">
 			<!-- Decorative elements -->
@@ -137,5 +125,4 @@
 				{/each}
 			</div>
 		{/if}
-	</div>
-</svelte:boundary>
+</div>

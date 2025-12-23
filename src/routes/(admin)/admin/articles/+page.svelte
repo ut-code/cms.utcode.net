@@ -28,19 +28,7 @@
 	<title>Articles - ut.code(); CMS</title>
 </svelte:head>
 
-<svelte:boundary>
-	{#snippet pending()}
-		<div class="space-y-6">
-			<div class="h-32 w-full skeleton rounded-2xl"></div>
-			<div class="space-y-4">
-				{#each Array.from({ length: 4 }, (_, i) => i) as i (i)}
-					<div class="h-28 skeleton rounded-2xl"></div>
-				{/each}
-			</div>
-		</div>
-	{/snippet}
-
-	<div class="space-y-6">
+<div class="space-y-6">
 		<!-- Header -->
 		<header class="animate-fade-slide-in gradient-dark relative overflow-hidden rounded-2xl p-6">
 			<!-- Decorative elements -->
@@ -226,5 +214,4 @@
 				{/each}
 			</div>
 		{/if}
-	</div>
-</svelte:boundary>
+</div>

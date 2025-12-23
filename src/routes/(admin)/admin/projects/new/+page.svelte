@@ -50,14 +50,6 @@
 	<title>New Project - ut.code(); CMS</title>
 </svelte:head>
 
-<svelte:boundary>
-	{#snippet pending()}
-		<div class="flex h-96 items-center justify-center">
-			<span class="loading loading-md loading-spinner"></span>
-		</div>
-	{/snippet}
-
-	<div class="h-[calc(100vh-4rem)]">
+<div class="h-[calc(100vh-4rem)]">
 		<ProjectForm {members} onSubmit={handleSubmit} submitLabel="Create" bind:isSubmitting isNew />
-	</div>
-</svelte:boundary>
+</div>

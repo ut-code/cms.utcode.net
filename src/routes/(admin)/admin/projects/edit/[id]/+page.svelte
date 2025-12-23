@@ -160,14 +160,7 @@
 	<title>{project?.name ?? "Edit Project"} - ut.code(); CMS</title>
 </svelte:head>
 
-<svelte:boundary>
-	{#snippet pending()}
-		<div class="flex h-96 items-center justify-center">
-			<span class="loading loading-md loading-spinner"></span>
-		</div>
-	{/snippet}
-
-	{#if !project}
+{#if !project}
 		<div class="flex h-96 flex-col items-center justify-center text-center">
 			<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-zinc-400">
 				<Folder class="h-6 w-6" />
@@ -356,5 +349,4 @@
 				</div>
 			</div>
 		{/if}
-	{/if}
-</svelte:boundary>
+{/if}

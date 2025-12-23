@@ -42,14 +42,6 @@
 	<title>New Article - ut.code(); CMS</title>
 </svelte:head>
 
-<svelte:boundary>
-	{#snippet pending()}
-		<div class="flex h-96 items-center justify-center">
-			<span class="loading loading-md loading-spinner"></span>
-		</div>
-	{/snippet}
-
-	<div class="h-[calc(100vh-4rem)]">
+<div class="h-[calc(100vh-4rem)]">
 		<ArticleForm {authors} onSubmit={handleSubmit} submitLabel="Create" bind:isSubmitting />
-	</div>
-</svelte:boundary>
+</div>

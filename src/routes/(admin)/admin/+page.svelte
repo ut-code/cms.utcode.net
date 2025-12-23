@@ -23,51 +23,29 @@
 	<title>Dashboard - ut.code(); CMS</title>
 </svelte:head>
 
-<svelte:boundary>
-	{#snippet pending()}
-		<div class="space-y-8">
-			<!-- Header skeleton -->
-			<div class="h-32 w-full skeleton rounded-2xl"></div>
+<div class="space-y-8">
+	<DashboardHeader
+		publishedArticles={stats.publishedArticles}
+		members={stats.members}
+		projects={stats.projects}
+	/>
 
-			<!-- Stats skeleton -->
-			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-				{#each Array.from({ length: 4 }, (_, i) => i) as i (i)}
-					<div class="h-28 skeleton rounded-2xl"></div>
-				{/each}
-			</div>
+	<StatsGrid
+		publishedArticles={stats.publishedArticles}
+		totalArticles={stats.articles}
+		projects={stats.projects}
+		members={stats.members}
+	/>
 
-			<!-- Content skeleton -->
-			<div class="grid gap-6 lg:grid-cols-2">
-				<div class="h-64 skeleton rounded-2xl"></div>
-				<div class="h-64 skeleton rounded-2xl"></div>
-			</div>
-		</div>
-	{/snippet}
+	<div class="grid gap-6 lg:grid-cols-2">
+		<NeedsAttention draftArticles={stats.draftArticles} {formatDate} />
 
-	<div class="space-y-8">
-		<DashboardHeader
-			publishedArticles={stats.publishedArticles}
-			members={stats.members}
-			projects={stats.projects}
+		<RecentActivity
+			recentArticles={stats.recentArticles}
+			{formatDate}
+			hasDrafts={stats.draftArticles.length > 0}
 		/>
-
-		<StatsGrid
-			publishedArticles={stats.publishedArticles}
-			totalArticles={stats.articles}
-			projects={stats.projects}
-			members={stats.members}
-		/>
-
-		<div class="grid gap-6 lg:grid-cols-2">
-			<NeedsAttention draftArticles={stats.draftArticles} {formatDate} />
-
-			<RecentActivity
-				recentArticles={stats.recentArticles}
-				{formatDate}
-				hasDrafts={stats.draftArticles.length > 0}
-			/>
-		</div>
-
-		<QuickActions />
 	</div>
-</svelte:boundary>
+
+	<QuickActions />
+</div>
