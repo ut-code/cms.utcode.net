@@ -1,6 +1,7 @@
 <script lang="ts">
 	import "../../app.css";
 	import {
+		DatabaseBackup,
 		FileText,
 		Folder,
 		LayoutGrid,
@@ -29,6 +30,7 @@
 		{ href: "/admin/members", label: "Members", icon: Users, exact: false },
 		{ href: "/admin/articles", label: "Articles", icon: FileText, exact: false },
 		{ href: "/admin/projects", label: "Projects", icon: Folder, exact: false },
+		{ href: "/admin/migrate", label: "Migration", icon: DatabaseBackup, exact: false },
 	] as const;
 
 	function isActive(path: string, exact: boolean) {
