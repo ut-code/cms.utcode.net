@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "sops exec-env secrets.dev.yaml 'vite dev'",
+    "dev": "vite dev",
     "build": "vite build",
     "build:local": "sops exec-env secrets.prod.yaml 'vite build'",
     "preview": "vite preview",
