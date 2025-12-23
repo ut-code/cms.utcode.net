@@ -1,5 +1,5 @@
 import type { Handle } from "@sveltejs/kit";
-import { redirect } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 import { svelteKitHandler } from "better-auth/svelte-kit";
 import { like } from "drizzle-orm";
@@ -11,6 +11,9 @@ import { article } from "$lib/shared/models/schema";
 const handleAuth: Handle = async ({ event, resolve }) => {
   return await svelteKitHandler({ event, resolve, auth, building });
 };
+
+// Global rate limiter for DB lookup redirects (1 request per second)
+let lastDbLookup = 0;
 
 const handleRedirect: Handle = async ({ event, resolve }) => {
   const path = event.url.pathname;
@@ -33,6 +36,14 @@ const handleRedirect: Handle = async ({ event, resolve }) => {
     if (/^\d{4}-\d{2}-\d{2}-/.test(oldSlug)) {
       return resolve(event);
     }
+
+    // Global rate limit: 2 DB lookup per second
+    const now = Date.now();
+    if (now - lastDbLookup < 500) {
+      error(429, "Too many requests");
+    }
+    lastDbLookup = now;
+
     // DB lookup: find article where slug ends with the old slug pattern
     const found = await db
       .select({ slug: article.slug })
