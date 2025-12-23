@@ -11,6 +11,7 @@ import {
   transferLead as serverTransferLead,
   updateProject,
 } from "$lib/server/database/projects.server";
+import { purgeCache } from "$lib/server/services/cloudflare/cache.server";
 import type { ProjectCategory, ProjectRole } from "$lib/shared/models/schema";
 
 // Re-export getMembers from canonical source
@@ -56,7 +57,9 @@ export const saveProject = command(
   }),
   async ({ data, leadMemberId }) => {
     await requireUtCodeMember();
-    return await createProject(data, leadMemberId);
+    const result = await createProject(data, leadMemberId);
+    purgeCache().catch(console.error);
+    return result;
   },
 );
 
@@ -76,13 +79,16 @@ export const editProject = command(
   }),
   async ({ id, data }) => {
     await requireUtCodeMember();
-    return await updateProject(id, data);
+    const result = await updateProject(id, data);
+    purgeCache().catch(console.error);
+    return result;
   },
 );
 
 export const removeProject = command(v.string(), async (id) => {
   await requireUtCodeMember();
   await deleteProject(id);
+  purgeCache().catch(console.error);
 });
 
 export const addMember = command(
@@ -94,6 +100,7 @@ export const addMember = command(
   async ({ projectId, memberId, role }) => {
     await requireUtCodeMember();
     await addProjectMember(projectId, memberId, role);
+    purgeCache().catch(console.error);
   },
 );
 
@@ -105,6 +112,7 @@ export const removeMember = command(
   async ({ projectId, memberId }) => {
     await requireUtCodeMember();
     await removeProjectMember(projectId, memberId);
+    purgeCache().catch(console.error);
   },
 );
 
@@ -129,5 +137,6 @@ export const transferLead = command(
     }
 
     await serverTransferLead(projectId, currentLead.memberId, newLeadMemberId);
+    purgeCache().catch(console.error);
   },
 );

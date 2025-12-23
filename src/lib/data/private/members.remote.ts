@@ -8,6 +8,7 @@ import {
   listMembers,
   updateMember,
 } from "$lib/server/database/members.server";
+import { purgeCache } from "$lib/server/services/cloudflare/cache.server";
 
 export const getMembers = query(async () => {
   await requireUtCodeMember();
@@ -29,7 +30,9 @@ export const saveMember = command(
   }),
   async (data) => {
     await requireUtCodeMember();
-    return await createMember(data);
+    const result = await createMember(data);
+    purgeCache().catch(console.error);
+    return result;
   },
 );
 
@@ -46,11 +49,14 @@ export const editMember = command(
   }),
   async ({ id, data }) => {
     await requireUtCodeMember();
-    return await updateMember(id, data);
+    const result = await updateMember(id, data);
+    purgeCache().catch(console.error);
+    return result;
   },
 );
 
 export const removeMember = command(v.string(), async (id) => {
   await requireUtCodeMember();
   await deleteMember(id);
+  purgeCache().catch(console.error);
 });

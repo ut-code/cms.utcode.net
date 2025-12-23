@@ -13,6 +13,9 @@ const Env = v.object({
   S3_BUCKET: v.string(),
   S3_PUBLIC_URL: v.string(),
   UNSAFE_DISABLE_AUTH: v.optional(v.picklist(["true"])),
+
+  CLOUDFLARE_ZONE_ID: v.string(),
+  CLOUDFLARE_API_TOKEN: v.string(),
 });
 
 export const env = v.parse(Env, process.env);

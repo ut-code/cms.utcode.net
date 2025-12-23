@@ -10,6 +10,7 @@ import {
   updateArticle,
 } from "$lib/server/database/articles.server";
 import { requireUtCodeMember } from "$lib/server/database/auth.server";
+import { purgeCache } from "$lib/server/services/cloudflare/cache.server";
 
 // Re-export getMembers from canonical source
 export { getMembers } from "./members.remote";
@@ -37,7 +38,9 @@ export const saveArticle = command(
   }),
   async (data) => {
     await requireUtCodeMember();
-    return await createArticle(data);
+    const result = await createArticle(data);
+    purgeCache().catch(console.error);
+    return result;
   },
 );
 
@@ -57,21 +60,28 @@ export const editArticle = command(
   }),
   async ({ id, data }) => {
     await requireUtCodeMember();
-    return await updateArticle(id, data);
+    const result = await updateArticle(id, data);
+    purgeCache().catch(console.error);
+    return result;
   },
 );
 
 export const removeArticle = command(v.string(), async (id) => {
   await requireUtCodeMember();
   await deleteArticle(id);
+  purgeCache().catch(console.error);
 });
 
 export const publish = command(v.string(), async (id) => {
   await requireUtCodeMember();
-  return await publishArticle(id);
+  const result = await publishArticle(id);
+  purgeCache().catch(console.error);
+  return result;
 });
 
 export const unpublish = command(v.string(), async (id) => {
   await requireUtCodeMember();
-  return await unpublishArticle(id);
+  const result = await unpublishArticle(id);
+  purgeCache().catch(console.error);
+  return result;
 });
