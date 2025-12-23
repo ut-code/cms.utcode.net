@@ -6,12 +6,14 @@
  */
 
 import { spawn } from "node:child_process";
-import { readdir, readFile, rm } from "node:fs/promises";
+import { readdir, readFile, rm, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { basename, dirname, join } from "node:path";
+import { basename, dirname, extname, join } from "node:path";
 import { eq } from "drizzle-orm";
 import * as v from "valibot";
 import { parse as parseYaml } from "yaml";
+import { env } from "$lib/env/env.server";
+import { uploadBuffer } from "$lib/server/database/storage.server";
 import { db } from "$lib/server/drivers/db";
 import {
   article,
@@ -380,6 +382,234 @@ async function migrateProjects(
   return { created, skipped, errors: errorCount };
 }
 
+// Image migration
+function getMimeType(filePath: string): string {
+  const ext = extname(filePath).toLowerCase();
+  const mimeTypes: Record<string, string> = {
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".png": "image/png",
+    ".gif": "image/gif",
+    ".webp": "image/webp",
+    ".svg": "image/svg+xml",
+  };
+  return mimeTypes[ext] ?? "application/octet-stream";
+}
+
+async function fileExists(filePath: string): Promise<boolean> {
+  try {
+    await stat(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function migrateImages(
+  repoPath: string,
+): Promise<{ created: number; skipped: number; errors: number }> {
+  log("--- Migrating Images ---");
+  const s3PublicUrl = env.S3_PUBLIC_URL;
+
+  let created = 0;
+  let skipped = 0;
+  let errorCount = 0;
+
+  // Member images
+  log("Processing member images...");
+  const membersPath = join(repoPath, "contents/members");
+  const memberFiles = await findMarkdownFiles(membersPath);
+
+  for (const file of memberFiles) {
+    const dirPath = dirname(file);
+    const relPath = file.replace(`${membersPath}/`, "");
+    const slug = dirname(relPath).split("/").at(-1);
+    if (!slug) continue;
+
+    try {
+      const content = await readFile(file, "utf-8");
+      const { frontmatter } = parseFrontmatter(content, MemberFrontmatterSchema);
+      const imageRef = frontmatter.faceImage ?? frontmatter.upperBodyImage;
+
+      if (!imageRef) {
+        continue; // No image to migrate
+      }
+
+      const imagePath = join(dirPath, imageRef.replace(/^\.\//, ""));
+      if (!(await fileExists(imagePath))) {
+        log(`  ⊘ Skipped: member/${slug} (image file not found)`);
+        skipped++;
+        continue;
+      }
+
+      // Check if member exists and needs update
+      const existing = await db
+        .select({ id: member.id, imageUrl: member.imageUrl })
+        .from(member)
+        .where(eq(member.slug, slug))
+        .limit(1);
+
+      const existingMember = existing[0];
+      if (!existingMember) {
+        log(`  ⊘ Skipped: member/${slug} (not in database)`);
+        skipped++;
+        continue;
+      }
+
+      if (existingMember.imageUrl?.startsWith(s3PublicUrl)) {
+        log(`  ⊘ Skipped: member/${slug} (already has S3 URL)`);
+        skipped++;
+        continue;
+      }
+
+      // Upload image
+      const buffer = await readFile(imagePath);
+      const { url } = await uploadBuffer(
+        buffer as Buffer,
+        getMimeType(imagePath),
+        basename(imagePath),
+        "members",
+      );
+
+      await db.update(member).set({ imageUrl: url }).where(eq(member.slug, slug));
+      log(`  ✓ Uploaded: member/${slug}`);
+      created++;
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      log(`  ✗ Error: member/${slug} - ${msg}`);
+      errorCount++;
+    }
+  }
+
+  // Article images
+  log("Processing article images...");
+  const articlesPath = join(repoPath, "contents/articles");
+  const articleFiles = await findMarkdownFiles(articlesPath);
+
+  for (const file of articleFiles) {
+    const dirPath = dirname(file);
+    const relPath = file.replace(`${articlesPath}/`, "");
+    const slug = generateArticleSlug(dirname(relPath));
+
+    try {
+      const content = await readFile(file, "utf-8");
+      const { frontmatter } = parseFrontmatter(content, ArticleFrontmatterSchema);
+
+      if (!frontmatter.thumbnail?.src) {
+        continue;
+      }
+
+      const imagePath = join(dirPath, frontmatter.thumbnail.src.replace(/^\.\//, ""));
+      if (!(await fileExists(imagePath))) {
+        log(`  ⊘ Skipped: article/${slug} (image file not found)`);
+        skipped++;
+        continue;
+      }
+
+      const existingArticle = (
+        await db
+          .select({ id: article.id, coverUrl: article.coverUrl })
+          .from(article)
+          .where(eq(article.slug, slug))
+          .limit(1)
+      )[0];
+
+      if (!existingArticle) {
+        log(`  ⊘ Skipped: article/${slug} (not in database)`);
+        skipped++;
+        continue;
+      }
+
+      if (existingArticle.coverUrl?.startsWith(s3PublicUrl)) {
+        log(`  ⊘ Skipped: article/${slug} (already has S3 URL)`);
+        skipped++;
+        continue;
+      }
+
+      const buffer = await readFile(imagePath);
+      const { url } = await uploadBuffer(
+        buffer as Buffer,
+        getMimeType(imagePath),
+        basename(imagePath),
+        "articles",
+      );
+
+      await db.update(article).set({ coverUrl: url }).where(eq(article.slug, slug));
+      log(`  ✓ Uploaded: article/${slug}`);
+      created++;
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      log(`  ✗ Error: article/${slug} - ${msg}`);
+      errorCount++;
+    }
+  }
+
+  // Project images
+  log("Processing project images...");
+  const projectsPath = join(repoPath, "contents/projects");
+  const projectFiles = await findMarkdownFiles(projectsPath);
+
+  for (const file of projectFiles) {
+    const dirPath = dirname(file);
+    const slug = basename(dirPath);
+
+    try {
+      const content = await readFile(file, "utf-8");
+      const { frontmatter } = parseFrontmatter(content, ProjectFrontmatterSchema);
+
+      if (!frontmatter.thumbnail?.src) {
+        continue;
+      }
+
+      const imagePath = join(dirPath, frontmatter.thumbnail.src.replace(/^\.\//, ""));
+      if (!(await fileExists(imagePath))) {
+        log(`  ⊘ Skipped: project/${slug} (image file not found)`);
+        skipped++;
+        continue;
+      }
+
+      const existingProject = (
+        await db
+          .select({ id: project.id, coverUrl: project.coverUrl })
+          .from(project)
+          .where(eq(project.slug, slug))
+          .limit(1)
+      )[0];
+
+      if (!existingProject) {
+        log(`  ⊘ Skipped: project/${slug} (not in database)`);
+        skipped++;
+        continue;
+      }
+
+      if (existingProject.coverUrl?.startsWith(s3PublicUrl)) {
+        log(`  ⊘ Skipped: project/${slug} (already has S3 URL)`);
+        skipped++;
+        continue;
+      }
+
+      const buffer = await readFile(imagePath);
+      const { url } = await uploadBuffer(
+        buffer as Buffer,
+        getMimeType(imagePath),
+        basename(imagePath),
+        "projects",
+      );
+
+      await db.update(project).set({ coverUrl: url }).where(eq(project.slug, slug));
+      log(`  ✓ Uploaded: project/${slug}`);
+      created++;
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      log(`  ✗ Error: project/${slug} - ${msg}`);
+      errorCount++;
+    }
+  }
+
+  log(`Images: ${created} uploaded, ${skipped} skipped, ${errorCount} errors`);
+  return { created, skipped, errors: errorCount };
+}
+
 export function startDataMigration(): { started: boolean; message: string } {
   if (isRunning()) {
     return { started: false, message: "Migration already in progress" };
@@ -401,13 +631,14 @@ async function runMigrationAsync(): Promise<void> {
     // Clone repo
     repoPath = await cloneRepo();
 
-    // Run migrations in order (members first, then articles/projects)
+    // Run migrations in order (members first, then articles/projects, then images)
     const members = await migrateMembers(repoPath);
     const articles = await migrateArticles(repoPath);
     const projects = await migrateProjects(repoPath);
+    const images = await migrateImages(repoPath);
 
     log("=== Migration Complete ===");
-    completeMigration({ members, articles, projects });
+    completeMigration({ members, articles, projects, images });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     log(`=== Migration Failed: ${msg} ===`);

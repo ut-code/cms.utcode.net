@@ -21,20 +21,12 @@
 		if (logsContainer) {
 			logsContainer.scrollTop = logsContainer.scrollHeight;
 		}
-
-		// Stop polling when completed or errored
-		if (migrationState.status !== "running" && pollInterval) {
-			clearInterval(pollInterval);
-			pollInterval = null;
-		}
 	}
 
 	async function handleStart() {
 		const result = await start();
 		if (result.started) {
 			await fetchStatus();
-			// Start polling
-			pollInterval = setInterval(fetchStatus, 500);
 		}
 	}
 
@@ -43,9 +35,13 @@
 		migrationState = await getStatus();
 	}
 
-	// Initial fetch
+	// Poll every 1s while running, cleanup on unmount
 	$effect(() => {
 		fetchStatus().catch(console.error);
+
+		// Always poll every 1s to catch running migrations
+		pollInterval = setInterval(fetchStatus, 1000);
+
 		return () => {
 			if (pollInterval) clearInterval(pollInterval);
 		};
@@ -137,7 +133,7 @@
 
 			<!-- Results summary -->
 			{#if migrationState?.result}
-				<div class="mb-4 grid grid-cols-3 gap-4">
+				<div class="mb-4 grid grid-cols-2 gap-4 md:grid-cols-4">
 					<div class="stat rounded-lg bg-base-200 p-4">
 						<div class="stat-title">Members</div>
 						<div class="stat-value text-lg text-success">
@@ -165,6 +161,16 @@
 						</div>
 						<div class="stat-desc">
 							{migrationState.result.projects.skipped} skipped, {migrationState.result.projects
+								.errors} errors
+						</div>
+					</div>
+					<div class="stat rounded-lg bg-base-200 p-4">
+						<div class="stat-title">Images</div>
+						<div class="stat-value text-lg text-success">
+							{migrationState.result.images.created}
+						</div>
+						<div class="stat-desc">
+							{migrationState.result.images.skipped} skipped, {migrationState.result.images
 								.errors} errors
 						</div>
 					</div>
