@@ -1,8 +1,23 @@
-import { command } from "$app/server";
+import { command, query } from "$app/server";
 import { requireUtCodeMember } from "$lib/server/database/auth.server";
-import { runDataMigration, type MigrationResult } from "$lib/server/services/migration.server";
+import { startDataMigration } from "$lib/server/services/migration.server";
+import {
+  getMigrationState,
+  resetMigration,
+  type MigrationState,
+} from "$lib/server/services/migration-state.server";
 
-export const runMigration = command(async (): Promise<MigrationResult> => {
+export const start = command(async (): Promise<{ started: boolean; message: string }> => {
   await requireUtCodeMember();
-  return runDataMigration();
+  return startDataMigration();
+});
+
+export const getStatus = query(async (): Promise<MigrationState> => {
+  await requireUtCodeMember();
+  return getMigrationState();
+});
+
+export const reset = command(async (): Promise<void> => {
+  await requireUtCodeMember();
+  resetMigration();
 });

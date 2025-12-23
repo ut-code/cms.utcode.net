@@ -20,14 +20,15 @@ import {
   projectMember,
   type ProjectCategory,
 } from "$lib/shared/models/schema";
+import {
+  log,
+  startMigration,
+  completeMigration,
+  failMigration,
+  isRunning,
+} from "./migration-state.server";
 
 const REPO_URL = "https://github.com/ut-code/utcode.net.git";
-
-export interface MigrationResult {
-  members: { created: number; skipped: number; errors: string[] };
-  articles: { created: number; skipped: number; errors: string[] };
-  projects: { created: number; skipped: number; errors: string[] };
-}
 
 async function runCommand(cmd: string, args: string[], cwd?: string): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -46,7 +47,9 @@ async function runCommand(cmd: string, args: string[], cwd?: string): Promise<vo
 
 async function cloneRepo(): Promise<string> {
   const tempDir = join(tmpdir(), `utcode-migration-${Date.now()}`);
+  log(`Cloning ${REPO_URL}...`);
   await runCommand("git", ["clone", "--depth", "1", REPO_URL, tempDir]);
+  log("Repository cloned successfully");
   return tempDir;
 }
 
@@ -99,12 +102,15 @@ const MemberFrontmatterSchema = v.object({
 
 async function migrateMembers(
   repoPath: string,
-): Promise<{ created: number; skipped: number; errors: string[] }> {
+): Promise<{ created: number; skipped: number; errors: number }> {
+  log("--- Migrating Members ---");
   const membersPath = join(repoPath, "contents/members");
   const files = await findMarkdownFiles(membersPath);
+  log(`Found ${files.length} member files`);
+
   let created = 0;
   let skipped = 0;
-  const errors: string[] = [];
+  let errorCount = 0;
 
   for (const file of files) {
     const relPath = file.replace(membersPath + "/", "");
@@ -124,6 +130,7 @@ async function migrateMembers(
         .limit(1);
 
       if (existing.length > 0) {
+        log(`  ⊘ Skipped: ${slug} (already exists)`);
         skipped++;
         continue;
       }
@@ -143,13 +150,17 @@ async function migrateMembers(
         pageContent: body || null,
       });
 
+      log(`  ✓ Created: ${slug} (${frontmatter.nameJa})`);
       created++;
     } catch (e) {
-      errors.push(`${slug}: ${e instanceof Error ? e.message : String(e)}`);
+      const msg = e instanceof Error ? e.message : String(e);
+      log(`  ✗ Error: ${slug} - ${msg}`);
+      errorCount++;
     }
   }
 
-  return { created, skipped, errors };
+  log(`Members: ${created} created, ${skipped} skipped, ${errorCount} errors`);
+  return { created, skipped, errors: errorCount };
 }
 
 // Article migration
@@ -185,12 +196,15 @@ function generateExcerpt(content: string, maxLength = 200): string {
 
 async function migrateArticles(
   repoPath: string,
-): Promise<{ created: number; skipped: number; errors: string[] }> {
+): Promise<{ created: number; skipped: number; errors: number }> {
+  log("--- Migrating Articles ---");
   const articlesPath = join(repoPath, "contents/articles");
   const files = await findMarkdownFiles(articlesPath);
+  log(`Found ${files.length} article files`);
+
   let created = 0;
   let skipped = 0;
-  const errors: string[] = [];
+  let errorCount = 0;
 
   for (const file of files) {
     const relPath = file.replace(articlesPath + "/", "");
@@ -208,6 +222,7 @@ async function migrateArticles(
         .limit(1);
 
       if (existing.length > 0) {
+        log(`  ⊘ Skipped: ${slug} (already exists)`);
         skipped++;
         continue;
       }
@@ -238,13 +253,17 @@ async function migrateArticles(
         viewCount: 0,
       });
 
+      log(`  ✓ Created: ${slug}`);
       created++;
     } catch (e) {
-      errors.push(`${slug}: ${e instanceof Error ? e.message : String(e)}`);
+      const msg = e instanceof Error ? e.message : String(e);
+      log(`  ✗ Error: ${slug} - ${msg}`);
+      errorCount++;
     }
   }
 
-  return { created, skipped, errors };
+  log(`Articles: ${created} created, ${skipped} skipped, ${errorCount} errors`);
+  return { created, skipped, errors: errorCount };
 }
 
 // Project migration
@@ -279,12 +298,15 @@ function mapCategory(kind: string | undefined): ProjectCategory {
 
 async function migrateProjects(
   repoPath: string,
-): Promise<{ created: number; skipped: number; errors: string[] }> {
+): Promise<{ created: number; skipped: number; errors: number }> {
+  log("--- Migrating Projects ---");
   const projectsPath = join(repoPath, "contents/projects");
   const files = await findMarkdownFiles(projectsPath);
+  log(`Found ${files.length} project files`);
+
   let created = 0;
   let skipped = 0;
-  const errors: string[] = [];
+  let errorCount = 0;
 
   for (const file of files) {
     const dirPath = dirname(file);
@@ -303,6 +325,7 @@ async function migrateProjects(
         .limit(1);
 
       if (existing.length > 0) {
+        log(`  ⊘ Skipped: ${slug} (already exists)`);
         skipped++;
         continue;
       }
@@ -344,16 +367,34 @@ async function migrateProjects(
         }
       }
 
+      log(`  ✓ Created: ${slug} (${name})`);
       created++;
     } catch (e) {
-      errors.push(`${slug}: ${e instanceof Error ? e.message : String(e)}`);
+      const msg = e instanceof Error ? e.message : String(e);
+      log(`  ✗ Error: ${slug} - ${msg}`);
+      errorCount++;
     }
   }
 
-  return { created, skipped, errors };
+  log(`Projects: ${created} created, ${skipped} skipped, ${errorCount} errors`);
+  return { created, skipped, errors: errorCount };
 }
 
-export async function runDataMigration(): Promise<MigrationResult> {
+export function startDataMigration(): { started: boolean; message: string } {
+  if (isRunning()) {
+    return { started: false, message: "Migration already in progress" };
+  }
+
+  startMigration();
+  log("=== Data Migration Started ===");
+
+  // Run migration in background (fire and forget with proper error handling)
+  runMigrationAsync().catch(console.error);
+
+  return { started: true, message: "Migration started" };
+}
+
+async function runMigrationAsync(): Promise<void> {
   let repoPath: string | null = null;
 
   try {
@@ -365,10 +406,16 @@ export async function runDataMigration(): Promise<MigrationResult> {
     const articles = await migrateArticles(repoPath);
     const projects = await migrateProjects(repoPath);
 
-    return { members, articles, projects };
+    log("=== Migration Complete ===");
+    completeMigration({ members, articles, projects });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    log(`=== Migration Failed: ${msg} ===`);
+    failMigration(msg);
   } finally {
     // Cleanup
     if (repoPath) {
+      log("Cleaning up temporary files...");
       await rm(repoPath, { recursive: true, force: true }).catch(() => {});
     }
   }
