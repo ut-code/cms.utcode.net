@@ -13,37 +13,27 @@ const FolderSchema = v.optional(v.picklist([...ALLOWED_FOLDERS]));
 const MAX_BASE64_SIZE = Math.ceil(10 * 1024 * 1024 * 1.37);
 
 const UploadSchema = v.object({
-  data: v.pipe(
-    v.string(),
-    v.maxLength(MAX_BASE64_SIZE, "File too large (max 10MB)"),
-  ),
+  data: v.pipe(v.string(), v.maxLength(MAX_BASE64_SIZE, "File too large (max 10MB)")),
   type: v.picklist([...ACCEPTED_IMAGE_TYPES], "Unsupported image format"),
   name: v.pipe(v.string(), v.maxLength(255)),
   folder: FolderSchema,
 });
 
-export const upload = command(
-  UploadSchema,
-  async ({ data, type, name, folder }) => {
-    await requireUtCodeMember();
+export const upload = command(UploadSchema, async ({ data, type, name, folder }) => {
+  await requireUtCodeMember();
 
-    const path = folder ?? "uploads";
-    const inputBuffer = Buffer.from(data, "base64");
+  const path = folder ?? "uploads";
+  const inputBuffer = Buffer.from(data, "base64");
 
-    // Compress and convert to WebP
-    const {
-      buffer,
-      type: outputType,
-      extension,
-    } = await compressImage(inputBuffer, type);
+  // Compress and convert to WebP
+  const { buffer, type: outputType, extension } = await compressImage(inputBuffer, type);
 
-    // Replace original extension with output extension
-    const baseName = name.replace(/\.[^.]+$/, "");
-    const outputName = `${baseName}.${extension}`;
+  // Replace original extension with output extension
+  const baseName = name.replace(/\.[^.]+$/, "");
+  const outputName = `${baseName}.${extension}`;
 
-    return await uploadBuffer(buffer, outputType, outputName, path);
-  },
-);
+  return await uploadBuffer(buffer, outputType, outputName, path);
+});
 
 export const remove = command(S3KeySchema, async (key) => {
   await requireUtCodeMember();

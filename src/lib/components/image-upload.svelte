@@ -132,9 +132,7 @@
       const arrayBuffer = await processedFile.arrayBuffer();
       const base64 = arrayBufferToBase64(arrayBuffer);
       // Use the validated original type - server will re-compress to WebP anyway
-      const uploadType = isAcceptedImageType(processedFile.type)
-        ? processedFile.type
-        : file.type;
+      const uploadType = isAcceptedImageType(processedFile.type) ? processedFile.type : file.type;
       const result = await upload({
         data: base64,
         type: uploadType,
