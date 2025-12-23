@@ -8,6 +8,7 @@
 
 	const articleResults = $derived(results.filter((r) => r.type === "article"));
 	const projectResults = $derived(results.filter((r) => r.type === "project"));
+	const memberResults = $derived(results.filter((r) => r.type === "member"));
 </script>
 
 <svelte:head>
@@ -45,7 +46,7 @@
 					{#each articleResults as article (article.id)}
 						<a
 							href="/articles/{article.slug}"
-							class="group rounded-xl border border-zinc-200 bg-white p-6 transition-all hover:border-[#00D372] hover:shadow-md"
+							class="group rounded-xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:border-[#00D372] hover:shadow-md"
 						>
 							{#if article.coverUrl}
 								<img
@@ -76,13 +77,13 @@
 		{/if}
 
 		{#if projectResults.length > 0}
-			<section>
+			<section class="mb-12">
 				<h2 class="mb-4 text-xl font-semibold">プロジェクト ({projectResults.length}件)</h2>
 				<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 					{#each projectResults as project (project.id)}
 						<a
 							href="/projects/{project.slug}"
-							class="group rounded-xl border border-zinc-200 bg-white p-6 transition-all hover:border-[#00D372] hover:shadow-md"
+							class="group rounded-xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:border-[#00D372] hover:shadow-md"
 						>
 							{#if project.coverUrl}
 								<img
@@ -94,6 +95,25 @@
 							<h3 class="mb-2 font-semibold group-hover:text-[#00D372]">{project.name}</h3>
 							{#if project.description}
 								<p class="mb-4 line-clamp-2 text-sm text-zinc-500">{project.description}</p>
+							{/if}
+						</a>
+					{/each}
+				</div>
+			</section>
+		{/if}
+
+		{#if memberResults.length > 0}
+			<section>
+				<h2 class="mb-4 text-xl font-semibold">メンバー ({memberResults.length}件)</h2>
+				<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+					{#each memberResults as member (member.id)}
+						<a
+							href="/members/{member.slug}"
+							class="group rounded-xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:border-[#00D372] hover:shadow-md"
+						>
+							<h3 class="mb-2 font-semibold group-hover:text-[#00D372]">{member.name}</h3>
+							{#if member.bio}
+								<p class="mb-4 line-clamp-2 text-sm text-zinc-500">{member.bio}</p>
 							{/if}
 						</a>
 					{/each}

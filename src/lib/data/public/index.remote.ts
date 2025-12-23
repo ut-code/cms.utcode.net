@@ -6,7 +6,7 @@ import {
   listPublishedArticles,
   searchPublishedArticles,
 } from "$lib/server/database/articles.server";
-import { getMemberBySlug, listMembers } from "$lib/server/database/members.server";
+import { getMemberBySlug, listMembers, searchMembers } from "$lib/server/database/members.server";
 import {
   getProjectBySlug,
   listProjects,
@@ -34,9 +34,10 @@ export const getPublicMember = query(v.string(), getMemberBySlug);
 export const searchPublic = query(
   v.string(),
   async (searchQuery: string): Promise<SearchResult[]> => {
-    const [articles, projects] = await Promise.all([
+    const [articles, projects, members] = await Promise.all([
       searchPublishedArticles(searchQuery),
       searchProjects(searchQuery),
+      searchMembers(searchQuery),
     ]);
 
     const articleResults: SearchResult[] = articles.map((article) => ({
@@ -59,6 +60,14 @@ export const searchPublic = query(
       coverUrl: project.coverUrl,
     }));
 
-    return [...articleResults, ...projectResults];
+    const memberResults: SearchResult[] = members.map((member) => ({
+      type: "member" as const,
+      id: member.id,
+      slug: member.slug,
+      name: member.name,
+      bio: member.bio,
+    }));
+
+    return [...articleResults, ...projectResults, ...memberResults];
   },
 );

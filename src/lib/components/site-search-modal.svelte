@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-	import { FileText, Folder } from "lucide-svelte";
+	import { FileText, Folder, User } from "lucide-svelte";
 	import { searchPublic } from "$lib/data/public/index.remote";
 	import type { SearchResult } from "$lib/shared/logic/search";
 	import SearchModalBase from "./search-modal-base.svelte";
@@ -14,6 +14,8 @@
 				return FileText;
 			case "project":
 				return Folder;
+			case "member":
+				return User;
 		}
 	}
 
@@ -23,6 +25,8 @@
 				return "Article";
 			case "project":
 				return "Project";
+			case "member":
+				return "Member";
 		}
 	}
 
@@ -31,6 +35,8 @@
 			case "article":
 				return result.title;
 			case "project":
+				return result.name;
+			case "member":
 				return result.name;
 		}
 	}
@@ -41,6 +47,8 @@
 				return `/articles/${result.slug}`;
 			case "project":
 				return `/projects/${result.slug}`;
+			case "member":
+				return `/members/${result.slug}`;
 		}
 	}
 
@@ -52,8 +60,11 @@
 				parts.push(result.publishedAt.toLocaleDateString("ja-JP"));
 			}
 			return parts.join(" · ");
+		} else if (result.type === "project") {
+			return result.description ?? "";
+		} else {
+			return result.bio ?? "";
 		}
-		return result.description ?? "";
 	}
 </script>
 
@@ -63,7 +74,7 @@
 	{getResultIcon}
 	{getResultName}
 	{getResultHref}
-	placeholder="記事やプロジェクトを検索..."
+	placeholder="記事、プロジェクト、メンバーを検索..."
 	emptyStateText="検索キーワードを入力..."
 	noResultsText={(query) => `「${query}」に一致する結果がありません`}
 	footerNavigateText="移動"

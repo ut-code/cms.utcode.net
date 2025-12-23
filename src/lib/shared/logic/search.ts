@@ -16,6 +16,13 @@ export type SearchResult =
       name: string;
       description: string | null;
       coverUrl: string | null;
+    }
+  | {
+      type: "member";
+      id: string;
+      slug: string;
+      name: string;
+      bio: string | null;
     };
 
 export type AdminSearchResult =
@@ -54,10 +61,15 @@ export function filterSearchResults(results: SearchResult[], query: string): Sea
         result.title.toLowerCase().includes(lowerQuery) ||
         result.excerpt?.toLowerCase().includes(lowerQuery)
       );
-    } else {
+    } else if (result.type === "project") {
       return (
         result.name.toLowerCase().includes(lowerQuery) ||
         result.description?.toLowerCase().includes(lowerQuery)
+      );
+    } else {
+      return (
+        result.name.toLowerCase().includes(lowerQuery) ||
+        result.bio?.toLowerCase().includes(lowerQuery)
       );
     }
   });
