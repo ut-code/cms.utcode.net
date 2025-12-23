@@ -1,0 +1,12 @@
+node_modules
+build
+.svelte-kit
+.devenv*
+.direnv
+.env
+.env.*
+!.env.sample
+.sops-age-key.txt
+secrets.dev.yaml
+*.db
+.git

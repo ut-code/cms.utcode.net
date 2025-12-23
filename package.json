@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "sops exec-env secrets.dev.yaml 'vite dev'",
-    "build": "sops exec-env secrets.prod.yaml 'vite build'",
+    "build": "vite build",
+    "build:local": "sops exec-env secrets.prod.yaml 'vite build'",
     "preview": "vite preview",
     "prepare": "svelte-kit sync",
     "test-check": "bun test",
@@ -29,9 +30,7 @@
   "devDependencies": {
     "@eslint/compat": "^1.4.0",
     "@eslint/js": "^9.39.1",
-    "postgres": "^3.4.5",
-    "@sveltejs/adapter-auto": "^7.0.0",
-    "@sveltejs/adapter-cloudflare": "^7.2.4",
+    "@sveltejs/adapter-node": "^5.4.0",
     "@sveltejs/kit": "^2.49.1",
     "@sveltejs/vite-plugin-svelte": "^6.2.1",
     "@tailwindcss/typography": "^0.5.19",
@@ -45,6 +44,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.13.1",
     "globals": "^16.5.0",
+    "postgres": "^3.4.5",
     "prettier": "^3.7.4",
     "prettier-plugin-svelte": "^3.4.0",
     "prettier-plugin-tailwindcss": "^0.7.2",
