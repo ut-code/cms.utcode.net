@@ -14,7 +14,7 @@
 		</div>
 		<div class="grid gap-6 md:grid-cols-3">
 			<div
-				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
 			>
 				<div
 					class="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-900 text-white transition-colors group-hover:bg-[#00D372] group-hover:text-zinc-900"
@@ -27,7 +27,7 @@
 				</p>
 			</div>
 			<div
-				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
 			>
 				<div
 					class="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-900 text-white transition-colors group-hover:bg-[#00D372] group-hover:text-zinc-900"
@@ -40,7 +40,7 @@
 				</p>
 			</div>
 			<div
-				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
 			>
 				<div
 					class="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-900 text-white transition-colors group-hover:bg-[#00D372] group-hover:text-zinc-900"

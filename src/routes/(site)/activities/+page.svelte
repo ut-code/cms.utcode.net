@@ -36,7 +36,7 @@
 			</div>
 		</div>
 
-		<div class="mb-12 rounded-2xl border border-zinc-200 bg-white p-8">
+		<div class="mb-12 rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8">
 			<p class="leading-relaxed text-zinc-600">
 				ut.code();
 				は、全ての人にソフトウェア開発の魅力を伝えるべく、教材の作成から教育活動までを一貫して行っており、さらに高みを目指すための自学自習の機会も提供しています。充実した教材、気軽に質問できる環境、切磋琢磨する仲間、この3つの柱により、初心者から上級者まですべての人に新しい学びを提供します。
@@ -46,7 +46,7 @@
 		<div class="space-y-8">
 			<!-- ut.code(); Learn -->
 			<div
-				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">ut.code(); Learn</h3>
 				<div class="space-y-4 text-zinc-600">
@@ -62,7 +62,7 @@
 
 			<!-- Document Reading -->
 			<div
-				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">ドキュメントを読む会</h3>
 				<div class="space-y-4 text-zinc-600">
@@ -78,7 +78,7 @@
 
 			<!-- Seminar -->
 			<div
-				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">全ゼミ / 自主ゼミ「モダン Web システム開発入門」</h3>
 				<div class="space-y-4 text-zinc-600">
@@ -105,7 +105,7 @@
 			</div>
 		</div>
 
-		<div class="mb-12 rounded-2xl border border-zinc-200 bg-white p-8">
+		<div class="mb-12 rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8">
 			<p class="leading-relaxed text-zinc-600">
 				ut.code();
 				では、社会をより良い方向へ導くことを目指し、様々なプロダクトを開発しています。ut.code();
@@ -116,7 +116,7 @@
 		<div class="space-y-8">
 			<!-- Projects -->
 			<div
-				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">プロジェクト</h3>
 				<div class="space-y-4 text-zinc-600">
@@ -140,7 +140,7 @@
 
 			<!-- Hackathon -->
 			<div
-				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">ハッカソン</h3>
 				<div class="space-y-4 text-zinc-600">
@@ -152,7 +152,7 @@
 
 			<!-- Solo Development -->
 			<div
-				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">個人開発</h3>
 				<div class="space-y-4 text-zinc-600">
@@ -179,7 +179,7 @@
 			</div>
 		</div>
 
-		<div class="mb-12 rounded-2xl border border-zinc-200 bg-white p-8">
+		<div class="mb-12 rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8">
 			<p class="leading-relaxed text-zinc-600">
 				ソフトウェア開発のために必要な技術は増加の一途をたどっており、ひとつのソフトウェアのために投資されるエネルギーも拡大し続けています。現代の開発者にとって、多くの関係者と密にコミュニケーションをとり、互いの足りない部分を補い合うことは、大切な技術のひとつです。
 			</p>
@@ -188,7 +188,7 @@
 		<div class="space-y-8">
 			<!-- Work Session -->
 			<div
-				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">作業会</h3>
 				<div class="space-y-4 text-zinc-600">
@@ -205,7 +205,7 @@
 
 			<!-- Festival -->
 			<div
-				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">五月祭・駒場祭</h3>
 				<div class="space-y-4 text-zinc-600">
@@ -222,7 +222,7 @@
 
 			<!-- Camp -->
 			<div
-				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">合宿</h3>
 				<div class="space-y-4 text-zinc-600">

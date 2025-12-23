@@ -70,7 +70,7 @@
 			{#each projects as project (project.id)}
 				<a
 					href="/projects/{project.slug}"
-					class="group rounded-2xl border border-zinc-200 bg-white p-6 transition-all hover:border-[#00D372] hover:shadow-md"
+					class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:border-[#00D372] hover:shadow-md"
 				>
 					{#if project.coverUrl}
 						<img

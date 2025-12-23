@@ -47,7 +47,7 @@
 			<Building2 class="h-5 w-5 text-[#00D372]" />
 			協賛による支援
 		</h2>
-		<div class="rounded-2xl border border-zinc-200 bg-white p-8">
+		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8">
 			<p class="mb-4 leading-relaxed text-zinc-700">
 				ut.code();は、ご協賛いただいた企業様のロゴをウェブサイトに掲載しております。
 			</p>
@@ -77,7 +77,7 @@
 			<Banknote class="h-5 w-5 text-[#00D372]" />
 			ご寄付による支援
 		</h2>
-		<div class="rounded-2xl border border-zinc-200 bg-white p-8">
+		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8">
 			<p class="mb-6 leading-relaxed text-zinc-700">
 				ご寄付いただける方は、以下の口座にお振込みください。
 			</p>
@@ -110,7 +110,7 @@
 			<Laptop class="h-5 w-5 text-[#00D372]" />
 			使用しなくなったノートパソコンの譲渡
 		</h2>
-		<div class="rounded-2xl border border-zinc-200 bg-white p-8">
+		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8">
 			<div class="mb-6 space-y-3 leading-relaxed text-zinc-700">
 				<p>
 					ut.code();
@@ -137,7 +137,7 @@
 	<!-- Supporters -->
 	<section class="mb-12">
 		<h2 class="mb-6 text-xl font-bold">ご支援いただいた皆様</h2>
-		<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<ul class="space-y-2">
 				<li class="flex items-center gap-2 text-sm text-zinc-700">
 					<span class="font-medium text-zinc-500">2024/3/11</span>
@@ -150,7 +150,7 @@
 	<!-- Contact -->
 	<section class="mb-12">
 		<h2 class="mb-6 text-xl font-bold">お問い合わせ</h2>
-		<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<p class="mb-4 text-zinc-700">
 				ご寄付・ご協賛に関するお問い合わせは、以下の SNS からお気軽にどうぞ。
 			</p>

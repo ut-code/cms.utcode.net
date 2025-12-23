@@ -105,7 +105,7 @@
 	<!-- FAQ Items -->
 	<div class="space-y-3">
 		{#each faqs as faq, i (i)}
-			<div class="collapse-plus collapse rounded-2xl border border-zinc-200 bg-white">
+			<div class="collapse-plus collapse rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md">
 				<input type="radio" name="faq-accordion" />
 				<div class="collapse-title text-lg font-semibold">
 					{faq.question}
@@ -120,7 +120,7 @@
 	</div>
 
 	<!-- CTA -->
-	<div class="mt-12 rounded-2xl border border-zinc-200 bg-white p-8 text-center">
+	<div class="mt-12 rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 text-center">
 		<h2 class="mb-4 text-xl font-bold">他にご質問はありますか?</h2>
 		<p class="mb-6 text-zinc-500">お気軽にお問い合わせください。メンバー一同、お待ちしています。</p>
 		<div class="flex flex-wrap justify-center gap-4">

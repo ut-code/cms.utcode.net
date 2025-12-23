@@ -33,7 +33,7 @@
 				{#each articles as article (article.id)}
 					<a
 						href="/articles/{article.slug}"
-						class="group rounded-2xl border border-zinc-200 bg-white p-6 transition-all hover:border-[#00D372] hover:shadow-md"
+						class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:border-[#00D372] hover:shadow-md"
 					>
 						{#if article.coverUrl}
 							<img

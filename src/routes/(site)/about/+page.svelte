@@ -52,7 +52,7 @@
 			<Building2 class="h-5 w-5 text-[#00D372]" />
 			基本情報
 		</h2>
-		<div class="grid gap-4 rounded-2xl border border-zinc-200 bg-white p-6">
+		<div class="grid gap-4 rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<div class="flex items-start gap-4">
 				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#00D372]/10">
 					<Code class="h-5 w-5 text-[#00D372]" />
@@ -107,21 +107,21 @@
 			<Rocket class="h-5 w-5 text-[#00D372]" />
 			活動内容
 		</h2>
-		<div class="mb-4 rounded-2xl border border-zinc-200 bg-white p-6">
+		<div class="mb-4 rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<p class="leading-relaxed text-zinc-700">
 				ut.code(); には「学習・教育」「交流」「開発」の三軸を主にして活動しています。
 			</p>
 		</div>
 		<div class="grid gap-4 sm:grid-cols-3">
-			<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+			<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 				<h3 class="mb-2 font-semibold">学習・教育</h3>
 				<p class="text-sm text-zinc-500">ut.code(); Learn、全ゼミ・自主ゼミ</p>
 			</div>
-			<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+			<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 				<h3 class="mb-2 font-semibold">交流</h3>
 				<p class="text-sm text-zinc-500">五月祭・駒場祭、合宿</p>
 			</div>
-			<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+			<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 				<h3 class="mb-2 font-semibold">開発</h3>
 				<p class="text-sm text-zinc-500">プロジェクト、ハッカソン</p>
 			</div>
@@ -134,7 +134,7 @@
 			<MapPin class="h-5 w-5 text-[#00D372]" />
 			活動場所
 		</h2>
-		<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<ul class="space-y-3">
 				<li class="flex items-start gap-3">
 					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
@@ -161,7 +161,7 @@
 		<div class="mb-4 rounded-2xl border border-[#1DA1F2]/20 bg-[#1DA1F2]/5 p-4">
 			<p class="text-sm text-zinc-700">具体的な使用技術はプロジェクトによって異なります。</p>
 		</div>
-		<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<ul class="space-y-3">
 				<li class="flex items-start gap-3">
 					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
@@ -205,21 +205,21 @@
 	<section class="mb-12">
 		<h2 class="mb-6 text-xl font-bold">FAQ / よくある質問</h2>
 		<div class="space-y-4">
-			<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+			<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 				<h3 class="mb-2 font-semibold">Q: 活動頻度はどのくらいですか？</h3>
 				<p class="text-sm leading-relaxed text-zinc-700">
 					A:
 					プロジェクトの参加数や各プロジェクトによって異なりますが、一般的には毎週夜のミーティングと月1~2回の作業会になります。
 				</p>
 			</div>
-			<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+			<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 				<h3 class="mb-2 font-semibold">Q: 初心者でも大丈夫ですか？</h3>
 				<p class="text-sm leading-relaxed text-zinc-700">
 					A: 全く問題ありません！ ut.code();
 					は全くの初心者がフルスタックのアプリケーションを作成できるようになる教材を公開しており、その教材を用いた勉強会や講習会も実施しています！
 				</p>
 			</div>
-			<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+			<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 				<h3 class="mb-2 font-semibold">Q: 東京大学ではないです・一年生ではありません・文系です</h3>
 				<p class="text-sm leading-relaxed text-zinc-700">
 					A: 全く問題ありません！ ut.code(); は大学名・学年・文理による制限は設けていません。
@@ -231,7 +231,7 @@
 	<!-- Video -->
 	<section class="mb-12">
 		<h2 class="mb-6 text-xl font-bold">紹介動画</h2>
-		<div class="overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+		<div class="overflow-hidden rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md">
 			<iframe
 				title="ut.code(); 紹介動画"
 				class="aspect-video w-full"
@@ -249,7 +249,7 @@
 			<Mail class="h-5 w-5 text-[#00D372]" />
 			お問い合わせ・SNS
 		</h2>
-		<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<div class="mb-4 space-y-3">
 				<div class="flex items-center gap-3">
 					<Github class="h-5 w-5 text-zinc-500" />
@@ -295,7 +295,7 @@
 			<Heart class="h-5 w-5 text-[#00D372]" />
 			ご寄付・ご協賛のお願い
 		</h2>
-		<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<p class="mb-4 leading-relaxed text-zinc-700">
 				ut.code();
 				では、活動を支援していただける方を募集しております。詳細につきましては、お問い合わせください。

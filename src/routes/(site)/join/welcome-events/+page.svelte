@@ -55,7 +55,7 @@
 			<ExternalLink class="h-5 w-5 text-[#00D372]" />
 			新歓配布資料
 		</h2>
-		<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<ul class="space-y-3">
 				<li>
 					<a
@@ -86,7 +86,7 @@
 		<div class="space-y-6">
 			<!-- Self-Study Sessions -->
 			<div
-				class="rounded-2xl border border-zinc-200 bg-white p-6 transition-shadow hover:shadow-lg"
+				class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-shadow hover:shadow-lg"
 			>
 				<div class="mb-3 flex items-start justify-between">
 					<h3 class="text-lg font-bold text-zinc-900">自主勉強会</h3>
@@ -118,7 +118,7 @@
 
 			<!-- Personal Hackathon -->
 			<div
-				class="rounded-2xl border border-zinc-200 bg-white p-6 transition-shadow hover:shadow-lg"
+				class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-shadow hover:shadow-lg"
 			>
 				<div class="mb-3 flex items-start justify-between">
 					<h3 class="text-lg font-bold text-zinc-900">新歓個人ハッカソン</h3>
@@ -148,7 +148,7 @@
 
 			<!-- Project Kickoff -->
 			<div
-				class="rounded-2xl border border-zinc-200 bg-white p-6 transition-shadow hover:shadow-lg"
+				class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-shadow hover:shadow-lg"
 			>
 				<div class="mb-3 flex items-start justify-between">
 					<h3 class="text-lg font-bold text-zinc-900">プロジェクト発足会</h3>
@@ -207,7 +207,7 @@
 					<div>
 						<h4 class="mb-4 text-center text-sm font-semibold text-zinc-500">説明会系イベント</h4>
 						<div class="space-y-4">
-							<div class="rounded-lg border border-zinc-200 bg-white p-4">
+							<div class="rounded-lg border border-zinc-200/50 bg-white/80 backdrop-blur-md p-4">
 								<h5 class="mb-2 font-semibold text-zinc-700">オンライン新歓説明会</h5>
 								<div class="space-y-1 text-sm text-zinc-600">
 									<div>日時: 3/30 (日) 20:00~</div>
@@ -215,7 +215,7 @@
 								</div>
 							</div>
 
-							<div class="rounded-lg border border-zinc-200 bg-white p-4">
+							<div class="rounded-lg border border-zinc-200/50 bg-white/80 backdrop-blur-md p-4">
 								<h5 class="mb-2 font-semibold text-zinc-700">サーオリ</h5>
 								<div class="space-y-1 text-sm text-zinc-600">
 									<div>日時: 4/3(木), 4/4(金) 全日</div>
@@ -229,7 +229,7 @@
 					<div>
 						<h4 class="mb-4 text-center text-sm font-semibold text-zinc-500">学習系イベント</h4>
 						<div class="space-y-4">
-							<div class="rounded-lg border border-zinc-200 bg-white p-4">
+							<div class="rounded-lg border border-zinc-200/50 bg-white/80 backdrop-blur-md p-4">
 								<h5 class="mb-2 font-semibold text-zinc-700">新歓講習会</h5>
 								<div class="space-y-1 text-sm text-zinc-600">
 									<div>日時: 4/6 (日) 14:00 ~ 17:30、4/12 (土) 14:00 ~ 17:30</div>
@@ -257,7 +257,7 @@
 								</div>
 							</div>
 
-							<div class="rounded-lg border border-zinc-200 bg-white p-4">
+							<div class="rounded-lg border border-zinc-200/50 bg-white/80 backdrop-blur-md p-4">
 								<h5 class="mb-2 font-semibold text-zinc-700">エンジニア系サークル合同新歓</h5>
 								<div class="space-y-1 text-sm text-zinc-600">
 									<div>日時: 4/9 (水) 19:00 ~ 21:00、4/15 (火) 19:00 ~ 21:00</div>
@@ -284,7 +284,7 @@
 							交流・開発系イベント
 						</h4>
 						<div class="space-y-4">
-							<div class="rounded-lg border border-zinc-200 bg-white p-4">
+							<div class="rounded-lg border border-zinc-200/50 bg-white/80 backdrop-blur-md p-4">
 								<h5 class="mb-2 font-semibold text-zinc-700">新歓合宿</h5>
 								<div class="space-y-1 text-sm text-zinc-600">
 									<div>日程: 5/3(土) ~ 5/5(月)</div>
@@ -314,7 +314,7 @@
 			<Users class="h-5 w-5 text-[#00D372]" />
 			参加について
 		</h2>
-		<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<ul class="space-y-3">
 				<li class="flex items-start gap-3">
 					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>

@@ -90,7 +90,7 @@
 					{#each relatedArticles as relatedArticle (relatedArticle.id)}
 						<a
 							href="/articles/{relatedArticle.slug}"
-							class="group rounded-xl border border-zinc-200 bg-white p-4 transition-all hover:border-[#00D372] hover:shadow-md"
+							class="group rounded-xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-4 transition-all hover:border-[#00D372] hover:shadow-md"
 						>
 							{#if relatedArticle.coverUrl}
 								<img

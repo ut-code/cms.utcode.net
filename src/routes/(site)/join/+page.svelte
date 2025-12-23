@@ -41,7 +41,7 @@
 			<Users class="h-5 w-5 text-[#00D372]" />
 			入部要件
 		</h2>
-		<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<ul class="space-y-3">
 				<li class="flex items-start gap-3">
 					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
@@ -69,7 +69,7 @@
 			<MessageCircle class="h-5 w-5 text-[#00D372]" />
 			入部方法
 		</h2>
-		<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<div class="space-y-4">
 				<div class="flex items-start gap-4">
 					<div
@@ -109,25 +109,25 @@
 			活動について
 		</h2>
 		<div class="grid gap-4 sm:grid-cols-2">
-			<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+			<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 				<h3 class="mb-2 font-semibold">学習会</h3>
 				<p class="text-sm text-zinc-500">
 					プログラミング未経験者から経験者まで、共に学び教え合う学習会を開催しています。
 				</p>
 			</div>
-			<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+			<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 				<h3 class="mb-2 font-semibold">プロジェクト開発</h3>
 				<p class="text-sm text-zinc-500">
 					大学や社会をより良くするソフトウェアを一緒に開発しています。
 				</p>
 			</div>
-			<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+			<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 				<h3 class="mb-2 font-semibold">交流イベント</h3>
 				<p class="text-sm text-zinc-500">
 					集中開発合宿やブレインストーミング大会など、様々なイベントを実施しています。
 				</p>
 			</div>
-			<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+			<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 				<h3 class="mb-2 font-semibold">オンライン活動</h3>
 				<p class="text-sm text-zinc-500">Discord を中心に、オンラインでも活発に活動しています。</p>
 			</div>
@@ -137,7 +137,7 @@
 	<!-- Contact -->
 	<section class="mb-12">
 		<h2 class="mb-6 text-xl font-bold">お問い合わせ</h2>
-		<div class="rounded-2xl border border-zinc-200 bg-white p-6">
+		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<p class="mb-4 text-zinc-700">ご質問やお問い合わせは、以下の SNS からお気軽にどうぞ。</p>
 			<div class="flex flex-wrap gap-4">
 				<a
