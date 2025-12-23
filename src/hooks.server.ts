@@ -2,8 +2,11 @@ import type { Handle } from "@sveltejs/kit";
 import { redirect } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 import { svelteKitHandler } from "better-auth/svelte-kit";
+import { like } from "drizzle-orm";
 import { building } from "$app/environment";
 import { auth } from "$lib/server/drivers/auth";
+import { db } from "$lib/server/drivers/db";
+import { article } from "$lib/shared/models/schema";
 
 const handleAuth: Handle = async ({ event, resolve }) => {
   return await svelteKitHandler({ event, resolve, auth, building });
@@ -12,12 +15,33 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 const handleRedirect: Handle = async ({ event, resolve }) => {
   const path = event.url.pathname;
 
-  // Redirect old article URL structure: /articles/YYYY/MM-DD_slug -> /articles/MM-DD_slug
-  const oldArticlePattern = /^\/articles\/(\d{4})\/(.+)$/;
-  const match = path.match(oldArticlePattern);
-  if (match) {
-    const slug = match[2];
-    redirect(301, `/articles/${slug}`);
+  // Format 2: /articles/YYYY/MM-DD_slug -> /articles/YYYY-MM-DD-slug
+  const format2Pattern = /^\/articles\/(\d{4})\/(\d{2}-\d{2})_(.+?)\/?$/;
+  const format2Match = path.match(format2Pattern);
+  if (format2Match) {
+    const [, year, monthDay, slug] = format2Match;
+    redirect(301, `/articles/${year}-${monthDay}-${slug}`);
+  }
+
+  // Format 1: /articles/{old-slug} -> DB lookup -> /articles/{new-slug}
+  // Old slugs don't have YYYY-MM-DD prefix, new slugs do
+  const format1Pattern = /^\/articles\/([^/]+?)\/?$/;
+  const format1Match = path.match(format1Pattern);
+  if (format1Match?.[1]) {
+    const oldSlug = format1Match[1];
+    // Skip if already in new format (YYYY-MM-DD-slug)
+    if (/^\d{4}-\d{2}-\d{2}-/.test(oldSlug)) {
+      return resolve(event);
+    }
+    // DB lookup: find article where slug ends with the old slug pattern
+    const found = await db
+      .select({ slug: article.slug })
+      .from(article)
+      .where(like(article.slug, `%-${oldSlug}`))
+      .limit(1);
+    if (found[0]) {
+      redirect(301, `/articles/${found[0].slug}`);
+    }
   }
 
   return resolve(event);
