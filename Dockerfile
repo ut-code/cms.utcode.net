@@ -35,13 +35,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf age age-v1.2.0-linux-amd64.tar.gz \
     && apt-get remove -y curl && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
+# Copy built application
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/package.json ./
 COPY secrets.prod.yaml ./secrets.yaml
 
+# Copy drizzle migration files and config
+COPY --from=builder /app/drizzle ./drizzle
+COPY --from=builder /app/drizzle.config.ts ./
+COPY --from=builder /app/src/lib/env/env.server.ts ./src/lib/env/env.server.ts
+COPY --from=builder /app/src/lib/shared/models/schema.ts ./src/lib/shared/models/schema.ts
+COPY --from=builder /app/bun.lock ./
+RUN bun install --frozen-lockfile
 ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE 3000
 
 # SOPS_AGE_KEY must be set at runtime
-CMD ["sops", "exec-env", "secrets.yaml", "bun build/index.js"]
+CMD ["sops", "exec-env", "secrets.yaml", "bun drizzle-kit migrate && exec bun build/index.js"]
