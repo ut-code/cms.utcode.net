@@ -4,8 +4,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "bun --env-file=.env vite dev",
-    "build": "bun --env-file=.env vite build",
+    "dev": "sops exec-env secrets.dev.yaml 'vite dev'",
+    "build": "sops exec-env secrets.prod.yaml 'vite build'",
     "preview": "vite preview",
     "prepare": "svelte-kit sync",
     "test-check": "bun test",

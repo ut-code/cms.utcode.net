@@ -1,5 +1,7 @@
 {pkgs, ...}: {
-  packages = [pkgs.postgresql];
+  packages = [pkgs.postgresql pkgs.sops pkgs.age];
+
+  env.SOPS_AGE_KEY_FILE = ".sops-age-key.txt";
 
   languages.javascript = {
     enable = true;
@@ -12,7 +14,7 @@
 
   dotenv.disableHint = true;
   processes.dev = {
-    exec = "bun dev";
+    exec = "sops exec-env secrets.dev.yaml 'vite dev'";
     process-compose.availability = {
       restart = "on_failure";
       backoff_seconds = 10;

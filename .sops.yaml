@@ -1,0 +1,8 @@
+keys:
+  - &project age1gsn5pg5pkk89zsukc94gqwlu7zyrep0prm7pwc787tcegapgmvgqzeq64c
+
+creation_rules:
+  - path_regex: secrets\.(dev|prod)\.yaml$
+    key_groups:
+      - age:
+          - *project

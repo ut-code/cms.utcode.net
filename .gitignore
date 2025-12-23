@@ -15,6 +15,7 @@ vite.config.ts.timestamp-*
 .env.*
 !.env.sample
 !.env.test
+.sops-age-key.txt
 .DS_Store
 Thumbs.db
 *.db
