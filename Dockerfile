@@ -44,4 +44,4 @@ ENV PORT=3000
 EXPOSE 3000
 
 # SOPS_AGE_KEY must be set at runtime
-CMD ["sops", "exec-env", "secrets.yaml", "bun drizzle-kit migrate && exec bun build/index.js"]
+CMD ["sh", "-c", "sops exec-env secrets.yaml 'bun drizzle-kit migrate && exec bun build/index.js'"]
