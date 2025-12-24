@@ -22,6 +22,7 @@ RUN bun run prepare
 
 # Build with sops secrets
 ARG SOPS_AGE_KEY
+ENV SOPS_AGE_KEY=${SOPS_AGE_KEY}
 RUN sops exec-env secrets.prod.yaml 'bun run build'
 
 FROM base AS executor
