@@ -27,7 +27,7 @@
 <section class="border-b border-zinc-200 bg-zinc-50/50 py-16">
 	<div class="mx-auto max-w-6xl px-6">
 		<div
-			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-[#00D372] uppercase"
+			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-primary uppercase"
 		>
 			About Us
 		</div>
@@ -38,7 +38,7 @@
 
 <div class="mx-auto max-w-4xl px-6 py-8 sm:py-12">
 	<!-- Organization Overview -->
-	<div class="mb-8 rounded-2xl border border-[#00D372]/20 bg-[#00D372]/5 p-6 sm:mb-12 sm:p-8">
+	<div class="mb-8 rounded-2xl border border-primary/20 bg-primary/5 p-6 sm:mb-12 sm:p-8">
 		<h2 class="mb-3 text-xl font-bold sm:mb-4 sm:text-2xl">ut.code(); について</h2>
 		<p class="leading-relaxed text-zinc-700">
 			ut.code();
@@ -49,13 +49,13 @@
 	<!-- Basic Information -->
 	<section class="mb-8 sm:mb-12">
 		<h2 class="mb-4 flex items-center gap-2 text-lg font-bold sm:mb-6 sm:text-xl">
-			<Building2 class="h-5 w-5 text-[#00D372]" />
+			<Building2 class="h-5 w-5 text-primary" />
 			基本情報
 		</h2>
 		<div class="grid gap-4 rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<div class="flex items-start gap-4">
-				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#00D372]/10">
-					<Code class="h-5 w-5 text-[#00D372]" />
+				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+					<Code class="h-5 w-5 text-primary" />
 				</div>
 				<div class="flex-1">
 					<div class="text-sm text-zinc-500">団体名</div>
@@ -63,8 +63,8 @@
 				</div>
 			</div>
 			<div class="flex items-start gap-4">
-				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#00D372]/10">
-					<Users class="h-5 w-5 text-[#00D372]" />
+				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+					<Users class="h-5 w-5 text-primary" />
 				</div>
 				<div class="flex-1">
 					<div class="text-sm text-zinc-500">構成人数</div>
@@ -72,8 +72,8 @@
 				</div>
 			</div>
 			<div class="flex items-start gap-4">
-				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#00D372]/10">
-					<Calendar class="h-5 w-5 text-[#00D372]" />
+				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+					<Calendar class="h-5 w-5 text-primary" />
 				</div>
 				<div class="flex-1">
 					<div class="text-sm text-zinc-500">発足</div>
@@ -81,8 +81,8 @@
 				</div>
 			</div>
 			<div class="flex items-start gap-4">
-				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#00D372]/10">
-					<MapPin class="h-5 w-5 text-[#00D372]" />
+				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+					<MapPin class="h-5 w-5 text-primary" />
 				</div>
 				<div class="flex-1">
 					<div class="text-sm text-zinc-500">部室</div>
@@ -90,8 +90,8 @@
 				</div>
 			</div>
 			<div class="flex items-start gap-4">
-				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#00D372]/10">
-					<GraduationCap class="h-5 w-5 text-[#00D372]" />
+				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+					<GraduationCap class="h-5 w-5 text-primary" />
 				</div>
 				<div class="flex-1">
 					<div class="text-sm text-zinc-500">所属</div>
@@ -104,7 +104,7 @@
 	<!-- Activities -->
 	<section class="mb-12">
 		<h2 class="mb-6 flex items-center gap-2 text-xl font-bold">
-			<Rocket class="h-5 w-5 text-[#00D372]" />
+			<Rocket class="h-5 w-5 text-primary" />
 			活動内容
 		</h2>
 		<div class="mb-4 rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
@@ -131,21 +131,21 @@
 	<!-- Location -->
 	<section class="mb-12">
 		<h2 class="mb-6 flex items-center gap-2 text-xl font-bold">
-			<MapPin class="h-5 w-5 text-[#00D372]" />
+			<MapPin class="h-5 w-5 text-primary" />
 			活動場所
 		</h2>
 		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<ul class="space-y-3">
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700">部室: 駒場学生会館 313B</span>
 				</li>
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700">本郷図書館 プロジェクトボックス</span>
 				</li>
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700">オンライン (Discord)</span>
 				</li>
 			</ul>
@@ -155,7 +155,7 @@
 	<!-- Tech Stack -->
 	<section class="mb-12">
 		<h2 class="mb-6 flex items-center gap-2 text-xl font-bold">
-			<Code class="h-5 w-5 text-[#00D372]" />
+			<Code class="h-5 w-5 text-primary" />
 			主な使用技術・スタック
 		</h2>
 		<div class="mb-4 rounded-2xl border border-[#1DA1F2]/20 bg-[#1DA1F2]/5 p-4">
@@ -164,37 +164,37 @@
 		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<ul class="space-y-3">
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700"><strong>言語:</strong> TypeScript など</span>
 				</li>
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700"
 						><strong>フレームワーク:</strong> React・Next.js, Svelte(Kit) など</span
 					>
 				</li>
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700"><strong>UI:</strong> MUI, Tailwind, DaisyUI など</span>
 				</li>
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700"
 						><strong>バックエンド:</strong> Hono, Express, Prisma, Drizzle など</span
 					>
 				</li>
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700"><strong>データベース:</strong> Supabase, Neon など</span>
 				</li>
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700"
 						><strong>インフラ:</strong> Cloudflare, Fly.io, Render など</span
 					>
 				</li>
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700"><strong>情報:</strong> Notion, Discord, GitHub など</span>
 				</li>
 			</ul>
@@ -246,7 +246,7 @@
 	<!-- Contact -->
 	<section class="mb-12">
 		<h2 class="mb-6 flex items-center gap-2 text-xl font-bold">
-			<Mail class="h-5 w-5 text-[#00D372]" />
+			<Mail class="h-5 w-5 text-primary" />
 			お問い合わせ・SNS
 		</h2>
 		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
@@ -258,7 +258,7 @@
 						href="https://github.com/ut-code"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="text-sm font-medium text-[#00D372] hover:underline"
+						class="text-sm font-medium text-primary hover:underline"
 					>
 						ut-code
 					</a>
@@ -270,7 +270,7 @@
 						href="https://x.com/utokyo_code"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="text-sm font-medium text-[#00D372] hover:underline"
+						class="text-sm font-medium text-primary hover:underline"
 					>
 						utokyo_code
 					</a>
@@ -280,7 +280,7 @@
 					<span class="text-sm text-zinc-500">Email:</span>
 					<a
 						href="mailto:contact@utcode.net"
-						class="text-sm font-medium text-[#00D372] hover:underline"
+						class="text-sm font-medium text-primary hover:underline"
 					>
 						contact@utcode.net
 					</a>
@@ -292,7 +292,7 @@
 	<!-- Donation CTA -->
 	<section class="mb-12">
 		<h2 class="mb-6 flex items-center gap-2 text-xl font-bold">
-			<Heart class="h-5 w-5 text-[#00D372]" />
+			<Heart class="h-5 w-5 text-primary" />
 			ご寄付・ご協賛のお願い
 		</h2>
 		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">

@@ -22,7 +22,7 @@
 	<div class="mx-auto max-w-6xl px-6">
 		<div class="mb-12 text-center">
 			<div
-				class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-[#00D372] uppercase"
+				class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-primary uppercase"
 			>
 				Sponsors
 			</div>
@@ -61,7 +61,7 @@
 						{/if}
 					{/each}
 				{:else}
-					<div class="text-center text-zinc-400">
+					<div class="text-center text-zinc-500">
 						<p class="mb-4 text-lg">協賛企業を募集中です</p>
 						<a
 							href="/donation"

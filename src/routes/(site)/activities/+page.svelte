@@ -11,7 +11,7 @@
 <section class="border-b border-zinc-200 bg-zinc-50/50 py-16">
 	<div class="mx-auto max-w-6xl px-6">
 		<div
-			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-[#00D372] uppercase"
+			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-primary uppercase"
 		>
 			Activities
 		</div>
@@ -27,7 +27,7 @@
 <section class="border-b border-zinc-200 py-24" id="learn">
 	<div class="mx-auto max-w-6xl px-6">
 		<div class="mb-12 flex items-center gap-4">
-			<div class="flex h-14 w-14 items-center justify-center rounded-xl bg-[#00D372] text-zinc-900">
+			<div class="flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-zinc-900">
 				<BookOpen class="h-7 w-7" />
 			</div>
 			<div>
@@ -46,7 +46,7 @@
 		<div class="space-y-8">
 			<!-- ut.code(); Learn -->
 			<div
-				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">ut.code(); Learn</h3>
 				<div class="space-y-4 text-zinc-600">
@@ -62,7 +62,7 @@
 
 			<!-- Document Reading -->
 			<div
-				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">ドキュメントを読む会</h3>
 				<div class="space-y-4 text-zinc-600">
@@ -78,7 +78,7 @@
 
 			<!-- Seminar -->
 			<div
-				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">全ゼミ / 自主ゼミ「モダン Web システム開発入門」</h3>
 				<div class="space-y-4 text-zinc-600">
@@ -96,7 +96,7 @@
 <section class="border-b border-zinc-200 bg-zinc-50/50 py-24" id="develop">
 	<div class="mx-auto max-w-6xl px-6">
 		<div class="mb-12 flex items-center gap-4">
-			<div class="flex h-14 w-14 items-center justify-center rounded-xl bg-[#00D372] text-zinc-900">
+			<div class="flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-zinc-900">
 				<Box class="h-7 w-7" />
 			</div>
 			<div>
@@ -116,7 +116,7 @@
 		<div class="space-y-8">
 			<!-- Projects -->
 			<div
-				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">プロジェクト</h3>
 				<div class="space-y-4 text-zinc-600">
@@ -130,7 +130,7 @@
 					<div class="pt-4">
 						<a
 							href="/projects"
-							class="inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#00D372] hover:text-zinc-900"
+							class="inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary hover:text-zinc-900"
 						>
 							すべてのプロジェクト
 						</a>
@@ -140,7 +140,7 @@
 
 			<!-- Hackathon -->
 			<div
-				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">ハッカソン</h3>
 				<div class="space-y-4 text-zinc-600">
@@ -152,7 +152,7 @@
 
 			<!-- Solo Development -->
 			<div
-				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">個人開発</h3>
 				<div class="space-y-4 text-zinc-600">
@@ -170,7 +170,7 @@
 <section class="py-24" id="share">
 	<div class="mx-auto max-w-6xl px-6">
 		<div class="mb-12 flex items-center gap-4">
-			<div class="flex h-14 w-14 items-center justify-center rounded-xl bg-[#00D372] text-zinc-900">
+			<div class="flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-zinc-900">
 				<MessageSquare class="h-7 w-7" />
 			</div>
 			<div>
@@ -188,7 +188,7 @@
 		<div class="space-y-8">
 			<!-- Work Session -->
 			<div
-				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">作業会</h3>
 				<div class="space-y-4 text-zinc-600">
@@ -205,7 +205,7 @@
 
 			<!-- Festival -->
 			<div
-				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">五月祭・駒場祭</h3>
 				<div class="space-y-4 text-zinc-600">
@@ -222,7 +222,7 @@
 
 			<!-- Camp -->
 			<div
-				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:border-[#00D372]/50 hover:shadow-lg hover:shadow-[#00D372]/5"
+				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
 			>
 				<h3 class="mb-4 text-xl font-semibold">合宿</h3>
 				<div class="space-y-4 text-zinc-600">

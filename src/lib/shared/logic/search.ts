@@ -48,29 +48,26 @@ export type AdminSearchResult =
       imageUrl: string | null;
     };
 
-export function filterSearchResults(results: SearchResult[], query: string): SearchResult[] {
-  if (!query.trim()) {
-    return results;
+export function getSearchResultLabel(
+  type: SearchResult["type"] | AdminSearchResult["type"],
+): string {
+  switch (type) {
+    case "article":
+      return "Article";
+    case "project":
+      return "Project";
+    case "member":
+      return "Member";
   }
+}
 
-  const lowerQuery = query.toLowerCase();
-
-  return results.filter((result) => {
-    if (result.type === "article") {
-      return (
-        result.title.toLowerCase().includes(lowerQuery) ||
-        result.excerpt?.toLowerCase().includes(lowerQuery)
-      );
-    } else if (result.type === "project") {
-      return (
-        result.name.toLowerCase().includes(lowerQuery) ||
-        result.description?.toLowerCase().includes(lowerQuery)
-      );
-    } else {
-      return (
-        result.name.toLowerCase().includes(lowerQuery) ||
-        result.bio?.toLowerCase().includes(lowerQuery)
-      );
-    }
-  });
+export function getSearchResultName(result: SearchResult | AdminSearchResult): string {
+  switch (result.type) {
+    case "article":
+      return result.title;
+    case "project":
+      return result.name;
+    case "member":
+      return result.name;
+  }
 }

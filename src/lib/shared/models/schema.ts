@@ -94,6 +94,21 @@ export const verification = pgTable(
 // CMS Tables
 // ============================================================================
 
+export const userPreference = pgTable("user_preference", {
+  userId: text("user_id")
+    .primaryKey()
+    .references(() => user.id, { onDelete: "cascade" }),
+  defaultAuthorId: text("default_author_id").references(() => member.id, {
+    onDelete: "set null",
+  }),
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
+    .default(sql`now()`)
+    .notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true })
+    .default(sql`now()`)
+    .notNull(),
+});
+
 export const member = pgTable(
   "member",
   {
@@ -108,6 +123,7 @@ export const member = pgTable(
     bio: text("bio"),
     imageUrl: text("image_url"),
     pageContent: text("page_content"),
+    viewCount: integer("view_count").notNull().default(0),
     createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
       .default(sql`now()`)
       .notNull(),
@@ -142,7 +158,31 @@ export const article = pgTable(
       .default(sql`now()`)
       .notNull(),
   },
-  (table) => [index("article_authorId_idx").on(table.authorId)],
+  (table) => [
+    index("article_authorId_idx").on(table.authorId),
+    index("article_published_publishedAt_idx").on(table.published, table.publishedAt),
+  ],
+);
+
+export const articleSlugRedirect = pgTable(
+  "article_slug_redirect",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    oldSlug: text("old_slug").notNull(),
+    newSlug: text("new_slug").notNull(),
+    articleId: text("article_id")
+      .notNull()
+      .references(() => article.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
+      .default(sql`now()`)
+      .notNull(),
+  },
+  (table) => [
+    index("article_slug_redirect_oldSlug_idx").on(table.oldSlug),
+    index("article_slug_redirect_articleId_idx").on(table.articleId),
+  ],
 );
 
 // Project categories - keys defined first for type-safe iteration
@@ -186,6 +226,7 @@ export const project = pgTable("project", {
   repoUrl: text("repo_url"),
   demoUrl: text("demo_url"),
   category: text("category").$type<ProjectCategory>().notNull().default("active"),
+  viewCount: integer("view_count").notNull().default(0),
   createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
     .default(sql`now()`)
     .notNull(),
@@ -214,8 +255,20 @@ export const projectMember = pgTable(
 
 export const userRelations = relations(user, ({ one, many }) => ({
   member: one(member, { fields: [user.id], references: [member.userId] }),
+  preference: one(userPreference, {
+    fields: [user.id],
+    references: [userPreference.userId],
+  }),
   sessions: many(session),
   accounts: many(account),
+}));
+
+export const userPreferenceRelations = relations(userPreference, ({ one }) => ({
+  user: one(user, { fields: [userPreference.userId], references: [user.id] }),
+  defaultAuthor: one(member, {
+    fields: [userPreference.defaultAuthorId],
+    references: [member.id],
+  }),
 }));
 
 export const memberRelations = relations(member, ({ one, many }) => ({
@@ -224,8 +277,16 @@ export const memberRelations = relations(member, ({ one, many }) => ({
   projectMembers: many(projectMember),
 }));
 
-export const articleRelations = relations(article, ({ one }) => ({
+export const articleRelations = relations(article, ({ one, many }) => ({
   author: one(member, { fields: [article.authorId], references: [member.id] }),
+  slugRedirects: many(articleSlugRedirect),
+}));
+
+export const articleSlugRedirectRelations = relations(articleSlugRedirect, ({ one }) => ({
+  article: one(article, {
+    fields: [articleSlugRedirect.articleId],
+    references: [article.id],
+  }),
 }));
 
 export const projectRelations = relations(project, ({ many }) => ({

@@ -97,3 +97,5 @@ run `bun tidy` after you finish your work. i.e. before commit
 
 - Never use `as` or `any`. Let TypeScript infer types properly.
 - Never just "fire and forget". it crashes the entire server. instead, catch `.catch(console.error)` then forget, if you want to dispatch the job.
+
+For detailed coding standards (import order, async patterns, naming conventions), see `docs/knowledges/coding-standards.md`.

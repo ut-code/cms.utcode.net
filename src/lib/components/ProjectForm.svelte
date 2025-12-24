@@ -1,29 +1,13 @@
 <script lang="ts">
+	import { createFormValidator } from "$lib/shared/logic/form-validation";
 	import { generateSlug, validateSlug } from "$lib/shared/logic/slugs";
-	import type { ProjectCategory } from "$lib/shared/models/schema";
+	import type { Member, ProjectData } from "$lib/shared/models/types";
+	import { triggerSubmit } from "$lib/utils/form";
 	import { onSaveShortcut } from "$lib/utils/keyboard";
 	import { snapshot } from "$lib/utils/snapshot.svelte";
 	import ProjectEditor from "./project-form/ProjectEditor.svelte";
 	import ProjectFormHeader from "./project-form/ProjectFormHeader.svelte";
 	import ProjectSettings from "./project-form/ProjectSettings.svelte";
-
-	type Member = {
-		id: string;
-		name: string;
-		imageUrl: string | null;
-	};
-
-	type ProjectData = {
-		slug: string;
-		name: string;
-		description: string;
-		content: string;
-		coverUrl: string;
-		repoUrl: string;
-		demoUrl: string;
-		category: ProjectCategory;
-		leadMemberId: string | null;
-	};
 
 	let {
 		initialData = {
@@ -65,22 +49,23 @@
 
 	async function handleSubmit(e: SubmitEvent) {
 		e.preventDefault();
-		errors = {};
 
-		if (!formData.name.trim()) {
-			errors.name = "Name is required";
-		}
-		if (!formData.slug.trim()) {
-			errors.slug = "URL path is required";
-		} else if (!validateSlug(formData.slug)) {
-			errors.slug = "Lowercase letters, numbers, and hyphens only";
-		}
+		const validator = createFormValidator<ProjectData>();
+		validator
+			.required("name", formData.name, "Name is required")
+			.required("slug", formData.slug, "URL path is required")
+			.validate("slug", formData.slug, (value) =>
+				validateSlug(value) ? null : "Lowercase letters, numbers, and hyphens only",
+			);
+
 		if (isNew && !formData.leadMemberId) {
-			errors.leadMemberId = "Lead member is required";
+			validator.validate("leadMemberId", "", () => "Lead member is required");
 			showSettings = true;
 		}
 
-		if (Object.keys(errors).length > 0) {
+		errors = validator.getErrors();
+
+		if (validator.hasErrors()) {
 			if (errors.slug || errors.leadMemberId) showSettings = true;
 			return;
 		}
@@ -92,13 +77,9 @@
 			isSubmitting = false;
 		}
 	}
-
-	function triggerSubmit() {
-		if (!isSubmitting) handleSubmit(new SubmitEvent("submit")).catch(console.error);
-	}
 </script>
 
-<svelte:window onkeydown={onSaveShortcut(triggerSubmit)} />
+<svelte:window onkeydown={onSaveShortcut(() => triggerSubmit(handleSubmit, isSubmitting))} />
 
 <form onsubmit={handleSubmit} class="flex h-full flex-col">
 	<ProjectFormHeader

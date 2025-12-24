@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { AlertCircle, Loader2, Upload, X } from "lucide-svelte";
+	import { AlertCircle, Loader2, RotateCw, Upload, X } from "lucide-svelte";
 	import { upload } from "$lib/data/private/storage.remote";
 	import {
 		type AllowedFolder,
 		isAcceptedImageType,
 		isAllowedFolder,
 	} from "$lib/shared/logic/image";
+	import { arrayBufferToBase64, compressImage } from "$lib/shared/logic/image-processing";
 
 	const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
@@ -27,72 +28,10 @@
 	let dragOver = $state(false);
 	let pasteFlash = $state(false);
 	let error = $state<string | null>(null);
+	let lastFailedFile = $state<File | null>(null);
 
 	// Show preview or final value
 	const displayUrl = $derived(previewUrl ?? value);
-
-	function arrayBufferToBase64(buffer: ArrayBuffer): string {
-		const bytes = new Uint8Array(buffer);
-		let binary = "";
-		for (const byte of bytes) {
-			binary += String.fromCharCode(byte);
-		}
-		return btoa(binary);
-	}
-
-	async function compressImage(file: File, maxSize = 1920, quality = 0.85): Promise<File> {
-		// Skip if not an image that can be compressed
-		if (!file.type.startsWith("image/") || file.type === "image/gif") {
-			return file;
-		}
-
-		return new Promise((resolve) => {
-			const img = new Image();
-			img.onload = () => {
-				// Calculate new dimensions
-				let { width, height } = img;
-				if (width > maxSize || height > maxSize) {
-					if (width > height) {
-						height = (height / width) * maxSize;
-						width = maxSize;
-					} else {
-						width = (width / height) * maxSize;
-						height = maxSize;
-					}
-				}
-
-				// Draw to canvas
-				const canvas = document.createElement("canvas");
-				canvas.width = width;
-				canvas.height = height;
-				const ctx = canvas.getContext("2d");
-				if (!ctx) {
-					resolve(file);
-					return;
-				}
-				ctx.drawImage(img, 0, 0, width, height);
-
-				// Convert to blob
-				canvas.toBlob(
-					(blob) => {
-						if (!blob) {
-							resolve(file);
-							return;
-						}
-						const compressed = new File([blob], file.name.replace(/\.[^.]+$/, ".jpg"), {
-							type: "image/jpeg",
-						});
-						// Use compressed only if smaller
-						resolve(compressed.size < file.size ? compressed : file);
-					},
-					"image/jpeg",
-					quality,
-				);
-			};
-			img.onerror = () => resolve(file);
-			img.src = URL.createObjectURL(file);
-		});
-	}
 
 	async function handleFile(file: File, fromPaste = false) {
 		error = null;
@@ -140,9 +79,11 @@
 				folder,
 			});
 			value = result.url;
+			lastFailedFile = null; // Clear on success
 		} catch {
 			error = "Upload failed. Please try again.";
 			previewUrl = null;
+			lastFailedFile = processedFile; // Store for retry
 		} finally {
 			isUploading = false;
 			// Clean up object URL after upload completes
@@ -198,6 +139,14 @@
 		value = "";
 		previewUrl = null;
 		error = null;
+		lastFailedFile = null;
+	}
+
+	function retryUpload() {
+		if (!lastFailedFile) return;
+		const file = lastFailedFile;
+		lastFailedFile = null;
+		handleFile(file).catch(console.error);
 	}
 </script>
 
@@ -210,7 +159,7 @@
 		<!-- Image preview/uploaded state -->
 		<div
 			class="relative max-w-xs overflow-hidden rounded-lg border transition-all duration-200
-        {isUploading ? 'border-[#00D372]' : 'border-zinc-200'}"
+        {isUploading ? 'border-primary' : 'border-zinc-200'}"
 		>
 			<img src={displayUrl} alt="" class="w-full object-cover" style="aspect-ratio: {aspect}" />
 
@@ -223,7 +172,7 @@
 					</div>
 					<!-- Progress bar -->
 					<div class="h-1 w-32 overflow-hidden rounded-full bg-white/30">
-						<div class="h-full animate-pulse rounded-full bg-[#00D372]" style="width: 60%"></div>
+						<div class="h-full animate-pulse rounded-full bg-primary" style="width: 60%"></div>
 					</div>
 				</div>
 			{:else}
@@ -232,7 +181,7 @@
 					class="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity hover:opacity-100"
 				>
 					<label
-						class="cursor-pointer rounded-lg bg-white px-3 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-100"
+						class="cursor-pointer rounded-lg bg-white px-3 py-2 text-sm font-medium text-zinc-900 hover:bg-primary/5"
 					>
 						Change
 						<input type="file" accept="image/*" class="hidden" oninput={handleInput} />
@@ -252,22 +201,22 @@
 		<label
 			class="relative flex max-w-xs cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-dashed transition-all duration-200
         {dragOver
-				? 'scale-[1.02] border-[#00D372] bg-[#00D372]/10'
+				? 'scale-[1.02] border-primary bg-primary/10'
 				: pasteFlash
-					? 'border-[#00D372] bg-[#00D372]/20'
-					: 'border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50'}"
+					? 'border-primary bg-primary/20'
+					: 'border-zinc-200 hover:border-primary/30 hover:bg-primary/5'}"
 			style="aspect-ratio: {aspect}"
 			ondrop={handleDrop}
 			ondragover={handleDragOver}
 			ondragleave={handleDragLeave}
 		>
 			{#if isUploading}
-				<Loader2 class="mb-2 h-8 w-8 animate-spin text-[#00D372]" />
+				<Loader2 class="mb-2 h-8 w-8 animate-spin text-primary" />
 				<span class="text-sm text-zinc-500">Uploading...</span>
 			{:else}
 				<Upload
 					class="mb-2 h-8 w-8 transition-transform duration-200
-            {dragOver ? 'scale-110 text-[#00D372]' : 'text-zinc-400'}"
+            {dragOver ? 'scale-110 text-primary' : 'text-zinc-400'}"
 				/>
 				<span class="text-sm text-zinc-600">
 					{#if dragOver}
@@ -278,7 +227,7 @@
 						Drop, click, or paste (Ctrl+V)
 					{/if}
 				</span>
-				<span class="mt-1 text-xs text-zinc-400">JPG, PNG, WebP, AVIF, HEIC up to 10MB</span>
+				<span class="mt-1 text-xs text-zinc-500">JPG, PNG, WebP, AVIF, HEIC up to 10MB</span>
 			{/if}
 			<input
 				type="file"
@@ -297,10 +246,21 @@
 		>
 			<AlertCircle class="h-4 w-4 shrink-0" />
 			<span>{error}</span>
+			{#if lastFailedFile}
+				<button
+					type="button"
+					onclick={retryUpload}
+					class="ml-auto flex items-center gap-1 rounded px-2 py-1 font-medium text-red-600 hover:bg-primary/5"
+					aria-label="Retry upload"
+				>
+					<RotateCw class="h-3.5 w-3.5" />
+					Retry
+				</button>
+			{/if}
 			<button
 				type="button"
 				onclick={() => (error = null)}
-				class="ml-auto text-red-400 hover:text-red-600"
+				class="text-red-400 hover:text-red-600"
 				aria-label="Dismiss error"
 			>
 				<X class="h-4 w-4" />

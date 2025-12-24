@@ -64,7 +64,7 @@
 <section class="border-b border-zinc-200 bg-zinc-50/50 py-16">
 	<div class="mx-auto max-w-6xl px-6">
 		<div
-			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-[#00D372] uppercase"
+			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-primary uppercase"
 		>
 			Projects
 		</div>
@@ -78,28 +78,18 @@
 	<div class="mb-8 flex flex-wrap gap-2">
 		<a
 			href={categoryUrl("all")}
-			class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-all"
-			class:border-[#00D372]={selectedCategory === "all"}
-			class:bg-[#00D372]={selectedCategory === "all"}
-			class:text-white={selectedCategory === "all"}
-			class:border-zinc-200={selectedCategory !== "all"}
-			class:bg-white={selectedCategory !== "all"}
-			class:text-zinc-700={selectedCategory !== "all"}
-			class:hover:border-zinc-300={selectedCategory !== "all"}
+			class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-all hover:bg-primary/5 {selectedCategory === 'all'
+				? 'border-primary bg-primary text-white'
+				: 'border-zinc-200 bg-white text-zinc-700 hover:border-primary/30'}"
 		>
 			すべて
 		</a>
 		{#each PROJECT_CATEGORY_KEYS as key (key)}
 			<a
 				href={categoryUrl(key)}
-				class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-all"
-				class:border-[#00D372]={selectedCategory === key}
-				class:bg-[#00D372]={selectedCategory === key}
-				class:text-white={selectedCategory === key}
-				class:border-zinc-200={selectedCategory !== key}
-				class:bg-white={selectedCategory !== key}
-				class:text-zinc-700={selectedCategory !== key}
-				class:hover:border-zinc-300={selectedCategory !== key}
+				class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-all hover:bg-primary/5 {selectedCategory === key
+					? 'border-primary bg-primary text-white'
+					: 'border-zinc-200 bg-white text-zinc-700 hover:border-primary/30'}"
 			>
 				{PROJECT_CATEGORIES[key]}
 			</a>
@@ -113,7 +103,7 @@
 			{#each paginatedProjects as project (project.id)}
 				<a
 					href="/projects/{project.slug}"
-					class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:border-[#00D372] hover:shadow-lg hover:shadow-[#00D372]/5"
+					class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
 				>
 					{#if project.coverUrl}
 						<img
@@ -123,7 +113,7 @@
 						/>
 					{/if}
 					<div class="mb-2 flex items-start justify-between gap-2">
-						<h2 class="font-semibold transition-colors group-hover:text-[#00D372]">
+						<h2 class="font-semibold transition-colors group-hover:text-primary">
 							{project.name}
 						</h2>
 						<span
@@ -164,7 +154,7 @@
 				{#if currentPage > 1}
 					<a
 						href={pageUrl(currentPage - 1)}
-						class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:border-[#00D372] hover:text-[#00D372] sm:w-auto"
+						class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:bg-primary/5 hover:border-primary/30 hover:text-primary focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 sm:w-auto"
 					>
 						前へ
 					</a>
@@ -181,15 +171,15 @@
 						{#if totalPages <= 7 || pageNum === 1 || pageNum === totalPages || Math.abs(pageNum - currentPage) <= 1}
 							<a
 								href={pageUrl(pageNum)}
-								class="min-w-[2.5rem] rounded-lg border px-3 py-2 text-center text-sm font-medium transition-colors {currentPage ===
+								class="min-w-[2.5rem] rounded-lg border px-3 py-2 text-center text-sm font-medium transition-colors focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 {currentPage ===
 								pageNum
-									? 'border-[#00D372] bg-[#00D372] text-white'
-									: 'border-zinc-200 bg-white hover:border-[#00D372] hover:text-[#00D372]'}"
+									? 'border-primary bg-primary text-white'
+									: 'border-zinc-200 bg-white hover:bg-primary/5 hover:border-primary/30 hover:text-primary'}"
 							>
 								{pageNum}
 							</a>
 						{:else if pageNum === currentPage - 2 || pageNum === currentPage + 2}
-							<span class="px-1 text-zinc-400">...</span>
+							<span class="px-1 text-zinc-500">...</span>
 						{/if}
 					{/each}
 				</div>
@@ -197,7 +187,7 @@
 				{#if currentPage < totalPages}
 					<a
 						href={pageUrl(currentPage + 1)}
-						class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:border-[#00D372] hover:text-[#00D372] sm:w-auto"
+						class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:bg-primary/5 hover:border-primary/30 hover:text-primary focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 sm:w-auto"
 					>
 						次へ
 					</a>

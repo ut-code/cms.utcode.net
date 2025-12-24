@@ -10,6 +10,7 @@
 		Trash2,
 		XCircle,
 	} from "lucide-svelte";
+	import { confirm } from "$lib/components/confirm-modal.svelte";
 	import { cleanup, deleteAll, getStatus, reset, start } from "$lib/data/private/migration.remote";
 	import type { MigrationState } from "$lib/shared/types/migration";
 
@@ -68,7 +69,16 @@
 
 	async function handleDeleteAll() {
 		if (isDisabled) return;
-		if (!confirm("Are you sure you want to delete ALL members, articles, and projects?")) return;
+
+		const confirmed = await confirm({
+			title: "Delete all data?",
+			description: "Delete ALL members, articles, and projects? This cannot be undone.",
+			confirmText: "Delete All",
+			variant: "danger",
+		});
+
+		if (!confirmed) return;
+
 		isStarting = true;
 		try {
 			const result = await deleteAll();
@@ -163,7 +173,7 @@
 
 			<!-- Action buttons -->
 			<div class="mb-4 grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
-				<button class="btn btn-sm gap-2 btn-warning sm:btn-md" onclick={handleStart} disabled={isDisabled}>
+				<button class="btn btn-sm gap-2 btn-warning sm:btn-md disabled:cursor-not-allowed disabled:opacity-50" onclick={handleStart} disabled={isDisabled}>
 					{#if isStarting}
 						<span class="loading loading-spinner loading-xs"></span>
 					{:else}
@@ -171,7 +181,7 @@
 					{/if}
 					Start Migration
 				</button>
-				<button class="btn btn-sm gap-2 btn-secondary sm:btn-md" onclick={handleCleanup} disabled={isDisabled}>
+				<button class="btn btn-sm gap-2 btn-secondary sm:btn-md disabled:cursor-not-allowed disabled:opacity-50" onclick={handleCleanup} disabled={isDisabled}>
 					{#if isStarting}
 						<span class="loading loading-spinner loading-xs"></span>
 					{:else}
@@ -179,7 +189,7 @@
 					{/if}
 					Cleanup Invalid URLs
 				</button>
-				<button class="btn btn-sm gap-2 btn-error sm:btn-md" onclick={handleDeleteAll} disabled={isDisabled}>
+				<button class="btn btn-sm gap-2 btn-error sm:btn-md disabled:cursor-not-allowed disabled:opacity-50" onclick={handleDeleteAll} disabled={isDisabled}>
 					{#if isStarting}
 						<span class="loading loading-spinner loading-xs"></span>
 					{:else}

@@ -14,7 +14,7 @@
 		<div class="mb-8 flex items-end justify-between">
 			<div>
 				<div
-					class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-[#00D372] uppercase"
+					class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-primary uppercase"
 				>
 					News
 				</div>
@@ -33,7 +33,7 @@
 				{#each articles as article (article.id)}
 					<a
 						href="/articles/{article.slug}"
-						class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:border-[#00D372] hover:shadow-md"
+						class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-md"
 					>
 						{#if article.coverUrl}
 							<img
@@ -42,13 +42,13 @@
 								class="mb-4 aspect-video w-full rounded-xl object-cover"
 							/>
 						{/if}
-						<h3 class="mb-2 font-semibold transition-colors group-hover:text-[#00D372]">
+						<h3 class="mb-2 font-semibold transition-colors group-hover:text-primary">
 							{article.title}
 						</h3>
 						{#if article.excerpt}
 							<p class="mb-4 line-clamp-2 text-sm text-zinc-500">{article.excerpt}</p>
 						{/if}
-						<div class="flex items-center gap-2 text-xs text-zinc-400">
+						<div class="flex items-center gap-2 text-xs text-zinc-500">
 							{#if article.author}
 								<span>{article.author.name}</span>
 								<span>·</span>

@@ -76,7 +76,7 @@
 					href={project.demoUrl}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="inline-flex items-center gap-2 rounded-lg bg-[#00D372] px-4 py-2 text-sm text-zinc-900 hover:bg-[#00C066]"
+					class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm text-zinc-900 hover:bg-primary-focus"
 				>
 					Demo →
 				</a>
@@ -93,7 +93,7 @@
 				{#each project.projectMembers as pm (pm.memberId)}
 					<a
 						href="/members/{pm.member.slug}"
-						class="flex items-center gap-3 rounded-lg border border-zinc-200 px-4 py-3 hover:border-[#00D372]"
+						class="flex items-center gap-3 rounded-lg border border-zinc-200 px-4 py-3 transition-all hover:bg-primary/5 hover:border-primary/30"
 					>
 						{#if pm.member.imageUrl}
 							<img src={pm.member.imageUrl} alt={pm.member.name} class="h-10 w-10 rounded-full" />
@@ -118,6 +118,6 @@
 {:else}
 	<div class="mx-auto max-w-3xl px-6 py-16 text-center">
 		<h1 class="mb-4 text-2xl font-bold">プロジェクトが見つかりません</h1>
-		<a href="/projects" class="text-[#00D372] hover:underline">プロジェクト一覧に戻る</a>
+		<a href="/projects" class="text-primary hover:underline">プロジェクト一覧に戻る</a>
 	</div>
 {/if}

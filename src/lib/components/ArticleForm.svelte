@@ -1,24 +1,12 @@
 <script lang="ts">
-	import { generateSlug, validateSlug } from "$lib/shared/logic/slugs";
+	import { createFormValidator } from "$lib/shared/logic/form-validation";
+	import { generateArticleSlug, validateArticleSlug } from "$lib/shared/logic/slugs";
+	import type { ArticleData, Author } from "$lib/shared/models/types";
+	import { triggerSubmit } from "$lib/utils/form";
 	import { onSaveShortcut } from "$lib/utils/keyboard";
 	import { snapshot } from "$lib/utils/snapshot.svelte";
 	import { ArticleEditor, ArticleFormHeader, ArticleSettings } from "./article-form";
-
-	type Author = {
-		id: string;
-		name: string;
-		imageUrl: string | null;
-	};
-
-	type ArticleData = {
-		slug: string;
-		title: string;
-		content: string;
-		excerpt: string;
-		coverUrl: string;
-		authorId: string | null;
-		published: boolean;
-	};
+	import { confirm } from "$lib/components/confirm-modal.svelte";
 
 	let {
 		initialData = {
@@ -39,7 +27,7 @@
 	}: {
 		initialData?: ArticleData;
 		authors?: Author[];
-		onSubmit: (data: ArticleData) => Promise<void>;
+		onSubmit: (data: ArticleData & { createRedirect?: boolean }) => Promise<void>;
 		onDelete?: (() => Promise<void>) | null;
 		submitLabel?: string;
 		isSubmitting?: boolean;
@@ -49,45 +37,45 @@
 	let formData = $state(snapshot(() => initialData));
 	let errors = $state<Record<string, string>>({});
 	let showSettings = $state(false);
+	let saveSuccess = $state(false);
+	let createRedirect = $state(false);
 
 	function handleTitleChange(title: string) {
-		if (!formData.slug || formData.slug === generateSlug(initialData.title)) {
-			formData.slug = generateSlug(title);
+		if (!formData.slug || formData.slug === generateArticleSlug(initialData.title)) {
+			formData.slug = generateArticleSlug(title);
 		}
 	}
 
 	async function handleSubmit(e: SubmitEvent) {
 		e.preventDefault();
-		errors = {};
 
-		if (!formData.title.trim()) {
-			errors.title = "Title is required";
-		}
-		if (!formData.slug.trim()) {
-			errors.slug = "Slug is required";
-		} else if (!validateSlug(formData.slug)) {
-			errors.slug = "Slug must be lowercase letters, numbers, and hyphens only";
-		}
-		if (!formData.content.trim()) {
-			errors.content = "Content is required";
-		}
+		const validator = createFormValidator<ArticleData>();
+		validator
+			.required("title", formData.title, "Title is required")
+			.required("slug", formData.slug, "Slug is required")
+			.validate("slug", formData.slug, (value) =>
+				validateArticleSlug(value)
+					? null
+					: "Slug must start with YYYY-MM-DD- (e.g., 2024-01-15-my-article)",
+			)
+			.required("content", formData.content, "Content is required");
 
-		if (Object.keys(errors).length > 0) {
+		errors = validator.getErrors();
+
+		if (validator.hasErrors()) {
 			// Show settings panel if there are errors in settings fields
 			if (errors.slug) showSettings = true;
 			return;
 		}
 
 		isSubmitting = true;
+		saveSuccess = false;
 		try {
-			await onSubmit(formData);
+			await onSubmit({ ...formData, createRedirect });
+			saveSuccess = true;
 		} finally {
 			isSubmitting = false;
 		}
-	}
-
-	function triggerSubmit() {
-		if (!isSubmitting) handleSubmit(new SubmitEvent("submit")).catch(console.error);
 	}
 
 	function openPreviewPage() {
@@ -95,14 +83,29 @@
 			window.open(`/admin/articles/${articleId}/preview`, "_blank");
 		}
 	}
+
+	async function handlePublishToggle(newValue: boolean) {
+		// If unpublishing (from true to false), show confirmation
+		if (formData.published && !newValue) {
+			const confirmed = await confirm({
+				title: "Unpublish article?",
+				description: "This will make the article inaccessible to the public. Are you sure?",
+				confirmText: "Unpublish",
+				variant: "warning",
+			});
+			if (!confirmed) return;
+		}
+		formData.published = newValue;
+	}
 </script>
 
-<svelte:window onkeydown={onSaveShortcut(triggerSubmit)} />
+<svelte:window onkeydown={onSaveShortcut(() => triggerSubmit(handleSubmit, isSubmitting))} />
 
 <form onsubmit={handleSubmit} class="flex h-full flex-col">
 	<ArticleFormHeader
 		bind:published={formData.published}
 		bind:showSettings
+		bind:saveSuccess
 		{isSubmitting}
 		{submitLabel}
 		{articleId}
@@ -125,9 +128,12 @@
 			bind:authorId={formData.authorId}
 			bind:excerpt={formData.excerpt}
 			bind:coverUrl={formData.coverUrl}
+			bind:createRedirect
+			initialSlug={initialData.slug}
 			{authors}
 			slugError={errors["slug"]}
 			{onDelete}
+			onPublishToggle={handlePublishToggle}
 		/>
 	</div>
 </form>

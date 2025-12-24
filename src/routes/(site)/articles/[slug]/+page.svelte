@@ -90,7 +90,7 @@
 					{#each relatedArticles as relatedArticle (relatedArticle.id)}
 						<a
 							href="/articles/{relatedArticle.slug}"
-							class="group rounded-xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-4 transition-all hover:border-[#00D372] hover:shadow-md"
+							class="group rounded-xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-4 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-md"
 						>
 							{#if relatedArticle.coverUrl}
 								<img
@@ -99,13 +99,13 @@
 									class="mb-3 aspect-video w-full rounded-lg object-cover"
 								/>
 							{/if}
-							<h3 class="mb-2 font-semibold group-hover:text-[#00D372]">
+							<h3 class="mb-2 font-semibold group-hover:text-primary">
 								{relatedArticle.title}
 							</h3>
 							{#if relatedArticle.excerpt}
 								<p class="mb-3 line-clamp-2 text-sm text-zinc-500">{relatedArticle.excerpt}</p>
 							{/if}
-							<div class="flex items-center gap-2 text-xs text-zinc-400">
+							<div class="flex items-center gap-2 text-xs text-zinc-500">
 								{#if relatedArticle.author}
 									<span>{relatedArticle.author.name}</span>
 									<span>·</span>
@@ -125,6 +125,6 @@
 {:else}
 	<div class="mx-auto max-w-3xl px-6 py-16 text-center">
 		<h1 class="mb-4 text-2xl font-bold">記事が見つかりません</h1>
-		<a href="/articles" class="text-[#00D372] hover:underline">記事一覧に戻る</a>
+		<a href="/articles" class="text-primary hover:underline">記事一覧に戻る</a>
 	</div>
 {/if}

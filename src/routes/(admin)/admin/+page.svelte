@@ -1,8 +1,8 @@
 <script lang="ts">
+	import AnalyticsBrief from "$lib/components/admin-dashboard/AnalyticsBrief.svelte";
 	import DashboardHeader from "$lib/components/admin-dashboard/DashboardHeader.svelte";
 	import NeedsAttention from "$lib/components/admin-dashboard/NeedsAttention.svelte";
 	import QuickActions from "$lib/components/admin-dashboard/QuickActions.svelte";
-	import RecentActivity from "$lib/components/admin-dashboard/RecentActivity.svelte";
 	import StatsGrid from "$lib/components/admin-dashboard/StatsGrid.svelte";
 	import { getAdminStats } from "$lib/data/private/stats.remote";
 
@@ -37,15 +37,19 @@
 		members={stats.members}
 	/>
 
+	<QuickActions />
+
 	<div class="grid gap-4 sm:gap-6 lg:grid-cols-2">
 		<NeedsAttention draftArticles={stats.draftArticles} {formatDate} />
 
-		<RecentActivity
-			recentArticles={stats.recentArticles}
-			{formatDate}
-			hasDrafts={stats.draftArticles.length > 0}
+		<AnalyticsBrief
+			totalViews={stats.analytics.totalViews}
+			totalArticleViews={stats.analytics.totalArticleViews}
+			totalProjectViews={stats.analytics.totalProjectViews}
+			totalMemberViews={stats.analytics.totalMemberViews}
+			topArticles={stats.analytics.topArticles}
+			topProjects={stats.analytics.topProjects}
+			topMembers={stats.analytics.topMembers}
 		/>
 	</div>
-
-	<QuickActions />
 </div>

@@ -41,7 +41,11 @@
 				await goto(`/admin/projects/edit/${result.id}`);
 			}
 		} catch (error) {
-			toast.show(error instanceof Error ? error.message : "Failed to save");
+			toast.show(
+				error instanceof Error
+					? error.message
+					: "Failed to save project. Check your connection and try again.",
+			);
 		}
 	}
 </script>

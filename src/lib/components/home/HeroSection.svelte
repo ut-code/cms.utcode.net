@@ -26,7 +26,7 @@
 			<div
 				class="mb-4 inline-block rounded-full border border-zinc-200 bg-white px-3 py-1.5 font-[JetBrains_Mono,monospace] text-[10px] font-medium text-zinc-600 shadow-sm sm:px-4 sm:text-xs"
 			>
-				<span class="mr-1 inline-block h-2 w-2 animate-pulse rounded-full bg-[#00D372] sm:mr-2"></span>
+				<span class="mr-1 inline-block h-2 w-2 animate-pulse rounded-full bg-primary sm:mr-2"></span>
 				<span class="hidden sm:inline">Est. 2019 — The University of Tokyo</span>
 				<span class="sm:hidden">Est. 2019 — UTokyo</span>
 			</div>
@@ -34,7 +34,7 @@
 				ソフトウェアで、<br />
 				<span class="relative">
 					<span
-						class="bg-gradient-to-r from-[#00D372] to-emerald-400 bg-clip-text text-transparent"
+						class="bg-gradient-to-r from-primary to-emerald-400 bg-clip-text text-transparent"
 					>
 						未来を書く。
 					</span>
@@ -46,7 +46,7 @@
 			<div class="flex flex-wrap items-center gap-4">
 				<a
 					href="#join"
-					class="group inline-flex items-center gap-2 rounded-lg bg-[#00D372] px-6 py-3 font-semibold text-zinc-900 shadow-lg shadow-[#00D372]/25 transition-all hover:bg-[#00C066] hover:shadow-xl hover:shadow-[#00D372]/30"
+					class="group inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-zinc-900 shadow-lg shadow-primary/25 transition-all hover:bg-primary-focus hover:shadow-xl hover:shadow-primary/30"
 				>
 					参加する
 					<ArrowRight class="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -72,7 +72,7 @@
 				</div>
 				<pre class="overflow-x-auto font-[JetBrains_Mono,monospace] text-xs leading-relaxed sm:text-sm"><code
 						class="text-zinc-400"
-						><span class="text-purple-400">const</span> <span class="text-[#00D372]">utcode</span
+						><span class="text-purple-400">const</span> <span class="text-primary">utcode</span
 						> = {"{"}<br />  <span class="text-blue-400">members</span>: <span
 							class="text-orange-400">{members}</span
 						>,<br />  <span class="text-blue-400">projects</span>: <span class="text-orange-400"

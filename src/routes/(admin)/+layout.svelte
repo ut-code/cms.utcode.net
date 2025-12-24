@@ -1,6 +1,7 @@
 <script lang="ts">
 	import "../../app.css";
 	import {
+		BarChart3,
 		DatabaseBackup,
 		FileText,
 		Folder,
@@ -8,6 +9,7 @@
 		LogOut,
 		Menu,
 		Search,
+		Settings,
 		Sparkles,
 		Users,
 	} from "lucide-svelte";
@@ -30,6 +32,8 @@
 		{ href: "/admin/members", label: "Members", icon: Users, exact: false },
 		{ href: "/admin/articles", label: "Articles", icon: FileText, exact: false },
 		{ href: "/admin/projects", label: "Projects", icon: Folder, exact: false },
+		{ href: "/admin/analytics", label: "Analytics", icon: BarChart3, exact: false },
+		{ href: "/admin/settings", label: "Settings", icon: Settings, exact: false },
 		{ href: "/admin/migrate", label: "Migration", icon: DatabaseBackup, exact: false },
 	] as const;
 

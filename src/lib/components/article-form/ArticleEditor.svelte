@@ -60,7 +60,7 @@
 			>
 				Preview
 			</button>
-			<span class="ml-auto text-xs text-zinc-400">Markdown supported</span>
+			<span class="ml-auto text-xs text-zinc-500">Markdown supported</span>
 		</div>
 
 		<!-- Content Area -->
@@ -70,7 +70,7 @@
 					{#if content.trim()}
 						<Markdown {content} />
 					{:else}
-						<p class="text-zinc-400">Nothing to preview</p>
+						<p class="text-zinc-500">Nothing to preview</p>
 					{/if}
 				</div>
 			{:else}

@@ -15,7 +15,7 @@
 <section class="border-b border-zinc-200 bg-zinc-50/50 py-16">
 	<div class="mx-auto max-w-6xl px-6">
 		<div
-			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-[#00D372] uppercase"
+			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-primary uppercase"
 		>
 			Welcome Events 2025
 		</div>
@@ -52,7 +52,7 @@
 	<!-- Materials -->
 	<section class="mb-12">
 		<h2 class="mb-6 flex items-center gap-2 text-xl font-bold">
-			<ExternalLink class="h-5 w-5 text-[#00D372]" />
+			<ExternalLink class="h-5 w-5 text-primary" />
 			新歓配布資料
 		</h2>
 		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
@@ -62,7 +62,7 @@
 						href="https://docs.google.com/presentation/d/1c8eWT2ihAr1Y1ppYphcG_sRRV2cSsc9N1v7nWg_FPtQ/edit?usp=sharing"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="inline-flex items-center gap-2 text-[#00D372] transition-colors hover:text-[#00C066]"
+						class="inline-flex items-center gap-2 text-primary transition-colors hover:text-primary-focus"
 					>
 						ut.code(); 紹介スライド
 						<ExternalLink class="h-3 w-3" />
@@ -75,7 +75,7 @@
 	<!-- Events Timeline -->
 	<section class="mb-12">
 		<h2 class="mb-6 flex items-center gap-2 text-xl font-bold">
-			<Calendar class="h-5 w-5 text-[#00D372]" />
+			<Calendar class="h-5 w-5 text-primary" />
 			新歓イベント日程
 		</h2>
 		<p class="mb-6 text-zinc-600">
@@ -86,11 +86,11 @@
 		<div class="space-y-6">
 			<!-- Self-Study Sessions -->
 			<div
-				class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-shadow hover:shadow-lg"
+				class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:border-primary/30 hover:bg-primary/5 hover:shadow-lg hover:shadow-primary/5"
 			>
 				<div class="mb-3 flex items-start justify-between">
 					<h3 class="text-lg font-bold text-zinc-900">自主勉強会</h3>
-					<span class="rounded-full bg-[#00D372]/10 px-3 py-1 text-xs font-semibold text-[#00D372]">
+					<span class="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
 						学習系
 					</span>
 				</div>
@@ -118,7 +118,7 @@
 
 			<!-- Personal Hackathon -->
 			<div
-				class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-shadow hover:shadow-lg"
+				class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:border-primary/30 hover:bg-primary/5 hover:shadow-lg hover:shadow-primary/5"
 			>
 				<div class="mb-3 flex items-start justify-between">
 					<h3 class="text-lg font-bold text-zinc-900">新歓個人ハッカソン</h3>
@@ -148,7 +148,7 @@
 
 			<!-- Project Kickoff -->
 			<div
-				class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-shadow hover:shadow-lg"
+				class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:border-primary/30 hover:bg-primary/5 hover:shadow-lg hover:shadow-primary/5"
 			>
 				<div class="mb-3 flex items-start justify-between">
 					<h3 class="text-lg font-bold text-zinc-900">プロジェクト発足会</h3>
@@ -245,7 +245,7 @@
 											href="https://forms.gle/Bo5gHDgz12XtA4NW8"
 											target="_blank"
 											rel="noopener noreferrer"
-											class="text-[#00D372] hover:text-[#00C066]"
+											class="text-primary hover:text-primary-focus"
 										>
 											参加フォーム
 										</a>
@@ -267,7 +267,7 @@
 											href="https://forms.gle/sAU7A9uMVerQPpUb6"
 											target="_blank"
 											rel="noopener noreferrer"
-											class="text-[#00D372] hover:text-[#00C066]"
+											class="text-primary hover:text-primary-focus"
 										>
 											参加フォーム
 										</a>
@@ -311,25 +311,25 @@
 	<!-- Participation Info -->
 	<section class="mb-12">
 		<h2 class="mb-6 flex items-center gap-2 text-xl font-bold">
-			<Users class="h-5 w-5 text-[#00D372]" />
+			<Users class="h-5 w-5 text-primary" />
 			参加について
 		</h2>
 		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<ul class="space-y-3">
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700">各イベントは基本的に事前登録制です</span>
 				</li>
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700">プログラミング未経験者も歓迎します</span>
 				</li>
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700">詳細や最新情報は Discord サーバーでお知らせします</span>
 				</li>
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700">ご質問は Discord または SNS でお気軽にどうぞ</span>
 				</li>
 			</ul>
@@ -339,7 +339,7 @@
 	<!-- CTA -->
 	<div class="rounded-2xl bg-zinc-900 p-8 text-center text-white">
 		<h2 class="mb-4 text-2xl font-bold">一緒にプログラミングを学ぼう</h2>
-		<p class="mb-6 text-zinc-400">
+		<p class="mb-6 text-zinc-500">
 			ut.code(); であなたのスキルを磨き、仲間と一緒に成長しませんか？
 		</p>
 		<div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -354,7 +354,7 @@
 			</a>
 			<a
 				href="/join"
-				class="inline-flex items-center gap-2 rounded-lg bg-[#00D372] px-6 py-3 font-semibold text-zinc-900 transition-colors hover:bg-[#00C066]"
+				class="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-zinc-900 transition-colors hover:bg-primary-focus"
 			>
 				入部案内を見る
 			</a>

@@ -1,6 +1,9 @@
+import { error } from "@sveltejs/kit";
 import * as v from "valibot";
 import { command, query } from "$app/server";
 import { requireUtCodeMember } from "$lib/server/database/auth.server";
+import { getMemberByUserId } from "$lib/server/database/members.server";
+import { requireProjectOwnership } from "$lib/server/database/ownership";
 import {
   addProjectMember,
   createProject,
@@ -78,7 +81,11 @@ export const editProject = command(
     }),
   }),
   async ({ id, data }) => {
-    await requireUtCodeMember();
+    const session = await requireUtCodeMember();
+
+    // Check ownership: only project members can edit the project
+    await requireProjectOwnership(session, id);
+
     const result = await updateProject(id, data);
     purgeCache().catch(console.error);
     return result;
@@ -86,7 +93,11 @@ export const editProject = command(
 );
 
 export const removeProject = command(v.string(), async (id) => {
-  await requireUtCodeMember();
+  const session = await requireUtCodeMember();
+
+  // Check ownership: only project members can delete the project
+  await requireProjectOwnership(session, id);
+
   await deleteProject(id);
   purgeCache().catch(console.error);
 });
@@ -98,7 +109,11 @@ export const addMember = command(
     role: v.optional(roleSchema),
   }),
   async ({ projectId, memberId, role }) => {
-    await requireUtCodeMember();
+    const session = await requireUtCodeMember();
+
+    // Check ownership: only project members can add new members
+    await requireProjectOwnership(session, projectId);
+
     await addProjectMember(projectId, memberId, role);
     purgeCache().catch(console.error);
   },
@@ -110,7 +125,11 @@ export const removeMember = command(
     memberId: v.string(),
   }),
   async ({ projectId, memberId }) => {
-    await requireUtCodeMember();
+    const session = await requireUtCodeMember();
+
+    // Check ownership: only project members can remove members
+    await requireProjectOwnership(session, projectId);
+
     await removeProjectMember(projectId, memberId);
     purgeCache().catch(console.error);
   },
@@ -122,18 +141,26 @@ export const transferLead = command(
     newLeadMemberId: v.string(),
   }),
   async ({ projectId, newLeadMemberId }) => {
-    await requireUtCodeMember();
+    const session = await requireUtCodeMember();
+    const currentUserMember = await getMemberByUserId(session.user.id);
+    if (!currentUserMember) throw error(404, "Current user is not a member");
+
     const project = await getProjectById(projectId);
-    if (!project) throw new Error("Project not found");
+    if (!project) throw error(404, "Project not found");
 
     const currentLead = project.projectMembers.find((pm) => pm.role === "lead");
-    if (!currentLead) throw new Error("No current lead found");
+    if (!currentLead) throw error(500, "No current lead found");
+
+    // Authorization check: only the current lead can transfer their role
+    if (currentLead.memberId !== currentUserMember.id) {
+      throw error(403, "Only the current project lead can transfer the lead role");
+    }
 
     const newLeadMember = project.projectMembers.find((pm) => pm.memberId === newLeadMemberId);
-    if (!newLeadMember) throw new Error("New lead is not a member of this project");
+    if (!newLeadMember) throw error(400, "New lead is not a member of this project");
 
     if (currentLead.memberId === newLeadMemberId) {
-      throw new Error("Member is already the lead");
+      throw error(400, "Member is already the lead");
     }
 
     await serverTransferLead(projectId, currentLead.memberId, newLeadMemberId);

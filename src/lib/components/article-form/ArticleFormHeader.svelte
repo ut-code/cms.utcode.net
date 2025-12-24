@@ -1,11 +1,20 @@
 <script lang="ts">
-	import { ArrowLeft, ExternalLink, Eye, EyeOff, Loader2, Settings } from "lucide-svelte";
+	import {
+		ArrowLeft,
+		Check,
+		ExternalLink,
+		Eye,
+		EyeOff,
+		Loader2,
+		Settings,
+	} from "lucide-svelte";
 	import { goto } from "$app/navigation";
 
 	let {
 		published = $bindable(false),
 		showSettings = $bindable(false),
 		isSubmitting = false,
+		saveSuccess = $bindable(false),
 		submitLabel = "Save",
 		articleId = null,
 		onPreview = null,
@@ -13,10 +22,31 @@
 		published?: boolean;
 		showSettings?: boolean;
 		isSubmitting?: boolean;
+		saveSuccess?: boolean;
 		submitLabel?: string;
 		articleId?: string | null;
 		onPreview?: (() => void) | null;
 	} = $props();
+
+	let successTimeout: ReturnType<typeof setTimeout> | null = null;
+
+	$effect(() => {
+		if (saveSuccess) {
+			if (successTimeout) {
+				clearTimeout(successTimeout);
+			}
+			successTimeout = setTimeout(() => {
+				saveSuccess = false;
+				successTimeout = null;
+			}, 2000);
+		}
+
+		return () => {
+			if (successTimeout) {
+				clearTimeout(successTimeout);
+			}
+		};
+	});
 
 	function openPreviewPage() {
 		if (articleId && onPreview) {
@@ -33,6 +63,7 @@
 			type="button"
 			onclick={() => goto("/admin/articles")}
 			class="flex items-center gap-1.5 text-sm text-zinc-500 transition-colors hover:text-zinc-900"
+			aria-label="Back to Articles"
 		>
 			<ArrowLeft class="h-4 w-4" />
 			<span class="hidden sm:inline">Articles</span>
@@ -62,7 +93,8 @@
 			<button
 				type="button"
 				onclick={openPreviewPage}
-				class="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 sm:px-3 sm:py-2"
+				class="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary sm:px-3 sm:py-2"
+				aria-label="Preview article"
 			>
 				<ExternalLink class="h-4 w-4" />
 				<span class="hidden sm:inline">Preview</span>
@@ -75,7 +107,8 @@
 			onclick={() => (showSettings = !showSettings)}
 			class="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm transition-colors sm:px-3 sm:py-2 {showSettings
 				? 'bg-zinc-900 text-white'
-				: 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900'}"
+				: 'text-zinc-600 hover:bg-primary/5 hover:text-primary'}"
+			aria-label="Toggle settings"
 		>
 			<Settings class="h-4 w-4" />
 			<span class="hidden sm:inline">Settings</span>
@@ -84,16 +117,23 @@
 		<!-- Save Button -->
 		<button
 			type="submit"
-			disabled={isSubmitting}
+			disabled={isSubmitting || saveSuccess}
 			class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-white transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 sm:gap-2 sm:px-4 sm:py-2 {published
 				? 'bg-emerald-600 hover:bg-emerald-700'
 				: 'bg-zinc-900 hover:bg-zinc-800'}"
 		>
 			{#if isSubmitting}
 				<Loader2 class="h-4 w-4 animate-spin" />
+				<span class="hidden sm:inline">Saving...</span>
+				<span class="sm:hidden">Saving...</span>
+			{:else if saveSuccess}
+				<Check class="h-4 w-4" />
+				<span class="hidden sm:inline">Saved</span>
+				<span class="sm:hidden">Saved</span>
+			{:else}
+				<span class="hidden sm:inline">{published ? "Publish" : submitLabel}</span>
+				<span class="sm:hidden">Save</span>
 			{/if}
-			<span class="hidden sm:inline">{published ? "Publish" : submitLabel}</span>
-			<span class="sm:hidden">Save</span>
 		</button>
 	</div>
 </header>

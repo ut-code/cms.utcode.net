@@ -33,7 +33,7 @@
 <section class="border-b border-zinc-200 bg-zinc-50/50 py-16">
 	<div class="mx-auto max-w-6xl px-6">
 		<div
-			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-[#00D372] uppercase"
+			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-primary uppercase"
 		>
 			Members
 		</div>
@@ -50,26 +50,26 @@
 			{#each paginatedMembers as member (member.id)}
 				<a
 					href="/members/{member.slug}"
-					class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 text-center transition-all hover:border-[#00D372] hover:shadow-lg hover:shadow-[#00D372]/5"
+					class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 text-center transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
 				>
 					{#if member.imageUrl}
 						<img
 							src={member.imageUrl}
 							alt={member.name}
-							class="mx-auto mb-4 h-24 w-24 rounded-full object-cover ring-2 ring-zinc-100 transition-all group-hover:ring-[#00D372]/30"
+							class="mx-auto mb-4 h-24 w-24 rounded-full object-cover ring-2 ring-zinc-100 transition-all group-hover:ring-primary/30"
 						/>
 					{:else}
 						<div
-							class="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-zinc-100 to-zinc-200 ring-2 ring-zinc-100 transition-all group-hover:from-[#00D372]/10 group-hover:to-[#00D372]/20 group-hover:ring-[#00D372]/30"
+							class="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-zinc-100 to-zinc-200 ring-2 ring-zinc-100 transition-all group-hover:from-primary/10 group-hover:to-primary/20 group-hover:ring-primary/30"
 						>
 							<span
-								class="font-[JetBrains_Mono,monospace] text-2xl font-medium text-zinc-600 transition-colors group-hover:text-[#00D372]"
+								class="font-[JetBrains_Mono,monospace] text-2xl font-medium text-zinc-600 transition-colors group-hover:text-primary"
 							>
 								{member.name.charAt(0)}
 							</span>
 						</div>
 					{/if}
-					<h2 class="font-semibold transition-colors group-hover:text-[#00D372]">{member.name}</h2>
+					<h2 class="font-semibold transition-colors group-hover:text-primary">{member.name}</h2>
 					{#if member.bio}
 						<p class="mt-2 line-clamp-2 text-sm leading-relaxed text-zinc-500">{member.bio}</p>
 					{/if}
@@ -82,7 +82,7 @@
 				{#if currentPage > 1}
 					<a
 						href={pageUrl(currentPage - 1)}
-						class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:border-[#00D372] hover:text-[#00D372] sm:w-auto"
+						class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:bg-primary/5 hover:border-primary/30 hover:text-primary focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 sm:w-auto"
 					>
 						前へ
 					</a>
@@ -99,15 +99,15 @@
 						{#if totalPages <= 7 || pageNum === 1 || pageNum === totalPages || Math.abs(pageNum - currentPage) <= 1}
 							<a
 								href={pageUrl(pageNum)}
-								class="min-w-[2.5rem] rounded-lg border px-3 py-2 text-center text-sm font-medium transition-colors {currentPage ===
+								class="min-w-[2.5rem] rounded-lg border px-3 py-2 text-center text-sm font-medium transition-colors focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 {currentPage ===
 								pageNum
-									? 'border-[#00D372] bg-[#00D372] text-white'
-									: 'border-zinc-200 bg-white hover:border-[#00D372] hover:text-[#00D372]'}"
+									? 'border-primary bg-primary text-white'
+									: 'border-zinc-200 bg-white hover:bg-primary/5 hover:border-primary/30 hover:text-primary'}"
 							>
 								{pageNum}
 							</a>
 						{:else if pageNum === currentPage - 2 || pageNum === currentPage + 2}
-							<span class="px-1 text-zinc-400">...</span>
+							<span class="px-1 text-zinc-500">...</span>
 						{/if}
 					{/each}
 				</div>
@@ -115,7 +115,7 @@
 				{#if currentPage < totalPages}
 					<a
 						href={pageUrl(currentPage + 1)}
-						class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:border-[#00D372] hover:text-[#00D372] sm:w-auto"
+						class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:bg-primary/5 hover:border-primary/30 hover:text-primary focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 sm:w-auto"
 					>
 						次へ
 					</a>

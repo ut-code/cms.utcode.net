@@ -32,7 +32,7 @@ export async function getPublishedArticle(slug: string) {
     db.update(article)
       .set({ viewCount: sql`${article.viewCount} + 1` })
       .where(eq(article.slug, slug))
-      .then(() => {}, console.error);
+      .catch(console.error);
   }
 
   return result;
@@ -78,15 +78,6 @@ export async function publishArticle(id: string) {
 
 export async function unpublishArticle(id: string) {
   return updateArticle(id, { published: false, publishedAt: null });
-}
-
-export async function incrementViewCount(slug: string) {
-  const [updated] = await db
-    .update(article)
-    .set({ viewCount: sql`${article.viewCount} + 1` })
-    .where(eq(article.slug, slug))
-    .returning();
-  return updated;
 }
 
 export async function getRelatedArticles(

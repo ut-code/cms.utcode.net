@@ -2,10 +2,14 @@
 	import { goto } from "$app/navigation";
 	import ArticleForm from "$lib/components/ArticleForm.svelte";
 	import { useToast } from "$lib/components/toast/controls.svelte";
-	import { getMembers, saveArticle } from "$lib/data/private/articles.remote";
+	import { getMembers } from "$lib/data/private/members.remote";
+	import { saveArticle } from "$lib/data/private/articles.remote";
+	import { getMyPreference } from "$lib/data/private/user-preferences.remote";
 
 	const toast = useToast();
 	const authors = $derived(await getMembers());
+	const preference = $derived(await getMyPreference());
+	const defaultAuthorId = $derived(preference?.defaultAuthorId ?? null);
 	let isSubmitting = $state(false);
 
 	async function handleSubmit(data: {
@@ -33,7 +37,11 @@
 				await goto(`/admin/articles/edit/${result.id}`);
 			}
 		} catch (error) {
-			toast.show(error instanceof Error ? error.message : "Failed to save");
+			toast.show(
+				error instanceof Error
+					? error.message
+					: "Failed to save article. Check your connection and try again.",
+			);
 		}
 	}
 </script>
@@ -43,5 +51,11 @@
 </svelte:head>
 
 <div class="h-[calc(100vh-4rem)]">
-		<ArticleForm {authors} onSubmit={handleSubmit} submitLabel="Create" bind:isSubmitting />
+		<ArticleForm
+			initialData={{ slug: "", title: "", content: "", excerpt: "", coverUrl: "", authorId: defaultAuthorId, published: false }}
+			{authors}
+			onSubmit={handleSubmit}
+			submitLabel="Create"
+			bind:isSubmitting
+		/>
 </div>

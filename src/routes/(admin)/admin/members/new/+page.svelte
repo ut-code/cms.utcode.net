@@ -27,7 +27,11 @@
 				await goto(`/admin/members/edit/${result.id}`);
 			}
 		} catch (error) {
-			toast.show(error instanceof Error ? error.message : "Failed to save");
+			toast.show(
+				error instanceof Error
+					? error.message
+					: "Failed to save member. Check your connection and try again.",
+			);
 		}
 	}
 </script>

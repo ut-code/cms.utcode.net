@@ -44,7 +44,11 @@
 			});
 			toast.show("Saved", "success");
 		} catch (error) {
-			toast.show(error instanceof Error ? error.message : "Failed to save");
+			toast.show(
+				error instanceof Error
+					? error.message
+					: "Failed to save member. Check your connection and try again.",
+			);
 		}
 	}
 
@@ -64,7 +68,11 @@
 				toast.show("Deleted", "success");
 				await goto("/admin/members");
 			} catch (error) {
-				toast.show(error instanceof Error ? error.message : "Failed to delete");
+				toast.show(
+					error instanceof Error
+						? error.message
+						: "Failed to delete member. Check your connection and try again.",
+				);
 			}
 		}
 	}

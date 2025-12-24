@@ -14,7 +14,7 @@
 	<div class="mx-auto max-w-6xl px-6">
 		<div class="mb-12 text-center">
 			<div
-				class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-[#00D372] uppercase"
+				class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-primary uppercase"
 			>
 				About us
 			</div>

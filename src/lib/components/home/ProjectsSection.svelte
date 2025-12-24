@@ -18,7 +18,7 @@
 		<div class="mb-8 flex items-end justify-between">
 			<div>
 				<div
-					class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-[#00D372] uppercase"
+					class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-primary uppercase"
 				>
 					Projects
 				</div>
@@ -39,7 +39,7 @@
 					class="group flex flex-col rounded-2xl bg-zinc-900 p-8 text-white transition-all hover:shadow-2xl lg:row-span-2"
 				>
 					<span
-						class="inline-block self-start rounded-lg bg-[#00D372] px-3 py-1 font-[JetBrains_Mono,monospace] text-xs font-medium text-zinc-900"
+						class="inline-block self-start rounded-lg bg-primary px-3 py-1 font-[JetBrains_Mono,monospace] text-xs font-medium text-zinc-900"
 					>
 						Featured
 					</span>
@@ -51,15 +51,15 @@
 						/>
 					{/if}
 					<div class="mt-auto pt-8">
-						<h3 class="mb-2 text-xl font-semibold transition-colors group-hover:text-[#00D372]">
+						<h3 class="mb-2 text-xl font-semibold transition-colors group-hover:text-primary">
 							{featuredProject.name}
 						</h3>
 						{#if featuredProject.description}
-							<p class="mb-4 text-sm text-zinc-400">{featuredProject.description}</p>
+							<p class="mb-4 text-sm text-zinc-500">{featuredProject.description}</p>
 						{/if}
 						<div class="flex flex-wrap gap-2">
 							<span
-								class="rounded-lg border border-zinc-700 bg-zinc-800 px-2 py-1 font-[JetBrains_Mono,monospace] text-xs text-zinc-400"
+								class="rounded-lg border border-zinc-700 bg-zinc-800 px-2 py-1 font-[JetBrains_Mono,monospace] text-xs text-zinc-500"
 							>
 								{PROJECT_CATEGORIES[featuredProject.category]}
 							</span>
@@ -70,7 +70,7 @@
 			{#each projects as project (project.id)}
 				<a
 					href="/projects/{project.slug}"
-					class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:border-[#00D372] hover:shadow-md"
+					class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-md"
 				>
 					{#if project.coverUrl}
 						<img
@@ -79,7 +79,7 @@
 							class="mb-4 aspect-video w-full rounded-xl object-cover"
 						/>
 					{/if}
-					<h3 class="mb-2 font-semibold transition-colors group-hover:text-[#00D372]">
+					<h3 class="mb-2 font-semibold transition-colors group-hover:text-primary">
 						{project.name}
 					</h3>
 					{#if project.description}

@@ -5,10 +5,10 @@
 	import ArticleForm from "$lib/components/ArticleForm.svelte";
 	import { confirm } from "$lib/components/confirm-modal.svelte";
 	import { useToast } from "$lib/components/toast/controls.svelte";
+	import { getMembers } from "$lib/data/private/members.remote";
 	import {
 		editArticle,
 		getArticle,
-		getMembers,
 		removeArticle,
 	} from "$lib/data/private/articles.remote";
 
@@ -27,6 +27,7 @@
 		coverUrl: string;
 		authorId: string | null;
 		published: boolean;
+		createRedirect?: boolean;
 	}) {
 		if (!article) return;
 
@@ -53,10 +54,15 @@
 					published: data.published,
 					publishedAt: data.published ? (article?.publishedAt ?? new Date()) : article?.publishedAt,
 				},
+				createRedirect: data.createRedirect,
 			});
 			toast.show(data.published ? "Published" : "Saved", "success");
 		} catch (error) {
-			toast.show(error instanceof Error ? error.message : "Failed to save");
+			toast.show(
+				error instanceof Error
+					? error.message
+					: "Failed to save article. Check your connection and try again.",
+			);
 		}
 	}
 
@@ -76,7 +82,11 @@
 				toast.show(`Article deleted`, "success");
 				await goto("/admin/articles");
 			} catch (error) {
-				toast.show(error instanceof Error ? error.message : "Failed to delete");
+				toast.show(
+					error instanceof Error
+						? error.message
+						: "Failed to delete article. Check your connection and try again.",
+				);
 			}
 		}
 	}

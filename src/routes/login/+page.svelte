@@ -11,7 +11,7 @@
 	<div class="w-full max-w-sm rounded-xl border border-zinc-200 bg-white p-8 shadow-sm">
 		<div class="mb-6 text-center">
 			<h1 class="font-[JetBrains_Mono,monospace] text-xl font-semibold">
-				ut.code<span class="text-[#00D372]">();</span>
+				ut.code<span class="text-primary">();</span>
 			</h1>
 			<p class="mt-2 text-sm text-zinc-500">Sign in to access the admin panel</p>
 		</div>

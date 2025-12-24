@@ -5,7 +5,11 @@
 <script lang="ts">
 	import { FileText, Folder, Users } from "lucide-svelte";
 	import { searchAdmin } from "$lib/data/private/search.remote";
-	import type { AdminSearchResult } from "$lib/shared/logic/search";
+	import {
+		type AdminSearchResult,
+		getSearchResultLabel,
+		getSearchResultName,
+	} from "$lib/shared/logic/search";
 	import SearchModalBase from "./search-modal-base.svelte";
 
 	function getResultIcon(result: AdminSearchResult) {
@@ -16,28 +20,6 @@
 				return Folder;
 			case "member":
 				return Users;
-		}
-	}
-
-	function getResultLabel(type: AdminSearchResult["type"]) {
-		switch (type) {
-			case "article":
-				return "Article";
-			case "project":
-				return "Project";
-			case "member":
-				return "Member";
-		}
-	}
-
-	function getResultName(result: AdminSearchResult) {
-		switch (result.type) {
-			case "article":
-				return result.title;
-			case "project":
-				return result.name;
-			case "member":
-				return result.name;
 		}
 	}
 
@@ -57,7 +39,7 @@
 	searchFn={searchAdmin}
 	getResultId={(result) => result.id}
 	{getResultIcon}
-	{getResultName}
+	getResultName={getSearchResultName}
 	{getResultHref}
 	placeholder="Search articles, projects, members..."
 	emptyStateText="Type to search..."
@@ -85,7 +67,7 @@
 >
 	{#snippet resultMeta(result: AdminSearchResult, isSelected: boolean)}
 		<p class="text-xs {isSelected ? 'text-primary-content/70' : 'text-base-content/50'}">
-			{getResultLabel(result.type)}
+			{getSearchResultLabel(result.type)}
 			{#if result.type === "article" && !result.published}
 				<span
 					class="ml-1 rounded px-1 py-0.5 text-[10px] font-medium

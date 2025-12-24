@@ -1,0 +1,1 @@
+CREATE INDEX "article_published_publishedAt_idx" ON "article" USING btree ("published","published_at");

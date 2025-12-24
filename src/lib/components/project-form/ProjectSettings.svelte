@@ -51,7 +51,7 @@
 			<button
 				type="button"
 				onclick={onClose}
-				class="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-zinc-200 hover:text-zinc-600"
+				class="rounded-lg p-1.5 text-zinc-500 transition-colors hover:bg-primary/5 hover:text-primary"
 			>
 				<X class="h-4 w-4" />
 			</button>
@@ -70,7 +70,7 @@
 							class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-all {category ===
 							key
 								? 'border-emerald-500 bg-emerald-50 text-emerald-700'
-								: 'border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300'}"
+								: 'border-zinc-200 bg-white text-zinc-600 hover:border-primary/30'}"
 						>
 							{PROJECT_CATEGORIES[key]}
 						</button>
@@ -82,7 +82,7 @@
 				<label for="slug" class="text-sm font-medium text-zinc-700">URL path</label>
 				<div class="flex rounded-lg border border-zinc-200 bg-white">
 					<span
-						class="shrink-0 border-r border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-400"
+						class="shrink-0 border-r border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-500"
 					>
 						/projects/
 					</span>
@@ -128,7 +128,7 @@
 				<label for="repoUrl" class="text-sm font-medium text-zinc-700">Repository</label>
 				<div class="flex rounded-lg border border-zinc-200 bg-white">
 					<span class="shrink-0 border-r border-zinc-200 bg-zinc-50 px-3 py-2">
-						<Github class="h-4 w-4 text-zinc-400" />
+						<Github class="h-4 w-4 text-zinc-500" />
 					</span>
 					<input
 						type="url"
@@ -144,7 +144,7 @@
 				<label for="demoUrl" class="text-sm font-medium text-zinc-700">Demo</label>
 				<div class="flex rounded-lg border border-zinc-200 bg-white">
 					<span class="shrink-0 border-r border-zinc-200 bg-zinc-50 px-3 py-2">
-						<ExternalLink class="h-4 w-4 text-zinc-400" />
+						<ExternalLink class="h-4 w-4 text-zinc-500" />
 					</span>
 					<input
 						type="url"

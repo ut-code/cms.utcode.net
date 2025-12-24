@@ -40,6 +40,21 @@
 | Tech tags           | Monospace, text-xs, bg-zinc-100/zinc-800, rounded-lg                                     |
 | Page headers        | border-b, bg-zinc-50/50, py-16                                                           |
 
+## Interaction Patterns
+
+**Hover States (Standardized)**
+
+All interactive card-like elements use the consistent hover pattern:
+- `hover:bg-primary/5 hover:border-primary/30`
+- With optional shadow effects: `hover:shadow-lg hover:shadow-primary/5` or `hover:shadow-md`
+- For elements with text: add `hover:text-primary`
+
+Applied to:
+- Public site cards (articles, projects, members, activities)
+- Admin dashboard cards (QuickActions, NeedsAttention, RecentActivity)
+- List items (project members, member projects)
+- Pagination buttons
+
 ## Layout
 
 - Max width: 6xl (1152px)

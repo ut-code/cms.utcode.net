@@ -4,8 +4,10 @@ import { sequence } from "@sveltejs/kit/hooks";
 import { svelteKitHandler } from "better-auth/svelte-kit";
 import { like } from "drizzle-orm";
 import { building } from "$app/environment";
+import { getRedirectByOldSlug } from "$lib/server/database/slug-redirects.server";
 import { auth } from "$lib/server/drivers/auth";
 import { db } from "$lib/server/drivers/db";
+import { escapeLikePattern } from "$lib/shared/logic/sql-escape";
 import { article } from "$lib/shared/models/schema";
 
 const handleAuth: Handle = async ({ event, resolve }) => {
@@ -44,11 +46,17 @@ const handleRedirect: Handle = async ({ event, resolve }) => {
     }
     lastDbLookup = now;
 
-    // DB lookup: find article where slug ends with the old slug pattern
+    // First check: articleSlugRedirect table (exact match)
+    const slugRedirect = await getRedirectByOldSlug(oldSlug);
+    if (slugRedirect) {
+      redirect(301, `/articles/${slugRedirect.newSlug}`);
+    }
+
+    // Second check: find article where slug ends with the old slug pattern (legacy)
     const found = await db
       .select({ slug: article.slug })
       .from(article)
-      .where(like(article.slug, `%-${oldSlug}`))
+      .where(like(article.slug, `%-${escapeLikePattern(oldSlug)}`))
       .limit(1);
     if (found[0]) {
       redirect(301, `/articles/${found[0].slug}`);

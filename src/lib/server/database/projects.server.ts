@@ -16,12 +16,22 @@ export async function listProjects() {
 }
 
 export async function getProjectBySlug(slug: string) {
-  return db.query.project.findFirst({
+  const result = await db.query.project.findFirst({
     where: eq(project.slug, slug),
     with: {
       projectMembers: { with: { member: true } },
     },
   });
+
+  // Fire-and-forget: view count accuracy is not critical
+  if (result) {
+    db.update(project)
+      .set({ viewCount: sql`${project.viewCount} + 1` })
+      .where(eq(project.slug, slug))
+      .catch(console.error);
+  }
+
+  return result;
 }
 
 export async function getProjectById(id: string) {

@@ -70,6 +70,6 @@
 {:else}
 	<div class="mx-auto max-w-3xl px-6 py-16 text-center">
 		<h1 class="mb-4 text-2xl font-bold">記事が見つかりません</h1>
-		<a href="/admin/articles" class="text-[#00D372] hover:underline">記事一覧に戻る</a>
+		<a href="/admin/articles" class="text-primary hover:underline">記事一覧に戻る</a>
 	</div>
 {/if}

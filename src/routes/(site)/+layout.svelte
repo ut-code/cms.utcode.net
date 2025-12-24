@@ -53,7 +53,7 @@
 					<button
 						type="button"
 						onclick={openSearch}
-						class="flex w-48 items-center gap-2 rounded-lg border border-zinc-200 bg-white py-1.5 pr-3 pl-2.5 text-left text-sm text-zinc-400 transition-colors hover:border-zinc-300 hover:text-zinc-500"
+						class="flex w-48 items-center gap-2 rounded-lg border border-zinc-200 bg-white py-1.5 pr-3 pl-2.5 text-left text-sm text-zinc-400 transition-colors hover:border-primary/30 hover:text-primary"
 					>
 						<Search class="h-4 w-4" />
 						<span class="flex-1">検索...</span>
@@ -89,7 +89,7 @@
 					<div class="flex flex-col items-center gap-6 md:flex-row md:items-start">
 						<div class="flex flex-col items-center gap-2 md:items-start">
 							<span
-								class="font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-zinc-400 uppercase"
+								class="font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-zinc-500 uppercase"
 								>Links</span
 							>
 							<div class="flex gap-4">
@@ -109,7 +109,7 @@
 						</div>
 						<div class="flex flex-col items-center gap-2 md:items-start">
 							<span
-								class="font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-zinc-400 uppercase"
+								class="font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-zinc-500 uppercase"
 								>Social</span
 							>
 							<div class="flex gap-4">
@@ -130,7 +130,7 @@
 					</div>
 				</div>
 				<div class="mt-8 border-t border-zinc-200 pt-6 text-center">
-					<p class="text-sm text-zinc-400">
+					<p class="text-sm text-zinc-500">
 						© {new Date().getFullYear()} ut.code(); — The University of Tokyo
 					</p>
 				</div>
@@ -144,7 +144,7 @@
 			<button
 				type="button"
 				onclick={openSearch}
-				class="mb-4 flex w-full items-center gap-2 rounded-lg border border-zinc-200 bg-white py-2 pr-3 pl-2.5 text-left text-sm text-zinc-400 transition-colors hover:border-zinc-300"
+				class="mb-4 flex w-full items-center gap-2 rounded-lg border border-zinc-200 bg-white py-2 pr-3 pl-2.5 text-left text-sm text-zinc-400 transition-colors hover:border-primary/30"
 			>
 				<Search class="h-4 w-4" />
 				<span>検索...</span>
@@ -153,21 +153,21 @@
 				<li>
 					<a
 						href="/articles"
-						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-900"
+						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
 						>Articles</a
 					>
 				</li>
 				<li>
 					<a
 						href="/projects"
-						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-900"
+						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
 						>Projects</a
 					>
 				</li>
 				<li>
 					<a
 						href="/members"
-						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-900"
+						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
 						>Members</a
 					>
 				</li>

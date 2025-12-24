@@ -10,7 +10,8 @@ members ◄────────────────┐
   │                      │
   │ 1:N                  │ N:M
   ▼                      │
-articles    projects ────┘
+articles ──► articleSlugRedirects
+           projects ─────┘
                 projectMembers
 ```
 
@@ -32,6 +33,7 @@ members
 ├── bio          TEXT
 ├── imageUrl     TEXT
 ├── pageContent  TEXT
+├── viewCount    INTEGER NOT NULL DEFAULT 0
 ├── createdAt    INTEGER NOT NULL
 └── updatedAt    INTEGER NOT NULL
 
@@ -49,6 +51,13 @@ articles
 ├── createdAt    INTEGER NOT NULL
 └── updatedAt    INTEGER NOT NULL
 
+articleSlugRedirects
+├── id           TEXT PK
+├── oldSlug      TEXT NOT NULL
+├── newSlug      TEXT NOT NULL
+├── articleId    TEXT FK → articles.id (CASCADE)
+└── createdAt    INTEGER NOT NULL
+
 projects
 ├── id           TEXT PK
 ├── slug         TEXT UNIQUE NOT NULL
@@ -59,6 +68,7 @@ projects
 ├── repoUrl      TEXT
 ├── demoUrl      TEXT
 ├── category     TEXT NOT NULL DEFAULT 'active'  -- "active" | "ended" | "hackathon" | "festival" | "personal"
+├── viewCount    INTEGER NOT NULL DEFAULT 0
 ├── createdAt    INTEGER NOT NULL
 └── updatedAt    INTEGER NOT NULL
 
@@ -91,24 +101,27 @@ projectMembers
 | メンバーを検索する         |      | ✓    |
 | メンバー一覧を見る         | ✓    | ✓    |
 | メンバー詳細を見る         | ✓    | ✓    |
+| メンバーページ閲覧数をインクリメント | ✓    | ✓    |
 | 自己紹介ページを書く       | ✓    | ✓    |
 
 ### Articles
 
-| アクション                 | 公開 | 実装 |
-| -------------------------- | ---- | ---- |
-| 記事を書く                 |      | ✓    |
-| 記事を編集する             |      | ✓    |
-| 記事を公開する             |      | ✓    |
-| 記事を非公開にする         |      | ✓    |
-| 記事を削除する             |      | ✓    |
-| 下書き含む記事一覧を見る   |      | ✓    |
-| 下書きを読む               |      | ✓    |
-| 記事をプレビューする       |      | ✓    |
-| 公開記事一覧を見る         | ✓    | ✓    |
-| 公開記事を読む             | ✓    | ✓    |
-| 記事閲覧数をインクリメント | ✓    | ✓    |
-| 関連記事を取得する         | ✓    | ✓    |
+| アクション                       | 公開 | 実装 |
+| -------------------------------- | ---- | ---- |
+| 記事を書く                       |      | ✓    |
+| 記事を編集する                   |      | ✓    |
+| スラグ変更時にリダイレクトを残す |      | ✓    |
+| 記事を公開する                   |      | ✓    |
+| 記事を非公開にする               |      | ✓    |
+| 記事を削除する                   |      | ✓    |
+| 下書き含む記事一覧を見る         |      | ✓    |
+| 下書きを読む                     |      | ✓    |
+| 記事をプレビューする             |      | ✓    |
+| 公開記事一覧を見る               | ✓    | ✓    |
+| 公開記事を読む                   | ✓    | ✓    |
+| 記事閲覧数をインクリメント       | ✓    | ✓    |
+| 関連記事を取得する               | ✓    | ✓    |
+| 旧スラグから新スラグへリダイレクト | ✓    | ✓    |
 
 ### Projects
 
@@ -122,6 +135,7 @@ projectMembers
 | プロジェクトを検索する           |      | ✓    |
 | プロジェクト一覧を見る           | ✓    | ✓    |
 | プロジェクト詳細を見る           | ✓    | ✓    |
+| プロジェクト閲覧数をインクリメント | ✓    | ✓    |
 | リードを引き継ぐ                 |      | ✓    |
 
 ### Search
@@ -129,3 +143,13 @@ projectMembers
 | アクション             | 公開 | 実装 |
 | ---------------------- | ---- | ---- |
 | 記事・プロジェクト検索 | ✓    | ✓    |
+
+### Analytics
+
+| アクション                   | 公開 | 実装 |
+| ---------------------------- | ---- | ---- |
+| 閲覧数統計を見る             |      | ✓    |
+| 記事別閲覧数ランキング       |      | ✓    |
+| プロジェクト別閲覧数ランキング |      | ✓    |
+| メンバー別閲覧数ランキング   |      | ✓    |
+| ダッシュボードで統計概要を見る |      | ✓    |

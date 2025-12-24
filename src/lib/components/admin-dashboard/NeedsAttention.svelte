@@ -30,7 +30,7 @@
 			{#each draftArticles as draft (draft.id)}
 				<a
 					href="/admin/articles/edit/{draft.id}"
-					class="group flex items-center gap-3 rounded-xl bg-base-200/50 p-3 transition-all hover:bg-base-200"
+					class="group flex items-center gap-3 rounded-xl border border-base-300/50 bg-base-200/50 p-3 transition-all hover:bg-primary/5 hover:border-primary/30"
 				>
 					<div class="flex h-9 w-9 items-center justify-center rounded-lg bg-warning/10">
 						<SquarePen class="h-4 w-4 text-warning" />

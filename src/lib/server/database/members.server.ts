@@ -13,12 +13,22 @@ export async function listMembers() {
 }
 
 export async function getMemberBySlug(slug: string) {
-  return db.query.member.findFirst({
+  const result = await db.query.member.findFirst({
     where: eq(member.slug, slug),
     with: {
       projectMembers: { with: { project: true } },
     },
   });
+
+  // Fire-and-forget: view count accuracy is not critical
+  if (result) {
+    db.update(member)
+      .set({ viewCount: sql`${member.viewCount} + 1` })
+      .where(eq(member.slug, slug))
+      .catch(console.error);
+  }
+
+  return result;
 }
 
 export async function getMemberById(id: string) {
@@ -54,10 +64,6 @@ export async function updateMember(id: string, data: Partial<Omit<NewMember, "id
 
 export async function deleteMember(id: string) {
   await db.delete(member).where(eq(member.id, id));
-}
-
-export async function linkMemberToUser(memberId: string, userId: string) {
-  return updateMember(memberId, { userId });
 }
 
 export async function searchMembers(query: string) {

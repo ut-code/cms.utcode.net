@@ -15,7 +15,7 @@
 <section class="border-b border-zinc-200 bg-zinc-50/50 py-16">
 	<div class="mx-auto max-w-6xl px-6">
 		<div
-			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-[#00D372] uppercase"
+			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-primary uppercase"
 		>
 			Join us
 		</div>
@@ -26,7 +26,7 @@
 
 <div class="mx-auto max-w-4xl px-6 py-8 sm:py-12">
 	<!-- Welcome message -->
-	<div class="mb-8 rounded-2xl border border-[#00D372]/20 bg-[#00D372]/5 p-6 sm:mb-12 sm:p-8">
+	<div class="mb-8 rounded-2xl border border-primary/20 bg-primary/5 p-6 sm:mb-12 sm:p-8">
 		<h2 class="mb-3 text-xl font-bold sm:mb-4 sm:text-2xl">ようこそ!</h2>
 		<p class="leading-relaxed text-zinc-700">
 			ut.code(); は東京大学のソフトウェアエンジニアリングサークルです。
@@ -38,25 +38,25 @@
 	<!-- Requirements -->
 	<section class="mb-8 sm:mb-12">
 		<h2 class="mb-4 flex items-center gap-2 text-lg font-bold sm:mb-6 sm:text-xl">
-			<Users class="h-5 w-5 text-[#00D372]" />
+			<Users class="h-5 w-5 text-primary" />
 			入部要件
 		</h2>
 		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<ul class="space-y-3">
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700">基本的に大学生・大学院生が対象です</span>
 				</li>
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700">大学名による制限はありません（他大学の方も歓迎）</span>
 				</li>
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700">学年による制限はありません</span>
 				</li>
 				<li class="flex items-start gap-3">
-					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#00D372]"></span>
+					<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
 					<span class="text-zinc-700">プログラミング経験の有無は問いません</span>
 				</li>
 			</ul>
@@ -66,14 +66,14 @@
 	<!-- How to join -->
 	<section class="mb-12">
 		<h2 class="mb-6 flex items-center gap-2 text-xl font-bold">
-			<MessageCircle class="h-5 w-5 text-[#00D372]" />
+			<MessageCircle class="h-5 w-5 text-primary" />
 			入部方法
 		</h2>
 		<div class="rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6">
 			<div class="space-y-4">
 				<div class="flex items-start gap-4">
 					<div
-						class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#00D372] font-bold text-white"
+						class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary font-bold text-white"
 					>
 						1
 					</div>
@@ -87,7 +87,7 @@
 				</div>
 				<div class="flex items-start gap-4">
 					<div
-						class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#00D372] font-bold text-white"
+						class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary font-bold text-white"
 					>
 						2
 					</div>
@@ -105,7 +105,7 @@
 	<!-- Activities -->
 	<section class="mb-12">
 		<h2 class="mb-6 flex items-center gap-2 text-xl font-bold">
-			<Heart class="h-5 w-5 text-[#00D372]" />
+			<Heart class="h-5 w-5 text-primary" />
 			活動について
 		</h2>
 		<div class="grid gap-4 sm:grid-cols-2">
@@ -144,7 +144,7 @@
 					href="https://github.com/ut-code"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:border-zinc-900 hover:bg-zinc-900 hover:text-white"
+					class="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
 				>
 					<Github class="h-4 w-4" />
 					GitHub
@@ -153,7 +153,7 @@
 					href="https://twitter.com/utokyo_code"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:border-[#1DA1F2] hover:bg-[#1DA1F2] hover:text-white"
+					class="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
 				>
 					<Twitter class="h-4 w-4" />
 					X (Twitter)
@@ -165,10 +165,10 @@
 	<!-- CTA -->
 	<div class="rounded-2xl bg-zinc-900 p-6 text-center text-white sm:p-8">
 		<h2 class="mb-3 text-xl font-bold sm:mb-4 sm:text-2xl">一緒にソフトウェアを作ろう</h2>
-		<p class="mb-6 text-zinc-400">ut.code(); であなたのアイデアを形にしませんか？</p>
+		<p class="mb-6 text-zinc-500">ut.code(); であなたのアイデアを形にしませんか？</p>
 		<a
 			href="/"
-			class="group inline-flex items-center gap-2 rounded-lg bg-[#00D372] px-6 py-3 font-semibold text-zinc-900 transition-all hover:bg-[#00C066]"
+			class="group inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-zinc-900 transition-all hover:bg-primary-focus"
 		>
 			トップページへ戻る
 			<ArrowRight class="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

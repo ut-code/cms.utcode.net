@@ -26,6 +26,7 @@
 			type="button"
 			onclick={() => goto("/admin/projects")}
 			class="flex items-center gap-1.5 text-sm text-zinc-500 transition-colors hover:text-zinc-900"
+			aria-label="Back to Projects"
 		>
 			<ArrowLeft class="h-4 w-4" />
 			<span class="hidden sm:inline">Projects</span>
@@ -42,7 +43,8 @@
 			onclick={onToggleSettings}
 			class="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm transition-colors sm:px-3 sm:py-2 {showSettings
 				? 'bg-zinc-900 text-white'
-				: 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900'}"
+				: 'text-zinc-600 hover:bg-primary/5 hover:text-primary'}"
+			aria-label="Toggle settings"
 		>
 			<Settings class="h-4 w-4" />
 			<span class="hidden sm:inline">Settings</span>

@@ -78,7 +78,7 @@
 <section class="border-b border-zinc-200 bg-zinc-50/50 py-16">
 	<div class="mx-auto max-w-6xl px-6">
 		<div
-			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-[#00D372] uppercase"
+			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-primary uppercase"
 		>
 			FAQ
 		</div>
@@ -89,9 +89,9 @@
 
 <div class="mx-auto max-w-4xl px-6 py-12">
 	<!-- Introduction -->
-	<div class="mb-12 rounded-2xl border border-[#00D372]/20 bg-[#00D372]/5 p-8">
+	<div class="mb-12 rounded-2xl border border-primary/20 bg-primary/5 p-8">
 		<div class="flex items-start gap-4">
-			<HelpCircle class="h-6 w-6 shrink-0 text-[#00D372]" />
+			<HelpCircle class="h-6 w-6 shrink-0 text-primary" />
 			<div>
 				<h2 class="mb-2 text-xl font-bold">お探しの情報が見つかりませんか?</h2>
 				<p class="text-zinc-700">
@@ -126,13 +126,13 @@
 		<div class="flex flex-wrap justify-center gap-4">
 			<a
 				href="/join"
-				class="inline-flex items-center gap-2 rounded-lg bg-[#00D372] px-6 py-3 font-semibold text-zinc-900 transition-all hover:bg-[#00C066]"
+				class="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-zinc-900 transition-all hover:bg-primary-focus"
 			>
 				入部案内を見る
 			</a>
 			<a
 				href="/"
-				class="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-6 py-3 font-semibold text-zinc-700 transition-colors hover:border-zinc-900 hover:bg-zinc-900 hover:text-white"
+				class="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-6 py-3 font-semibold text-zinc-700 transition-colors hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
 			>
 				トップページへ
 			</a>

@@ -82,6 +82,7 @@
 	let selectedIndex = $state(0);
 
 	const results = $derived(query.trim() ? await searchFn(query) : []);
+	const resultCount = $derived(results.length);
 
 	function handleQueryInput(e: Event & { currentTarget: HTMLInputElement }) {
 		const newQuery = e.currentTarget.value;
@@ -171,6 +172,13 @@
 				/>
 				<kbd class="hidden sm:inline {theme.kbd}">ESC</kbd>
 			</div>
+
+			<!-- Result count -->
+			{#if query.trim() && resultCount > 0}
+				<div class="px-4 py-2 text-sm {theme.emptyText}">
+					Found {resultCount} {resultCount === 1 ? "result" : "results"}
+				</div>
+			{/if}
 
 			<!-- Results -->
 			<div class="max-h-80 overflow-y-auto p-2">

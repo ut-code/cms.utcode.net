@@ -68,7 +68,7 @@
 					{#each member.projectMembers as pm (pm.projectId)}
 						<a
 							href="/projects/{pm.project.slug}"
-							class="flex items-center gap-3 rounded-lg border border-zinc-200 px-4 py-3 hover:border-[#00D372]"
+							class="flex items-center gap-3 rounded-lg border border-zinc-200 px-4 py-3 transition-all hover:bg-primary/5 hover:border-primary/30"
 						>
 							{#if pm.project.coverUrl}
 								<img
@@ -98,6 +98,6 @@
 {:else}
 	<div class="mx-auto max-w-3xl px-6 py-16 text-center">
 		<h1 class="mb-4 text-2xl font-bold">メンバーが見つかりません</h1>
-		<a href="/members" class="text-[#00D372] hover:underline">メンバー一覧に戻る</a>
+		<a href="/members" class="text-primary hover:underline">メンバー一覧に戻る</a>
 	</div>
 {/if}
