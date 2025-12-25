@@ -29,16 +29,16 @@
 		{#if showDevBanner}
 			<div
 				role="alert"
-				class="alert fixed top-0 right-0 left-0 z-50 rounded-none border-b border-yellow-600/20 bg-yellow-50 py-3 text-center"
+				class="alert fixed top-0 right-0 left-0 z-50 rounded-none border-b-2 border-orange-600 bg-gradient-to-r from-orange-500 to-amber-500 py-4 text-center shadow-lg"
 			>
-				<span class="font-[JetBrains_Mono,monospace] text-sm text-yellow-900">
-					このサイトは開発中です
+				<span class="font-[JetBrains_Mono,monospace] text-base font-semibold text-white drop-shadow-md">
+					⚠️ このサイトは開発中です
 				</span>
 			</div>
 		{/if}
 
 		<nav
-			class="sticky {showDevBanner ? 'top-12' : 'top-0'} right-0 left-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-md"
+			class="sticky {showDevBanner ? 'top-14' : 'top-0'} right-0 left-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-md"
 		>
 			<div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
 				<div class="flex items-center gap-4">
@@ -148,7 +148,7 @@
 									href="https://twitter.com/utokyo_code"
 									target="_blank"
 									rel="noopener noreferrer"
-									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">Twitter</a
+									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">X</a
 								>
 							</div>
 						</div>
