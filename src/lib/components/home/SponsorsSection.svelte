@@ -18,18 +18,18 @@
 	];
 </script>
 
-<section class="bg-white py-32">
-	<div class="mx-auto max-w-7xl px-6">
+<section class="bg-zinc-50 py-32">
+	<div class="mx-auto max-w-6xl px-6">
 		<div class="mb-16 text-center">
-			<div class="mb-4 font-mono text-sm font-medium text-orange-600">SPONSORS</div>
-			<h2 class="font-[clash-display,ui-sans-serif,system-ui,sans-serif] text-5xl font-bold text-zinc-900 lg:text-6xl">
+			<div class="mb-4 font-mono text-sm font-medium uppercase tracking-widest text-[#00D372]">SPONSORS</div>
+			<h2 class="text-5xl font-bold text-zinc-900 lg:text-6xl">
 				協賛企業様
 			</h2>
 		</div>
 
 		<div class="mx-auto max-w-5xl">
 			<div
-				class="flex min-h-64 flex-wrap items-center justify-center gap-16 rounded-3xl border-2 border-zinc-200 bg-gradient-to-br from-zinc-50 to-white p-16"
+				class="flex min-h-64 flex-wrap items-center justify-center gap-16 rounded-3xl border border-zinc-200/50 bg-white/80 p-16 backdrop-blur-md"
 			>
 				{#if sponsors.length > 0}
 					{#each sponsors as sponsor}
@@ -38,7 +38,7 @@
 								href={sponsor.websiteUrl}
 								target="_blank"
 								rel="noopener noreferrer"
-								class="transition-all hover:scale-105 hover:opacity-80"
+								class="transition-all hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-[#00D372] focus:ring-offset-2"
 							>
 								<img
 									src={sponsor.logoUrl}
@@ -48,7 +48,7 @@
 								/>
 							</a>
 						{:else}
-							<div class="transition-all hover:scale-105">
+							<div>
 								<img
 									src={sponsor.logoUrl}
 									alt={sponsor.name}
@@ -63,7 +63,7 @@
 						<p class="mb-6 text-xl text-zinc-600">協賛企業を募集中です</p>
 						<a
 							href="/donation"
-							class="inline-block rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-8 py-4 font-bold text-white shadow-lg shadow-orange-500/25 transition-all hover:shadow-xl hover:shadow-orange-500/40"
+							class="inline-block rounded-lg bg-[#00D372] px-8 py-4 font-semibold text-white shadow-lg shadow-[#00D372]/30 transition-all hover:shadow-xl hover:shadow-[#00D372]/40 focus:outline-none focus:ring-2 focus:ring-[#00D372] focus:ring-offset-2"
 						>
 							寄付について詳しく見る
 						</a>

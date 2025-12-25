@@ -19,6 +19,9 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "complexity": {
+        "noImportantStyles": "off"
+      },
       "nursery": {
         "noFloatingPromises": "error",
         "useSortedClasses": {

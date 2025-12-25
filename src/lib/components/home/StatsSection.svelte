@@ -11,96 +11,84 @@
 	const { members, projects, articles, years }: Props = $props();
 </script>
 
-<section class="bg-zinc-900 py-24">
-	<div class="mx-auto max-w-7xl px-6">
+<section class="bg-zinc-50 py-24">
+	<div class="mx-auto max-w-6xl px-6">
 		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
 			<a
 				href="/members"
-				class="group relative overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950/50 p-8 backdrop-blur-sm transition-all hover:scale-105 hover:border-orange-500/60 hover:shadow-xl hover:shadow-orange-500/10"
+				class="group relative overflow-hidden rounded-2xl border border-zinc-200/50 bg-white/80 p-8 backdrop-blur-md transition-all hover:border-[#00D372]/30 hover:bg-[#00D372]/5 hover:shadow-lg hover:shadow-[#00D372]/5 focus:outline-none focus:ring-2 focus:ring-[#00D372] focus:ring-offset-2"
 			>
-				<div
-					class="pointer-events-none absolute inset-0 bg-gradient-to-br from-orange-500/0 to-orange-500/0 opacity-0 transition-all duration-500 group-hover:from-orange-500/15 group-hover:to-transparent group-hover:opacity-100"
-				></div>
 				<div class="relative">
 					<div class="mb-4 flex items-center justify-between">
-						<div class="font-mono text-xs uppercase tracking-wider text-zinc-500">Members</div>
-						<div class="rounded-lg bg-orange-500/10 p-2 transition-all group-hover:bg-orange-500/20">
-							<Users class="h-5 w-5 text-orange-400" />
+						<div class="font-mono text-xs uppercase tracking-wider text-zinc-400">Members</div>
+						<div class="rounded-lg bg-[#00D372]/10 p-2 transition-all group-hover:bg-[#00D372]/20">
+							<Users class="h-5 w-5 text-[#00D372]" />
 						</div>
 					</div>
 					<div class="flex items-baseline gap-2">
-						<span class="font-[clash-display,ui-sans-serif,system-ui,sans-serif] text-5xl font-bold text-white transition-all group-hover:text-orange-300">
+						<span class="text-5xl font-bold text-zinc-900 transition-all group-hover:text-[#00D372]">
 							{members}
 						</span>
-						<span class="text-2xl font-bold text-orange-400">+</span>
+						<span class="text-2xl font-bold text-[#00D372]">+</span>
 					</div>
 				</div>
 			</a>
 
 			<a
 				href="/projects"
-				class="group relative overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950/50 p-8 backdrop-blur-sm transition-all hover:scale-105 hover:border-amber-500/60 hover:shadow-xl hover:shadow-amber-500/10"
+				class="group relative overflow-hidden rounded-2xl border border-zinc-200/50 bg-white/80 p-8 backdrop-blur-md transition-all hover:border-[#00D372]/30 hover:bg-[#00D372]/5 hover:shadow-lg hover:shadow-[#00D372]/5 focus:outline-none focus:ring-2 focus:ring-[#00D372] focus:ring-offset-2"
 			>
-				<div
-					class="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-500/0 to-amber-500/0 opacity-0 transition-all duration-500 group-hover:from-amber-500/15 group-hover:to-transparent group-hover:opacity-100"
-				></div>
 				<div class="relative">
 					<div class="mb-4 flex items-center justify-between">
-						<div class="font-mono text-xs uppercase tracking-wider text-zinc-500">Projects</div>
-						<div class="rounded-lg bg-amber-500/10 p-2 transition-all group-hover:bg-amber-500/20">
-							<Rocket class="h-5 w-5 text-amber-400" />
+						<div class="font-mono text-xs uppercase tracking-wider text-zinc-400">Projects</div>
+						<div class="rounded-lg bg-[#00D372]/10 p-2 transition-all group-hover:bg-[#00D372]/20">
+							<Rocket class="h-5 w-5 text-[#00D372]" />
 						</div>
 					</div>
 					<div class="flex items-baseline gap-2">
-						<span class="font-[clash-display,ui-sans-serif,system-ui,sans-serif] text-5xl font-bold text-white transition-all group-hover:text-amber-300">
+						<span class="text-5xl font-bold text-zinc-900 transition-all group-hover:text-[#00D372]">
 							{projects}
 						</span>
-						<span class="text-2xl font-bold text-amber-400">+</span>
+						<span class="text-2xl font-bold text-[#00D372]">+</span>
 					</div>
 				</div>
 			</a>
 
 			<a
 				href="/articles"
-				class="group relative overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950/50 p-8 backdrop-blur-sm transition-all hover:scale-105 hover:border-yellow-500/60 hover:shadow-xl hover:shadow-yellow-500/10"
+				class="group relative overflow-hidden rounded-2xl border border-zinc-200/50 bg-white/80 p-8 backdrop-blur-md transition-all hover:border-[#00D372]/30 hover:bg-[#00D372]/5 hover:shadow-lg hover:shadow-[#00D372]/5 focus:outline-none focus:ring-2 focus:ring-[#00D372] focus:ring-offset-2"
 			>
-				<div
-					class="pointer-events-none absolute inset-0 bg-gradient-to-br from-yellow-500/0 to-yellow-500/0 opacity-0 transition-all duration-500 group-hover:from-yellow-500/15 group-hover:to-transparent group-hover:opacity-100"
-				></div>
 				<div class="relative">
 					<div class="mb-4 flex items-center justify-between">
-						<div class="font-mono text-xs uppercase tracking-wider text-zinc-500">Articles</div>
-						<div class="rounded-lg bg-yellow-500/10 p-2 transition-all group-hover:bg-yellow-500/20">
-							<BookOpen class="h-5 w-5 text-yellow-400" />
+						<div class="font-mono text-xs uppercase tracking-wider text-zinc-400">Articles</div>
+						<div class="rounded-lg bg-[#00D372]/10 p-2 transition-all group-hover:bg-[#00D372]/20">
+							<BookOpen class="h-5 w-5 text-[#00D372]" />
 						</div>
 					</div>
 					<div class="flex items-baseline gap-2">
-						<span class="font-[clash-display,ui-sans-serif,system-ui,sans-serif] text-5xl font-bold text-white transition-all group-hover:text-yellow-300">
+						<span class="text-5xl font-bold text-zinc-900 transition-all group-hover:text-[#00D372]">
 							{articles}
 						</span>
-						<span class="text-2xl font-bold text-yellow-400">+</span>
+						<span class="text-2xl font-bold text-[#00D372]">+</span>
 					</div>
 				</div>
 			</a>
 
 			<div
-				class="group relative overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950/50 p-8 backdrop-blur-sm transition-all hover:scale-105 hover:border-orange-500/40 hover:shadow-xl hover:shadow-orange-500/10"
+				class="group relative overflow-hidden rounded-2xl border border-zinc-200/50 bg-white/80 p-8 backdrop-blur-md transition-all hover:border-[#00D372]/30 hover:bg-[#00D372]/5 hover:shadow-lg hover:shadow-[#00D372]/5"
 			>
-				<div
-					class="pointer-events-none absolute inset-0 bg-gradient-to-br from-orange-500/0 to-orange-500/0 opacity-0 transition-all duration-500 group-hover:from-orange-500/10 group-hover:to-transparent group-hover:opacity-100"
-				></div>
 				<div class="relative">
 					<div class="mb-4 flex items-center justify-between">
-						<div class="font-mono text-xs uppercase tracking-wider text-zinc-500">Years Active</div>
-						<div class="rounded-lg bg-orange-500/10 p-2 transition-all group-hover:bg-orange-500/20">
-							<Calendar class="h-5 w-5 text-orange-400" />
+						<div class="font-mono text-xs uppercase tracking-wider text-zinc-400">Years Active</div>
+						<div class="rounded-lg bg-[#00D372]/10 p-2 transition-all group-hover:bg-[#00D372]/20">
+							<Calendar class="h-5 w-5 text-[#00D372]" />
 						</div>
 					</div>
 					<div class="flex items-baseline gap-2">
-						<span class="font-[clash-display,ui-sans-serif,system-ui,sans-serif] text-5xl font-bold text-white transition-all group-hover:text-orange-300">
+						<span class="text-5xl font-bold text-zinc-900 transition-all group-hover:text-[#00D372]">
 							{years}
 						</span>
-						<span class="text-2xl font-bold text-orange-400">+</span>
+						<span class="text-2xl font-bold text-[#00D372]">+</span>
 					</div>
 				</div>
 			</div>
