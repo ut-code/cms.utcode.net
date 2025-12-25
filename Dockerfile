@@ -22,16 +22,18 @@ RUN bun run prepare
 
 # Build with sops secrets
 ARG SOPS_AGE_KEY
+ARG SECRETS_FILE=secrets.prod.yaml
 ENV SOPS_AGE_KEY=${SOPS_AGE_KEY}
-RUN sops exec-env secrets.prod.yaml 'bun run build'
+RUN sops exec-env ${SECRETS_FILE} 'bun run build'
 
 FROM base AS executor
 WORKDIR /app
+ARG SECRETS_FILE=secrets.prod.yaml
 
 # Copy built application
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/package.json ./
-COPY secrets.prod.yaml ./secrets.yaml
+COPY ${SECRETS_FILE} ./secrets.yaml
 
 # Copy drizzle migration files and config
 COPY --from=builder /app/drizzle ./drizzle

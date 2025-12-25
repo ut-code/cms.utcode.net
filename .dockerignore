@@ -7,6 +7,5 @@ build
 .env.*
 !.env.sample
 .sops-age-key.txt
-secrets.dev.yaml
 *.db
 .git

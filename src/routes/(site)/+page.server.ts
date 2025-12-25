@@ -13,5 +13,3 @@ export const load: PageServerLoad = async () => {
     allProjects,
   };
 };
-
-export const prerender = true;

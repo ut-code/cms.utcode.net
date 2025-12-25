@@ -132,3 +132,7 @@ run `bun tidy` after you finish your work. i.e. before commit
   ```
 
 For detailed coding standards (import order, async patterns, naming conventions), see `docs/knowledges/coding-standards.md`.
+
+# Requirements
+
+do NOT read sops secrets. do NOT read .env.
