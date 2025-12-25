@@ -49,7 +49,7 @@
 						<img src={logo} alt="ut.code();" class="h-8" />
 					</a>
 				</div>
-				<div class="hidden items-center gap-4 md:flex">
+				<div class="hidden items-center gap-6 md:flex">
 					<button
 						type="button"
 						onclick={openSearch}
@@ -63,73 +63,12 @@
 						>
 					</button>
 
-					<div class="dropdown dropdown-hover">
-						<div
-							tabindex="0"
-							role="button"
-							class="text-sm text-zinc-500 transition-colors hover:text-zinc-900"
-						>
-							About
-						</div>
-						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-						<ul
-							tabindex="0"
-							class="menu dropdown-content z-[1] mt-3 w-52 rounded-lg border border-zinc-200 bg-white p-2 shadow"
-						>
-							<li>
-								<a
-									href="/about"
-									class="text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
-									>About</a
-								>
-							</li>
-							<li>
-								<a
-									href="/activities"
-									class="text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
-									>Activities</a
-								>
-							</li>
-							<li>
-								<a
-									href="/join"
-									class="text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
-									>Join</a
-								>
-							</li>
-						</ul>
-					</div>
-
-					<div class="dropdown dropdown-hover">
-						<div
-							tabindex="0"
-							role="button"
-							class="text-sm text-zinc-500 transition-colors hover:text-zinc-900"
-						>
-							Content
-						</div>
-						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-						<ul
-							tabindex="0"
-							class="menu dropdown-content z-[1] mt-3 w-52 rounded-lg border border-zinc-200 bg-white p-2 shadow"
-						>
-							<li>
-								<a
-									href="/articles"
-									class="text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
-									>Articles</a
-								>
-							</li>
-							<li>
-								<a
-									href="/projects"
-									class="text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
-									>Projects</a
-								>
-							</li>
-						</ul>
-					</div>
-
+					<a href="/articles" class="text-sm text-zinc-500 transition-colors hover:text-zinc-900"
+						>Articles</a
+					>
+					<a href="/projects" class="text-sm text-zinc-500 transition-colors hover:text-zinc-900"
+						>Projects</a
+					>
 					<a href="/members" class="text-sm text-zinc-500 transition-colors hover:text-zinc-900"
 						>Members</a
 					>
@@ -238,20 +177,6 @@
 			<ul class="space-y-2">
 				<li>
 					<a
-						href="/about"
-						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
-						>About</a
-					>
-				</li>
-				<li>
-					<a
-						href="/activities"
-						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
-						>Activities</a
-					>
-				</li>
-				<li>
-					<a
 						href="/articles"
 						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
 						>Articles</a
@@ -269,13 +194,6 @@
 						href="/members"
 						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
 						>Members</a
-					>
-				</li>
-				<li>
-					<a
-						href="/join"
-						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
-						>Join</a
 					>
 				</li>
 			</ul>

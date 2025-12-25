@@ -42,6 +42,7 @@
 				src={article.coverUrl}
 				alt={article.title}
 				class="mb-6 aspect-[5/3] w-full rounded-xl object-cover sm:mb-8"
+				loading="lazy"
 			/>
 		{/if}
 
@@ -58,6 +59,7 @@
 							src={article.author.imageUrl}
 							alt={article.author.name}
 							class="aspect-square h-6 w-6 rounded-full object-cover"
+							loading="lazy"
 						/>
 					{/if}
 					{article.author.name}
@@ -88,6 +90,7 @@
 									src={relatedArticle.coverUrl}
 									alt={relatedArticle.title}
 									class="mb-3 aspect-[5/3] w-full rounded-lg object-cover"
+									loading="lazy"
 								/>
 							{/if}
 							<h3 class="mb-2 font-semibold group-hover:text-primary">

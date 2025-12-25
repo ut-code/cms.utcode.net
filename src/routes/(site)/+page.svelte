@@ -7,14 +7,13 @@
 	import ProjectsSection from "$lib/components/home/ProjectsSection.svelte";
 	import SponsorsSection from "$lib/components/home/SponsorsSection.svelte";
 	import StatsSection from "$lib/components/home/StatsSection.svelte";
-	import { getPublicArticles, getPublicProjects } from "$lib/data/public/index.remote";
+	import { getHomeArticles, getHomeProjects } from "$lib/data/public/index.remote";
 	import { getStats } from "$lib/data/public/stats.remote";
 
 	const stats = await getStats();
-	const allArticles = await getPublicArticles();
-	const allProjects = await getPublicProjects();
+	const articles = await getHomeArticles(3);
+	const allProjects = await getHomeProjects(5);
 
-	const articles = $derived(allArticles.slice(0, 3));
 	const featuredProject = $derived(allProjects.find((p) => p.category === "active"));
 	const projects = $derived(allProjects.filter((p) => p.id !== featuredProject?.id).slice(0, 4));
 
@@ -27,7 +26,7 @@
 	<meta property="og:title" content="ut.code(); - 東京大学ソフトウェアエンジニアリングサークル" />
 </svelte:head>
 
-<HeroSection members={stats.members} projects={stats.projects} {years} />
+<HeroSection />
 
 <StatsSection members={stats.members} projects={stats.projects} articles={stats.articles} {years} />
 

@@ -133,3 +133,13 @@ export async function getRecentProjects(limit: number) {
     limit,
   });
 }
+
+export async function listRecentProjects(limit: number) {
+  return db.query.project.findMany({
+    orderBy: (t, { desc }) => desc(t.createdAt),
+    limit,
+    with: {
+      projectMembers: { with: { member: true } },
+    },
+  });
+}

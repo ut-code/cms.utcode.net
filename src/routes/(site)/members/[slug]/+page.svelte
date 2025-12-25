@@ -35,6 +35,7 @@
 					src={member.imageUrl}
 					alt={member.name}
 					class="mb-4 aspect-square h-16 w-16 rounded-full object-cover sm:mb-6 sm:mr-6 sm:h-20 sm:w-20 md:mb-0"
+					loading="lazy"
 				/>
 			{:else}
 				<div
@@ -74,6 +75,7 @@
 									src={pm.project.coverUrl}
 									alt={pm.project.name}
 									class="h-10 w-16 rounded object-cover"
+									loading="lazy"
 								/>
 							{:else}
 								<div class="flex h-10 w-10 items-center justify-center rounded bg-zinc-100">

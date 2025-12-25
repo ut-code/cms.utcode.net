@@ -66,6 +66,7 @@
 									src={article.coverUrl}
 									alt={article.title}
 									class="mb-4 aspect-[5/3] w-full rounded-lg object-cover"
+									loading="lazy"
 								/>
 							{/if}
 							<h3 class="mb-2 font-semibold group-hover:text-primary">{article.title}</h3>
@@ -103,6 +104,7 @@
 									src={project.coverUrl}
 									alt={project.name}
 									class="mb-4 aspect-[5/3] w-full rounded-lg object-cover"
+									loading="lazy"
 								/>
 							{/if}
 							<h3 class="mb-2 font-semibold group-hover:text-primary">{project.name}</h3>

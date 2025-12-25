@@ -191,3 +191,12 @@ export async function getRecentDraftArticles(limit: number) {
     limit,
   });
 }
+
+export async function getRecentPublishedArticles(limit: number) {
+  return db.query.article.findMany({
+    where: eq(article.published, true),
+    orderBy: desc(article.publishedAt),
+    limit,
+    with: { author: true },
+  });
+}

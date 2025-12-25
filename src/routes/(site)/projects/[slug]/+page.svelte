@@ -44,6 +44,7 @@
 				src={project.coverUrl}
 				alt={project.name}
 				class="mb-6 aspect-[5/3] w-full rounded-xl object-cover sm:mb-8"
+				loading="lazy"
 			/>
 		{/if}
 
@@ -95,7 +96,12 @@
 						class="flex items-center gap-3 rounded-lg border border-zinc-200 px-4 py-3 transition-all hover:bg-primary/5 hover:border-primary/30"
 					>
 						{#if pm.member.imageUrl}
-							<img src={pm.member.imageUrl} alt={pm.member.name} class="aspect-square h-10 w-10 rounded-full object-cover" />
+							<img
+								src={pm.member.imageUrl}
+								alt={pm.member.name}
+								class="aspect-square h-10 w-10 rounded-full object-cover"
+								loading="lazy"
+							/>
 						{:else}
 							<div class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100">
 								<span class="text-sm font-medium text-zinc-600">

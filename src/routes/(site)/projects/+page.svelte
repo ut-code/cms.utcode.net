@@ -110,6 +110,7 @@
 							src={project.coverUrl}
 							alt={project.name}
 							class="mb-4 aspect-[5/3] w-full rounded-xl object-cover"
+							loading="lazy"
 						/>
 					{/if}
 					<div class="mb-2 flex items-start justify-between gap-2">

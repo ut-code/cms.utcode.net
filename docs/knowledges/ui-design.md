@@ -69,12 +69,17 @@ Applied to:
 
 ## Navigation Structure
 
-**Header Navigation** (3 groups max for UX)
-- **About** dropdown: About, Activities, Join
-- **Content** dropdown: Articles, Projects
-- **Members**: Direct link
+**Header Navigation** (Simple direct links)
+- Articles
+- Projects
+- Members
 
-Mobile: All items in drawer menu
+**Footer Navigation** (Comprehensive links)
+- About section: About, Activities, Join, Donation
+- Content section: Articles, Projects, Members
+- Social section: GitHub, Twitter
+
+Mobile: Drawer menu mirrors header navigation (Articles, Projects, Members)
 
 ## Public Pages Structure
 

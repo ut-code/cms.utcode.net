@@ -39,6 +39,7 @@
 									src={article.coverUrl}
 									alt={article.title}
 									class="aspect-[5/3] w-full object-cover"
+									loading="lazy"
 								/>
 							{/if}
 							<div class="p-6">

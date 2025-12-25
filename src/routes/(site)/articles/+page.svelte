@@ -57,6 +57,7 @@
 							src={article.coverUrl}
 							alt={article.title}
 							class="mb-4 aspect-[5/3] w-full rounded-xl object-cover"
+							loading="lazy"
 						/>
 					{/if}
 					<h2 class="mb-2 font-semibold transition-colors group-hover:text-primary">

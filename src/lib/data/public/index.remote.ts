@@ -2,6 +2,7 @@ import * as v from "valibot";
 import { query } from "$app/server";
 import {
   getPublishedArticle,
+  getRecentPublishedArticles,
   getRelatedArticles,
   listPublishedArticles,
   searchPublishedArticles,
@@ -10,6 +11,7 @@ import { getMemberBySlug, listMembers, searchMembers } from "$lib/server/databas
 import {
   getProjectBySlug,
   listProjects,
+  listRecentProjects,
   searchProjects,
 } from "$lib/server/database/projects.server";
 import type { SearchResult } from "$lib/shared/logic/search";
@@ -27,6 +29,11 @@ export const getPublicRelatedArticles = query(
 
 export const getPublicProjects = query(async () => listProjects());
 export const getPublicProject = query(v.string(), async (slug) => getProjectBySlug(slug));
+
+export const getHomeArticles = query(v.number(), async (limit) =>
+  getRecentPublishedArticles(limit),
+);
+export const getHomeProjects = query(v.number(), async (limit) => listRecentProjects(limit));
 
 export const getPublicMembers = query(async () => listMembers());
 export const getPublicMember = query(v.string(), async (slug) => getMemberBySlug(slug));

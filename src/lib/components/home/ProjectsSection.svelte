@@ -51,6 +51,7 @@
 									src={featuredProject.coverUrl}
 									alt={featuredProject.name}
 									class="aspect-[5/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+									loading="lazy"
 								/>
 							</div>
 						{/if}
@@ -84,6 +85,7 @@
 									src={project.coverUrl}
 									alt={project.name}
 									class="aspect-[5/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+									loading="lazy"
 								/>
 							</div>
 						{/if}

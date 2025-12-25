@@ -57,6 +57,7 @@
 							src={member.imageUrl}
 							alt={member.name}
 							class="mx-auto mb-4 aspect-square h-24 w-24 rounded-full object-cover ring-2 ring-zinc-100 transition-all group-hover:ring-primary/30"
+							loading="lazy"
 						/>
 					{:else}
 						<div
