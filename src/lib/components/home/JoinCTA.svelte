@@ -23,7 +23,7 @@
 	<div class="relative z-10 mx-auto max-w-4xl px-6 text-center">
 		<div class="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2">
 			<Sparkles class="h-4 w-4 text-primary" />
-			<span class="font-mono text-sm font-medium text-primary">WE'RE HIRING</span>
+			<span class="font-mono text-sm font-medium text-primary">メンバー募集中</span>
 		</div>
 
 		<h2 class="mb-6 text-5xl font-bold leading-tight text-white sm:text-6xl lg:text-7xl">
