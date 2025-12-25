@@ -143,10 +143,10 @@
 							</div>
 							<span class="font-mono text-xs text-zinc-400">main.ts</span>
 						</div>
-						<pre class="font-mono text-sm leading-relaxed text-zinc-700"><code>{@html `<span class="text-purple-600">const</span> <span class="text-zinc-900">mission</span> = {
-  <span class="text-[#00D372]">learn</span>: <span class="text-blue-600">"最新技術"</span>,
-  <span class="text-[#00D372]">build</span>: <span class="text-blue-600">"実用プロダクト"</span>,
-  <span class="text-[#00D372]">share</span>: <span class="text-blue-600">"知見と経験"</span>
+						<pre class="font-mono text-sm leading-relaxed text-zinc-700"><code>{@html `<span class="text-zinc-500">const</span> <span class="text-zinc-900">mission</span> = {
+  <span class="text-[#00D372]">learn</span>: <span class="text-zinc-600">"最新技術"</span>,
+  <span class="text-[#00D372]">build</span>: <span class="text-zinc-600">"実用プロダクト"</span>,
+  <span class="text-[#00D372]">share</span>: <span class="text-zinc-600">"知見と経験"</span>
 };`}</code></pre>
 					</div>
 
