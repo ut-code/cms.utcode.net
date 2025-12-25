@@ -7,15 +7,12 @@
 	import ProjectsSection from "$lib/components/home/ProjectsSection.svelte";
 	import SponsorsSection from "$lib/components/home/SponsorsSection.svelte";
 	import StatsSection from "$lib/components/home/StatsSection.svelte";
-	import { getHomeArticles, getHomeProjects } from "$lib/data/public/index.remote";
-	import { getStats } from "$lib/data/public/stats.remote";
+	import type { PageData } from "./$types";
 
-	const stats = await getStats();
-	const articles = await getHomeArticles(3);
-	const allProjects = await getHomeProjects(5);
+	const { data }: { data: PageData } = $props();
 
-	const featuredProject = $derived(allProjects.find((p) => p.category === "active"));
-	const projects = $derived(allProjects.filter((p) => p.id !== featuredProject?.id).slice(0, 4));
+	const featuredProject = $derived(data.allProjects.find((p) => p.category === "active"));
+	const projects = $derived(data.allProjects.filter((p) => p.id !== featuredProject?.id).slice(0, 4));
 
 	const currentYear = new Date().getFullYear();
 	const years = currentYear - 2019;
@@ -28,16 +25,16 @@
 
 <HeroSection />
 
-<StatsSection members={stats.members} projects={stats.projects} articles={stats.articles} {years} />
+<StatsSection members={data.stats.members} projects={data.stats.projects} articles={data.stats.articles} {years} />
 
 <ActivitiesSection />
 
 <ProjectsSection {featuredProject} {projects} />
 
-<ArticlesSection {articles} />
+<ArticlesSection articles={data.articles} />
 
 <JoinCTA />
 
 <SponsorsSection />
 
-<AboutSection members={stats.members} />
+<AboutSection members={data.stats.members} />

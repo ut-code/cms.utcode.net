@@ -3,24 +3,24 @@
 	import type { PageData } from "./$types";
 
 	const { data }: { data: PageData } = $props();
-	const { member } = data;
+	
 </script>
 
 <svelte:head>
-	{#if member}
-		<title>{member.name} | ut.code();</title>
-		<meta property="og:title" content={member.name} />
-		{#if member.bio}
-			<meta name="description" content={member.bio} />
-			<meta property="og:description" content={member.bio} />
+	{#if data.member}
+		<title>{data.member.name} | ut.code();</title>
+		<meta property="og:title" content={data.member.name} />
+		{#if data.member.bio}
+			<meta name="description" content={data.member.bio} />
+			<meta property="og:description" content={data.member.bio} />
 		{/if}
-		{#if member.imageUrl}
-			<meta property="og:image" content={member.imageUrl} />
+		{#if data.member.imageUrl}
+			<meta property="og:image" content={data.member.imageUrl} />
 		{/if}
 	{/if}
 </svelte:head>
 
-{#if member}
+{#if data.member}
 	<article class="mx-auto max-w-3xl px-6 py-16">
 		<a
 			href="/members"
@@ -30,10 +30,10 @@
 		</a>
 
 		<div class="flex flex-col items-center text-center sm:flex-row sm:items-start sm:text-left">
-			{#if member.imageUrl}
+			{#if data.member.imageUrl}
 				<img
-					src={member.imageUrl}
-					alt={member.name}
+					src={data.member.imageUrl}
+					alt={data.member.name}
 					class="mb-4 aspect-square h-16 w-16 rounded-full object-cover sm:mb-6 sm:mr-6 sm:h-20 sm:w-20 md:mb-0"
 					loading="lazy"
 				/>
@@ -42,30 +42,30 @@
 					class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-zinc-100 sm:mb-6 sm:mr-6 sm:h-20 sm:w-20 md:mb-0"
 				>
 					<span class="text-xl font-medium text-zinc-600 sm:text-2xl">
-						{member.name.charAt(0)}
+						{data.member.name.charAt(0)}
 					</span>
 				</div>
 			{/if}
 
 			<div>
-				<h1 class="mb-2 text-2xl font-bold sm:text-3xl">{member.name}</h1>
-				{#if member.bio}
-					<p class="text-sm text-zinc-500 sm:text-base">{member.bio}</p>
+				<h1 class="mb-2 text-2xl font-bold sm:text-3xl">{data.member.name}</h1>
+				{#if data.member.bio}
+					<p class="text-sm text-zinc-500 sm:text-base">{data.member.bio}</p>
 				{/if}
 			</div>
 		</div>
 
-		{#if member.pageContent}
+		{#if data.member.pageContent}
 			<section class="mt-8 border-t border-zinc-200 pt-6 sm:mt-12 sm:pt-8">
-				<Markdown content={member.pageContent} />
+				<Markdown content={data.member.pageContent} />
 			</section>
 		{/if}
 
-		{#if member.projectMembers && member.projectMembers.length > 0}
+		{#if data.member.projectMembers && data.member.projectMembers.length > 0}
 			<section class="mt-8 border-t border-zinc-200 pt-6 sm:mt-12 sm:pt-8">
 				<h2 class="mb-3 text-lg font-semibold sm:mb-4 sm:text-xl">参加プロジェクト</h2>
 				<div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-					{#each member.projectMembers as pm (pm.projectId)}
+					{#each data.member.projectMembers as pm (pm.projectId)}
 						<a
 							href="/projects/{pm.project.slug}"
 							class="flex items-center gap-3 rounded-lg border border-zinc-200 px-4 py-3 transition-all hover:bg-primary/5 hover:border-primary/30"

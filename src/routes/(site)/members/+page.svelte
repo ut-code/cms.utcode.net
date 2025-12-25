@@ -1,26 +1,17 @@
 <script lang="ts">
-	import { SvelteURLSearchParams } from "svelte/reactivity";
-	import { page } from "$app/state";
-	import { getPublicMembers } from "$lib/data/public/index.remote";
+	import type { PageData } from "./$types";
 
-	const members = await getPublicMembers();
+	const { data }: { data: PageData } = $props();
+	
 	const itemsPerPage = 12;
 
-	const currentPage = $derived(Number(page.url.searchParams.get("page")) || 1);
-	const totalPages = $derived(Math.ceil(members.length / itemsPerPage));
+	const totalPages = $derived(Math.ceil(data.members.length / itemsPerPage));
 	const paginatedMembers = $derived(
-		members.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage),
+		data.members.slice((data.currentPage - 1) * itemsPerPage, data.currentPage * itemsPerPage),
 	);
 
 	function pageUrl(pageNum: number): string {
-		const params = new SvelteURLSearchParams(page.url.searchParams);
-		if (pageNum === 1) {
-			params.delete("page");
-		} else {
-			params.set("page", String(pageNum));
-		}
-		const query = params.toString();
-		return query ? `?${query}` : page.url.pathname;
+		return pageNum === 1 ? "/members" : `/members?page=${pageNum}`;
 	}
 </script>
 
@@ -43,7 +34,7 @@
 </section>
 
 <div class="mx-auto max-w-6xl px-6 py-12">
-	{#if members.length === 0}
+	{#if data.members.length === 0}
 		<p class="text-zinc-500">まだメンバーがいません。</p>
 	{:else}
 		<div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -78,11 +69,11 @@
 			{/each}
 		</div>
 
-		{#if members.length > itemsPerPage}
+		{#if data.members.length > itemsPerPage}
 			<div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-				{#if currentPage > 1}
+				{#if data.currentPage > 1}
 					<a
-						href={pageUrl(currentPage - 1)}
+						href={pageUrl(data.currentPage - 1)}
 						class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:bg-primary/5 hover:border-primary/30 hover:text-primary focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 sm:w-auto"
 					>
 						前へ
@@ -97,25 +88,25 @@
 
 				<div class="flex flex-1 flex-wrap items-center justify-center gap-1 sm:flex-initial">
 					{#each Array.from({ length: totalPages }, (_, i) => i + 1) as pageNum (pageNum)}
-						{#if totalPages <= 7 || pageNum === 1 || pageNum === totalPages || Math.abs(pageNum - currentPage) <= 1}
+						{#if totalPages <= 7 || pageNum === 1 || pageNum === totalPages || Math.abs(pageNum - data.currentPage) <= 1}
 							<a
 								href={pageUrl(pageNum)}
-								class="min-w-[2.5rem] rounded-lg border px-3 py-2 text-center text-sm font-medium transition-colors focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 {currentPage ===
+								class="min-w-[2.5rem] rounded-lg border px-3 py-2 text-center text-sm font-medium transition-colors focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 {data.currentPage ===
 								pageNum
 									? 'border-primary bg-primary text-white'
 									: 'border-zinc-200 bg-white hover:bg-primary/5 hover:border-primary/30 hover:text-primary'}"
 							>
 								{pageNum}
 							</a>
-						{:else if pageNum === currentPage - 2 || pageNum === currentPage + 2}
+						{:else if pageNum === data.currentPage - 2 || pageNum === data.currentPage + 2}
 							<span class="px-1 text-zinc-500">...</span>
 						{/if}
 					{/each}
 				</div>
 
-				{#if currentPage < totalPages}
+				{#if data.currentPage < totalPages}
 					<a
-						href={pageUrl(currentPage + 1)}
+						href={pageUrl(data.currentPage + 1)}
 						class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:bg-primary/5 hover:border-primary/30 hover:text-primary focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 sm:w-auto"
 					>
 						次へ
