@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { Github } from "lucide-svelte";
-	import { page } from "$app/state";
 	import Markdown from "$lib/components/Markdown.svelte";
-	import { getPublicProject } from "$lib/data/public/index.remote";
 	import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
+	import type { PageData } from "./$types";
 
-	const project = await getPublicProject(page.params.slug ?? "");
+	const { data }: { data: PageData } = $props();
+	const { project } = data;
 
 	const categoryColors: Record<ProjectCategory, string> = {
 		active: "bg-emerald-100 text-emerald-700 border-emerald-200",

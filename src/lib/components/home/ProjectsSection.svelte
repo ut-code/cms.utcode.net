@@ -54,6 +54,12 @@
 									loading="lazy"
 								/>
 							</div>
+						{:else}
+							<div class="mt-6 flex aspect-[5/3] w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-800 to-zinc-700 ring-1 ring-white/10">
+								<span class="font-[JetBrains_Mono,monospace] text-sm font-medium text-zinc-400">
+									No Image
+								</span>
+							</div>
 						{/if}
 						<div class="mt-8">
 							<h3 class="mb-3 text-2xl font-bold transition-colors duration-300 group-hover:text-primary">
@@ -87,6 +93,12 @@
 									class="aspect-[5/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"
 									loading="lazy"
 								/>
+							</div>
+						{:else}
+							<div class="mb-4 flex aspect-[5/3] w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-100 to-zinc-200 ring-1 ring-zinc-100">
+								<span class="font-[JetBrains_Mono,monospace] text-sm font-medium text-zinc-400">
+									No Image
+								</span>
 							</div>
 						{/if}
 						<h3 class="mb-2 text-xl font-bold text-zinc-900 transition-colors duration-300 group-hover:text-primary">

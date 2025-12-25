@@ -41,6 +41,14 @@
 									class="aspect-[5/3] w-full object-cover"
 									loading="lazy"
 								/>
+							{:else}
+								<div
+									class="flex aspect-[5/3] w-full items-center justify-center bg-gradient-to-br from-zinc-100 to-zinc-200"
+								>
+									<span class="font-[JetBrains_Mono,monospace] text-sm font-medium text-zinc-400">
+										No Image
+									</span>
+								</div>
 							{/if}
 							<div class="p-6">
 								<h3 class="mb-3 text-xl font-bold text-zinc-900 transition-colors group-hover:text-primary">

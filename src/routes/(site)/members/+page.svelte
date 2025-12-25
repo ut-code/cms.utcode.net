@@ -79,7 +79,7 @@
 		</div>
 
 		{#if members.length > itemsPerPage}
-			<div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-2">
+			<div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
 				{#if currentPage > 1}
 					<a
 						href={pageUrl(currentPage - 1)}
@@ -95,7 +95,7 @@
 					</span>
 				{/if}
 
-				<div class="flex flex-wrap items-center justify-center gap-1">
+				<div class="flex flex-1 flex-wrap items-center justify-center gap-1 sm:flex-initial">
 					{#each Array.from({ length: totalPages }, (_, i) => i + 1) as pageNum (pageNum)}
 						{#if totalPages <= 7 || pageNum === 1 || pageNum === totalPages || Math.abs(pageNum - currentPage) <= 1}
 							<a

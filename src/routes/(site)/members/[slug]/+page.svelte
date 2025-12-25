@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { page } from "$app/state";
 	import Markdown from "$lib/components/Markdown.svelte";
-	import { getPublicMember } from "$lib/data/public/index.remote";
+	import type { PageData } from "./$types";
 
-	const member = await getPublicMember(page.params.slug ?? "");
+	const { data }: { data: PageData } = $props();
+	const { member } = data;
 </script>
 
 <svelte:head>

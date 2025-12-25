@@ -59,6 +59,14 @@
 							class="mb-4 aspect-[5/3] w-full rounded-xl object-cover"
 							loading="lazy"
 						/>
+					{:else}
+						<div
+							class="mb-4 flex aspect-[5/3] w-full items-center justify-center rounded-xl bg-gradient-to-br from-zinc-100 to-zinc-200"
+						>
+							<span class="font-[JetBrains_Mono,monospace] text-sm font-medium text-zinc-400">
+								No Image
+							</span>
+						</div>
 					{/if}
 					<h2 class="mb-2 font-semibold transition-colors group-hover:text-primary">
 						{article.title}
@@ -82,7 +90,7 @@
 		</div>
 
 		{#if articles.length > itemsPerPage}
-			<div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-2">
+			<div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
 				{#if currentPage > 1}
 					<a
 						href={pageUrl(currentPage - 1)}
@@ -98,7 +106,7 @@
 					</span>
 				{/if}
 
-				<div class="flex flex-wrap items-center justify-center gap-1">
+				<div class="flex flex-1 flex-wrap items-center justify-center gap-1 sm:flex-initial">
 					{#each Array.from({ length: totalPages }, (_, i) => i + 1) as pageNum (pageNum)}
 						{#if totalPages <= 7 || pageNum === 1 || pageNum === totalPages || Math.abs(pageNum - currentPage) <= 1}
 							<a

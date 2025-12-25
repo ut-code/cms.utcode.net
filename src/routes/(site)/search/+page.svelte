@@ -1,32 +1,17 @@
 <script lang="ts">
 	import { Search } from "lucide-svelte";
-	import { page } from "$app/state";
-	import { searchPublic } from "$lib/data/public/index.remote";
-	import type { SearchResult } from "$lib/shared/logic/search";
+	import type { PageData } from "./$types";
 
-	const query = $derived(page.url.searchParams.get("q") ?? "");
-	let results = $state<SearchResult[]>([]);
+	const { data }: { data: PageData } = $props();
 
-	$effect(() => {
-		if (query) {
-			searchPublic(query)
-				.then((r) => {
-					results = r;
-				})
-				.catch(console.error);
-		} else {
-			results = [];
-		}
-	});
-
-	const articleResults = $derived(results.filter((r) => r.type === "article"));
-	const projectResults = $derived(results.filter((r) => r.type === "project"));
-	const memberResults = $derived(results.filter((r) => r.type === "member"));
+	const articleResults = $derived(data.results.filter((r) => r.type === "article"));
+	const projectResults = $derived(data.results.filter((r) => r.type === "project"));
+	const memberResults = $derived(data.results.filter((r) => r.type === "member"));
 </script>
 
 <svelte:head>
-	<title>検索{query ? `: ${query}` : ""} | ut.code();</title>
-	<meta property="og:title" content="検索{query ? `: ${query}` : ''} | ut.code();" />
+	<title>検索{data.query ? `: ${data.query}` : ""} | ut.code();</title>
+	<meta property="og:title" content="検索{data.query ? `: ${data.query}` : ''} | ut.code();" />
 </svelte:head>
 
 <div class="mx-auto max-w-6xl px-6 py-16">
@@ -37,19 +22,19 @@
 	</div>
 	<h1 class="mb-8 text-3xl font-bold">検索結果</h1>
 
-	{#if !query}
+	{#if !data.query}
 		<div class="flex flex-col items-center gap-4 py-16 text-center">
 			<Search class="h-12 w-12 text-zinc-300" />
 			<p class="text-zinc-500">検索キーワードを入力してください</p>
 		</div>
-	{:else if results.length === 0}
+	{:else if data.results.length === 0}
 		<div class="flex flex-col items-center gap-4 py-16 text-center">
 			<Search class="h-12 w-12 text-zinc-300" />
-			<p class="text-zinc-500">「{query}」に一致する結果が見つかりませんでした</p>
+			<p class="text-zinc-500">「{data.query}」に一致する結果が見つかりませんでした</p>
 		</div>
 	{:else}
 		<p class="mb-6 text-sm text-zinc-500">
-			「{query}」の検索結果: {results.length}件
+			「{data.query}」の検索結果: {data.results.length}件
 		</p>
 
 		{#if articleResults.length > 0}
@@ -68,6 +53,14 @@
 									class="mb-4 aspect-[5/3] w-full rounded-lg object-cover"
 									loading="lazy"
 								/>
+							{:else}
+								<div
+									class="mb-4 flex aspect-[5/3] w-full items-center justify-center rounded-lg bg-gradient-to-br from-zinc-100 to-zinc-200"
+								>
+									<span class="font-[JetBrains_Mono,monospace] text-sm font-medium text-zinc-400">
+										No Image
+									</span>
+								</div>
 							{/if}
 							<h3 class="mb-2 font-semibold group-hover:text-primary">{article.title}</h3>
 							{#if article.excerpt}
@@ -106,6 +99,14 @@
 									class="mb-4 aspect-[5/3] w-full rounded-lg object-cover"
 									loading="lazy"
 								/>
+							{:else}
+								<div
+									class="mb-4 flex aspect-[5/3] w-full items-center justify-center rounded-lg bg-gradient-to-br from-zinc-100 to-zinc-200"
+								>
+									<span class="font-[JetBrains_Mono,monospace] text-sm font-medium text-zinc-400">
+										No Image
+									</span>
+								</div>
 							{/if}
 							<h3 class="mb-2 font-semibold group-hover:text-primary">{project.name}</h3>
 							{#if project.description}

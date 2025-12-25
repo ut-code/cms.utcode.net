@@ -1,16 +1,9 @@
 <script lang="ts">
-	import { page } from "$app/state";
 	import Markdown from "$lib/components/Markdown.svelte";
-	import { getPublicArticle, getPublicRelatedArticles } from "$lib/data/public/index.remote";
+	import type { PageData } from "./$types";
 
-	const article = await getPublicArticle(page.params.slug ?? "");
-	const relatedArticles = article
-		? await getPublicRelatedArticles({
-				articleId: article.id,
-				authorId: article.authorId,
-				limit: 3,
-			})
-		: [];
+	const { data }: { data: PageData } = $props();
+	const { article, relatedArticles } = data;
 </script>
 
 <svelte:head>
