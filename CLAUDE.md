@@ -21,6 +21,28 @@ ls ./docs/knowledges
 - data: Drizzle + Valibot
 - visuals design: Tailwind CSS v4, DaisyUI v5
 
+# Design Language
+
+**Principles**: Simplicity, minimalism, developer-focused aesthetics
+
+**Primary Color**: `#00D372` (oklch(76% 0.2 153)) — ut.code(); brand lime green
+- Use sparingly for emphasis: CTAs, labels, hover states
+- Background: white (#ffffff) with zinc-50 alternating sections
+- Text: zinc-900 primary, zinc-500 secondary
+
+**Typography**:
+- Body: DM Sans (clean, modern)
+- Code/Mono: JetBrains Mono (developer identity)
+
+**Key Rules**:
+1. Content-first: minimal decoration, readability priority
+2. High contrast: clear visual hierarchy
+3. Generous spacing: py-24 sections, max-w-6xl containers
+4. Consistent hover: `hover:bg-primary/5 hover:border-primary/30`
+5. Visual variety: alternate backgrounds (white/zinc-50/zinc-900)
+
+See `docs/knowledges/ui-design.md` for detailed component patterns and layout guidelines.
+
 # Remote Functions
 
 `$app/server` exports:
