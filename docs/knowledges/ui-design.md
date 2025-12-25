@@ -41,7 +41,6 @@
 | Section labels      | Monospace, uppercase, tracking-widest, text-[#00D372]                                    |
 | Tech tags           | Monospace, text-xs, bg-zinc-100/zinc-800, rounded-lg                                     |
 | Page headers        | border-b, bg-zinc-50/50, py-16                                                           |
-| Dropdown menus      | dropdown-hover, border border-zinc-200, bg-white, shadow, hover:bg-primary/5             |
 
 ## Interaction Patterns
 
