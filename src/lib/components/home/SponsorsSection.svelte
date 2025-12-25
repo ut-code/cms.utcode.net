@@ -18,20 +18,18 @@
 	];
 </script>
 
-<section class="bg-zinc-50 py-24">
-	<div class="mx-auto max-w-6xl px-6">
-		<div class="mb-12 text-center">
-			<div
-				class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-primary uppercase"
-			>
-				Sponsors
-			</div>
-			<h2 class="text-3xl font-bold">協賛企業様</h2>
+<section class="bg-white py-32">
+	<div class="mx-auto max-w-7xl px-6">
+		<div class="mb-16 text-center">
+			<div class="mb-4 font-mono text-sm font-medium text-orange-600">SPONSORS</div>
+			<h2 class="font-[clash-display,ui-sans-serif,system-ui,sans-serif] text-5xl font-bold text-zinc-900 lg:text-6xl">
+				協賛企業様
+			</h2>
 		</div>
 
-		<div class="mx-auto max-w-4xl">
+		<div class="mx-auto max-w-5xl">
 			<div
-				class="flex min-h-48 flex-wrap items-center justify-center gap-12 rounded-2xl border border-zinc-200 bg-white p-12"
+				class="flex min-h-64 flex-wrap items-center justify-center gap-16 rounded-3xl border-2 border-zinc-200 bg-gradient-to-br from-zinc-50 to-white p-16"
 			>
 				{#if sponsors.length > 0}
 					{#each sponsors as sponsor}
@@ -40,32 +38,32 @@
 								href={sponsor.websiteUrl}
 								target="_blank"
 								rel="noopener noreferrer"
-								class="transition-opacity hover:opacity-70"
+								class="transition-all hover:scale-105 hover:opacity-80"
 							>
 								<img
 									src={sponsor.logoUrl}
 									alt={sponsor.name}
-									class="h-16 object-contain"
+									class="h-32 object-contain sm:h-40"
 									loading="lazy"
 								/>
 							</a>
 						{:else}
-							<div>
+							<div class="transition-all hover:scale-105">
 								<img
 									src={sponsor.logoUrl}
 									alt={sponsor.name}
-									class="h-16 object-contain"
+									class="h-32 object-contain sm:h-40"
 									loading="lazy"
 								/>
 							</div>
 						{/if}
 					{/each}
 				{:else}
-					<div class="text-center text-zinc-500">
-						<p class="mb-4 text-lg">協賛企業を募集中です</p>
+					<div class="text-center">
+						<p class="mb-6 text-xl text-zinc-600">協賛企業を募集中です</p>
 						<a
 							href="/donation"
-							class="inline-block rounded-lg bg-zinc-100 px-6 py-3 font-medium text-zinc-700 transition-colors hover:bg-zinc-200"
+							class="inline-block rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-8 py-4 font-bold text-white shadow-lg shadow-orange-500/25 transition-all hover:shadow-xl hover:shadow-orange-500/40"
 						>
 							寄付について詳しく見る
 						</a>

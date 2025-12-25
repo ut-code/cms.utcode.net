@@ -226,6 +226,14 @@
 				</p>
 			</div>
 		</div>
+		<div class="mt-6 text-center">
+			<a
+				href="/about/faq"
+				class="inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary hover:text-zinc-900"
+			>
+				すべての質問を見る
+			</a>
+		</div>
 	</section>
 
 	<!-- Video -->

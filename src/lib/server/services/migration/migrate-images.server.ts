@@ -82,7 +82,7 @@ export async function migrateImages(repoPath: string, log: Logger): Promise<Migr
         buffer: compressedBuffer,
         type: outputType,
         extension,
-      } = await compressImage(inputBuffer as Buffer, getMimeType(imagePath));
+      } = await compressImage(inputBuffer, getMimeType(imagePath));
       const baseName = basename(imagePath).replace(/\.[^.]+$/, "");
       const outputName = `${baseName}.${extension}`;
 
@@ -146,7 +146,7 @@ export async function migrateImages(repoPath: string, log: Logger): Promise<Migr
         buffer: compressedBuffer,
         type: outputType,
         extension,
-      } = await compressImage(inputBuffer as Buffer, getMimeType(imagePath));
+      } = await compressImage(inputBuffer, getMimeType(imagePath));
       const baseName = basename(imagePath).replace(/\.[^.]+$/, "");
       const outputName = `${baseName}.${extension}`;
 
@@ -209,7 +209,7 @@ export async function migrateImages(repoPath: string, log: Logger): Promise<Migr
         buffer: compressedBuffer,
         type: outputType,
         extension,
-      } = await compressImage(inputBuffer as Buffer, getMimeType(imagePath));
+      } = await compressImage(inputBuffer, getMimeType(imagePath));
       const baseName = basename(imagePath).replace(/\.[^.]+$/, "");
       const outputName = `${baseName}.${extension}`;
 

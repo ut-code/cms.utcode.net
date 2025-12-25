@@ -13,7 +13,7 @@
 		{#each controls.toasts as t (t.id)}
 			<div class="alert alert-{t.type}">
 				<span>{t.message}</span>
-				<button class="btn btn-ghost btn-sm" onclick={() => controls.remove(t.id)}>×</button>
+				<button class="btn btn-ghost btn-sm" aria-label="Close notification" onclick={() => controls.remove(t.id)}>×</button>
 			</div>
 		{/each}
 	</div>

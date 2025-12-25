@@ -9,6 +9,7 @@
 		pageContent = $bindable(""),
 		nameError = null,
 		onNameChange,
+		onOpenSettings,
 	}: {
 		name?: string;
 		slug?: string;
@@ -17,6 +18,7 @@
 		pageContent?: string;
 		nameError?: string | null;
 		onNameChange?: () => void;
+		onOpenSettings?: () => void;
 	} = $props();
 
 	let showPageContentPreview = $state(false);
@@ -32,19 +34,25 @@
 	<div class="mx-auto w-full max-w-2xl flex-1 px-4 py-8 sm:px-8">
 		<!-- Profile Image -->
 		<div class="mb-8 flex justify-center">
-			{#if imageUrl}
-				<img
-					src={imageUrl}
-					alt={name || "Profile"}
-					class="h-32 w-32 rounded-full object-cover ring-4 ring-zinc-100"
-				/>
-			{:else}
-				<div
-					class="flex h-32 w-32 items-center justify-center rounded-full bg-zinc-100 text-4xl font-bold text-zinc-300"
-				>
-					{name ? name.charAt(0).toUpperCase() : "?"}
-				</div>
-			{/if}
+			<button
+				type="button"
+				onclick={onOpenSettings}
+				class="group rounded-full transition-all hover:ring-4 hover:ring-primary/20"
+			>
+				{#if imageUrl}
+					<img
+						src={imageUrl}
+						alt={name || "Profile"}
+						class="h-32 w-32 rounded-full object-cover ring-4 ring-zinc-100 transition-opacity group-hover:opacity-90"
+					/>
+				{:else}
+					<div
+						class="flex h-32 w-32 items-center justify-center rounded-full bg-zinc-100 text-4xl font-bold text-zinc-300 transition-colors group-hover:bg-primary/10 group-hover:text-primary"
+					>
+						{name ? name.charAt(0).toUpperCase() : "?"}
+					</div>
+				{/if}
+			</button>
 		</div>
 
 		<!-- Name Input -->
@@ -62,9 +70,15 @@
 		{/if}
 
 		<!-- Username -->
-		<p class="mt-2 text-center text-sm text-zinc-500">
-			@{slug || "username"}
-		</p>
+		<button
+			type="button"
+			onclick={onOpenSettings}
+			class="mx-auto mt-2 block rounded-lg px-3 py-1 transition-colors hover:bg-primary/5"
+		>
+			<span class="text-sm text-zinc-500 hover:text-primary">
+				@{slug || "username"}
+			</span>
+		</button>
 
 		<!-- Bio -->
 		<div class="mt-8">

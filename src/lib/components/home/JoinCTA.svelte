@@ -1,29 +1,60 @@
 <script lang="ts">
-	import { ArrowRight } from "lucide-svelte";
+	import { ArrowRight, Sparkles } from "lucide-svelte";
 </script>
 
-<section id="join" class="relative overflow-hidden bg-zinc-900 py-16 text-white sm:py-24 md:py-32">
-	<!-- Background decoration -->
+<section id="join" class="relative overflow-hidden bg-gradient-to-br from-orange-600 to-amber-600 py-32">
+	<!-- Animated background elements -->
+	<div class="pointer-events-none absolute inset-0 overflow-hidden">
+		<div
+			class="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-white/5 blur-3xl"
+		></div>
+		<div
+			class="absolute right-1/4 bottom-1/4 h-96 w-96 rounded-full bg-white/5 blur-3xl"
+		></div>
+	</div>
+
+	<!-- Noise texture -->
 	<div
-		class="pointer-events-none absolute inset-0 opacity-10"
-		style="background-image: radial-gradient(circle at 20% 50%, oklch(72% 0.19 145) 0%, transparent 50%), radial-gradient(circle at 80% 50%, oklch(72% 0.19 145) 0%, transparent 50%);"
+		class="pointer-events-none absolute inset-0 opacity-[0.02]"
+		style="background-image: url('data:image/svg+xml,%3Csvg viewBox=&quot;0 0 200 200&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cfilter id=&quot;noiseFilter&quot;%3E%3CfeTurbulence type=&quot;fractalNoise&quot; baseFrequency=&quot;0.9&quot; numOctaves=&quot;3&quot; stitchTiles=&quot;stitch&quot;/%3E%3C/filter%3E%3Crect width=&quot;100%25&quot; height=&quot;100%25&quot; filter=&quot;url(%23noiseFilter)&quot;/%3E%3C/svg%3E');"
 	></div>
 
-	<div class="relative z-10 mx-auto max-w-6xl px-6 text-center">
-		<h2 class="mb-4 text-2xl font-bold sm:mb-6 sm:text-3xl md:text-4xl lg:text-5xl">
-			<span class="inline-block border-b-2 border-primary pb-1 sm:border-b-4 sm:pb-2">未来のソフトウェア</span>を<br
-			/>デザインしよう
+	<div class="relative z-10 mx-auto max-w-4xl px-6 text-center">
+		<div class="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 backdrop-blur-sm">
+			<Sparkles class="h-4 w-4 text-white" />
+			<span class="font-mono text-sm font-medium text-white">WE'RE HIRING</span>
+		</div>
+
+		<h2 class="mb-6 font-[clash-display,ui-sans-serif,system-ui,sans-serif] text-5xl font-bold leading-tight text-white sm:text-6xl lg:text-7xl">
+			未来のソフトウェアを<br />
+			<span class="relative inline-block">
+				デザインしよう
+				<svg class="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12" fill="none">
+					<path d="M2 10C50 5 100 2 150 5C200 8 250 3 298 7" stroke="white" stroke-width="4" stroke-linecap="round"/>
+				</svg>
+			</span>
 		</h2>
-		<p class="mx-auto mb-8 max-w-xl text-base leading-relaxed text-zinc-500 sm:mb-10 sm:text-lg">
-			ut.code(); で一緒にワクワクするソフトウェアを作りませんか?
+
+		<p class="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-white/90 sm:text-xl">
+			ut.code(); で一緒にワクワクするソフトウェアを作りませんか?<br />
 			初心者から実務経験者、学年を問わずどなたでも大歓迎です。
 		</p>
-		<a
-			href="/join"
-			class="group inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-base font-semibold text-zinc-900 shadow-lg shadow-primary/25 transition-all hover:bg-primary-focus hover:shadow-xl sm:px-8 sm:py-4 sm:text-lg"
-		>
-			JOIN US
-			<ArrowRight class="h-4 w-4 transition-transform group-hover:translate-x-0.5 sm:h-5 sm:w-5" />
-		</a>
+
+		<div class="flex flex-wrap items-center justify-center gap-4">
+			<a
+				href="/join"
+				class="group inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-8 py-4 font-bold text-white shadow-2xl shadow-zinc-950/50 transition-all hover:bg-zinc-900 hover:shadow-zinc-950/60"
+			>
+				JOIN US
+				<ArrowRight class="h-5 w-5 transition-transform group-hover:translate-x-1" />
+			</a>
+			<a
+				href="/about"
+				class="group inline-flex items-center gap-2 rounded-xl border-2 border-white/30 bg-white/10 px-8 py-4 font-bold text-white backdrop-blur-sm transition-all hover:border-white/50 hover:bg-white/20"
+			>
+				もっと詳しく
+				<ArrowRight class="h-5 w-5 transition-transform group-hover:translate-x-1" />
+			</a>
+		</div>
 	</div>
 </section>

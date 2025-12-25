@@ -97,6 +97,12 @@ bun tidy             # Auto-check + fix (type + format + lint)
 6. **Security**: Never read `.env` files, use `.env.sample` or `.env.example`
 7. **Type Safety**: Never use `as` or `any`, let TypeScript infer
 8. **Error Handling**: Never "fire and forget", use `.catch(console.error)` for async jobs
+9. **Remote Functions**: Always use explicit arrow functions with `query()` and `command()`
+   - ❌ `query(listPublishedArticles)` (function reference)
+   - ✅ `query(async () => listPublishedArticles())` (explicit arrow function)
+   - ❌ `query(v.string(), getPublishedArticle)` (function reference)
+   - ✅ `query(v.string(), async (slug) => getPublishedArticle(slug))` (explicit arrow function)
+   - Reason: Function references can cause 400 Bad Request errors due to validation issues
 
 ## Knowledge Base
 

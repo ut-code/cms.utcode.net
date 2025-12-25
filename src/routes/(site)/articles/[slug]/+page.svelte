@@ -1,20 +1,16 @@
 <script lang="ts">
-	import { Eye } from "lucide-svelte";
 	import { page } from "$app/state";
 	import Markdown from "$lib/components/Markdown.svelte";
 	import { getPublicArticle, getPublicRelatedArticles } from "$lib/data/public/index.remote";
 
-	const slug = $derived(page.params.slug ?? "");
-	const article = $derived(await getPublicArticle(slug));
-	const relatedArticles = $derived(
-		article
-			? await getPublicRelatedArticles({
-					articleId: article.id,
-					authorId: article.authorId,
-					limit: 3,
-				})
-			: [],
-	);
+	const article = await getPublicArticle(page.params.slug ?? "");
+	const relatedArticles = article
+		? await getPublicRelatedArticles({
+				articleId: article.id,
+				authorId: article.authorId,
+				limit: 3,
+			})
+		: [];
 </script>
 
 <svelte:head>
@@ -45,8 +41,7 @@
 			<img
 				src={article.coverUrl}
 				alt={article.title}
-				class="mb-6 max-h-48 w-full rounded-xl object-cover sm:mb-8 sm:max-h-64"
-				style="aspect-ratio: 5/3"
+				class="mb-6 aspect-[5/3] w-full rounded-xl object-cover sm:mb-8"
 			/>
 		{/if}
 
@@ -62,7 +57,7 @@
 						<img
 							src={article.author.imageUrl}
 							alt={article.author.name}
-							class="h-6 w-6 rounded-full"
+							class="aspect-square h-6 w-6 rounded-full object-cover"
 						/>
 					{/if}
 					{article.author.name}
@@ -73,10 +68,6 @@
 					{article.publishedAt.toLocaleDateString("ja-JP")}
 				</time>
 			{/if}
-			<div class="flex items-center gap-1">
-				<Eye class="h-4 w-4" />
-				<span>{article.viewCount.toLocaleString()}</span>
-			</div>
 		</div>
 
 		<Markdown content={article.content} />
@@ -96,7 +87,7 @@
 								<img
 									src={relatedArticle.coverUrl}
 									alt={relatedArticle.title}
-									class="mb-3 aspect-video w-full rounded-lg object-cover"
+									class="mb-3 aspect-[5/3] w-full rounded-lg object-cover"
 								/>
 							{/if}
 							<h3 class="mb-2 font-semibold group-hover:text-primary">

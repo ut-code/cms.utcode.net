@@ -8,7 +8,7 @@
 		type ProjectCategory,
 	} from "$lib/shared/models/schema";
 
-	const projects = $derived(await getPublicProjects());
+	const projects = await getPublicProjects();
 	const itemsPerPage = 12;
 
 	const categoryParam = $derived(page.url.searchParams.get("category"));
@@ -109,7 +109,7 @@
 						<img
 							src={project.coverUrl}
 							alt={project.name}
-							class="mb-4 aspect-video w-full rounded-xl object-cover"
+							class="mb-4 aspect-[5/3] w-full rounded-xl object-cover"
 						/>
 					{/if}
 					<div class="mb-2 flex items-start justify-between gap-2">

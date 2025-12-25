@@ -5,14 +5,20 @@
 		name = $bindable(),
 		description = $bindable(),
 		content = $bindable(),
+		slug = "",
+		coverUrl = "",
 		errors,
 		onNameChange,
+		onOpenSettings,
 	}: {
 		name?: string;
 		description?: string;
 		content?: string;
+		slug?: string;
+		coverUrl?: string;
 		errors: Record<string, string>;
 		onNameChange: () => void;
+		onOpenSettings?: () => void;
 	} = $props();
 
 	let showPreview = $state(false);
@@ -20,6 +26,34 @@
 
 <main class="flex flex-1 flex-col overflow-y-auto bg-white">
 	<div class="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-8">
+		<!-- Cover Image Preview -->
+		{#if coverUrl}
+			<button
+				type="button"
+				onclick={onOpenSettings}
+				class="group mb-6 w-full overflow-hidden rounded-xl transition-all hover:ring-2 hover:ring-primary/30"
+			>
+				<img
+					src={coverUrl}
+					alt="Cover"
+					class="h-48 w-full object-cover transition-opacity group-hover:opacity-90"
+				/>
+			</button>
+		{/if}
+
+		<!-- Slug Preview -->
+		{#if slug}
+			<button
+				type="button"
+				onclick={onOpenSettings}
+				class="mb-4 flex items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-primary/5"
+			>
+				<span class="font-mono text-sm text-zinc-500 hover:text-primary">
+					/projects/{slug}
+				</span>
+			</button>
+		{/if}
+
 		<input
 			type="text"
 			id="name"

@@ -13,12 +13,14 @@
 		onDelete = null,
 		submitLabel = "Save",
 		isSubmitting = $bindable(false),
+		viewCount = 0,
 	}: {
 		initialData?: MemberData;
 		onSubmit: (data: MemberData) => Promise<void>;
 		onDelete?: (() => Promise<void>) | null;
 		submitLabel?: string;
 		isSubmitting?: boolean;
+		viewCount?: number;
 	} = $props();
 
 	let formData = $state(snapshot(() => initialData));
@@ -76,6 +78,7 @@
 			imageUrl={formData.imageUrl}
 			nameError={errors["name"]}
 			onNameChange={handleNameChange}
+			onOpenSettings={() => (showSettings = true)}
 		/>
 
 		<MemberSettings
@@ -83,6 +86,7 @@
 			bind:slug={formData.slug}
 			bind:imageUrl={formData.imageUrl}
 			slugError={errors["slug"]}
+			{viewCount}
 			{onDelete}
 		/>
 	</div>

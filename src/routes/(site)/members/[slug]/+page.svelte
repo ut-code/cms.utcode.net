@@ -3,8 +3,7 @@
 	import Markdown from "$lib/components/Markdown.svelte";
 	import { getPublicMember } from "$lib/data/public/index.remote";
 
-	const slug = $derived(page.params.slug ?? "");
-	const member = $derived(await getPublicMember(slug));
+	const member = await getPublicMember(page.params.slug ?? "");
 </script>
 
 <svelte:head>
@@ -35,7 +34,7 @@
 				<img
 					src={member.imageUrl}
 					alt={member.name}
-					class="mb-4 h-16 w-16 rounded-full object-cover sm:mb-6 sm:mr-6 sm:h-20 sm:w-20 md:mb-0"
+					class="mb-4 aspect-square h-16 w-16 rounded-full object-cover sm:mb-6 sm:mr-6 sm:h-20 sm:w-20 md:mb-0"
 				/>
 			{:else}
 				<div
@@ -74,7 +73,7 @@
 								<img
 									src={pm.project.coverUrl}
 									alt={pm.project.name}
-									class="h-10 w-10 rounded object-cover"
+									class="h-10 w-16 rounded object-cover"
 								/>
 							{:else}
 								<div class="flex h-10 w-10 items-center justify-center rounded bg-zinc-100">

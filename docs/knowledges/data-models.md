@@ -86,6 +86,12 @@ projectMembers
 ├── projectId    TEXT FK → projects.id  ┐
 ├── memberId     TEXT FK → members.id   ┘ PK
 └── role         TEXT                      -- "lead", "member"
+
+viewLog (時系列アナリティクス用)
+├── id           TEXT PK
+├── resourceType TEXT NOT NULL             -- "article", "member", "project"
+├── resourceId   TEXT NOT NULL
+└── viewedAt     TIMESTAMP NOT NULL
 ```
 
 ## Actions
@@ -146,10 +152,12 @@ projectMembers
 
 ### Analytics
 
-| アクション                   | 公開 | 実装 |
-| ---------------------------- | ---- | ---- |
-| 閲覧数統計を見る             |      | ✓    |
-| 記事別閲覧数ランキング       |      | ✓    |
+| アクション                     | 公開 | 実装 |
+| ------------------------------ | ---- | ---- |
+| 閲覧数統計を見る               |      | ✓    |
+| 記事別閲覧数ランキング         |      | ✓    |
 | プロジェクト別閲覧数ランキング |      | ✓    |
-| メンバー別閲覧数ランキング   |      | ✓    |
+| メンバー別閲覧数ランキング     |      | ✓    |
 | ダッシュボードで統計概要を見る |      | ✓    |
+| 時系列グラフで閲覧傾向を見る   |      | ✓    |
+| コンテンツタイプ別推移を見る   |      | ✓    |

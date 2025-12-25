@@ -1,17 +1,33 @@
 <script lang="ts">
-	import { Calendar, Check, ChevronRight, Eye, FileText, Plus, SquarePen } from "lucide-svelte";
+	import { Calendar, Check, ChevronRight, Eye, FileText, Plus, Search, SquarePen, X } from "lucide-svelte";
 	import { page } from "$app/state";
 	import { getArticles } from "$lib/data/private/articles.remote";
 
-	const allArticles = $derived(await getArticles());
+	const allArticles = await getArticles();
 	const statusFilter = $derived(page.url.searchParams.get("status"));
-	const articles = $derived(
+	let searchQuery = $state("");
+
+	const filteredByStatus = $derived(
 		statusFilter === "published"
 			? allArticles.filter((a) => a.published)
 			: statusFilter === "draft"
 				? allArticles.filter((a) => !a.published)
 				: allArticles,
 	);
+
+	const articles = $derived(
+		searchQuery.trim() === ""
+			? filteredByStatus
+			: filteredByStatus.filter((a) => {
+					const query = searchQuery.toLowerCase();
+					return (
+						a.title.toLowerCase().includes(query) ||
+						a.slug.toLowerCase().includes(query) ||
+						a.author?.name.toLowerCase().includes(query)
+					);
+				}),
+	);
+
 	const publishedCount = $derived(allArticles.filter((a) => a.published).length);
 	const draftCount = $derived(allArticles.length - publishedCount);
 
@@ -49,7 +65,7 @@
 				</div>
 				<a
 					href="/admin/articles/new"
-					class="gradient-primary glow-primary btn btn-sm gap-2 border-none text-white sm:btn-md"
+					class="btn btn-primary btn-sm gap-2 sm:btn-md"
 				>
 					<Plus class="h-4 w-4" />
 					<span class="hidden sm:inline">New Article</span>
@@ -91,6 +107,28 @@
 					<span class="sm:hidden">Draft ({draftCount})</span>
 				</a>
 			</div>
+
+			<!-- Search input -->
+			<div class="relative mt-4">
+				<div class="relative">
+					<Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+					<input
+						type="text"
+						placeholder="Search articles by title, slug, or author..."
+						bind:value={searchQuery}
+						class="w-full rounded-lg border-0 bg-white/10 py-2 pl-10 pr-10 text-sm text-white placeholder-white/40 outline-none transition-all focus:bg-white/15 focus:ring-2 focus:ring-white/20"
+					/>
+					{#if searchQuery}
+						<button
+							onclick={() => (searchQuery = "")}
+							class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 transition-colors hover:text-white"
+							aria-label="Clear search"
+						>
+							<X class="h-4 w-4" />
+						</button>
+					{/if}
+				</div>
+			</div>
 		</header>
 
 		{#if articles.length === 0}
@@ -101,9 +139,20 @@
 				<div
 					class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-base-200 text-base-content/40"
 				>
-					<FileText class="h-8 w-8" />
+					{#if searchQuery}
+						<Search class="h-8 w-8" />
+					{:else}
+						<FileText class="h-8 w-8" />
+					{/if}
 				</div>
-				{#if statusFilter === "published"}
+				{#if searchQuery}
+					<h3 class="mt-4 text-lg font-semibold text-base-content">No articles found</h3>
+					<p class="mt-1 text-base-content/60">Try a different search term.</p>
+					<button onclick={() => (searchQuery = "")} class="btn btn-outline mt-6 gap-2">
+						<X class="h-4 w-4" />
+						Clear search
+					</button>
+				{:else if statusFilter === "published"}
 					<h3 class="mt-4 text-lg font-semibold text-base-content">No published articles</h3>
 					<p class="mt-1 text-base-content/60">Publish your first article to see it here.</p>
 					{#if draftCount > 0}
@@ -114,14 +163,14 @@
 				{:else if statusFilter === "draft"}
 					<h3 class="mt-4 text-lg font-semibold text-base-content">No drafts</h3>
 					<p class="mt-1 text-base-content/60">All articles are published!</p>
-					<a href="/admin/articles/new" class="gradient-primary btn mt-6 gap-2 text-white">
+					<a href="/admin/articles/new" class="btn btn-primary mt-6 gap-2">
 						<Plus class="h-4 w-4" />
 						New Article
 					</a>
 				{:else}
 					<h3 class="mt-4 text-lg font-semibold text-base-content">No articles yet</h3>
 					<p class="mt-1 text-base-content/60">Get started by writing your first article.</p>
-					<a href="/admin/articles/new" class="gradient-primary btn mt-6 gap-2 text-white">
+					<a href="/admin/articles/new" class="btn btn-primary mt-6 gap-2">
 						<Plus class="h-4 w-4" />
 						New Article
 					</a>
@@ -138,7 +187,7 @@
 					>
 						<!-- Cover thumbnail -->
 						{#if article.coverUrl}
-							<figure class="h-40 w-full shrink-0 overflow-hidden rounded-xl bg-base-200 sm:h-24 sm:w-36">
+							<figure class="aspect-[5/3] w-full shrink-0 overflow-hidden rounded-xl bg-base-200 sm:h-24 sm:w-36 sm:aspect-auto">
 								<img
 									src={article.coverUrl}
 									alt={article.title}
@@ -148,7 +197,7 @@
 							</figure>
 						{:else}
 							<div
-								class="flex h-40 w-full shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-base-200 to-base-300 sm:h-24 sm:w-36"
+								class="flex aspect-[5/3] w-full shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-base-200 to-base-300 sm:h-24 sm:w-36 sm:aspect-auto"
 							>
 								<FileText class="h-8 w-8 text-base-content/20" />
 							</div>
@@ -194,8 +243,8 @@
 									<div class="flex items-center gap-2">
 										{#if article.author.imageUrl}
 											<div class="avatar">
-												<div class="w-5 rounded-full ring-1 ring-base-200">
-													<img src={article.author.imageUrl} alt={article.author.name} />
+												<div class="aspect-square w-5 rounded-full ring-1 ring-base-200">
+													<img src={article.author.imageUrl} alt={article.author.name} class="h-full w-full object-cover" />
 												</div>
 											</div>
 										{/if}

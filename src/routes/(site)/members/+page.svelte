@@ -3,7 +3,7 @@
 	import { page } from "$app/state";
 	import { getPublicMembers } from "$lib/data/public/index.remote";
 
-	const members = $derived(await getPublicMembers());
+	const members = await getPublicMembers();
 	const itemsPerPage = 12;
 
 	const currentPage = $derived(Number(page.url.searchParams.get("page")) || 1);
@@ -56,7 +56,7 @@
 						<img
 							src={member.imageUrl}
 							alt={member.name}
-							class="mx-auto mb-4 h-24 w-24 rounded-full object-cover ring-2 ring-zinc-100 transition-all group-hover:ring-primary/30"
+							class="mx-auto mb-4 aspect-square h-24 w-24 rounded-full object-cover ring-2 ring-zinc-100 transition-all group-hover:ring-primary/30"
 						/>
 					{:else}
 						<div

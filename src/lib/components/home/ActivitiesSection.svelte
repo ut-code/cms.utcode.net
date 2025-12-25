@@ -1,56 +1,97 @@
 <script lang="ts">
-	import { BookOpen, Code, MessageSquare } from "lucide-svelte";
+	import { BookOpen, Code, Users } from "lucide-svelte";
 </script>
 
-<section class="py-24">
-	<div class="mx-auto max-w-6xl px-6">
-		<div class="mb-12 text-center">
-			<div
-				class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-primary uppercase"
-			>
-				What we do
-			</div>
-			<h2 class="text-3xl font-bold">活動内容</h2>
+<section class="relative overflow-hidden bg-white py-32">
+	<!-- Background decoration with more layers -->
+	<div class="pointer-events-none absolute left-0 top-0 h-full w-1/2 bg-gradient-to-r from-orange-50/80 via-amber-50/40 to-transparent"></div>
+	<div class="pointer-events-none absolute right-0 top-0 h-full w-1/2 bg-gradient-to-l from-yellow-50/80 via-amber-50/40 to-transparent"></div>
+
+	<!-- Subtle dot pattern -->
+	<div
+		class="pointer-events-none absolute inset-0 opacity-[0.03]"
+		style="background-image: radial-gradient(circle, #000 1px, transparent 1px); background-size: 24px 24px;"
+	></div>
+
+	<div class="relative mx-auto max-w-7xl px-6">
+		<div class="mb-20 text-center">
+			<div class="mb-4 font-mono text-sm font-medium uppercase tracking-widest text-orange-600">WHAT WE DO</div>
+			<h2 class="font-[clash-display,ui-sans-serif,system-ui,sans-serif] text-5xl font-bold text-zinc-900 lg:text-6xl">
+				活動内容
+			</h2>
+			<p class="mx-auto mt-6 max-w-2xl text-lg text-zinc-600">
+				学習、交流、開発の3つの柱で、実践的なソフトウェアエンジニアリングを体験
+			</p>
 		</div>
-		<div class="grid gap-6 md:grid-cols-3">
-			<div
-				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
-			>
-				<div
-					class="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-900 text-white transition-colors group-hover:bg-primary group-hover:text-zinc-900"
-				>
-					<BookOpen class="h-6 w-6" />
+
+		<div class="grid gap-8 md:grid-cols-3">
+			<div class="group relative">
+				<div class="relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/80 p-8 backdrop-blur-sm transition-all hover:scale-105 hover:border-orange-300 hover:bg-white hover:shadow-2xl hover:shadow-orange-500/10">
+					<!-- Gradient overlay on hover -->
+					<div
+						class="pointer-events-none absolute inset-0 bg-gradient-to-br from-orange-50/0 to-orange-50/0 opacity-0 transition-all duration-500 group-hover:from-orange-50/80 group-hover:to-transparent group-hover:opacity-100"
+					></div>
+
+					<div class="relative">
+						<div
+							class="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30 transition-all group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-orange-500/50"
+						>
+							<BookOpen class="h-8 w-8" />
+						</div>
+						<h3 class="mb-4 font-[clash-display,ui-sans-serif,system-ui,sans-serif] text-2xl font-bold text-zinc-900 transition-colors group-hover:text-orange-600">
+							学習・教育
+						</h3>
+						<p class="leading-relaxed text-zinc-600">
+							プログラミング未経験者から経験者まで、共に学び教え合う学習会を開催。独自の学習コンテンツをオープンソースで公開しています。
+						</p>
+					</div>
 				</div>
-				<h3 class="mb-2 text-xl font-semibold">学習・教育</h3>
-				<p class="leading-relaxed text-zinc-500">
-					プログラミング未経験者から経験者まで、共に学び教え合う学習会を開催。独自の学習コンテンツをオープンソースで公開しています。
-				</p>
 			</div>
-			<div
-				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
-			>
-				<div
-					class="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-900 text-white transition-colors group-hover:bg-primary group-hover:text-zinc-900"
-				>
-					<MessageSquare class="h-6 w-6" />
+
+			<div class="group relative">
+				<div class="relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/80 p-8 backdrop-blur-sm transition-all hover:scale-105 hover:border-amber-300 hover:bg-white hover:shadow-2xl hover:shadow-amber-500/10">
+					<!-- Gradient overlay on hover -->
+					<div
+						class="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-50/0 to-amber-50/0 opacity-0 transition-all duration-500 group-hover:from-amber-50/80 group-hover:to-transparent group-hover:opacity-100"
+					></div>
+
+					<div class="relative">
+						<div
+							class="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500 to-yellow-500 text-white shadow-lg shadow-amber-500/30 transition-all group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-amber-500/50"
+						>
+							<Users class="h-8 w-8" />
+						</div>
+						<h3 class="mb-4 font-[clash-display,ui-sans-serif,system-ui,sans-serif] text-2xl font-bold text-zinc-900 transition-colors group-hover:text-amber-600">
+							交流
+						</h3>
+						<p class="leading-relaxed text-zinc-600">
+							定期的なイベントでメンバー同士の交流を深めます。集中開発合宿やブレインストーミング大会など様々な活動を実施。
+						</p>
+					</div>
 				</div>
-				<h3 class="mb-2 text-xl font-semibold">交流</h3>
-				<p class="leading-relaxed text-zinc-500">
-					定期的なイベントでメンバー同士の交流を深めます。集中開発合宿やブレインストーミング大会など様々な活動を実施。
-				</p>
 			</div>
-			<div
-				class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
-			>
-				<div
-					class="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-900 text-white transition-colors group-hover:bg-primary group-hover:text-zinc-900"
-				>
-					<Code class="h-6 w-6" />
+
+			<div class="group relative">
+				<div class="relative overflow-hidden rounded-3xl border border-zinc-200 bg-white/80 p-8 backdrop-blur-sm transition-all hover:scale-105 hover:border-yellow-300 hover:bg-white hover:shadow-2xl hover:shadow-yellow-500/10">
+					<!-- Gradient overlay on hover -->
+					<div
+						class="pointer-events-none absolute inset-0 bg-gradient-to-br from-yellow-50/0 to-yellow-50/0 opacity-0 transition-all duration-500 group-hover:from-yellow-50/80 group-hover:to-transparent group-hover:opacity-100"
+					></div>
+
+					<div class="relative">
+						<div
+							class="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-500 to-orange-500 text-white shadow-lg shadow-yellow-500/30 transition-all group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-yellow-500/50"
+						>
+							<Code class="h-8 w-8" />
+						</div>
+						<h3 class="mb-4 font-[clash-display,ui-sans-serif,system-ui,sans-serif] text-2xl font-bold text-zinc-900 transition-colors group-hover:text-yellow-600">
+							開発
+						</h3>
+						<p class="leading-relaxed text-zinc-600">
+							大学や社会をより良くするソフトウェアを一緒に開発。Webアプリからモバイル、インフラまで幅広く挑戦しています。
+						</p>
+					</div>
 				</div>
-				<h3 class="mb-2 text-xl font-semibold">開発</h3>
-				<p class="leading-relaxed text-zinc-500">
-					大学や社会をより良くするソフトウェアを一緒に開発。Webアプリからモバイル、インフラまで幅広く挑戦しています。
-				</p>
 			</div>
 		</div>
 	</div>

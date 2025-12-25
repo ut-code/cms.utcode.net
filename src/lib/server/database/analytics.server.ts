@@ -1,6 +1,6 @@
-import { desc, sql } from "drizzle-orm";
+import { and, desc, gte, sql } from "drizzle-orm";
 import { db } from "$lib/server/drivers/db";
-import { article, member, project } from "$lib/shared/models/schema";
+import { article, member, project, viewLog } from "$lib/shared/models/schema";
 
 export async function getTotalArticleViews() {
   const result = await db
@@ -44,6 +44,64 @@ export async function getTopProjects(limit: number) {
     limit,
     with: { projectMembers: { with: { member: true } } },
   });
+}
+
+export async function getViewsByDay(days: number) {
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - days);
+  startDate.setHours(0, 0, 0, 0);
+
+  const result = await db
+    .select({
+      date: sql<string>`DATE(${viewLog.viewedAt})`,
+      resourceType: viewLog.resourceType,
+      count: sql<number>`COUNT(*)`,
+    })
+    .from(viewLog)
+    .where(gte(viewLog.viewedAt, startDate))
+    .groupBy(sql`DATE(${viewLog.viewedAt})`, viewLog.resourceType)
+    .orderBy(sql`DATE(${viewLog.viewedAt})`);
+
+  return result;
+}
+
+export async function getRecentViewTrend(days: number) {
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - days);
+  startDate.setHours(0, 0, 0, 0);
+
+  const result = await db
+    .select({
+      date: sql<string>`DATE(${viewLog.viewedAt})`,
+      count: sql<number>`COUNT(*)`,
+    })
+    .from(viewLog)
+    .where(gte(viewLog.viewedAt, startDate))
+    .groupBy(sql`DATE(${viewLog.viewedAt})`)
+    .orderBy(sql`DATE(${viewLog.viewedAt})`);
+
+  return result;
+}
+
+export async function getResourceViewTrend(
+  resourceType: "article" | "member" | "project",
+  days: number,
+) {
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - days);
+  startDate.setHours(0, 0, 0, 0);
+
+  const result = await db
+    .select({
+      date: sql<string>`DATE(${viewLog.viewedAt})`,
+      count: sql<number>`COUNT(*)`,
+    })
+    .from(viewLog)
+    .where(and(gte(viewLog.viewedAt, startDate), sql`${viewLog.resourceType} = ${resourceType}`))
+    .groupBy(sql`DATE(${viewLog.viewedAt})`)
+    .orderBy(sql`DATE(${viewLog.viewedAt})`);
+
+  return result;
 }
 
 export async function getAnalyticsSummary() {

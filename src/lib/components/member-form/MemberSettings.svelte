@@ -7,12 +7,14 @@
 		slug = $bindable(""),
 		imageUrl = $bindable(""),
 		slugError = null,
+		viewCount = 0,
 		onDelete = null,
 	}: {
 		show?: boolean;
 		slug?: string;
 		imageUrl?: string;
 		slugError?: string | null;
+		viewCount?: number;
 		onDelete?: (() => Promise<void>) | null;
 	} = $props();
 </script>
@@ -64,6 +66,19 @@
 					label="Profile image"
 					aspect="1/1"
 				/>
+			</div>
+
+			<!-- View Count (Analytics) -->
+			<div class="space-y-2">
+				<p class="text-sm font-medium text-zinc-700">Analytics</p>
+				<div class="rounded-lg border border-zinc-200 bg-white px-3 py-2">
+					<div class="flex items-center justify-between">
+						<span class="text-sm text-zinc-600">View count</span>
+						<span class="font-mono text-sm font-medium text-zinc-900"
+							>{viewCount.toLocaleString()}</span
+						>
+					</div>
+				</div>
 			</div>
 
 			<!-- Danger Zone -->

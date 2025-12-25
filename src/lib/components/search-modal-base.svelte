@@ -80,8 +80,20 @@
 
 	let query = $state("");
 	let selectedIndex = $state(0);
+	let results = $state<TResult[]>([]);
 
-	const results = $derived(query.trim() ? await searchFn(query) : []);
+	$effect(() => {
+		if (query.trim()) {
+			searchFn(query)
+				.then((r) => {
+					results = r;
+				})
+				.catch(console.error);
+		} else {
+			results = [];
+		}
+	});
+
 	const resultCount = $derived(results.length);
 
 	function handleQueryInput(e: Event & { currentTarget: HTMLInputElement }) {

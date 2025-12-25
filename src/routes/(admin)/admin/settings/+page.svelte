@@ -8,7 +8,7 @@
 	} from "$lib/data/private/user-preferences.remote";
 
 	const toast = useToast();
-	const members = $derived(await getMembers());
+	const members = await getMembers();
 	const preference = await getMyPreference();
 
 	let defaultAuthorId = $state(preference?.defaultAuthorId ?? null);

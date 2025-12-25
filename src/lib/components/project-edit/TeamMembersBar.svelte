@@ -29,10 +29,10 @@
 				class="group flex shrink-0 items-center gap-1.5 rounded-full bg-white py-1 pr-2 pl-1 text-xs shadow-sm ring-1 ring-zinc-200"
 			>
 				{#if pm.member.imageUrl}
-					<img src={pm.member.imageUrl} alt="" class="h-5 w-5 rounded-full" />
+					<img src={pm.member.imageUrl} alt="" class="aspect-square h-5 w-5 rounded-full object-cover" />
 				{:else}
 					<div
-						class="flex h-5 w-5 items-center justify-center rounded-full bg-zinc-200 text-[10px] font-medium"
+						class="flex aspect-square h-5 w-5 items-center justify-center rounded-full bg-zinc-200 text-[10px] font-medium"
 					>
 						{pm.member.name.charAt(0)}
 					</div>

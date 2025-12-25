@@ -10,9 +10,9 @@
 	import { getPublicArticles, getPublicProjects } from "$lib/data/public/index.remote";
 	import { getStats } from "$lib/data/public/stats.remote";
 
-	const stats = $derived(await getStats());
-	const allArticles = $derived(await getPublicArticles());
-	const allProjects = $derived(await getPublicProjects());
+	const stats = await getStats();
+	const allArticles = await getPublicArticles();
+	const allProjects = await getPublicProjects();
 
 	const articles = $derived(allArticles.slice(0, 3));
 	const featuredProject = $derived(allProjects.find((p) => p.category === "active"));

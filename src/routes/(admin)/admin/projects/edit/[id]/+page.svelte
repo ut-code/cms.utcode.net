@@ -20,9 +20,9 @@
 	import type { ProjectCategory } from "$lib/shared/models/schema";
 
 	const toast = useToast();
-	const id = $derived(page.params.id ?? "");
-	const project = $derived(await getProject(id));
-	const members = $derived(await getMembers());
+	const id = page.params.id ?? "";
+	const project = await getProject(id);
+	const members = await getMembers();
 	let isSubmitting = $state(false);
 	let showAddMember = $state(false);
 	let showTransferLead = $state(false);
@@ -225,6 +225,7 @@
 					onDelete={handleDelete}
 					submitLabel="Save"
 					bind:isSubmitting
+					viewCount={project.viewCount}
 				/>
 			</div>
 		</div>

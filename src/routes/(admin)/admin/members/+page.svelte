@@ -1,8 +1,22 @@
 <script lang="ts">
-	import { ChevronRight, Link2, Plus, Sparkles, Users } from "lucide-svelte";
+	import { ChevronRight, Link2, Plus, Search, Sparkles, Users, X } from "lucide-svelte";
 	import { getMembers } from "$lib/data/private/members.remote";
 
-	const members = $derived(await getMembers());
+	const allMembers = await getMembers();
+	let searchQuery = $state("");
+
+	const members = $derived(
+		searchQuery.trim() === ""
+			? allMembers
+			: allMembers.filter((m) => {
+					const query = searchQuery.toLowerCase();
+					return (
+						m.name.toLowerCase().includes(query) ||
+						m.slug.toLowerCase().includes(query) ||
+						m.bio?.toLowerCase().includes(query)
+					);
+				}),
+	);
 </script>
 
 <svelte:head>
@@ -27,12 +41,34 @@
 				</div>
 				<a
 					href="/admin/members/new"
-					class="gradient-primary glow-primary btn btn-sm gap-2 border-none text-white sm:btn-md"
+					class="btn btn-primary btn-sm gap-2 sm:btn-md"
 				>
 					<Plus class="h-4 w-4" />
 					<span class="hidden sm:inline">Add Member</span>
 					<span class="sm:hidden">Add</span>
 				</a>
+			</div>
+
+			<!-- Search input -->
+			<div class="relative mt-4 sm:mt-6">
+				<div class="relative">
+					<Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+					<input
+						type="text"
+						placeholder="Search members by name, slug, or bio..."
+						bind:value={searchQuery}
+						class="w-full rounded-lg border-0 bg-white/10 py-2 pl-10 pr-10 text-sm text-white placeholder-white/40 outline-none transition-all focus:bg-white/15 focus:ring-2 focus:ring-white/20"
+					/>
+					{#if searchQuery}
+						<button
+							onclick={() => (searchQuery = "")}
+							class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 transition-colors hover:text-white"
+							aria-label="Clear search"
+						>
+							<X class="h-4 w-4" />
+						</button>
+					{/if}
+				</div>
 			</div>
 		</header>
 
@@ -44,14 +80,27 @@
 				<div
 					class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-base-200 text-base-content/40"
 				>
-					<Users class="h-8 w-8" />
+					{#if searchQuery}
+						<Search class="h-8 w-8" />
+					{:else}
+						<Users class="h-8 w-8" />
+					{/if}
 				</div>
-				<h3 class="mt-4 text-lg font-semibold text-base-content">No members yet</h3>
-				<p class="mt-1 text-base-content/60">Get started by adding a member.</p>
-				<a href="/admin/members/new" class="gradient-primary btn mt-6 gap-2 text-white">
-					<Plus class="h-4 w-4" />
-					Add Member
-				</a>
+				{#if searchQuery}
+					<h3 class="mt-4 text-lg font-semibold text-base-content">No members found</h3>
+					<p class="mt-1 text-base-content/60">Try a different search term.</p>
+					<button onclick={() => (searchQuery = "")} class="btn btn-outline mt-6 gap-2">
+						<X class="h-4 w-4" />
+						Clear search
+					</button>
+				{:else}
+					<h3 class="mt-4 text-lg font-semibold text-base-content">No members yet</h3>
+					<p class="mt-1 text-base-content/60">Get started by adding a member.</p>
+					<a href="/admin/members/new" class="btn btn-primary mt-6 gap-2">
+						<Plus class="h-4 w-4" />
+						Add Member
+					</a>
+				{/if}
 			</div>
 		{:else}
 			<!-- Members grid -->
@@ -72,14 +121,14 @@
 							{#if member.imageUrl}
 								<div class="avatar">
 									<div
-										class="w-14 rounded-xl ring-2 ring-base-200 transition-all group-hover:ring-primary/30"
+										class="aspect-square w-14 rounded-full ring-2 ring-base-200 transition-all group-hover:ring-primary/30"
 									>
-										<img src={member.imageUrl} alt={member.name} />
+										<img src={member.imageUrl} alt={member.name} class="h-full w-full object-cover" />
 									</div>
 								</div>
 							{:else}
 								<div class="placeholder avatar">
-									<div class="gradient-primary w-14 rounded-xl text-white">
+									<div class="gradient-primary aspect-square w-14 rounded-full text-white">
 										<span class="text-lg font-bold">{member.name.charAt(0)}</span>
 									</div>
 								</div>

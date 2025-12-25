@@ -24,6 +24,7 @@
 		submitLabel = "Save",
 		isSubmitting = $bindable(false),
 		articleId = null,
+		viewCount = 0,
 	}: {
 		initialData?: ArticleData;
 		authors?: Author[];
@@ -32,6 +33,7 @@
 		submitLabel?: string;
 		isSubmitting?: boolean;
 		articleId?: string | null;
+		viewCount?: number;
 	} = $props();
 
 	let formData = $state(snapshot(() => initialData));
@@ -116,9 +118,12 @@
 		<ArticleEditor
 			bind:title={formData.title}
 			bind:content={formData.content}
+			slug={formData.slug}
+			coverUrl={formData.coverUrl}
 			titleError={errors["title"]}
 			contentError={errors["content"]}
 			onTitleChange={handleTitleChange}
+			onOpenSettings={() => (showSettings = true)}
 		/>
 
 		<ArticleSettings
@@ -134,6 +139,7 @@
 			slugError={errors["slug"]}
 			{onDelete}
 			onPublishToggle={handlePublishToggle}
+			{viewCount}
 		/>
 	</div>
 </form>

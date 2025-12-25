@@ -8,12 +8,12 @@
 @plugin "daisyui/theme" {
   name: "utcode";
   default: true;
-  --color-primary: oklch(72% 0.19 145); /* Lime green #00D372 */
-  --color-primary-content: oklch(15% 0.03 145);
+  --color-primary: oklch(76% 0.2 153); /* Lime green #00D372 */
+  --color-primary-content: oklch(15% 0.03 153);
   --color-secondary: oklch(20% 0.01 260); /* Near black */
   --color-secondary-content: oklch(98% 0.01 260);
-  --color-accent: oklch(72% 0.19 145);
-  --color-accent-content: oklch(15% 0.03 145);
+  --color-accent: oklch(76% 0.2 153);
+  --color-accent-content: oklch(15% 0.03 153);
   --color-neutral: oklch(25% 0.015 260);
   --color-neutral-content: oklch(98% 0.01 260);
   --color-base-100: oklch(99% 0.002 260);
@@ -22,8 +22,8 @@
   --color-base-content: oklch(20% 0.02 260);
   --color-info: oklch(65% 0.19 240);
   --color-info-content: oklch(98% 0.01 240);
-  --color-success: oklch(72% 0.19 145);
-  --color-success-content: oklch(15% 0.03 145);
+  --color-success: oklch(76% 0.2 153);
+  --color-success-content: oklch(15% 0.03 153);
   --color-warning: oklch(75% 0.18 75);
   --color-warning-content: oklch(20% 0.04 75);
   --color-error: oklch(65% 0.22 25);
@@ -106,10 +106,10 @@ pre,
 @keyframes pulse-glow {
   0%,
   100% {
-    box-shadow: 0 0 0 0 oklch(72% 0.19 145 / 0.4);
+    box-shadow: 0 0 0 0 oklch(76% 0.2 153 / 0.4);
   }
   50% {
-    box-shadow: 0 0 20px 4px oklch(72% 0.19 145 / 0.2);
+    box-shadow: 0 0 20px 4px oklch(76% 0.2 153 / 0.2);
   }
 }
 
@@ -152,7 +152,7 @@ pre,
   background: linear-gradient(
     90deg,
     transparent 0%,
-    oklch(72% 0.19 145 / 0.1) 50%,
+    oklch(76% 0.2 153 / 0.1) 50%,
     transparent 100%
   );
   background-size: 200% 100%;
@@ -190,7 +190,7 @@ pre,
 
 /* Bold Admin Theme Utilities */
 .gradient-primary {
-  background: linear-gradient(135deg, oklch(72% 0.19 145) 0%, oklch(65% 0.22 160) 100%);
+  background: linear-gradient(135deg, oklch(76% 0.2 153) 0%, oklch(65% 0.22 160) 100%);
 }
 
 .gradient-dark {
@@ -199,7 +199,7 @@ pre,
 
 .gradient-mesh {
   background:
-    radial-gradient(at 40% 20%, oklch(72% 0.19 145 / 0.15) 0, transparent 50%),
+    radial-gradient(at 40% 20%, oklch(76% 0.2 153 / 0.15) 0, transparent 50%),
     radial-gradient(at 80% 0%, oklch(65% 0.19 240 / 0.1) 0, transparent 50%),
     radial-gradient(at 0% 50%, oklch(75% 0.18 75 / 0.08) 0, transparent 50%), oklch(97% 0.003 260);
 }
@@ -212,8 +212,8 @@ pre,
 
 .glow-primary {
   box-shadow:
-    0 0 20px oklch(72% 0.19 145 / 0.3),
-    0 0 40px oklch(72% 0.19 145 / 0.1);
+    0 0 20px oklch(76% 0.2 153 / 0.3),
+    0 0 40px oklch(76% 0.2 153 / 0.1);
 }
 
 .glow-soft {
@@ -226,11 +226,11 @@ pre,
   border: 1px solid transparent;
   background:
     linear-gradient(white, white) padding-box,
-    linear-gradient(135deg, oklch(72% 0.19 145 / 0.5), oklch(65% 0.19 240 / 0.3)) border-box;
+    linear-gradient(135deg, oklch(76% 0.2 153 / 0.5), oklch(65% 0.19 240 / 0.3)) border-box;
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, oklch(72% 0.19 145) 0%, oklch(65% 0.22 160) 100%);
+  background: linear-gradient(135deg, oklch(76% 0.2 153) 0%, oklch(65% 0.22 160) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -271,7 +271,7 @@ pre,
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--accent-color, oklch(72% 0.19 145)), transparent);
+  background: linear-gradient(90deg, var(--accent-color, oklch(76% 0.2 153)), transparent);
 }
 
 /* Navigation item active indicator */
@@ -287,6 +287,6 @@ pre,
   transform: translateY(-50%);
   width: 3px;
   height: 60%;
-  background: oklch(72% 0.19 145);
+  background: oklch(76% 0.2 153);
   border-radius: 0 2px 2px 0;
 }

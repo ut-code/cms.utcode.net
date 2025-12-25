@@ -6,7 +6,7 @@
 	import StatsGrid from "$lib/components/admin-dashboard/StatsGrid.svelte";
 	import { getAdminStats } from "$lib/data/private/stats.remote";
 
-	const stats = $derived(await getAdminStats());
+	const stats = await getAdminStats();
 
 	function formatDate(date: Date): string {
 		const now = new Date();
@@ -50,6 +50,7 @@
 			topArticles={stats.analytics.topArticles}
 			topProjects={stats.analytics.topProjects}
 			topMembers={stats.analytics.topMembers}
+			viewTrend={stats.analytics.viewTrend}
 		/>
 	</div>
 </div>

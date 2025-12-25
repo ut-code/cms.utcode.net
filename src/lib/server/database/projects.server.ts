@@ -1,6 +1,6 @@
 import { and, eq, like, or, sql } from "drizzle-orm";
 import { db } from "$lib/server/drivers/db";
-import { type ProjectRole, project, projectMember } from "$lib/shared/models/schema";
+import { type ProjectRole, project, projectMember, viewLog } from "$lib/shared/models/schema";
 import { createSearchPattern } from "./utils";
 
 export type Project = typeof project.$inferSelect;
@@ -25,10 +25,16 @@ export async function getProjectBySlug(slug: string) {
 
   // Fire-and-forget: view count accuracy is not critical
   if (result) {
-    db.update(project)
-      .set({ viewCount: sql`${project.viewCount} + 1` })
-      .where(eq(project.slug, slug))
-      .catch(console.error);
+    Promise.all([
+      db
+        .update(project)
+        .set({ viewCount: sql`${project.viewCount} + 1` })
+        .where(eq(project.slug, slug)),
+      db.insert(viewLog).values({
+        resourceType: "project",
+        resourceId: result.id,
+      }),
+    ]).catch(console.error);
   }
 
   return result;

@@ -3,8 +3,7 @@
 	import Markdown from "$lib/components/Markdown.svelte";
 	import { getArticle } from "$lib/data/private/articles.remote";
 
-	const id = $derived(page.params.id ?? "");
-	const article = $derived(await getArticle(id));
+	const article = await getArticle(page.params.id ?? "");
 </script>
 
 <svelte:head>
@@ -35,8 +34,7 @@
 			<img
 				src={article.coverUrl}
 				alt={article.title}
-				class="mb-8 max-h-64 w-full rounded-xl object-cover"
-				style="aspect-ratio: 5/3"
+				class="mb-8 aspect-[5/3] w-full rounded-xl object-cover"
 			/>
 		{/if}
 
@@ -52,7 +50,7 @@
 						<img
 							src={article.author.imageUrl}
 							alt={article.author.name}
-							class="h-6 w-6 rounded-full"
+							class="aspect-square h-6 w-6 rounded-full object-cover"
 						/>
 					{/if}
 					{article.author.name}

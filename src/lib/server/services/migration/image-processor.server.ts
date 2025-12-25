@@ -40,7 +40,7 @@ export async function processContentImages(
         buffer: compressedBuffer,
         type: outputType,
         extension,
-      } = await compressImage(inputBuffer as Buffer, getMimeType(imagePath));
+      } = await compressImage(inputBuffer, getMimeType(imagePath));
       const baseName = basename(imagePath).replace(/\.[^.]+$/, "");
       const outputName = `${baseName}.${extension}`;
 

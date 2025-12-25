@@ -38,7 +38,7 @@
 		{/if}
 
 		<nav
-			class="fixed top-12 right-0 left-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-md"
+			class="sticky {showDevBanner ? 'top-12' : 'top-0'} right-0 left-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-md"
 		>
 			<div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
 				<div class="flex items-center gap-4">
@@ -62,6 +62,12 @@
 							>⌘K</kbd
 						>
 					</button>
+					<a href="/about" class="text-sm text-zinc-500 transition-colors hover:text-zinc-900"
+						>About</a
+					>
+					<a href="/activities" class="text-sm text-zinc-500 transition-colors hover:text-zinc-900"
+						>Activities</a
+					>
 					<a href="/articles" class="text-sm text-zinc-500 transition-colors hover:text-zinc-900"
 						>Articles</a
 					>
@@ -71,11 +77,14 @@
 					<a href="/members" class="text-sm text-zinc-500 transition-colors hover:text-zinc-900"
 						>Members</a
 					>
+					<a href="/join" class="text-sm text-zinc-500 transition-colors hover:text-zinc-900"
+						>Join</a
+					>
 				</div>
 			</div>
 		</nav>
 
-		<main class="pt-28">
+		<main>
 			{@render children()}
 		</main>
 
@@ -90,9 +99,33 @@
 						<div class="flex flex-col items-center gap-2 md:items-start">
 							<span
 								class="font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-zinc-500 uppercase"
-								>Links</span
+								>About</span
 							>
-							<div class="flex gap-4">
+							<div class="flex flex-col gap-2">
+								<a
+									href="/about"
+									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">About</a
+								>
+								<a
+									href="/activities"
+									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">Activities</a
+								>
+								<a
+									href="/join"
+									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">Join</a
+								>
+								<a
+									href="/donation"
+									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">Donation</a
+								>
+							</div>
+						</div>
+						<div class="flex flex-col items-center gap-2 md:items-start">
+							<span
+								class="font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-zinc-500 uppercase"
+								>Content</span
+							>
+							<div class="flex flex-col gap-2">
 								<a
 									href="/articles"
 									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">Articles</a
@@ -112,7 +145,7 @@
 								class="font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-zinc-500 uppercase"
 								>Social</span
 							>
-							<div class="flex gap-4">
+							<div class="flex flex-col gap-2">
 								<a
 									href="https://github.com/ut-code"
 									target="_blank"
@@ -152,6 +185,20 @@
 			<ul class="space-y-2">
 				<li>
 					<a
+						href="/about"
+						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
+						>About</a
+					>
+				</li>
+				<li>
+					<a
+						href="/activities"
+						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
+						>Activities</a
+					>
+				</li>
+				<li>
+					<a
 						href="/articles"
 						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
 						>Articles</a
@@ -169,6 +216,13 @@
 						href="/members"
 						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
 						>Members</a
+					>
+				</li>
+				<li>
+					<a
+						href="/join"
+						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
+						>Join</a
 					>
 				</li>
 			</ul>

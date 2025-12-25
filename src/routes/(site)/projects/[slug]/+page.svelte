@@ -5,8 +5,7 @@
 	import { getPublicProject } from "$lib/data/public/index.remote";
 	import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
 
-	const slug = $derived(page.params.slug ?? "");
-	const project = $derived(await getPublicProject(slug));
+	const project = await getPublicProject(page.params.slug ?? "");
 
 	const categoryColors: Record<ProjectCategory, string> = {
 		active: "bg-emerald-100 text-emerald-700 border-emerald-200",
@@ -44,7 +43,7 @@
 			<img
 				src={project.coverUrl}
 				alt={project.name}
-				class="mb-6 aspect-video w-full rounded-xl object-cover sm:mb-8"
+				class="mb-6 aspect-[5/3] w-full rounded-xl object-cover sm:mb-8"
 			/>
 		{/if}
 
@@ -96,7 +95,7 @@
 						class="flex items-center gap-3 rounded-lg border border-zinc-200 px-4 py-3 transition-all hover:bg-primary/5 hover:border-primary/30"
 					>
 						{#if pm.member.imageUrl}
-							<img src={pm.member.imageUrl} alt={pm.member.name} class="h-10 w-10 rounded-full" />
+							<img src={pm.member.imageUrl} alt={pm.member.name} class="aspect-square h-10 w-10 rounded-full object-cover" />
 						{:else}
 							<div class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100">
 								<span class="text-sm font-medium text-zinc-600">

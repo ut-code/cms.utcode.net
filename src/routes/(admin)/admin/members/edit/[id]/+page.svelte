@@ -8,8 +8,8 @@
 	import { editMember, getMember, removeMember } from "$lib/data/private/members.remote";
 
 	const toast = useToast();
-	const id = $derived(page.params.id ?? "");
-	const member = $derived(await getMember(id));
+	const id = page.params.id ?? "";
+	const member = await getMember(id);
 	let isSubmitting = $state(false);
 
 	async function handleSubmit(data: {
@@ -33,7 +33,7 @@
 			}
 
 			await editMember({
-				id,
+				id: member.id,
 				data: {
 					slug: data.slug,
 					name: data.name,
@@ -64,7 +64,7 @@
 
 		if (confirmed) {
 			try {
-				await removeMember(id);
+				await removeMember(member.id);
 				toast.show("Deleted", "success");
 				await goto("/admin/members");
 			} catch (error) {
@@ -110,6 +110,7 @@
 				onDelete={handleDelete}
 				submitLabel="Save"
 				bind:isSubmitting
+				viewCount={member.viewCount}
 			/>
 		</div>
 {/if}

@@ -1,6 +1,6 @@
 import { and, desc, eq, like, or, sql } from "drizzle-orm";
 import { db } from "$lib/server/drivers/db";
-import { article } from "$lib/shared/models/schema";
+import { article, viewLog } from "$lib/shared/models/schema";
 import { createSearchPattern } from "./utils";
 
 export type Article = typeof article.$inferSelect;
@@ -29,10 +29,16 @@ export async function getPublishedArticle(slug: string) {
 
   // Fire-and-forget: view count accuracy is not critical
   if (result) {
-    db.update(article)
-      .set({ viewCount: sql`${article.viewCount} + 1` })
-      .where(eq(article.slug, slug))
-      .catch(console.error);
+    Promise.all([
+      db
+        .update(article)
+        .set({ viewCount: sql`${article.viewCount} + 1` })
+        .where(eq(article.slug, slug)),
+      db.insert(viewLog).values({
+        resourceType: "article",
+        resourceId: result.id,
+      }),
+    ]).catch(console.error);
   }
 
   return result;

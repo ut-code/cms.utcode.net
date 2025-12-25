@@ -1,7 +1,12 @@
 <script lang="ts">
-	import { Eye, EyeOff, X, ChevronDown } from "lucide-svelte";
+	import { ChevronDown, Eye, EyeOff, X } from "lucide-svelte";
 	import { Combobox } from "bits-ui";
-	import { extractDateFromArticleSlug, formatDateForSlug, generateSlug, validateArticleSlug } from "$lib/shared/logic/slugs";
+	import {
+		extractDateFromArticleSlug,
+		formatDateForSlug,
+		generateSlug,
+		validateArticleSlug,
+	} from "$lib/shared/logic/slugs";
 	import ImageUpload from "../image-upload.svelte";
 
 	type Author = {
@@ -24,6 +29,7 @@
 		slugError = null,
 		onDelete = null,
 		onPublishToggle = null,
+		viewCount = 0,
 	}: {
 		show?: boolean;
 		published?: boolean;
@@ -37,6 +43,7 @@
 		slugError?: string | null;
 		onDelete?: (() => Promise<void>) | null;
 		onPublishToggle?: ((newValue: boolean) => Promise<void>) | null;
+		viewCount?: number;
 	} = $props();
 
 	// Real-time validation state
@@ -88,7 +95,9 @@
 
 	// Author combobox state
 	type AuthorItem = { value: string; label: string; slug: string };
-	let authorItems: AuthorItem[] = $derived(authors.map((a) => ({ value: a.id, label: a.name, slug: a.slug })));
+	let authorItems: AuthorItem[] = $derived(
+		authors.map((a) => ({ value: a.id, label: a.name, slug: a.slug })),
+	);
 	let searchValue = $state("");
 	let isAuthorSelectOpen = $state(false);
 
@@ -106,7 +115,7 @@
 		if (!searchValue) return authorItems;
 		const query = searchValue.toLowerCase();
 		return authorItems.filter(
-			(item) => item.label.toLowerCase().includes(query) || item.slug.toLowerCase().includes(query)
+			(item) => item.label.toLowerCase().includes(query) || item.slug.toLowerCase().includes(query),
 		);
 	});
 
@@ -128,7 +137,9 @@
 </script>
 
 {#if show}
-	<aside class="fixed inset-0 z-30 overflow-y-auto bg-zinc-50 lg:static lg:w-80 lg:shrink-0 lg:border-l lg:border-zinc-200 lg:bg-zinc-50/50 xl:w-96">
+	<aside
+		class="fixed inset-0 z-30 overflow-y-auto bg-zinc-50 lg:static lg:w-80 lg:shrink-0 lg:border-l lg:border-zinc-200 lg:bg-zinc-50/50 xl:w-96"
+	>
 		<div
 			class="sticky top-0 flex items-center justify-between border-b border-zinc-200 bg-zinc-50 px-4 py-3 backdrop-blur-sm lg:bg-zinc-50/80"
 		>
@@ -229,16 +240,21 @@
 
 				<!-- Redirect checkbox (only show when editing and slug has changed) -->
 				{#if initialSlug && slug !== initialSlug}
-					<label class="flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-200 p-3">
+					<label
+						class="flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-200 p-3"
+					>
 						<input
 							type="checkbox"
 							bind:checked={createRedirect}
 							class="mt-0.5 h-4 w-4 rounded border-amber-300 text-amber-600 focus:ring-amber-500"
 						/>
 						<div class="flex-1">
-							<span class="block text-sm font-medium text-amber-900">Leave redirect from old URL</span>
+							<span class="block text-sm font-medium text-amber-900"
+								>Leave redirect from old URL</span
+							>
 							<span class="mt-0.5 block text-xs text-amber-700">
-								Old links to <span class="font-mono">/articles/{initialSlug}</span> will redirect to the new URL
+								Old links to <span class="font-mono">/articles/{initialSlug}</span> will redirect to
+								the new URL
 							</span>
 						</div>
 					</label>
@@ -311,6 +327,19 @@
 			<!-- Cover Image -->
 			<div class="space-y-2">
 				<ImageUpload bind:value={coverUrl} folder="articles" label="Cover image" />
+			</div>
+
+			<!-- View Count (Analytics) -->
+			<div class="space-y-2">
+				<p class="text-sm font-medium text-zinc-700">Analytics</p>
+				<div class="rounded-lg border border-zinc-200 bg-white px-3 py-2">
+					<div class="flex items-center justify-between">
+						<span class="text-sm text-zinc-600">View count</span>
+						<span class="font-mono text-sm font-medium text-zinc-900"
+							>{viewCount.toLocaleString()}</span
+						>
+					</div>
+				</div>
 			</div>
 
 			<!-- Danger Zone -->

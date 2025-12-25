@@ -20,6 +20,11 @@
 		name: string;
 	}
 
+	interface ViewTrendData {
+		date: string;
+		count: number;
+	}
+
 	interface Props {
 		totalViews: number;
 		totalArticleViews: number;
@@ -28,6 +33,7 @@
 		topArticles: TopArticle[];
 		topProjects: TopProject[];
 		topMembers: TopMember[];
+		viewTrend?: ViewTrendData[];
 	}
 
 	const {
@@ -38,11 +44,22 @@
 		topArticles,
 		topProjects,
 		topMembers,
+		viewTrend = [],
 	}: Props = $props();
 
 	const topThreeArticles = $derived(topArticles.slice(0, 3));
 	const topThreeProjects = $derived(topProjects.slice(0, 3));
 	const topThreeMembers = $derived(topMembers.slice(0, 3));
+
+	const recentTrend = $derived(() => {
+		if (viewTrend.length < 2) return { value: 0, isPositive: true };
+		const recent = viewTrend.slice(-7);
+		const older = viewTrend.slice(-14, -7);
+		const recentSum = recent.reduce((sum, d) => sum + d.count, 0);
+		const olderSum = older.reduce((sum, d) => sum + d.count, 0);
+		const change = olderSum === 0 ? 0 : ((recentSum - olderSum) / olderSum) * 100;
+		return { value: Math.abs(change), isPositive: change >= 0 };
+	});
 </script>
 
 <section class="animate-fade-slide-in stagger-5 glow-soft rounded-2xl bg-base-100 p-4 sm:p-6">

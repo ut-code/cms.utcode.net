@@ -1,5 +1,7 @@
 # UI Design
 
+団体要件: プライマリカラー = RGB(0,211,114) #00D372 CMYK(68%, 0, 72%, 0)
+
 ## Inspiration
 
 - **Linear**: Typography, clarity, professional developer aesthetic

@@ -14,22 +14,22 @@ import {
 } from "$lib/server/database/projects.server";
 import type { SearchResult } from "$lib/shared/logic/search";
 
-export const getPublicArticles = query(listPublishedArticles);
-export const getPublicArticle = query(v.string(), getPublishedArticle);
+export const getPublicArticles = query(async () => listPublishedArticles());
+export const getPublicArticle = query(v.string(), async (slug) => getPublishedArticle(slug));
 export const getPublicRelatedArticles = query(
   v.object({
     articleId: v.string(),
     authorId: v.nullable(v.string()),
     limit: v.number(),
   }),
-  ({ articleId, authorId, limit }) => getRelatedArticles(articleId, authorId, limit),
+  async ({ articleId, authorId, limit }) => getRelatedArticles(articleId, authorId, limit),
 );
 
-export const getPublicProjects = query(listProjects);
-export const getPublicProject = query(v.string(), getProjectBySlug);
+export const getPublicProjects = query(async () => listProjects());
+export const getPublicProject = query(v.string(), async (slug) => getProjectBySlug(slug));
 
-export const getPublicMembers = query(listMembers);
-export const getPublicMember = query(v.string(), getMemberBySlug);
+export const getPublicMembers = query(async () => listMembers());
+export const getPublicMember = query(v.string(), async (slug) => getMemberBySlug(slug));
 
 export const searchPublic = query(
   v.string(),

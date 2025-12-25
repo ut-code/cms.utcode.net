@@ -1,9 +1,23 @@
 <script lang="ts">
-	import { ChevronRight, ExternalLink, Folder, Github, Plus, Users } from "lucide-svelte";
+	import { ChevronRight, ExternalLink, Folder, Github, Plus, Search, Users, X } from "lucide-svelte";
 	import { getProjects } from "$lib/data/private/projects.remote";
 	import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
 
-	const projects = $derived(await getProjects());
+	const allProjects = await getProjects();
+	let searchQuery = $state("");
+
+	const projects = $derived(
+		searchQuery.trim() === ""
+			? allProjects
+			: allProjects.filter((p) => {
+					const query = searchQuery.toLowerCase();
+					return (
+						p.name.toLowerCase().includes(query) ||
+						p.slug.toLowerCase().includes(query) ||
+						p.description?.toLowerCase().includes(query)
+					);
+				}),
+	);
 
 	const categoryColors: Record<ProjectCategory, { bg: string; text: string }> = {
 		active: { bg: "bg-emerald-500/10", text: "text-emerald-600" },
@@ -39,12 +53,34 @@
 				</div>
 				<a
 					href="/admin/projects/new"
-					class="gradient-primary glow-primary btn btn-sm gap-2 border-none text-white sm:btn-md"
+					class="btn btn-primary btn-sm gap-2 sm:btn-md"
 				>
 					<Plus class="h-4 w-4" />
 					<span class="hidden sm:inline">New Project</span>
 					<span class="sm:hidden">New</span>
 				</a>
+			</div>
+
+			<!-- Search input -->
+			<div class="relative mt-4 sm:mt-6">
+				<div class="relative">
+					<Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+					<input
+						type="text"
+						placeholder="Search projects by name, slug, or description..."
+						bind:value={searchQuery}
+						class="w-full rounded-lg border-0 bg-white/10 py-2 pl-10 pr-10 text-sm text-white placeholder-white/40 outline-none transition-all focus:bg-white/15 focus:ring-2 focus:ring-white/20"
+					/>
+					{#if searchQuery}
+						<button
+							onclick={() => (searchQuery = "")}
+							class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 transition-colors hover:text-white"
+							aria-label="Clear search"
+						>
+							<X class="h-4 w-4" />
+						</button>
+					{/if}
+				</div>
 			</div>
 		</header>
 
@@ -56,14 +92,27 @@
 				<div
 					class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-base-200 text-base-content/40"
 				>
-					<Folder class="h-8 w-8" />
+					{#if searchQuery}
+						<Search class="h-8 w-8" />
+					{:else}
+						<Folder class="h-8 w-8" />
+					{/if}
 				</div>
-				<h3 class="mt-4 text-lg font-semibold text-base-content">No projects yet</h3>
-				<p class="mt-1 text-base-content/60">Get started by creating a project.</p>
-				<a href="/admin/projects/new" class="gradient-primary btn mt-6 gap-2 text-white">
-					<Plus class="h-4 w-4" />
-					New Project
-				</a>
+				{#if searchQuery}
+					<h3 class="mt-4 text-lg font-semibold text-base-content">No projects found</h3>
+					<p class="mt-1 text-base-content/60">Try a different search term.</p>
+					<button onclick={() => (searchQuery = "")} class="btn btn-outline mt-6 gap-2">
+						<X class="h-4 w-4" />
+						Clear search
+					</button>
+				{:else}
+					<h3 class="mt-4 text-lg font-semibold text-base-content">No projects yet</h3>
+					<p class="mt-1 text-base-content/60">Get started by creating a project.</p>
+					<a href="/admin/projects/new" class="btn btn-primary mt-6 gap-2">
+						<Plus class="h-4 w-4" />
+						New Project
+					</a>
+				{/if}
 			</div>
 		{:else}
 			<!-- Projects grid -->
@@ -76,7 +125,7 @@
 					>
 						<!-- Cover -->
 						{#if project.coverUrl}
-							<figure class="relative h-36 overflow-hidden">
+							<figure class="relative aspect-[5/3] overflow-hidden">
 								<img
 									src={project.coverUrl}
 									alt={project.name}
@@ -87,7 +136,7 @@
 							</figure>
 						{:else}
 							<figure
-								class="relative flex h-36 items-center justify-center bg-gradient-to-br from-base-200 via-base-200 to-base-300"
+								class="relative flex aspect-[5/3] items-center justify-center bg-gradient-to-br from-base-200 via-base-200 to-base-300"
 							>
 								<Folder
 									class="h-12 w-12 text-base-content/10 transition-transform duration-300 group-hover:scale-110"
@@ -129,17 +178,18 @@
 											{#each project.projectMembers.slice(0, 3) as pm (pm.memberId)}
 												{#if pm.member.imageUrl}
 													<div class="avatar border-base-100">
-														<div class="w-6">
+														<div class="aspect-square w-6 rounded-full">
 															<img
 																src={pm.member.imageUrl}
 																alt={pm.member.name}
 																title={pm.member.name}
+																class="h-full w-full object-cover"
 															/>
 														</div>
 													</div>
 												{:else}
 													<div class="placeholder avatar border-base-100">
-														<div class="gradient-primary w-6 text-white">
+														<div class="gradient-primary aspect-square w-6 rounded-full text-white">
 															<span class="text-[9px] font-bold">{pm.member.name.charAt(0)}</span>
 														</div>
 													</div>

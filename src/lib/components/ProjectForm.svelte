@@ -27,6 +27,7 @@
 		submitLabel = "Save",
 		isSubmitting = $bindable(false),
 		isNew = false,
+		viewCount = 0,
 	}: {
 		initialData?: ProjectData;
 		members?: Member[];
@@ -35,6 +36,7 @@
 		submitLabel?: string;
 		isSubmitting?: boolean;
 		isNew?: boolean;
+		viewCount?: number;
 	} = $props();
 
 	let formData = $state(snapshot(() => initialData));
@@ -95,8 +97,11 @@
 			bind:name={formData.name}
 			bind:description={formData.description}
 			bind:content={formData.content}
+			slug={formData.slug}
+			coverUrl={formData.coverUrl}
 			{errors}
 			onNameChange={handleNameChange}
+			onOpenSettings={() => (showSettings = true)}
 		/>
 
 		<ProjectSettings
@@ -110,6 +115,7 @@
 			{members}
 			{errors}
 			{isNew}
+			{viewCount}
 			onClose={() => (showSettings = false)}
 			{onDelete}
 		/>

@@ -2,9 +2,22 @@
 	import { Search } from "lucide-svelte";
 	import { page } from "$app/state";
 	import { searchPublic } from "$lib/data/public/index.remote";
+	import type { SearchResult } from "$lib/shared/logic/search";
 
-	const query = $derived(page.url.searchParams.get("q") || "");
-	const results = $derived(query ? await searchPublic(query) : []);
+	const query = $derived(page.url.searchParams.get("q") ?? "");
+	let results = $state<SearchResult[]>([]);
+
+	$effect(() => {
+		if (query) {
+			searchPublic(query)
+				.then((r) => {
+					results = r;
+				})
+				.catch(console.error);
+		} else {
+			results = [];
+		}
+	});
 
 	const articleResults = $derived(results.filter((r) => r.type === "article"));
 	const projectResults = $derived(results.filter((r) => r.type === "project"));
@@ -52,7 +65,7 @@
 								<img
 									src={article.coverUrl}
 									alt={article.title}
-									class="mb-4 aspect-video w-full rounded-lg object-cover"
+									class="mb-4 aspect-[5/3] w-full rounded-lg object-cover"
 								/>
 							{/if}
 							<h3 class="mb-2 font-semibold group-hover:text-primary">{article.title}</h3>
@@ -89,7 +102,7 @@
 								<img
 									src={project.coverUrl}
 									alt={project.name}
-									class="mb-4 aspect-video w-full rounded-lg object-cover"
+									class="mb-4 aspect-[5/3] w-full rounded-lg object-cover"
 								/>
 							{/if}
 							<h3 class="mb-2 font-semibold group-hover:text-primary">{project.name}</h3>

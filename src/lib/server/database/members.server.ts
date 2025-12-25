@@ -1,6 +1,6 @@
 import { eq, like, or, sql } from "drizzle-orm";
 import { db } from "$lib/server/drivers/db";
-import { member } from "$lib/shared/models/schema";
+import { member, viewLog } from "$lib/shared/models/schema";
 import { createSearchPattern } from "./utils";
 
 export type Member = typeof member.$inferSelect;
@@ -22,10 +22,16 @@ export async function getMemberBySlug(slug: string) {
 
   // Fire-and-forget: view count accuracy is not critical
   if (result) {
-    db.update(member)
-      .set({ viewCount: sql`${member.viewCount} + 1` })
-      .where(eq(member.slug, slug))
-      .catch(console.error);
+    Promise.all([
+      db
+        .update(member)
+        .set({ viewCount: sql`${member.viewCount} + 1` })
+        .where(eq(member.slug, slug)),
+      db.insert(viewLog).values({
+        resourceType: "member",
+        resourceId: result.id,
+      }),
+    ]).catch(console.error);
   }
 
   return result;

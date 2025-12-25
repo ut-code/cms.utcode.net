@@ -6,7 +6,7 @@
 	import type { ProjectCategory } from "$lib/shared/models/schema";
 
 	const toast = useToast();
-	const members = $derived(await getMembers());
+	const members = await getMembers();
 	let isSubmitting = $state(false);
 
 	async function handleSubmit(data: {

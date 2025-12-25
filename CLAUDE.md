@@ -97,5 +97,16 @@ run `bun tidy` after you finish your work. i.e. before commit
 
 - Never use `as` or `any`. Let TypeScript infer types properly.
 - Never just "fire and forget". it crashes the entire server. instead, catch `.catch(console.error)` then forget, if you want to dispatch the job.
+- **NEVER use `$derived(await ...)` in Svelte 5.** This causes infinite loops and memory leaks. Use top-level `await` instead:
+  ```ts
+  // ❌ WRONG - causes memory leak
+  const data = $derived(await fetchData());
+
+  // ✅ CORRECT - use top-level await
+  const data = await fetchData();
+
+  // ✅ For reactive dependencies, use $derived without await
+  const filtered = $derived(data.filter(x => x.active));
+  ```
 
 For detailed coding standards (import order, async patterns, naming conventions), see `docs/knowledges/coding-standards.md`.

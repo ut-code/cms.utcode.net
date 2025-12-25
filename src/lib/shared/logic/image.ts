@@ -21,7 +21,7 @@ export type AcceptedImageType = (typeof ACCEPTED_IMAGE_TYPES)[number];
  * Check if a MIME type is an accepted image type
  */
 export function isAcceptedImageType(type: string): type is AcceptedImageType {
-  return (ACCEPTED_IMAGE_TYPES as readonly string[]).includes(type);
+  return ACCEPTED_IMAGE_TYPES.some((t) => t === type);
 }
 
 /**
@@ -43,5 +43,5 @@ export type AllowedFolder = (typeof ALLOWED_FOLDERS)[number];
  * Check if a folder is allowed
  */
 export function isAllowedFolder(folder: string): folder is AllowedFolder {
-  return (ALLOWED_FOLDERS as readonly string[]).includes(folder);
+  return ALLOWED_FOLDERS.some((f) => f === folder);
 }

@@ -8,8 +8,6 @@
 	} from "$lib/shared/logic/image";
 	import { arrayBufferToBase64, compressImage } from "$lib/shared/logic/image-processing";
 
-	const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-
 	let {
 		value = $bindable(""),
 		folder = "images" as AllowedFolder,
@@ -45,12 +43,6 @@
 		// Validate folder
 		if (!isAllowedFolder(folder)) {
 			error = "Invalid upload folder";
-			return;
-		}
-
-		// Validate file size
-		if (file.size > MAX_FILE_SIZE) {
-			error = `File too large (max ${MAX_FILE_SIZE / 1024 / 1024}MB)`;
 			return;
 		}
 
@@ -161,7 +153,7 @@
 			class="relative max-w-xs overflow-hidden rounded-lg border transition-all duration-200
         {isUploading ? 'border-primary' : 'border-zinc-200'}"
 		>
-			<img src={displayUrl} alt="" class="w-full object-cover" style="aspect-ratio: {aspect}" />
+			<img src={displayUrl} alt="Upload preview" class="w-full object-cover" style="aspect-ratio: {aspect}" />
 
 			{#if isUploading}
 				<!-- Upload progress overlay -->
@@ -227,7 +219,7 @@
 						Drop, click, or paste (Ctrl+V)
 					{/if}
 				</span>
-				<span class="mt-1 text-xs text-zinc-500">JPG, PNG, WebP, AVIF, HEIC up to 10MB</span>
+				<span class="mt-1 text-xs text-zinc-500">Any size (auto-compressed to fit limit)</span>
 			{/if}
 			<input
 				type="file"

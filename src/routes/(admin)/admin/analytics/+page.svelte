@@ -1,8 +1,16 @@
 <script lang="ts">
-	import { BarChart3, Eye, FileText, FolderKanban, Users } from "lucide-svelte";
-	import { getAnalytics } from "$lib/data/private/analytics.remote";
+	import { BarChart3, Eye, FileText, FolderKanban, TrendingUp, Users } from "lucide-svelte";
+	import {
+		getAnalytics,
+		getViewTrend,
+		getViewsByDayAndType,
+	} from "$lib/data/private/analytics.remote";
+	import ViewTrendChart from "$lib/components/analytics/ViewTrendChart.svelte";
+	import ViewsByTypeChart from "$lib/components/analytics/ViewsByTypeChart.svelte";
 
-	const analytics = $derived(await getAnalytics());
+	const analytics = await getAnalytics();
+	const viewTrend = await getViewTrend(30);
+	const viewsByType = await getViewsByDayAndType(30);
 </script>
 
 <svelte:head>
@@ -12,6 +20,27 @@
 <div class="space-y-6">
 	<div class="flex items-center justify-between">
 		<h1 class="text-3xl font-bold">Analytics</h1>
+	</div>
+
+	<!-- View Trends Section -->
+	<div class="card bg-base-100 shadow-md">
+		<div class="card-body">
+			<div class="mb-4 flex items-center gap-2">
+				<TrendingUp class="h-5 w-5" />
+				<h2 class="card-title">View Trends (Last 30 Days)</h2>
+			</div>
+			<ViewTrendChart data={viewTrend} title="Total Views Over Time" />
+		</div>
+	</div>
+
+	<div class="card bg-base-100 shadow-md">
+		<div class="card-body">
+			<div class="mb-4 flex items-center gap-2">
+				<BarChart3 class="h-5 w-5" />
+				<h2 class="card-title">Views by Content Type</h2>
+			</div>
+			<ViewsByTypeChart data={viewsByType} title="Views by Type Over Time" />
+		</div>
 	</div>
 
 	<!-- Total Views Summary -->
@@ -97,7 +126,7 @@
 												<img
 													src={article.author.imageUrl}
 													alt={article.author.name}
-													class="h-6 w-6 rounded-full"
+													class="aspect-square h-6 w-6 rounded-full object-cover"
 												/>
 											{/if}
 											<span>{article.author.name}</span>
@@ -207,7 +236,7 @@
 											<img
 												src={member.imageUrl}
 												alt={member.name}
-												class="h-8 w-8 rounded-full"
+												class="aspect-square h-8 w-8 rounded-full object-cover"
 											/>
 										{/if}
 										<span>{member.name}</span>

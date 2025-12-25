@@ -3,7 +3,7 @@
 	import { page } from "$app/state";
 	import { getPublicArticles } from "$lib/data/public/index.remote";
 
-	const articles = $derived(await getPublicArticles());
+	const articles = await getPublicArticles();
 	const itemsPerPage = 12;
 
 	const currentPage = $derived(Number(page.url.searchParams.get("page")) || 1);
@@ -56,7 +56,7 @@
 						<img
 							src={article.coverUrl}
 							alt={article.title}
-							class="mb-4 aspect-video w-full rounded-xl object-cover"
+							class="mb-4 aspect-[5/3] w-full rounded-xl object-cover"
 						/>
 					{/if}
 					<h2 class="mb-2 font-semibold transition-colors group-hover:text-primary">

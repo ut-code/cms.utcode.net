@@ -1,5 +1,5 @@
 import { query } from "$app/server";
-import { getAnalyticsSummary } from "$lib/server/database/analytics.server";
+import { getAnalyticsSummary, getRecentViewTrend } from "$lib/server/database/analytics.server";
 import {
   countArticles,
   countPublishedArticles,
@@ -22,6 +22,7 @@ export const getAdminStats = query(async () => {
     recentProjects,
     draftArticles,
     analytics,
+    viewTrend,
   ] = await Promise.all([
     countMembers(),
     countArticles(),
@@ -31,6 +32,7 @@ export const getAdminStats = query(async () => {
     getRecentProjects(3),
     getRecentDraftArticles(3),
     getAnalyticsSummary(),
+    getRecentViewTrend(14),
   ]);
 
   return {
@@ -59,6 +61,9 @@ export const getAdminStats = query(async () => {
       slug: a.slug,
       updatedAt: a.updatedAt,
     })),
-    analytics,
+    analytics: {
+      ...analytics,
+      viewTrend,
+    },
   };
 });

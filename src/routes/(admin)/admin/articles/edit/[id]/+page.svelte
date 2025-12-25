@@ -6,17 +6,13 @@
 	import { confirm } from "$lib/components/confirm-modal.svelte";
 	import { useToast } from "$lib/components/toast/controls.svelte";
 	import { getMembers } from "$lib/data/private/members.remote";
-	import {
-		editArticle,
-		getArticle,
-		removeArticle,
-	} from "$lib/data/private/articles.remote";
+	import { editArticle, getArticle, removeArticle } from "$lib/data/private/articles.remote";
 
 	const toast = useToast();
 
-	const id = $derived(page.params.id ?? "");
-	const article = $derived(await getArticle(id));
-	const authors = $derived(await getMembers());
+	const id = page.params.id ?? "";
+	const article = await getArticle(id);
+	const authors = await getMembers();
 	let isSubmitting = $state(false);
 
 	async function handleSubmit(data: {
@@ -97,37 +93,38 @@
 </svelte:head>
 
 {#if !article}
-		<div class="flex h-96 flex-col items-center justify-center text-center">
-			<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-zinc-400">
-				<FileText class="h-6 w-6" />
-			</div>
-			<h2 class="mt-4 font-semibold text-zinc-900">Article not found</h2>
-			<p class="mt-1 text-sm text-zinc-500">This article doesn't exist.</p>
-			<a
-				href="/admin/articles"
-				class="mt-4 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800"
-			>
-				Back to Articles
-			</a>
+	<div class="flex h-96 flex-col items-center justify-center text-center">
+		<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-zinc-400">
+			<FileText class="h-6 w-6" />
 		</div>
-	{:else}
-		<div class="h-[calc(100vh-4rem)]">
-			<ArticleForm
-				initialData={{
-					slug: article.slug,
-					title: article.title,
-					content: article.content,
-					excerpt: article.excerpt ?? "",
-					coverUrl: article.coverUrl ?? "",
-					authorId: article.authorId,
-					published: article.published,
-				}}
-				{authors}
-				onSubmit={handleSubmit}
-				onDelete={handleDelete}
-				submitLabel="Save"
-				bind:isSubmitting
-				articleId={article.id}
-			/>
-		</div>
+		<h2 class="mt-4 font-semibold text-zinc-900">Article not found</h2>
+		<p class="mt-1 text-sm text-zinc-500">This article doesn't exist.</p>
+		<a
+			href="/admin/articles"
+			class="mt-4 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800"
+		>
+			Back to Articles
+		</a>
+	</div>
+{:else}
+	<div class="h-[calc(100vh-4rem)]">
+		<ArticleForm
+			initialData={{
+				slug: article.slug,
+				title: article.title,
+				content: article.content,
+				excerpt: article.excerpt ?? "",
+				coverUrl: article.coverUrl ?? "",
+				authorId: article.authorId,
+				published: article.published,
+			}}
+			{authors}
+			onSubmit={handleSubmit}
+			onDelete={handleDelete}
+			submitLabel="Save"
+			bind:isSubmitting
+			articleId={article.id}
+			viewCount={article.viewCount}
+		/>
+	</div>
 {/if}

@@ -249,6 +249,29 @@ export const projectMember = pgTable(
   (table) => [index("projectMember_pk").on(table.projectId, table.memberId)],
 );
 
+// View tracking - keys defined first for type-safe iteration
+export const VIEW_LOG_TYPE_KEYS = ["article", "member", "project"] as const;
+
+export type ViewLogType = (typeof VIEW_LOG_TYPE_KEYS)[number];
+
+export const viewLog = pgTable(
+  "view_log",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    resourceType: text("resource_type").$type<ViewLogType>().notNull(),
+    resourceId: text("resource_id").notNull(),
+    viewedAt: timestamp("viewed_at", { mode: "date", withTimezone: true })
+      .default(sql`now()`)
+      .notNull(),
+  },
+  (table) => [
+    index("view_log_resourceType_resourceId_idx").on(table.resourceType, table.resourceId),
+    index("view_log_viewedAt_idx").on(table.viewedAt),
+  ],
+);
+
 // ============================================================================
 // Relations
 // ============================================================================

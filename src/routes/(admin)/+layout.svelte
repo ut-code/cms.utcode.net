@@ -139,28 +139,32 @@
 
 			<!-- User section -->
 			<div class="relative shrink-0 border-t border-white/10 p-4">
-				<div
-					class="flex items-center gap-3 rounded-xl bg-white/5 p-3 transition-colors duration-150 hover:bg-white/10"
-				>
-					{#if session.user.image}
-						<div class="avatar">
-							<div
-								class="w-10 rounded-full ring-2 ring-primary/50 ring-offset-2 ring-offset-neutral"
-							>
-								<img src={session.user.image} alt={session.user.name ?? "User"} />
+				<div class="flex items-center gap-3 rounded-xl bg-white/5 p-3 transition-colors duration-150">
+					<a
+						href="/admin/settings"
+						class="group flex min-w-0 flex-1 items-center gap-3 transition-opacity hover:opacity-80"
+						title="Personal Settings"
+					>
+						{#if session.user.image}
+							<div class="avatar">
+								<div
+									class="aspect-square w-10 rounded-full ring-2 ring-primary/50 ring-offset-2 ring-offset-neutral"
+								>
+									<img src={session.user.image} alt={session.user.name ?? "User"} class="h-full w-full object-cover" />
+								</div>
 							</div>
-						</div>
-					{:else}
-						<div class="placeholder avatar">
-							<div class="gradient-primary w-10 rounded-full text-white">
-								<span class="text-sm font-bold">{session.user.name?.charAt(0) ?? "?"}</span>
+						{:else}
+							<div class="placeholder avatar">
+								<div class="gradient-primary aspect-square w-10 rounded-full text-white">
+									<span class="text-sm font-bold">{session.user.name?.charAt(0) ?? "?"}</span>
+								</div>
 							</div>
+						{/if}
+						<div class="min-w-0 flex-1">
+							<p class="truncate text-sm font-semibold text-white">{session.user.name}</p>
+							<p class="truncate text-xs text-white/40">{session.user.email}</p>
 						</div>
-					{/if}
-					<div class="min-w-0 flex-1">
-						<p class="truncate text-sm font-semibold text-white">{session.user.name}</p>
-						<p class="truncate text-xs text-white/40">{session.user.email}</p>
-					</div>
+					</a>
 					<a
 						href="/api/auth/sign-out"
 						class="btn btn-circle text-white/40 btn-ghost btn-sm hover:bg-white/10 hover:text-white"

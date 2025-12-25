@@ -7,8 +7,8 @@
 	import { getMyPreference } from "$lib/data/private/user-preferences.remote";
 
 	const toast = useToast();
-	const authors = $derived(await getMembers());
-	const preference = $derived(await getMyPreference());
+	const authors = await getMembers();
+	const preference = await getMyPreference();
 	const defaultAuthorId = $derived(preference?.defaultAuthorId ?? null);
 	let isSubmitting = $state(false);
 
