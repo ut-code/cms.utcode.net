@@ -18,10 +18,10 @@
 		isSubmitting = true;
 		try {
 			await updateDefaultAuthor(defaultAuthorId);
-			toast.show("Settings saved", "success");
+			toast.show("Personal settings saved", "success");
 		} catch (error) {
 			toast.show(
-				error instanceof Error ? error.message : "Failed to save settings",
+				error instanceof Error ? error.message : "Failed to save personal settings",
 			);
 		} finally {
 			isSubmitting = false;
@@ -30,7 +30,7 @@
 </script>
 
 <svelte:head>
-	<title>Settings - ut.code(); CMS</title>
+	<title>Personal Settings - ut.code(); CMS</title>
 </svelte:head>
 
 <div class="space-y-6">
@@ -39,8 +39,8 @@
 			<Settings class="h-5 w-5 text-white" />
 		</div>
 		<div>
-			<h1 class="text-2xl font-bold text-base-content">Settings</h1>
-			<p class="text-sm text-base-content/60">Manage your preferences</p>
+			<h1 class="text-2xl font-bold text-base-content">Personal Settings</h1>
+			<p class="text-sm text-base-content/60">Manage your personal preferences</p>
 		</div>
 	</div>
 
@@ -71,7 +71,7 @@
 
 				<div class="card-actions">
 					<button type="submit" class="btn btn-primary" disabled={isSubmitting}>
-						{isSubmitting ? "Saving..." : "Save Settings"}
+						{isSubmitting ? "Saving..." : "Save"}
 					</button>
 				</div>
 			</form>
