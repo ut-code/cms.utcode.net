@@ -20,8 +20,8 @@
   --color-base-200: oklch(97% 0.003 260);
   --color-base-300: oklch(94% 0.004 260);
   --color-base-content: oklch(20% 0.02 260);
-  --color-info: oklch(65% 0.19 240);
-  --color-info-content: oklch(98% 0.01 240);
+  --color-info: oklch(60% 0.05 260); /* Zinc-based neutral */
+  --color-info-content: oklch(98% 0.01 260);
   --color-success: oklch(76% 0.2 153);
   --color-success-content: oklch(15% 0.03 153);
   --color-warning: oklch(75% 0.18 75);
@@ -200,7 +200,7 @@ pre,
 .gradient-mesh {
   background:
     radial-gradient(at 40% 20%, oklch(76% 0.2 153 / 0.15) 0, transparent 50%),
-    radial-gradient(at 80% 0%, oklch(65% 0.19 240 / 0.1) 0, transparent 50%),
+    radial-gradient(at 80% 0%, oklch(76% 0.2 153 / 0.08) 0, transparent 50%),
     radial-gradient(at 0% 50%, oklch(75% 0.18 75 / 0.08) 0, transparent 50%), oklch(97% 0.003 260);
 }
 
@@ -226,7 +226,7 @@ pre,
   border: 1px solid transparent;
   background:
     linear-gradient(white, white) padding-box,
-    linear-gradient(135deg, oklch(76% 0.2 153 / 0.5), oklch(65% 0.19 240 / 0.3)) border-box;
+    linear-gradient(135deg, oklch(76% 0.2 153 / 0.5), oklch(76% 0.2 153 / 0.2)) border-box;
 }
 
 .text-gradient {

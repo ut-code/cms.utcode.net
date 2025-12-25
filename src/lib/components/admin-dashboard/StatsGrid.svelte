@@ -44,7 +44,7 @@
 		href="/admin/projects"
 		icon={Folder}
 		iconColor="info"
-		accentColor="oklch(65% 0.19 240)"
+		accentColor="oklch(60% 0.05 260)"
 		stagger={3}
 	/>
 
