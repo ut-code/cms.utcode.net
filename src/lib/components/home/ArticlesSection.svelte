@@ -13,14 +13,14 @@
 	<div class="mx-auto max-w-6xl px-6">
 		<div class="mb-16 flex items-end justify-between">
 			<div>
-				<div class="mb-4 font-mono text-sm font-medium uppercase tracking-widest text-[#00D372]">NEWS & ARTICLES</div>
+				<div class="mb-4 font-mono text-sm font-medium uppercase tracking-widest text-primary">NEWS & ARTICLES</div>
 				<h2 class="text-5xl font-bold text-zinc-900 lg:text-6xl">
 					最新情報
 				</h2>
 			</div>
 			<a
 				href="/articles"
-				class="group hidden items-center gap-2 rounded-lg bg-zinc-900 px-6 py-3 font-semibold text-white transition-all hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-[#00D372] focus:ring-offset-2 sm:flex"
+				class="group hidden items-center gap-2 rounded-lg bg-zinc-900 px-6 py-3 font-semibold text-white transition-all hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 sm:flex"
 			>
 				すべて見る
 				<ArrowRight class="h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -31,7 +31,7 @@
 				{#each articles as article (article.id)}
 					<a
 						href="/articles/{article.slug}"
-						class="group relative overflow-hidden rounded-3xl border border-zinc-200/50 bg-white/80 backdrop-blur-md transition-all hover:border-[#00D372]/30 hover:bg-[#00D372]/5 hover:shadow-lg hover:shadow-[#00D372]/5 focus:outline-none focus:ring-2 focus:ring-[#00D372] focus:ring-offset-2"
+						class="group relative overflow-hidden rounded-3xl border border-zinc-200/50 bg-white/80 backdrop-blur-md transition-all hover:border-primary/30 hover:bg-primary/5 hover:shadow-lg hover:shadow-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
 					>
 						<div class="relative">
 							{#if article.coverUrl}
@@ -42,7 +42,7 @@
 								/>
 							{/if}
 							<div class="p-6">
-								<h3 class="mb-3 text-xl font-bold text-zinc-900 transition-colors group-hover:text-[#00D372]">
+								<h3 class="mb-3 text-xl font-bold text-zinc-900 transition-colors group-hover:text-primary">
 									{article.title}
 								</h3>
 								{#if article.excerpt}
@@ -74,7 +74,7 @@
 		{/if}
 		<a
 			href="/articles"
-			class="mt-8 flex items-center justify-center gap-2 font-bold text-zinc-600 transition-colors hover:text-[#00D372] focus:outline-none focus:ring-2 focus:ring-[#00D372] focus:ring-offset-2 sm:hidden"
+			class="mt-8 flex items-center justify-center gap-2 font-bold text-zinc-600 transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 sm:hidden"
 		>
 			すべて見る
 			<ArrowRight class="h-5 w-5" />
