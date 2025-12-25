@@ -24,7 +24,7 @@
     "lint-check": "biome lint .",
     "lint": "bun lint-check",
     "lint-fix": "biome lint --fix .",
-    "prepare": "svelte-kit sync && lefthook install"
+    "prepare": "svelte-kit sync"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.10",
@@ -39,7 +39,6 @@
     "daisyui": "^5.5.14",
     "drizzle-kit": "^0.31.8",
     "drizzle-orm": "^0.45.1",
-    "lefthook": "^1.11.10",
     "postgres": "^3.4.7",
     "prettier": "^3.7.4",
     "prettier-plugin-svelte": "^3.4.1",
