@@ -21,28 +21,24 @@
 		published = $bindable(false),
 		slug = $bindable(""),
 		authorId = $bindable<string | null>(null),
-		excerpt = $bindable(""),
 		coverUrl = $bindable(""),
 		createRedirect = $bindable(false),
 		initialSlug = "",
 		authors = [],
 		slugError = null,
 		onDelete = null,
-		onPublishToggle = null,
 		viewCount = 0,
 	}: {
 		show?: boolean;
 		published?: boolean;
 		slug?: string;
 		authorId?: string | null;
-		excerpt?: string;
 		coverUrl?: string;
 		createRedirect?: boolean;
 		initialSlug?: string;
 		authors?: Author[];
 		slugError?: string | null;
 		onDelete?: (() => Promise<void>) | null;
-		onPublishToggle?: ((newValue: boolean) => Promise<void>) | null;
 		viewCount?: number;
 	} = $props();
 
@@ -127,13 +123,6 @@
 		if (!open) searchValue = "";
 	}
 
-	async function handlePublishButtonClick(newValue: boolean) {
-		if (onPublishToggle) {
-			await onPublishToggle(newValue);
-		} else {
-			published = newValue;
-		}
-	}
 </script>
 
 {#if show}
@@ -160,26 +149,26 @@
 				<div class="grid grid-cols-2 gap-2">
 					<button
 						type="button"
-						onclick={() => handlePublishButtonClick(false)}
+						onclick={() => (published = false)}
 						class="rounded-lg border-2 p-3 text-left transition-all {!published
-							? 'border-zinc-900 bg-white'
+							? 'border-primary bg-primary/5'
 							: 'border-zinc-200 bg-white hover:border-primary/30'}"
 					>
-						<EyeOff class="mb-1 h-4 w-4 {!published ? 'text-zinc-900' : 'text-zinc-400'}" />
+						<EyeOff class="mb-1 h-4 w-4 {!published ? 'text-primary' : 'text-zinc-400'}" />
 						<span class="block text-sm font-medium {!published ? 'text-zinc-900' : 'text-zinc-600'}"
 							>Draft</span
 						>
 					</button>
 					<button
 						type="button"
-						onclick={() => handlePublishButtonClick(true)}
+						onclick={() => (published = true)}
 						class="rounded-lg border-2 p-3 text-left transition-all {published
-							? 'border-emerald-500 bg-emerald-50'
+							? 'border-primary bg-primary/5'
 							: 'border-zinc-200 bg-white hover:border-primary/30'}"
 					>
-						<Eye class="mb-1 h-4 w-4 {published ? 'text-emerald-600' : 'text-zinc-400'}" />
+						<Eye class="mb-1 h-4 w-4 {published ? 'text-primary' : 'text-zinc-400'}" />
 						<span
-							class="block text-sm font-medium {published ? 'text-emerald-700' : 'text-zinc-600'}"
+							class="block text-sm font-medium {published ? 'text-zinc-900' : 'text-zinc-600'}"
 							>Public</span
 						>
 					</button>
@@ -307,21 +296,6 @@
 						</Combobox.Viewport>
 					</Combobox.Content>
 				</Combobox.Root>
-			</div>
-
-			<!-- Excerpt -->
-			<div class="space-y-2">
-				<label for="excerpt" class="text-sm font-medium text-zinc-700">
-					Excerpt
-					<span class="font-normal text-zinc-500">(for cards)</span>
-				</label>
-				<textarea
-					id="excerpt"
-					bind:value={excerpt}
-					rows={3}
-					class="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-zinc-400 focus:ring-0 focus:outline-none"
-					placeholder="Brief summary..."
-				></textarea>
 			</div>
 
 			<!-- Cover Image -->

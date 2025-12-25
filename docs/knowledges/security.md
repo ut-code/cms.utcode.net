@@ -15,6 +15,8 @@
 - Members must belong to the `ut-code` GitHub organization
 - Membership is cached for 24 hours (`CACHE_TTL_MS`)
 - `UNSAFE_DISABLE_AUTH=true` bypasses all auth checks (dev only, throws error in production)
+  - Mock user ID: `"mock"`, mock member ID: `"mock-member"`
+  - Mock data returned from `getMemberByUserId`, `getUserPreference`, `setDefaultAuthor`
 
 ## Ownership Model
 

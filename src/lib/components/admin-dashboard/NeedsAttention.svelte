@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Pagination from "$lib/components/Pagination.svelte";
 	import { AlertCircle, ArrowRight, SquarePen } from "lucide-svelte";
 
 	interface DraftArticle {
@@ -10,22 +11,28 @@
 	interface Props {
 		draftArticles: DraftArticle[];
 		formatDate: (date: Date) => string;
+		currentPage: number;
+		totalPages: number;
 	}
 
-	const { draftArticles, formatDate }: Props = $props();
+	const { draftArticles, formatDate, currentPage, totalPages }: Props = $props();
+
+	function pageUrl(pageNum: number): string {
+		return pageNum === 1 ? "/admin" : `/admin?page=${pageNum}`;
+	}
 </script>
 
-{#if draftArticles.length > 0}
-	<section class="animate-fade-slide-in stagger-5 glow-soft rounded-2xl bg-base-100 p-4 sm:p-6">
-		<div class="mb-4 flex flex-wrap items-center gap-2 sm:gap-3">
-			<div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-warning/10">
-				<AlertCircle class="h-4 w-4 text-warning" />
-			</div>
-			<h2 class="font-semibold text-base-content">Needs Attention</h2>
-			<span class="ml-auto rounded-full bg-warning/10 px-2 py-0.5 text-xs font-medium text-warning">
-				{draftArticles.length} draft{draftArticles.length > 1 ? 's' : ''}
-			</span>
+<section class="animate-fade-slide-in stagger-5 glow-soft rounded-2xl bg-base-100 p-4 sm:p-6">
+	<div class="mb-4 flex flex-wrap items-center gap-2 sm:gap-3">
+		<div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-warning/10">
+			<AlertCircle class="h-4 w-4 text-warning" />
 		</div>
+		<h2 class="font-semibold text-base-content">Needs Attention</h2>
+		<span class="ml-auto rounded-full bg-warning/10 px-2 py-0.5 text-xs font-medium text-warning">
+			{draftArticles.length} draft{draftArticles.length > 1 ? "s" : ""}
+		</span>
+	</div>
+	{#if draftArticles.length > 0}
 		<div class="space-y-2">
 			{#each draftArticles as draft (draft.id)}
 				<a
@@ -45,5 +52,8 @@
 				</a>
 			{/each}
 		</div>
-	</section>
-{/if}
+		<Pagination {currentPage} {totalPages} {pageUrl} />
+	{:else}
+		<p class="text-sm text-base-content/40">No draft articles.</p>
+	{/if}
+</section>

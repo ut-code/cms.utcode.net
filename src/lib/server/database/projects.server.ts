@@ -6,9 +6,10 @@ import { createSearchPattern } from "./utils";
 export type Project = typeof project.$inferSelect;
 export type NewProject = typeof project.$inferInsert;
 
-export async function listProjects() {
+export async function listProjects(limit = 100) {
   return db.query.project.findMany({
     orderBy: (t, { desc }) => desc(t.createdAt),
+    limit,
     with: {
       projectMembers: { with: { member: true } },
     },
@@ -103,7 +104,7 @@ export async function transferLead(projectId: string, fromMemberId: string, toMe
   await updateProjectMemberRole(projectId, toMemberId, "lead");
 }
 
-export async function searchProjects(query: string) {
+export async function searchProjects(query: string, limit = 50) {
   const searchPattern = createSearchPattern(query);
   if (!searchPattern) {
     return [];
@@ -116,6 +117,7 @@ export async function searchProjects(query: string) {
       like(project.content, searchPattern),
     ),
     orderBy: (t, { desc }) => desc(t.createdAt),
+    limit,
     with: {
       projectMembers: { with: { member: true } },
     },

@@ -5,8 +5,19 @@
 	import QuickActions from "$lib/components/admin-dashboard/QuickActions.svelte";
 	import StatsGrid from "$lib/components/admin-dashboard/StatsGrid.svelte";
 	import { getAdminStats } from "$lib/data/private/stats.remote";
+	import { ITEMS_PER_PAGE } from "$lib/shared/constants";
+	import type { PageData } from "./$types";
 
+	const { data }: { data: PageData } = $props();
 	const stats = await getAdminStats();
+
+	const totalPages = $derived(Math.ceil(stats.draftArticles.length / ITEMS_PER_PAGE));
+	const paginatedDrafts = $derived(
+		stats.draftArticles.slice(
+			(data.currentPage - 1) * ITEMS_PER_PAGE,
+			data.currentPage * ITEMS_PER_PAGE,
+		),
+	);
 
 	function formatDate(date: Date): string {
 		const now = new Date();
@@ -40,7 +51,12 @@
 	<QuickActions />
 
 	<div class="grid gap-4 sm:gap-6 lg:grid-cols-2">
-		<NeedsAttention draftArticles={stats.draftArticles} {formatDate} />
+		<NeedsAttention
+			draftArticles={paginatedDrafts}
+			{formatDate}
+			currentPage={data.currentPage}
+			{totalPages}
+		/>
 
 		<AnalyticsBrief
 			totalViews={stats.analytics.totalViews}

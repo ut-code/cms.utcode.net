@@ -1,0 +1,12 @@
+pre-push:
+  scripts:
+    "docker-build.sh":
+      runner: bash
+      fail_text: |
+        ❌ Docker build failed. Fix the build errors before pushing.
+
+        Common issues:
+        - Syntax errors in Dockerfile
+        - Missing dependencies in package.json
+        - Build script failures
+        - TypeScript compilation errors

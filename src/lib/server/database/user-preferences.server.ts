@@ -1,11 +1,23 @@
 import { eq } from "drizzle-orm";
+import { env } from "$lib/env/env.server";
 import { db } from "$lib/server/drivers/db";
 import { userPreference } from "$lib/shared/models/schema";
 
 export type UserPreference = typeof userPreference.$inferSelect;
 export type NewUserPreference = typeof userPreference.$inferInsert;
 
+const mockPreference: UserPreference = {
+  userId: "mock",
+  defaultAuthorId: null,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
 export async function getUserPreference(userId: string) {
+  if (env.UNSAFE_DISABLE_AUTH === "true") {
+    return mockPreference;
+  }
+
   return db.query.userPreference.findFirst({
     where: eq(userPreference.userId, userId),
     with: { defaultAuthor: true },
@@ -13,6 +25,10 @@ export async function getUserPreference(userId: string) {
 }
 
 export async function setDefaultAuthor(userId: string, defaultAuthorId: string | null) {
+  if (env.UNSAFE_DISABLE_AUTH === "true") {
+    return { ...mockPreference, defaultAuthorId };
+  }
+
   // Check if preference exists
   const existing = await db.query.userPreference.findFirst({
     where: eq(userPreference.userId, userId),

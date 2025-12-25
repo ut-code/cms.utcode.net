@@ -22,3 +22,8 @@ Thumbs.db
 .devenv*
 devenv.local*
 .direnv
+
+# Test Results
+/playwright-report/
+/test-results/
+/playwright/.cache/

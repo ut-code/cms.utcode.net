@@ -8,7 +8,6 @@ export type ArticleData = {
   slug: string;
   title: string;
   content: string;
-  excerpt: string;
   coverUrl: string;
   authorId: string | null;
   published: boolean;

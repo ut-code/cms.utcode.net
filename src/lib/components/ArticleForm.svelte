@@ -13,7 +13,6 @@
 			slug: "",
 			title: "",
 			content: "",
-			excerpt: "",
 			coverUrl: "",
 			authorId: null,
 			published: false,
@@ -70,6 +69,17 @@
 			return;
 		}
 
+		// If unpublishing (from true to false), show confirmation
+		if (initialData.published && !formData.published) {
+			const confirmed = await confirm({
+				title: "Unpublish article?",
+				description: "This will make the article inaccessible to the public. Are you sure?",
+				confirmText: "Unpublish",
+				variant: "warning",
+			});
+			if (!confirmed) return;
+		}
+
 		isSubmitting = true;
 		saveSuccess = false;
 		try {
@@ -86,19 +96,6 @@
 		}
 	}
 
-	async function handlePublishToggle(newValue: boolean) {
-		// If unpublishing (from true to false), show confirmation
-		if (formData.published && !newValue) {
-			const confirmed = await confirm({
-				title: "Unpublish article?",
-				description: "This will make the article inaccessible to the public. Are you sure?",
-				confirmText: "Unpublish",
-				variant: "warning",
-			});
-			if (!confirmed) return;
-		}
-		formData.published = newValue;
-	}
 </script>
 
 <svelte:window onkeydown={onSaveShortcut(() => triggerSubmit(handleSubmit, isSubmitting))} />
@@ -131,14 +128,12 @@
 			bind:published={formData.published}
 			bind:slug={formData.slug}
 			bind:authorId={formData.authorId}
-			bind:excerpt={formData.excerpt}
 			bind:coverUrl={formData.coverUrl}
 			bind:createRedirect
 			initialSlug={initialData.slug}
 			{authors}
 			slugError={errors["slug"]}
 			{onDelete}
-			onPublishToggle={handlePublishToggle}
 			{viewCount}
 		/>
 	</div>

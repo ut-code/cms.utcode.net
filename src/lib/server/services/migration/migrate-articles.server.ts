@@ -10,7 +10,6 @@ import type { MigrationResult } from "$lib/shared/types/migration";
 import {
   findMarkdownFiles,
   generateArticleSlug,
-  generateExcerpt,
   type Logger,
   parseFrontmatter,
 } from "./helpers.server";
@@ -68,7 +67,6 @@ export async function migrateArticles(repoPath: string, log: Logger): Promise<Mi
         slug,
         title: frontmatter.title,
         content: processedBody,
-        excerpt: generateExcerpt(body),
         coverUrl: frontmatter.thumbnail?.src ?? null,
         authorId,
         published: true,

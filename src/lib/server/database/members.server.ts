@@ -1,4 +1,5 @@
 import { eq, like, or, sql } from "drizzle-orm";
+import { env } from "$lib/env/env.server";
 import { db } from "$lib/server/drivers/db";
 import { member, viewLog } from "$lib/shared/models/schema";
 import { createSearchPattern } from "./utils";
@@ -6,9 +7,23 @@ import { createSearchPattern } from "./utils";
 export type Member = typeof member.$inferSelect;
 export type NewMember = typeof member.$inferInsert;
 
-export async function listMembers() {
+export const mockMember: Member = {
+  id: "mock-member",
+  slug: "dev-user",
+  name: "Dev User",
+  bio: null,
+  imageUrl: null,
+  pageContent: null,
+  userId: "mock",
+  viewCount: 0,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+export async function listMembers(limit = 200) {
   return db.query.member.findMany({
     orderBy: (t, { desc }) => desc(t.createdAt),
+    limit,
   });
 }
 
@@ -47,6 +62,9 @@ export async function getMemberById(id: string) {
 }
 
 export async function getMemberByUserId(userId: string) {
+  if (env.UNSAFE_DISABLE_AUTH === "true" && userId === "mock") {
+    return mockMember;
+  }
   return db.query.member.findFirst({
     where: eq(member.userId, userId),
   });
@@ -72,7 +90,7 @@ export async function deleteMember(id: string) {
   await db.delete(member).where(eq(member.id, id));
 }
 
-export async function searchMembers(query: string) {
+export async function searchMembers(query: string, limit = 50) {
   const searchPattern = createSearchPattern(query);
   if (!searchPattern) {
     return [];
@@ -81,6 +99,7 @@ export async function searchMembers(query: string) {
   return db.query.member.findMany({
     where: or(like(member.name, searchPattern), like(member.bio, searchPattern)),
     orderBy: (t, { desc }) => desc(t.createdAt),
+    limit,
   });
 }
 

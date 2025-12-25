@@ -104,8 +104,14 @@ export async function getResourceViewTrend(
   return result;
 }
 
+export async function getTotalViews() {
+  const result = await db.select({ total: sql<number>`COUNT(*)` }).from(viewLog);
+  return result[0]?.total ?? 0;
+}
+
 export async function getAnalyticsSummary() {
   const [
+    totalViews,
     totalArticleViews,
     totalMemberViews,
     totalProjectViews,
@@ -113,6 +119,7 @@ export async function getAnalyticsSummary() {
     topMembers,
     topProjects,
   ] = await Promise.all([
+    getTotalViews(),
     getTotalArticleViews(),
     getTotalMemberViews(),
     getTotalProjectViews(),
@@ -122,10 +129,10 @@ export async function getAnalyticsSummary() {
   ]);
 
   return {
+    totalViews,
     totalArticleViews,
     totalMemberViews,
     totalProjectViews,
-    totalViews: totalArticleViews + totalMemberViews + totalProjectViews,
     topArticles,
     topMembers,
     topProjects,

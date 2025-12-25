@@ -18,7 +18,7 @@
 	];
 </script>
 
-<section class="bg-zinc-50 py-32">
+<section class="bg-zinc-50 py-24">
 	<div class="mx-auto max-w-6xl px-6">
 		<div class="mb-16 text-center">
 			<div class="mb-4 font-mono text-sm font-medium uppercase tracking-widest text-primary">SPONSORS</div>
@@ -29,7 +29,7 @@
 
 		<div class="mx-auto max-w-5xl">
 			<div
-				class="flex min-h-64 flex-wrap items-center justify-center gap-16 rounded-3xl border border-zinc-200/50 bg-white/80 p-16 backdrop-blur-md"
+				class="flex min-h-64 flex-wrap items-center justify-center gap-16 rounded-2xl border border-zinc-200 bg-white p-16"
 			>
 				{#if sponsors.length > 0}
 					{#each sponsors as sponsor}

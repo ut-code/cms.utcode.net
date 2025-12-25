@@ -9,7 +9,7 @@
 	const { articles }: Props = $props();
 </script>
 
-<section class="bg-white py-32">
+<section class="bg-white py-24">
 	<div class="mx-auto max-w-6xl px-6">
 		<div class="mb-16 flex items-end justify-between">
 			<div>
@@ -31,48 +31,46 @@
 				{#each articles as article (article.id)}
 					<a
 						href="/articles/{article.slug}"
-						class="group relative overflow-hidden rounded-3xl border border-zinc-200/50 bg-white/80 backdrop-blur-md transition-all hover:border-primary/30 hover:bg-primary/5 hover:shadow-lg hover:shadow-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+						class="group overflow-hidden rounded-2xl border border-zinc-200 bg-white transition-all hover:border-primary/30 hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
 					>
-						<div class="relative">
-							{#if article.coverUrl}
-								<img
-									src={article.coverUrl}
-									alt={article.title}
-									class="aspect-[5/3] w-full object-cover"
-									loading="lazy"
-								/>
-							{:else}
-								<div
-									class="flex aspect-[5/3] w-full items-center justify-center bg-gradient-to-br from-zinc-100 to-zinc-200"
-								>
-									<span class="font-[JetBrains_Mono,monospace] text-sm font-medium text-zinc-400">
-										No Image
-									</span>
-								</div>
+						{#if article.coverUrl}
+							<img
+								src={article.coverUrl}
+								alt={article.title}
+								class="aspect-[5/3] w-full object-cover"
+								loading="lazy"
+							/>
+						{:else}
+							<div
+								class="flex aspect-[5/3] w-full items-center justify-center bg-zinc-100"
+							>
+								<span class="font-mono text-sm font-medium text-zinc-400">
+									No Image
+								</span>
+							</div>
+						{/if}
+						<div class="p-6">
+							<h3 class="mb-3 text-xl font-bold text-zinc-900">
+								{article.title}
+							</h3>
+							{#if article.excerpt}
+								<p class="mb-4 line-clamp-2 text-sm leading-relaxed text-zinc-600">{article.excerpt}</p>
 							{/if}
-							<div class="p-6">
-								<h3 class="mb-3 text-xl font-bold text-zinc-900 transition-colors group-hover:text-primary">
-									{article.title}
-								</h3>
-								{#if article.excerpt}
-									<p class="mb-4 line-clamp-2 text-sm leading-relaxed text-zinc-600">{article.excerpt}</p>
+							<div class="flex items-center gap-4 text-xs text-zinc-500">
+								{#if article.author}
+									<div class="flex items-center gap-1.5">
+										<User class="h-3.5 w-3.5" />
+										<span>{article.author.name}</span>
+									</div>
 								{/if}
-								<div class="flex items-center gap-4 text-xs text-zinc-500">
-									{#if article.author}
-										<div class="flex items-center gap-1.5">
-											<User class="h-3.5 w-3.5" />
-											<span>{article.author.name}</span>
-										</div>
-									{/if}
-									{#if article.publishedAt}
-										<div class="flex items-center gap-1.5">
-											<Calendar class="h-3.5 w-3.5" />
-											<time datetime={article.publishedAt.toISOString()}>
-												{article.publishedAt.toLocaleDateString("ja-JP")}
-											</time>
-										</div>
-									{/if}
-								</div>
+								{#if article.publishedAt}
+									<div class="flex items-center gap-1.5">
+										<Calendar class="h-3.5 w-3.5" />
+										<time datetime={article.publishedAt.toISOString()}>
+											{article.publishedAt.toLocaleDateString("ja-JP")}
+										</time>
+									</div>
+								{/if}
 							</div>
 						</div>
 					</a>

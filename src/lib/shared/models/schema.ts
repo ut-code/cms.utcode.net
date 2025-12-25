@@ -143,7 +143,6 @@ export const article = pgTable(
     slug: text("slug").notNull().unique(),
     title: text("title").notNull(),
     content: text("content").notNull(),
-    excerpt: text("excerpt"),
     coverUrl: text("cover_url"),
     authorId: text("author_id").references(() => member.id, {
       onDelete: "set null",

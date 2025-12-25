@@ -2,25 +2,8 @@
 	import { ArrowRight, Sparkles } from "lucide-svelte";
 </script>
 
-<section id="join" class="relative overflow-hidden bg-zinc-900 py-32">
-	<!-- Decorative elements -->
-	<div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-		<div
-			class="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-primary/10 blur-3xl"
-		></div>
-		<div
-			class="absolute right-1/4 bottom-1/4 h-96 w-96 rounded-full bg-primary/5 blur-3xl"
-		></div>
-	</div>
-
-	<!-- Grid pattern -->
-	<div
-		class="pointer-events-none absolute inset-0 opacity-[0.02]"
-		style="background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 48px 48px;"
-		aria-hidden="true"
-	></div>
-
-	<div class="relative z-10 mx-auto max-w-4xl px-6 text-center">
+<section id="join" class="bg-zinc-900 py-24">
+	<div class="mx-auto max-w-4xl px-6 text-center">
 		<div class="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2">
 			<Sparkles class="h-4 w-4 text-primary" />
 			<span class="font-mono text-sm font-medium text-primary">メンバー募集中</span>

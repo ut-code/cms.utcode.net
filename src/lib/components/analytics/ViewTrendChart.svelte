@@ -31,7 +31,7 @@
 		color?: string;
 	}
 
-	const { data, title = "View Trend", color = "#570df8" }: Props = $props();
+	const { data, title = "View Trend", color = "#00D372" }: Props = $props();
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart | null = null;
@@ -71,25 +71,46 @@
 				labels: filledData.map((d) => new Date(d.date).toLocaleDateString("ja-JP")),
 				datasets: [
 					{
-						label: "Views",
+						label: "訪問数",
 						data: filledData.map((d) => d.count),
 						borderColor: color,
-						backgroundColor: `${color}33`,
+						backgroundColor: `${color}20`,
 						fill: true,
-						tension: 0.4,
+						tension: 0.3,
+						borderWidth: 2,
+						pointRadius: 3,
+						pointHoverRadius: 5,
+						pointBackgroundColor: color,
+						pointBorderColor: "#ffffff",
+						pointBorderWidth: 2,
 					},
 				],
 			},
 			options: {
 				responsive: true,
 				maintainAspectRatio: false,
+				interaction: {
+					intersect: false,
+					mode: "index",
+				},
 				plugins: {
 					title: {
-						display: true,
-						text: title,
+						display: false,
 					},
 					legend: {
 						display: false,
+					},
+					tooltip: {
+						backgroundColor: "rgba(0, 0, 0, 0.8)",
+						titleColor: "#ffffff",
+						bodyColor: "#ffffff",
+						padding: 12,
+						borderColor: color,
+						borderWidth: 1,
+						displayColors: false,
+						callbacks: {
+							label: (context) => `${context.parsed.y}回`,
+						},
 					},
 				},
 				scales: {
@@ -97,6 +118,35 @@
 						beginAtZero: true,
 						ticks: {
 							precision: 0,
+							color: "#71717a",
+							font: {
+								family: "DM Sans",
+								size: 12,
+							},
+						},
+						grid: {
+							color: "rgba(0, 0, 0, 0.05)",
+						},
+						border: {
+							display: false,
+						},
+					},
+					x: {
+						ticks: {
+							color: "#71717a",
+							font: {
+								family: "DM Sans",
+								size: 12,
+							},
+							maxRotation: 0,
+							autoSkip: true,
+							autoSkipPadding: 20,
+						},
+						grid: {
+							display: false,
+						},
+						border: {
+							display: false,
 						},
 					},
 				},
@@ -109,6 +159,6 @@
 	});
 </script>
 
-<div class="h-64 w-full">
+<div class="h-80 w-full">
 	<canvas bind:this={canvas}></canvas>
 </div>

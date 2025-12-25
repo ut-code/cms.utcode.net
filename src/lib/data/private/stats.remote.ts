@@ -4,7 +4,7 @@ import {
   countArticles,
   countPublishedArticles,
   getRecentArticles,
-  getRecentDraftArticles,
+  listDraftArticles,
 } from "$lib/server/database/articles.server";
 import { requireUtCodeMember } from "$lib/server/database/auth.server";
 import { countMembers } from "$lib/server/database/members.server";
@@ -30,7 +30,7 @@ export const getAdminStats = query(async () => {
     countProjects(),
     getRecentArticles(5),
     getRecentProjects(3),
-    getRecentDraftArticles(3),
+    listDraftArticles(),
     getAnalyticsSummary(),
     getRecentViewTrend(14),
   ]);

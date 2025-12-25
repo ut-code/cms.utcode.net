@@ -11,8 +11,7 @@
 
 	const { data }: { data: PageData } = $props();
 
-	const featuredProject = $derived(data.allProjects.find((p) => p.category === "active"));
-	const projects = $derived(data.allProjects.filter((p) => p.id !== featuredProject?.id).slice(0, 4));
+	const projects = $derived(data.allProjects.slice(0, 6));
 
 	const currentYear = new Date().getFullYear();
 	const years = currentYear - 2019;
@@ -21,6 +20,7 @@
 <svelte:head>
 	<title>ut.code(); - 東京大学ソフトウェアエンジニアリングサークル</title>
 	<meta property="og:title" content="ut.code(); - 東京大学ソフトウェアエンジニアリングサークル" />
+	<meta property="og:url" content="https://cms.utcode.net/" />
 </svelte:head>
 
 <HeroSection />
@@ -29,7 +29,7 @@
 
 <ActivitiesSection />
 
-<ProjectsSection {featuredProject} {projects} />
+<ProjectsSection {projects} />
 
 <ArticlesSection articles={data.articles} />
 

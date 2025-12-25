@@ -16,7 +16,6 @@
 		slug: string;
 		title: string;
 		content: string;
-		excerpt: string;
 		coverUrl: string;
 		authorId: string | null;
 		published: boolean;
@@ -26,7 +25,6 @@
 				slug: data.slug,
 				title: data.title,
 				content: data.content,
-				excerpt: data.excerpt || null,
 				coverUrl: data.coverUrl || null,
 				authorId: data.authorId,
 				published: data.published,
@@ -52,7 +50,7 @@
 
 <div class="h-[calc(100vh-4rem)]">
 		<ArticleForm
-			initialData={{ slug: "", title: "", content: "", excerpt: "", coverUrl: "", authorId: defaultAuthorId, published: false }}
+			initialData={{ slug: "", title: "", content: "", coverUrl: "", authorId: defaultAuthorId, published: false }}
 			{authors}
 			onSubmit={handleSubmit}
 			submitLabel="Create"

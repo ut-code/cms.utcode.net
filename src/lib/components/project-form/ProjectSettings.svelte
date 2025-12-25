@@ -71,7 +71,7 @@
 							}}
 							class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-all {category ===
 							key
-								? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+								? 'border-primary bg-primary/5 text-zinc-900'
 								: 'border-zinc-200 bg-white text-zinc-600 hover:border-primary/30'}"
 						>
 							{PROJECT_CATEGORIES[key]}

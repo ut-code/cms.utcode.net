@@ -81,6 +81,7 @@
 	let query = $state("");
 	let selectedIndex = $state(0);
 	let results = $state<TResult[]>([]);
+	let inputElement: HTMLInputElement | undefined = $state();
 
 	$effect(() => {
 		if (query.trim()) {
@@ -91,6 +92,12 @@
 				.catch(console.error);
 		} else {
 			results = [];
+		}
+	});
+
+	$effect(() => {
+		if (modalState.open && inputElement) {
+			inputElement.focus();
 		}
 	});
 
@@ -108,6 +115,11 @@
 		if ((e.metaKey || e.ctrlKey) && e.key === "k") {
 			e.preventDefault();
 			toggleSearch();
+		}
+
+		if (modalState.open && e.key === "Escape") {
+			e.preventDefault();
+			closeSearch();
 		}
 	}
 
@@ -176,6 +188,7 @@
 			<div class="flex items-center gap-3 px-4 {theme.searchBorder}">
 				<Search class="h-5 w-5 shrink-0 {theme.searchIcon}" />
 				<input
+					bind:this={inputElement}
 					value={query}
 					oninput={handleQueryInput}
 					type="text"

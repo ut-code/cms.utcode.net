@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ArrowRight, BarChart3, Eye, FileText, FolderKanban, Users } from "lucide-svelte";
+	import ViewTrendChart from "$lib/components/analytics/ViewTrendChart.svelte";
 
 	interface TopItem {
 		id: string;
@@ -107,6 +108,16 @@
 			<p class="mt-1 text-lg font-bold">{totalMemberViews.toLocaleString()}</p>
 		</div>
 	</div>
+
+	<!-- View Trend Chart -->
+	{#if viewTrend.length > 0}
+		<div class="mb-4">
+			<h3 class="mb-2 text-xs font-semibold text-base-content/60">過去30日間の訪問数推移</h3>
+			<div class="rounded-lg border border-base-300/50 bg-base-200/30 p-3">
+				<ViewTrendChart data={viewTrend} />
+			</div>
+		</div>
+	{/if}
 
 	<!-- Top Content Lists -->
 	<div class="space-y-4">

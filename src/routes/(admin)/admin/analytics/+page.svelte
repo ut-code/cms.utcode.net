@@ -70,11 +70,12 @@
 	<!-- View Trends Section -->
 	<div class="card bg-base-100 shadow-md">
 		<div class="card-body">
-			<div class="mb-4 flex items-center gap-2">
-				<TrendingUp class="h-5 w-5" />
-				<h2 class="card-title">訪問数の推移（過去30日間）</h2>
+			<div class="mb-6 flex items-center gap-2">
+				<TrendingUp class="h-5 w-5 text-primary" />
+				<h2 class="text-xl font-bold">全体の訪問数推移</h2>
 			</div>
-			<ViewTrendChart data={viewTrend} title="全体の訪問数" />
+			<p class="mb-4 text-sm text-zinc-500">過去30日間の訪問数の推移を表示しています</p>
+			<ViewTrendChart data={viewTrend} />
 		</div>
 	</div>
 </div>

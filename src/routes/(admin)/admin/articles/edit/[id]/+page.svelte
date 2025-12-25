@@ -19,7 +19,6 @@
 		slug: string;
 		title: string;
 		content: string;
-		excerpt: string;
 		coverUrl: string;
 		authorId: string | null;
 		published: boolean;
@@ -44,7 +43,6 @@
 					slug: data.slug,
 					title: data.title,
 					content: data.content,
-					excerpt: data.excerpt || null,
 					coverUrl: data.coverUrl || null,
 					authorId: data.authorId,
 					published: data.published,
@@ -113,7 +111,6 @@
 				slug: article.slug,
 				title: article.title,
 				content: article.content,
-				excerpt: article.excerpt ?? "",
 				coverUrl: article.coverUrl ?? "",
 				authorId: article.authorId,
 				published: article.published,

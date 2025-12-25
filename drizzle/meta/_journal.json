@@ -36,6 +36,13 @@
       "when": 1766590476875,
       "tag": "0004_dry_adam_destine",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1766647447093,
+      "tag": "0005_boring_rockslide",
+      "breakpoints": true
     }
   ]
 }

@@ -13,7 +13,10 @@
 	<meta name="description" content="東京大学のソフトウェアエンジニアリングサークル ut.code();" />
 	<meta property="og:site_name" content="ut.code();" />
 	<meta property="og:type" content="website" />
+	<meta property="og:image" content="https://cms.utcode.net/og-image.svg" />
+	<meta property="og:url" content="https://cms.utcode.net" />
 	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:image" content="https://cms.utcode.net/og-image.svg" />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
 	<link
