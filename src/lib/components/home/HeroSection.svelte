@@ -142,15 +142,5 @@
 				</div>
 			</div>
 		</div>
-
-		<!-- Scroll indicator -->
-		<div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-			<div class="flex flex-col items-center gap-2">
-				<span class="font-mono text-xs text-zinc-400">scroll</span>
-				<div class="h-12 w-6 rounded-full border-2 border-zinc-200">
-					<div class="mx-auto mt-2 h-2 w-1 animate-pulse rounded-full bg-[#00D372]"></div>
-				</div>
-			</div>
-		</div>
 	</div>
 </section>
