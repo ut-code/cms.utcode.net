@@ -1,19 +1,11 @@
 <script lang="ts">
 	import { Github } from "lucide-svelte";
 	import Markdown from "$lib/components/Markdown.svelte";
-	import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
+	import { CATEGORY_COLORS } from "$lib/shared/constants";
+	import { PROJECT_CATEGORIES } from "$lib/shared/models/schema";
 	import type { PageData } from "./$types";
 
 	const { data }: { data: PageData } = $props();
-	
-
-	const categoryColors: Record<ProjectCategory, string> = {
-		active: "bg-emerald-100 text-emerald-700 border-emerald-200",
-		ended: "bg-zinc-100 text-zinc-600 border-zinc-200",
-		hackathon: "bg-purple-100 text-purple-700 border-purple-200",
-		festival: "bg-pink-100 text-pink-700 border-pink-200",
-		personal: "bg-amber-100 text-amber-700 border-amber-200",
-	};
 </script>
 
 <svelte:head>
@@ -50,7 +42,7 @@
 
 		<div class="mb-3 flex flex-wrap items-center gap-2 sm:mb-4 sm:gap-3">
 			<h1 class="text-2xl font-bold sm:text-3xl md:text-4xl">{data.project.name}</h1>
-			<span class="rounded border px-2 py-1 text-xs font-medium {categoryColors[data.project.category]}">
+			<span class="rounded border px-2 py-1 text-xs font-medium {CATEGORY_COLORS[data.project.category]}">
 				{PROJECT_CATEGORIES[data.project.category]}
 			</span>
 		</div>
@@ -76,7 +68,7 @@
 					href={data.project.demoUrl}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm text-zinc-900 hover:bg-primary-focus"
+					class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm text-zinc-900 hover:bg-primary/90"
 				>
 					Demo →
 				</a>

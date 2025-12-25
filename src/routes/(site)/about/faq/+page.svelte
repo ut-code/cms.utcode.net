@@ -126,7 +126,7 @@
 		<div class="flex flex-wrap justify-center gap-4">
 			<a
 				href="/join"
-				class="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-zinc-900 transition-all hover:bg-primary-focus"
+				class="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-zinc-900 transition-all hover:bg-primary/90"
 			>
 				入部案内を見る
 			</a>

@@ -14,7 +14,7 @@
 		stagger: number;
 	}
 
-	const { label, value, sublabel, href, icon, iconColor, accentColor, stagger }: Props = $props();
+	const { label, value, sublabel, href, icon: IconComponent, iconColor, accentColor, stagger }: Props = $props();
 
 	const iconColorClasses = {
 		success: "bg-success/10 text-success group-hover:bg-success/20",
@@ -36,8 +36,7 @@
 				iconColor
 			]}"
 		>
-			<!-- svelte-ignore svelte_component_deprecated -->
-			<svelte:component this={icon} class="h-5 w-5" />
+			<IconComponent class="h-5 w-5" />
 		</div>
 	</div>
 	<p class="mt-3 font-mono text-4xl font-bold text-base-content">

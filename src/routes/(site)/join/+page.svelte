@@ -176,7 +176,7 @@
 		<p class="mb-6 text-zinc-500">ut.code(); であなたのアイデアを形にしませんか？</p>
 		<a
 			href="/"
-			class="group inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-zinc-900 transition-all hover:bg-primary-focus"
+			class="group inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-zinc-900 transition-all hover:bg-primary/90"
 		>
 			トップページへ戻る
 			<ArrowRight class="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Pagination from "$lib/components/Pagination.svelte";
+	import { CATEGORY_COLORS, ITEMS_PER_PAGE } from "$lib/shared/constants";
 	import {
 		PROJECT_CATEGORIES,
 		PROJECT_CATEGORY_KEYS,
@@ -7,8 +9,6 @@
 	import type { PageData } from "./$types";
 
 	const { data }: { data: PageData } = $props();
-	
-	const itemsPerPage = 12;
 
 	const selectedCategory = $derived(
 		PROJECT_CATEGORY_KEYS.find((k) => k === data.categoryParam) ?? "all",
@@ -18,18 +18,10 @@
 		selectedCategory === "all" ? data.projects : data.projects.filter((p) => p.category === selectedCategory),
 	);
 
-	const totalPages = $derived(Math.ceil(filteredProjects.length / itemsPerPage));
+	const totalPages = $derived(Math.ceil(filteredProjects.length / ITEMS_PER_PAGE));
 	const paginatedProjects = $derived(
-		filteredProjects.slice((data.currentPage - 1) * itemsPerPage, data.currentPage * itemsPerPage),
+		filteredProjects.slice((data.currentPage - 1) * ITEMS_PER_PAGE, data.currentPage * ITEMS_PER_PAGE),
 	);
-
-	const categoryColors: Record<ProjectCategory, string> = {
-		active: "bg-emerald-100 text-emerald-700 border-emerald-200",
-		ended: "bg-zinc-100 text-zinc-600 border-zinc-200",
-		hackathon: "bg-purple-100 text-purple-700 border-purple-200",
-		festival: "bg-pink-100 text-pink-700 border-pink-200",
-		personal: "bg-amber-100 text-amber-700 border-amber-200",
-	};
 
 	function categoryUrl(category: ProjectCategory | "all"): string {
 		return category === "all" ? "/projects" : `/projects?category=${category}`;
@@ -112,7 +104,7 @@
 							{project.name}
 						</h2>
 						<span
-							class="shrink-0 rounded-lg border px-2 py-0.5 text-[10px] font-medium {categoryColors[
+							class="shrink-0 rounded-lg border px-2 py-0.5 text-[10px] font-medium {CATEGORY_COLORS[
 								project.category
 							]}"
 						>
@@ -144,56 +136,6 @@
 			{/each}
 		</div>
 
-		{#if filteredProjects.length > itemsPerPage}
-			<div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-				{#if data.currentPage > 1}
-					<a
-						href={pageUrl(data.currentPage - 1)}
-						class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:bg-primary/5 hover:border-primary/30 hover:text-primary focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 sm:w-auto"
-					>
-						前へ
-					</a>
-				{:else}
-					<span
-						class="w-full cursor-not-allowed rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium opacity-50 sm:w-auto"
-					>
-						前へ
-					</span>
-				{/if}
-
-				<div class="flex flex-1 flex-wrap items-center justify-center gap-1 sm:flex-initial">
-					{#each Array.from({ length: totalPages }, (_, i) => i + 1) as pageNum (pageNum)}
-						{#if totalPages <= 7 || pageNum === 1 || pageNum === totalPages || Math.abs(pageNum - data.currentPage) <= 1}
-							<a
-								href={pageUrl(pageNum)}
-								class="min-w-[2.5rem] rounded-lg border px-3 py-2 text-center text-sm font-medium transition-colors focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 {data.currentPage ===
-								pageNum
-									? 'border-primary bg-primary text-white'
-									: 'border-zinc-200 bg-white hover:bg-primary/5 hover:border-primary/30 hover:text-primary'}"
-							>
-								{pageNum}
-							</a>
-						{:else if pageNum === data.currentPage - 2 || pageNum === data.currentPage + 2}
-							<span class="px-1 text-zinc-500">...</span>
-						{/if}
-					{/each}
-				</div>
-
-				{#if data.currentPage < totalPages}
-					<a
-						href={pageUrl(data.currentPage + 1)}
-						class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:bg-primary/5 hover:border-primary/30 hover:text-primary focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 sm:w-auto"
-					>
-						次へ
-					</a>
-				{:else}
-					<span
-						class="w-full cursor-not-allowed rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium opacity-50 sm:w-auto"
-					>
-						次へ
-					</span>
-				{/if}
-			</div>
-		{/if}
+		<Pagination currentPage={data.currentPage} {totalPages} {pageUrl} />
 	{/if}
 </div>

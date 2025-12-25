@@ -245,7 +245,7 @@
 											href="https://forms.gle/Bo5gHDgz12XtA4NW8"
 											target="_blank"
 											rel="noopener noreferrer"
-											class="text-primary hover:text-primary-focus"
+											class="text-primary hover:text-primary/90"
 										>
 											参加フォーム
 										</a>
@@ -267,7 +267,7 @@
 											href="https://forms.gle/sAU7A9uMVerQPpUb6"
 											target="_blank"
 											rel="noopener noreferrer"
-											class="text-primary hover:text-primary-focus"
+											class="text-primary hover:text-primary/90"
 										>
 											参加フォーム
 										</a>
@@ -354,7 +354,7 @@
 			</a>
 			<a
 				href="/join"
-				class="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-zinc-900 transition-colors hover:bg-primary-focus"
+				class="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-zinc-900 transition-colors hover:bg-primary/90"
 			>
 				入部案内を見る
 			</a>

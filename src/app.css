@@ -2,6 +2,7 @@
 @plugin "@tailwindcss/typography";
 @plugin "daisyui" {
   logs: false;
+  themes: false;
 }
 
 /* ut.code(); Admin Theme */

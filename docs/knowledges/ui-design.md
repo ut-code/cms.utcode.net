@@ -34,13 +34,14 @@
 
 | Component           | Style                                                                                    |
 | ------------------- | ---------------------------------------------------------------------------------------- |
-| Buttons (primary)   | bg-[#00D372], rounded-lg, font-semibold, shadow-lg                                       |
+| Buttons (primary)   | bg-primary, rounded-lg, font-semibold, shadow-lg                                         |
 | Buttons (secondary) | bg-zinc-900, text-white                                                                  |
 | Cards               | bg-white/80, backdrop-blur-md, border border-zinc-200/50, rounded-2xl, hover:shadow      |
 | Featured card       | bg-zinc-900, text-white (inverted)                                                       |
-| Section labels      | Monospace, uppercase, tracking-widest, text-[#00D372]                                    |
+| Section labels      | Monospace, uppercase, tracking-widest, text-primary                                      |
 | Tech tags           | Monospace, text-xs, bg-zinc-100/zinc-800, rounded-lg                                     |
 | Page headers        | border-b, bg-zinc-50/50, py-16                                                           |
+| Pagination          | `$lib/components/Pagination.svelte` - Reusable component with prev/next buttons, page numbers with ellipsis |
 
 ## Interaction Patterns
 
