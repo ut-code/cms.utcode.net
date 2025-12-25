@@ -6,7 +6,7 @@ import { createSearchPattern } from "./utils";
 export type Project = typeof project.$inferSelect;
 export type NewProject = typeof project.$inferInsert;
 
-export async function listProjects(limit = 100) {
+export async function listProjects(limit: number) {
   return db.query.project.findMany({
     orderBy: (t, { desc }) => desc(t.createdAt),
     limit,
@@ -41,9 +41,9 @@ export async function getProjectBySlug(slug: string) {
   return result;
 }
 
-export async function getProjectById(id: string) {
+export async function getProjectById(projectId: string) {
   return db.query.project.findFirst({
-    where: eq(project.id, id),
+    where: eq(project.id, projectId),
     with: {
       projectMembers: { with: { member: true } },
     },
@@ -61,17 +61,17 @@ export async function createProject(data: NewProject, leadMemberId: string) {
   return created;
 }
 
-export async function updateProject(id: string, data: Partial<Omit<NewProject, "id">>) {
+export async function updateProject(projectId: string, data: Partial<Omit<NewProject, "id">>) {
   const [updated] = await db
     .update(project)
     .set({ ...data, updatedAt: new Date() })
-    .where(eq(project.id, id))
+    .where(eq(project.id, projectId))
     .returning();
   return updated;
 }
 
-export async function deleteProject(id: string) {
-  await db.delete(project).where(eq(project.id, id));
+export async function deleteProject(projectId: string) {
+  await db.delete(project).where(eq(project.id, projectId));
 }
 
 export async function addProjectMember(
@@ -104,7 +104,7 @@ export async function transferLead(projectId: string, fromMemberId: string, toMe
   await updateProjectMemberRole(projectId, toMemberId, "lead");
 }
 
-export async function searchProjects(query: string, limit = 50) {
+export async function searchProjects(query: string, limit: number) {
   const searchPattern = createSearchPattern(query);
   if (!searchPattern) {
     return [];

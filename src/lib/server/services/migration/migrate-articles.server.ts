@@ -77,8 +77,8 @@ export async function migrateArticles(repoPath: string, log: Logger): Promise<Mi
       log(`  ✓ Created: ${slug}`);
       created++;
     } catch (e) {
-      const msg = e instanceof Error ? e.message : String(e);
-      log(`  ✗ Error: ${slug} - ${msg}`);
+      const errorMessage = e instanceof Error ? e.message : String(e);
+      log(`  ✗ Error: ${slug} - ${errorMessage}`);
       errors++;
     }
   }

@@ -20,7 +20,7 @@ export const mockMember: Member = {
   updatedAt: new Date(),
 };
 
-export async function listMembers(limit = 200) {
+export async function listMembers(limit: number) {
   return db.query.member.findMany({
     orderBy: (t, { desc }) => desc(t.createdAt),
     limit,
@@ -52,9 +52,9 @@ export async function getMemberBySlug(slug: string) {
   return result;
 }
 
-export async function getMemberById(id: string) {
+export async function getMemberById(memberId: string) {
   return db.query.member.findFirst({
-    where: eq(member.id, id),
+    where: eq(member.id, memberId),
     with: {
       projectMembers: { with: { project: true } },
     },
@@ -76,21 +76,21 @@ export async function createMember(data: NewMember) {
   return created;
 }
 
-export async function updateMember(id: string, data: Partial<Omit<NewMember, "id">>) {
+export async function updateMember(memberId: string, data: Partial<Omit<NewMember, "id">>) {
   const [updated] = await db
     .update(member)
     .set({ ...data, updatedAt: new Date() })
-    .where(eq(member.id, id))
+    .where(eq(member.id, memberId))
     .returning();
   if (!updated) throw new Error("Failed to update member");
   return updated;
 }
 
-export async function deleteMember(id: string) {
-  await db.delete(member).where(eq(member.id, id));
+export async function deleteMember(memberId: string) {
+  await db.delete(member).where(eq(member.id, memberId));
 }
 
-export async function searchMembers(query: string, limit = 50) {
+export async function searchMembers(query: string, limit: number) {
   const searchPattern = createSearchPattern(query);
   if (!searchPattern) {
     return [];

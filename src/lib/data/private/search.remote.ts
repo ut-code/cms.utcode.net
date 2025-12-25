@@ -4,6 +4,7 @@ import { searchAllArticles } from "$lib/server/database/articles.server";
 import { requireUtCodeMember } from "$lib/server/database/auth.server";
 import { searchMembers } from "$lib/server/database/members.server";
 import { searchProjects } from "$lib/server/database/projects.server";
+import { DB_SEARCH_LIMIT } from "$lib/shared/constants";
 import type { AdminSearchResult } from "$lib/shared/logic/search";
 
 export const searchAdmin = query(
@@ -12,9 +13,9 @@ export const searchAdmin = query(
     await requireUtCodeMember();
 
     const [articles, projects, members] = await Promise.all([
-      searchAllArticles(searchQuery),
-      searchProjects(searchQuery),
-      searchMembers(searchQuery),
+      searchAllArticles(searchQuery, DB_SEARCH_LIMIT),
+      searchProjects(searchQuery, DB_SEARCH_LIMIT),
+      searchMembers(searchQuery, DB_SEARCH_LIMIT),
     ]);
 
     const articleResults: AdminSearchResult[] = articles.map((article) => ({

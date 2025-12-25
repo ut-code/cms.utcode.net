@@ -10,10 +10,11 @@ import {
 } from "$lib/server/database/members.server";
 import { requireMemberOwnership } from "$lib/server/database/ownership";
 import { purgeCache } from "$lib/server/services/cloudflare/cache.server";
+import { DB_MEMBERS_LIMIT } from "$lib/shared/constants";
 
 export const getMembers = query(async () => {
   await requireUtCodeMember();
-  return await listMembers();
+  return await listMembers(DB_MEMBERS_LIMIT);
 });
 
 export const getMember = query(v.string(), async (id) => {

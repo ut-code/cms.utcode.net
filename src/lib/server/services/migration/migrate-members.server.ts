@@ -64,8 +64,8 @@ export async function migrateMembers(repoPath: string, log: Logger): Promise<Mig
       log(`  ✓ Created: ${slug} (${frontmatter.nameJa})`);
       created++;
     } catch (e) {
-      const msg = e instanceof Error ? e.message : String(e);
-      log(`  ✗ Error: ${slug} - ${msg}`);
+      const errorMessage = e instanceof Error ? e.message : String(e);
+      log(`  ✗ Error: ${slug} - ${errorMessage}`);
       errors++;
     }
   }

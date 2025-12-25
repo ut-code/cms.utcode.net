@@ -9,6 +9,12 @@ import {
 import { requireUtCodeMember } from "$lib/server/database/auth.server";
 import { countMembers } from "$lib/server/database/members.server";
 import { countProjects, getRecentProjects } from "$lib/server/database/projects.server";
+import {
+  DASHBOARD_RECENT_ARTICLES_LIMIT,
+  DASHBOARD_RECENT_PROJECTS_LIMIT,
+  DASHBOARD_VIEW_TREND_DAYS,
+  DB_LARGE_LIMIT,
+} from "$lib/shared/constants";
 
 export const getAdminStats = query(async () => {
   await requireUtCodeMember();
@@ -28,11 +34,11 @@ export const getAdminStats = query(async () => {
     countArticles(),
     countPublishedArticles(),
     countProjects(),
-    getRecentArticles(5),
-    getRecentProjects(3),
-    listDraftArticles(),
+    getRecentArticles(DASHBOARD_RECENT_ARTICLES_LIMIT),
+    getRecentProjects(DASHBOARD_RECENT_PROJECTS_LIMIT),
+    listDraftArticles(DB_LARGE_LIMIT),
     getAnalyticsSummary(),
-    getRecentViewTrend(14),
+    getRecentViewTrend(DASHBOARD_VIEW_TREND_DAYS),
   ]);
 
   return {

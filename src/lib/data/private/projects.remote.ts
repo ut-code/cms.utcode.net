@@ -15,6 +15,7 @@ import {
   updateProject,
 } from "$lib/server/database/projects.server";
 import { purgeCache } from "$lib/server/services/cloudflare/cache.server";
+import { DB_DEFAULT_LIMIT } from "$lib/shared/constants";
 import type { ProjectCategory, ProjectRole } from "$lib/shared/models/schema";
 
 // Re-export getMembers from canonical source
@@ -36,7 +37,7 @@ const roleSchema = v.picklist(PROJECT_ROLE_VALUES);
 
 export const getProjects = query(async () => {
   await requireUtCodeMember();
-  return await listProjects();
+  return await listProjects(DB_DEFAULT_LIMIT);
 });
 
 export const getProject = query(v.string(), async (id) => {

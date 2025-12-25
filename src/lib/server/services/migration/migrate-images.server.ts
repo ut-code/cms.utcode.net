@@ -92,8 +92,8 @@ export async function migrateImages(repoPath: string, log: Logger): Promise<Migr
       log(`  ✓ Uploaded: member/${slug}`);
       created++;
     } catch (e) {
-      const msg = e instanceof Error ? e.message : String(e);
-      log(`  ✗ Error: member/${slug} - ${msg}`);
+      const errorMessage = e instanceof Error ? e.message : String(e);
+      log(`  ✗ Error: member/${slug} - ${errorMessage}`);
       errors++;
     }
   }
@@ -156,8 +156,8 @@ export async function migrateImages(repoPath: string, log: Logger): Promise<Migr
       log(`  ✓ Uploaded: article/${slug}`);
       created++;
     } catch (e) {
-      const msg = e instanceof Error ? e.message : String(e);
-      log(`  ✗ Error: article/${slug} - ${msg}`);
+      const errorMessage = e instanceof Error ? e.message : String(e);
+      log(`  ✗ Error: article/${slug} - ${errorMessage}`);
       errors++;
     }
   }
@@ -219,8 +219,8 @@ export async function migrateImages(repoPath: string, log: Logger): Promise<Migr
       log(`  ✓ Uploaded: project/${slug}`);
       created++;
     } catch (e) {
-      const msg = e instanceof Error ? e.message : String(e);
-      log(`  ✗ Error: project/${slug} - ${msg}`);
+      const errorMessage = e instanceof Error ? e.message : String(e);
+      log(`  ✗ Error: project/${slug} - ${errorMessage}`);
       errors++;
     }
   }

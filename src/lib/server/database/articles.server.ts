@@ -25,7 +25,7 @@ function addExcerpts<T extends Article>(articles: T[]): (T & { excerpt: string }
   return articles.map((a) => ({ ...a, excerpt: generateExcerpt(a.content) }));
 }
 
-export async function listPublishedArticles(limit = 100) {
+export async function listPublishedArticles(limit: number) {
   const articles = await db.query.article.findMany({
     where: eq(article.published, true),
     orderBy: desc(article.publishedAt),
@@ -66,7 +66,7 @@ export async function getPublishedArticle(slug: string) {
   return result ? addExcerpt(result) : null;
 }
 
-export async function listAllArticles(limit = 1000) {
+export async function listAllArticles(limit: number) {
   const articles = await db.query.article.findMany({
     orderBy: desc(article.createdAt),
     limit,
@@ -75,9 +75,9 @@ export async function listAllArticles(limit = 1000) {
   return addExcerpts(articles);
 }
 
-export async function getArticleById(id: string) {
+export async function getArticleById(articleId: string) {
   const result = await db.query.article.findFirst({
-    where: eq(article.id, id),
+    where: eq(article.id, articleId),
     with: { author: true },
   });
   return result ? addExcerpt(result) : null;
@@ -89,26 +89,26 @@ export async function createArticle(data: NewArticle) {
   return created;
 }
 
-export async function updateArticle(id: string, data: Partial<Omit<NewArticle, "id">>) {
+export async function updateArticle(articleId: string, data: Partial<Omit<NewArticle, "id">>) {
   const [updated] = await db
     .update(article)
     .set({ ...data, updatedAt: new Date() })
-    .where(eq(article.id, id))
+    .where(eq(article.id, articleId))
     .returning();
   if (!updated) throw new Error("Failed to update article");
   return updated;
 }
 
-export async function deleteArticle(id: string) {
-  await db.delete(article).where(eq(article.id, id));
+export async function deleteArticle(articleId: string) {
+  await db.delete(article).where(eq(article.id, articleId));
 }
 
-export async function publishArticle(id: string) {
-  return updateArticle(id, { published: true, publishedAt: new Date() });
+export async function publishArticle(articleId: string) {
+  return updateArticle(articleId, { published: true, publishedAt: new Date() });
 }
 
-export async function unpublishArticle(id: string) {
-  return updateArticle(id, { published: false, publishedAt: null });
+export async function unpublishArticle(articleId: string) {
+  return updateArticle(articleId, { published: false, publishedAt: null });
 }
 
 export async function getRelatedArticles(
@@ -152,7 +152,7 @@ export async function getRelatedArticles(
   return addExcerpts(sameAuthorArticles);
 }
 
-export async function searchPublishedArticles(query: string, limit = 50) {
+export async function searchPublishedArticles(query: string, limit: number) {
   const searchPattern = createSearchPattern(query);
   if (!searchPattern) {
     return [];
@@ -170,7 +170,7 @@ export async function searchPublishedArticles(query: string, limit = 50) {
   return addExcerpts(articles);
 }
 
-export async function searchAllArticles(query: string, limit = 100) {
+export async function searchAllArticles(query: string, limit: number) {
   const searchPattern = createSearchPattern(query);
   if (!searchPattern) {
     return [];
@@ -215,7 +215,7 @@ export async function getRecentDraftArticles(limit: number) {
   return addExcerpts(articles);
 }
 
-export async function listDraftArticles(limit = 1000) {
+export async function listDraftArticles(limit: number) {
   const articles = await db.query.article.findMany({
     where: eq(article.published, false),
     orderBy: desc(article.updatedAt),

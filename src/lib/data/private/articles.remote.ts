@@ -15,10 +15,11 @@ import { requireUtCodeMember } from "$lib/server/database/auth.server";
 import { getMemberByUserId } from "$lib/server/database/members.server";
 import { requireArticleOwnership } from "$lib/server/database/ownership";
 import { purgeCache } from "$lib/server/services/cloudflare/cache.server";
+import { DB_LARGE_LIMIT } from "$lib/shared/constants";
 
 export const getArticles = query(async () => {
   await requireUtCodeMember();
-  return await listAllArticles();
+  return await listAllArticles(DB_LARGE_LIMIT);
 });
 
 export const getArticle = query(v.string(), async (id) => {

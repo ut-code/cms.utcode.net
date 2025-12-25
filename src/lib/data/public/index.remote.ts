@@ -14,9 +14,10 @@ import {
   listRecentProjects,
   searchProjects,
 } from "$lib/server/database/projects.server";
+import { DB_DEFAULT_LIMIT, DB_MEMBERS_LIMIT, DB_SEARCH_LIMIT } from "$lib/shared/constants";
 import type { SearchResult } from "$lib/shared/logic/search";
 
-export const getPublicArticles = query(async () => listPublishedArticles());
+export const getPublicArticles = query(async () => listPublishedArticles(DB_DEFAULT_LIMIT));
 export const getPublicArticle = query(v.string(), async (slug) => getPublishedArticle(slug));
 export const getPublicRelatedArticles = query(
   v.object({
@@ -27,7 +28,7 @@ export const getPublicRelatedArticles = query(
   async ({ articleId, authorId, limit }) => getRelatedArticles(articleId, authorId, limit),
 );
 
-export const getPublicProjects = query(async () => listProjects());
+export const getPublicProjects = query(async () => listProjects(DB_DEFAULT_LIMIT));
 export const getPublicProject = query(v.string(), async (slug) => getProjectBySlug(slug));
 
 export const getHomeArticles = query(v.number(), async (limit) =>
@@ -35,16 +36,16 @@ export const getHomeArticles = query(v.number(), async (limit) =>
 );
 export const getHomeProjects = query(v.number(), async (limit) => listRecentProjects(limit));
 
-export const getPublicMembers = query(async () => listMembers());
+export const getPublicMembers = query(async () => listMembers(DB_MEMBERS_LIMIT));
 export const getPublicMember = query(v.string(), async (slug) => getMemberBySlug(slug));
 
 export const searchPublic = query(
   v.string(),
   async (searchQuery: string): Promise<SearchResult[]> => {
     const [articles, projects, members] = await Promise.all([
-      searchPublishedArticles(searchQuery),
-      searchProjects(searchQuery),
-      searchMembers(searchQuery),
+      searchPublishedArticles(searchQuery, DB_SEARCH_LIMIT),
+      searchProjects(searchQuery, DB_SEARCH_LIMIT),
+      searchMembers(searchQuery, DB_SEARCH_LIMIT),
     ]);
 
     const articleResults: SearchResult[] = articles.map((article) => ({

@@ -83,9 +83,9 @@ async function runCleanupAsync(): Promise<void> {
       images: { created: 0, skipped: 0, errors: 0 },
     });
   } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    log(`=== Cleanup Failed: ${msg} ===`);
-    failMigration(msg);
+    const errorMessage = e instanceof Error ? e.message : String(e);
+    log(`=== Cleanup Failed: ${errorMessage} ===`);
+    failMigration(errorMessage);
   }
 }
 
@@ -114,9 +114,9 @@ async function runDeleteAllAsync(): Promise<void> {
       images: { created: 0, skipped: 0, errors: 0 },
     });
   } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    log(`=== Delete Failed: ${msg} ===`);
-    failMigration(msg);
+    const errorMessage = e instanceof Error ? e.message : String(e);
+    log(`=== Delete Failed: ${errorMessage} ===`);
+    failMigration(errorMessage);
   }
 }
 
@@ -136,9 +136,9 @@ async function runMigrationAsync(): Promise<void> {
     log("=== Migration Complete ===");
     completeMigration({ members, articles, projects, images });
   } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    log(`=== Migration Failed: ${msg} ===`);
-    failMigration(msg);
+    const errorMessage = e instanceof Error ? e.message : String(e);
+    log(`=== Migration Failed: ${errorMessage} ===`);
+    failMigration(errorMessage);
   } finally {
     // Cleanup
     if (repoPath) {
