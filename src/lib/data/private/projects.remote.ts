@@ -3,7 +3,6 @@ import * as v from "valibot";
 import { command, query } from "$app/server";
 import { requireUtCodeMember } from "$lib/server/database/auth.server";
 import { getMemberByUserId } from "$lib/server/database/members.server";
-import { requireProjectOwnership } from "$lib/server/database/ownership";
 import {
   addProjectMember,
   createProject,
@@ -82,10 +81,7 @@ export const editProject = command(
     }),
   }),
   async ({ id, data }) => {
-    const session = await requireUtCodeMember();
-
-    // Check ownership: only project members can edit the project
-    await requireProjectOwnership(session, id);
+    await requireUtCodeMember();
 
     const result = await updateProject(id, data);
     purgeCache().catch(console.error);
@@ -94,10 +90,7 @@ export const editProject = command(
 );
 
 export const removeProject = command(v.string(), async (id) => {
-  const session = await requireUtCodeMember();
-
-  // Check ownership: only project members can delete the project
-  await requireProjectOwnership(session, id);
+  await requireUtCodeMember();
 
   await deleteProject(id);
   purgeCache().catch(console.error);
@@ -110,10 +103,7 @@ export const addMember = command(
     role: v.optional(roleSchema),
   }),
   async ({ projectId, memberId, role }) => {
-    const session = await requireUtCodeMember();
-
-    // Check ownership: only project members can add new members
-    await requireProjectOwnership(session, projectId);
+    await requireUtCodeMember();
 
     await addProjectMember(projectId, memberId, role);
     purgeCache().catch(console.error);
@@ -126,10 +116,7 @@ export const removeMember = command(
     memberId: v.string(),
   }),
   async ({ projectId, memberId }) => {
-    const session = await requireUtCodeMember();
-
-    // Check ownership: only project members can remove members
-    await requireProjectOwnership(session, projectId);
+    await requireUtCodeMember();
 
     await removeProjectMember(projectId, memberId);
     purgeCache().catch(console.error);

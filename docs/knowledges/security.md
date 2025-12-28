@@ -1,13 +1,23 @@
 # Security Model
 
+## Trust Model
+
+**Core Principle**: All ut.code(); members are mutually trusted.
+
+This is an internal CMS for the ut.code(); organization. All authenticated members belong to the same organization and collaborate on shared content. Therefore:
+
+- **No ownership checks required**: Any ut.code(); member can edit any article, member profile, or project
+- **Authorization is binary**: `requireUtCodeMember()` is the only auth check needed
+- **Mutual trust assumption**: Members are expected to coordinate and communicate, not compete
+
+This model prioritizes collaboration and simplicity over granular access control.
+
 ## Assumptions
 
-| Role                     | Read Access                           | Write Access                                            |
-| ------------------------ | ------------------------------------- | ------------------------------------------------------- |
-| Public (unauthenticated) | Published articles, members, projects | None                                                    |
-| ut.code(); members       | All resources (including drafts)      | Own resources only (see Ownership Model below)          |
-
-**Design Decision**: Ownership-based access control. Users can only modify resources they own or are members of.
+| Role                     | Read Access                           | Write Access                     |
+| ------------------------ | ------------------------------------- | -------------------------------- |
+| Public (unauthenticated) | Published articles, members, projects | None                             |
+| ut.code(); members       | All resources (including drafts)      | All resources (full admin access)|
 
 ## Authentication
 
@@ -18,26 +28,20 @@
   - Mock user ID: `"mock"`, mock member ID: `"mock-member"`
   - Mock data returned from `getMemberByUserId`, `getUserPreference`, `setDefaultAuthor`
 
-## Ownership Model
+## Authorization Model
 
-Resource-level access control is enforced via `ownership.ts`:
+All authenticated ut.code(); members have full admin access. Authorization is enforced via:
 
-### Articles
-- **Edit/Delete/Publish/Unpublish**: Only the article author can modify their own articles
-- Enforced by: `requireArticleOwnership(session, articleId)`
-- Creates: Any authenticated ut.code member can create articles (with their own member ID as author)
+- `requireUtCodeMember()` - Single auth check for all private endpoints
+- Returns session with `user.id` and `member.id`
+- No resource-level ownership checks needed
 
-### Members
-- **Edit/Delete**: Only the member themselves can modify their own profile
-- Enforced by: `requireMemberOwnership(session, memberId)`
-- Creates: Any authenticated ut.code member can create member profiles
+### Resource Access
 
-### Projects
-- **Edit/Delete**: Only project members (lead or regular members) can modify the project
-- **Add/Remove Members**: Only existing project members can add or remove other members
-- **Transfer Lead**: Only the current project lead can transfer leadership
-- Enforced by: `requireProjectOwnership(session, projectId)`
-- Creates: Any authenticated ut.code member can create projects (they become the lead)
+All authenticated members can:
+- **Articles**: Create, edit, delete, publish/unpublish any article
+- **Members**: Create, edit, delete any member profile
+- **Projects**: Create, edit, delete, manage members of any project
 
 ## Endpoint Classification
 
@@ -72,7 +76,6 @@ Resource-level access control is enforced via `ownership.ts`:
 - **S3 Key Validation**: Regex prevents path traversal on delete (`S3KeySchema`)
 - **Session Management**: Better Auth handles session security
 - **CSRF**: SvelteKit Remote Functions use POST with same-origin enforcement
-- **AuthorId Validation**: Article `authorId` must be null or match authenticated user's member ID
 
 ## Known Issues
 
@@ -98,19 +101,16 @@ Now uses `v.picklist(["lead", "member"])` validation.
 ~~User input with `%`, `_`, or `\` characters not escaped in LIKE patterns.~~
 Now uses `escapeLikePattern()` utility in all search functions and redirect lookups.
 
-### ~~MEDIUM: Article authorId not validated~~ FIXED
+### INFO: No resource-level access control (by design)
 
-~~Users could set `authorId` to any member ID when creating/editing articles.~~
-Now validates that `authorId` is either null or matches authenticated user's member ID via `validateAuthorId()` helper.
+This is **not a security issue** - it's the intended trust model.
 
-### ~~HIGH: No ownership verification on edits~~ FIXED
+All authenticated ut.code(); members can edit/delete any resource (articles, members, projects). This is intentional because:
+- All members belong to the same organization
+- Collaboration and flexibility are prioritized over access restrictions
+- Members are expected to coordinate via communication, not technical barriers
 
-~~Any authenticated member could edit/delete any article, member profile, or project.~~
-Now enforces ownership checks:
-- Articles: Only author can edit/delete/publish/unpublish
-- Members: Only the member themselves can edit/delete their profile
-- Projects: Only project members can edit/delete/manage members
-Implementation: `ownership.ts` with `requireArticleOwnership()`, `requireMemberOwnership()`, `requireProjectOwnership()`
+**Implementation**: No `ownership.ts` module needed - `requireUtCodeMember()` is the only authorization check.
 
 ### LOW: No rate limiting
 
@@ -128,13 +128,11 @@ GitHub org membership cached 24h. Removed members retain access.
 | Priority   | Issue              | Fix                                                     | Status  |
 | ---------- | ------------------ | ------------------------------------------------------- | ------- |
 | ~~HIGH~~   | stats endpoint     | Add `requireUtCodeMember()` or filter to published only | ✅ DONE |
-| ~~HIGH~~   | ownership controls | Add ownership verification for edit/delete operations   | ✅ DONE |
 | ~~MEDIUM~~ | File upload        | Add MIME whitelist, folder allowlist, WebP compression  | ✅ DONE |
 | ~~MEDIUM~~ | Project role       | Use `v.picklist(["lead", "member"])`                    | ✅ DONE |
-| ~~MEDIUM~~ | Article authId     | Validate authorId matches user's member ID              | ✅ DONE |
 | LOW        | Rate limiting      | Add to public endpoints                                 | TODO    |
 | LOW        | Cache TTL          | Reduce to 4h or add invalidation                        | TODO    |
 
 ## Audit Date
 
-2024-12-15 (Updated: 2025-12-24 - Added ownership verification model)
+2024-12-15 (Updated: 2025-12-26 - Updated to trust-based security model)

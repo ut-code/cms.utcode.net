@@ -1,6 +1,6 @@
 # Project Context & Overview
 
-**Last Updated**: 2025-12-24
+**Last Updated**: 2025-12-26
 
 ## Project Identity
 
@@ -29,10 +29,10 @@ Component → *.remote.ts (DAL) → *.server.ts (DB)
 2. **DAL** (`*.remote.ts`): Auth guards via `getRequestEvent()`, exports `query`/`command`/`form`
 3. **DB** (`*.server.ts`): Pure database queries, no auth logic
 
-**Verification (2025-12-24)**:
+**Verification (2025-12-26)**:
 - ✅ All `*.remote.ts` files contain auth guards (`requireUtCodeMember()`)
 - ✅ All `*.server.ts` files are pure DB/infrastructure (no auth)
-- ✅ `ownership.ts` (renamed from `ownership.server.ts`) is business logic, not DB layer
+- ✅ Trust-based model: No `ownership.ts` needed - all ut.code(); members have full admin access
 - ✅ Exception: `src/routes/(admin)/+layout.server.ts` (SvelteKit route-level auth guard)
 
 ### Remote Functions (`$app/server`)
@@ -108,8 +108,8 @@ bun tidy             # Auto-check + fix (type + format + lint)
 
 Current knowledge documents in `docs/knowledges/`:
 
-1. **security.md** - Comprehensive security audit (2025-12-24)
-   - Ownership-based access control model
+1. **security.md** - Comprehensive security audit (2025-12-26)
+   - Trust-based security model (all ut.code(); members are mutually trusted)
    - All HIGH/MEDIUM security issues resolved
    - Remaining: LOW priority rate limiting and cache TTL
 
@@ -157,13 +157,13 @@ c7ae749 meta: use sops for Docker build secrets
 ## Current Priorities & TODOs
 
 ### Completed
-- ✅ Security audit and ownership controls
+- ✅ Security audit and trust-based access model
 - ✅ File upload validation (MIME whitelist, size limits, WebP compression)
 - ✅ LIKE wildcard escaping in search
-- ✅ Article authorId validation
 - ✅ Project role validation with picklist
 - ✅ Stats endpoint auth protection
 - ✅ All CRUD operations for members, articles, projects
+- ✅ Removed `ownership.ts` (2025-12-26) - trust-based model doesn't need resource-level checks
 
 ### Remaining (LOW Priority)
 - ⏳ Rate limiting on public endpoints (view counting, search)
@@ -176,16 +176,20 @@ c7ae749 meta: use sops for Docker build secrets
 
 ## Security Model
 
-### Access Control
-| Role                     | Read Access                           | Write Access                                            |
-| ------------------------ | ------------------------------------- | ------------------------------------------------------- |
-| Public (unauthenticated) | Published articles, members, projects | None                                                    |
-| ut.code(); members       | All resources (including drafts)      | Own resources only (ownership-based)                    |
+### Trust-Based Access Control
 
-### Ownership Rules
-- **Articles**: Only author can edit/delete/publish/unpublish
-- **Members**: Only the member themselves can edit/delete their profile
-- **Projects**: Only project members (lead or regular) can edit/delete/manage members
+**Core Principle**: All ut.code(); members are mutually trusted.
+
+| Role                     | Read Access                           | Write Access                     |
+| ------------------------ | ------------------------------------- | -------------------------------- |
+| Public (unauthenticated) | Published articles, members, projects | None                             |
+| ut.code(); members       | All resources (including drafts)      | All resources (full admin access)|
+
+### Authorization Model
+- Single auth check: `requireUtCodeMember()` for all private endpoints
+- No resource-level ownership checks needed
+- All authenticated members can create, edit, delete any article, member profile, or project
+- Trust model prioritizes collaboration over granular access control
 
 ### Security Strengths
 - No SQL injection (Drizzle ORM with parameterized queries)

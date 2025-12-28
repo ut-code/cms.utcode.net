@@ -8,7 +8,6 @@ import {
   listMembers,
   updateMember,
 } from "$lib/server/database/members.server";
-import { requireMemberOwnership } from "$lib/server/database/ownership";
 import { purgeCache } from "$lib/server/services/cloudflare/cache.server";
 import { DB_MEMBERS_LIMIT } from "$lib/shared/constants";
 
@@ -50,10 +49,7 @@ export const editMember = command(
     }),
   }),
   async ({ id, data }) => {
-    const session = await requireUtCodeMember();
-
-    // Check ownership: only the member themselves can edit their profile
-    await requireMemberOwnership(session, id);
+    await requireUtCodeMember();
 
     const result = await updateMember(id, data);
     purgeCache().catch(console.error);
@@ -62,10 +58,7 @@ export const editMember = command(
 );
 
 export const removeMember = command(v.string(), async (id) => {
-  const session = await requireUtCodeMember();
-
-  // Check ownership: only the member themselves can delete their profile
-  await requireMemberOwnership(session, id);
+  await requireUtCodeMember();
 
   await deleteMember(id);
   purgeCache().catch(console.error);

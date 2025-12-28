@@ -1,5 +1,32 @@
 # Data Models
 
+## Database Optimizations
+
+### Better Auth Performance Indexes
+
+Better Auth 推奨のパフォーマンス最適化インデックス（全て実装済み）:
+
+- ✅ `user.email` - unique constraint (自動インデックス)
+- ✅ `session.userId` - `session_userId_idx`
+- ✅ `session.token` - unique constraint (自動インデックス)
+- ✅ `account.userId` - `account_userId_idx`
+- ✅ `verification.identifier` - `verification_identifier_idx`
+
+### Additional Indexes
+
+CMS テーブル用の追加インデックス:
+
+- `member.userId` - `member_userId_idx` (user linkage lookup)
+- `article.authorId` - `article_authorId_idx` (author's articles)
+- `article.published, publishedAt` - `article_published_publishedAt_idx` (published articles sorted by date)
+- `articleSlugRedirect.oldSlug` - `article_slug_redirect_oldSlug_idx` (redirect lookup)
+- `articleSlugRedirect.articleId` - `article_slug_redirect_articleId_idx` (article's redirects)
+- `projectMember.projectId, memberId` - `projectMember_pk` (project-member junction)
+- `viewLog.resourceType, resourceId` - `view_log_resourceType_resourceId_idx` (resource view lookups)
+- `viewLog.viewedAt` - `view_log_viewedAt_idx` (time-series analytics)
+
+参考: [Better Auth Performance Guide](https://www.better-auth.com/docs/guides/optimizing-for-performance#database-optimizations)
+
 ## Schema
 
 ```
