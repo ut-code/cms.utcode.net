@@ -40,6 +40,6 @@
 	<title>New Member - ut.code(); CMS</title>
 </svelte:head>
 
-<div class="h-[calc(100vh-4rem)]">
+<div>
 	<MemberForm onSubmit={handleSubmit} submitLabel="Create" bind:isSubmitting />
 </div>

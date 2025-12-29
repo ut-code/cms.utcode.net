@@ -54,6 +54,6 @@
 	<title>New Project - ut.code(); CMS</title>
 </svelte:head>
 
-<div class="h-[calc(100vh-4rem)]">
+<div>
 		<ProjectForm {members} onSubmit={handleSubmit} submitLabel="Create" bind:isSubmitting isNew />
 </div>

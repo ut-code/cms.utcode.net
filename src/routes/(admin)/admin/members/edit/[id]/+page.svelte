@@ -97,7 +97,7 @@
 			</a>
 		</div>
 	{:else}
-		<div class="h-[calc(100vh-4rem)]">
+		<div>
 			<MemberForm
 				initialData={{
 					slug: member.slug,
@@ -110,7 +110,6 @@
 				onDelete={handleDelete}
 				submitLabel="Save"
 				bind:isSubmitting
-				viewCount={member.viewCount}
 			/>
 		</div>
 {/if}
