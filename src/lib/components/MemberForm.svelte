@@ -8,7 +8,16 @@
 	import { MemberEditor, MemberFormHeader } from "./member-form";
 
 	let {
-		initialData = { slug: "", name: "", bio: "", imageUrl: "", pageContent: "" },
+		initialData = {
+			slug: "",
+			name: "",
+			bio: "",
+			imageUrl: "",
+			githubUrl: "",
+			twitterUrl: "",
+			websiteUrl: "",
+			pageContent: "",
+		},
 		onSubmit,
 		onDelete = null,
 		submitLabel = "Save",
@@ -66,6 +75,9 @@
 		bind:slug={formData.slug}
 		bind:bio={formData.bio}
 		bind:imageUrl={formData.imageUrl}
+		bind:githubUrl={formData.githubUrl}
+		bind:twitterUrl={formData.twitterUrl}
+		bind:websiteUrl={formData.websiteUrl}
 		bind:pageContent={formData.pageContent}
 		nameError={errors["name"]}
 		slugError={errors["slug"]}

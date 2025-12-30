@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Github, Globe, Twitter } from "lucide-svelte";
 	import Markdown from "../Markdown.svelte";
 	import ImageUpload from "../image-upload.svelte";
 	import { generateSlug, validateSlug } from "$lib/shared/logic/slugs";
@@ -8,6 +9,9 @@
 		slug = $bindable(""),
 		bio = $bindable(""),
 		imageUrl = $bindable(""),
+		githubUrl = $bindable(""),
+		twitterUrl = $bindable(""),
+		websiteUrl = $bindable(""),
 		pageContent = $bindable(""),
 		nameError = null,
 		slugError = null,
@@ -17,6 +21,9 @@
 		slug?: string;
 		bio?: string;
 		imageUrl?: string;
+		githubUrl?: string;
+		twitterUrl?: string;
+		websiteUrl?: string;
 		pageContent?: string;
 		nameError?: string | null;
 		slugError?: string | null;
@@ -107,6 +114,40 @@
 				class="w-full resize-none rounded-lg border border-zinc-200 bg-white px-4 py-3 text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-0 focus:outline-none"
 				placeholder="A short bio about this member..."
 			></textarea>
+		</div>
+
+		<!-- Social Links -->
+		<div class="mt-8">
+			<p class="mb-3 text-sm font-medium text-zinc-700">Social Links</p>
+			<div class="space-y-3">
+				<div class="flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2">
+					<Github class="h-5 w-5 shrink-0 text-zinc-400" />
+					<input
+						type="url"
+						bind:value={githubUrl}
+						class="w-full border-none bg-transparent text-sm text-zinc-900 placeholder:text-zinc-400 focus:ring-0 focus:outline-none"
+						placeholder="https://github.com/username"
+					/>
+				</div>
+				<div class="flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2">
+					<Twitter class="h-5 w-5 shrink-0 text-zinc-400" />
+					<input
+						type="url"
+						bind:value={twitterUrl}
+						class="w-full border-none bg-transparent text-sm text-zinc-900 placeholder:text-zinc-400 focus:ring-0 focus:outline-none"
+						placeholder="https://x.com/username"
+					/>
+				</div>
+				<div class="flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2">
+					<Globe class="h-5 w-5 shrink-0 text-zinc-400" />
+					<input
+						type="url"
+						bind:value={websiteUrl}
+						class="w-full border-none bg-transparent text-sm text-zinc-900 placeholder:text-zinc-400 focus:ring-0 focus:outline-none"
+						placeholder="https://example.com"
+					/>
+				</div>
+			</div>
 		</div>
 
 		<!-- Page Content -->

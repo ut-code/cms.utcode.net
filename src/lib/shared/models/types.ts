@@ -30,6 +30,9 @@ export type MemberData = {
   name: string;
   bio: string;
   imageUrl: string;
+  githubUrl: string;
+  twitterUrl: string;
+  websiteUrl: string;
   pageContent: string;
 };
 
