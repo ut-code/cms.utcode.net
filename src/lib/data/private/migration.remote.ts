@@ -5,7 +5,7 @@ import {
   startDeleteAll,
   startImageCleanup,
 } from "$lib/server/services/migration/index.server";
-import { getMigrationState, resetMigration } from "$lib/server/services/migration/state.server";
+import { migrationActor } from "$lib/server/services/migration/state.server";
 import type { MigrationState } from "$lib/shared/types/migration";
 
 export const start = command(async (): Promise<{ started: boolean; message: string }> => {
@@ -16,12 +16,12 @@ export const start = command(async (): Promise<{ started: boolean; message: stri
 // Use command instead of query to bypass caching for real-time polling
 export const getStatus = command(async (): Promise<MigrationState> => {
   await requireUtCodeMember();
-  return getMigrationState();
+  return migrationActor.getState();
 });
 
 export const reset = command(async (): Promise<void> => {
   await requireUtCodeMember();
-  resetMigration();
+  migrationActor.reset();
 });
 
 export const cleanup = command(async (): Promise<{ started: boolean; message: string }> => {

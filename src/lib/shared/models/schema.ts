@@ -122,6 +122,9 @@ export const member = pgTable(
     name: text("name").notNull(),
     bio: text("bio"),
     imageUrl: text("image_url"),
+    githubUrl: text("github_url"),
+    twitterUrl: text("twitter_url"),
+    websiteUrl: text("website_url"),
     pageContent: text("page_content"),
     viewCount: integer("view_count").notNull().default(0),
     createdAt: timestamp("created_at", { mode: "date", withTimezone: true })

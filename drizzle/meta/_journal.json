@@ -43,6 +43,13 @@
       "when": 1766647447093,
       "tag": "0005_boring_rockslide",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1767024203005,
+      "tag": "0006_add-member-social-links",
+      "breakpoints": true
     }
   ]
 }

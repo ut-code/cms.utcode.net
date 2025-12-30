@@ -27,6 +27,9 @@ export const saveMember = command(
     name: v.string(),
     bio: v.nullable(v.string()),
     imageUrl: v.nullable(v.string()),
+    githubUrl: v.nullable(v.string()),
+    twitterUrl: v.nullable(v.string()),
+    websiteUrl: v.nullable(v.string()),
     pageContent: v.nullable(v.string()),
   }),
   async (data) => {
@@ -41,11 +44,14 @@ export const editMember = command(
   v.object({
     id: v.string(),
     data: v.object({
-      slug: v.optional(v.string()),
-      name: v.optional(v.string()),
-      bio: v.optional(v.nullable(v.string())),
-      imageUrl: v.optional(v.nullable(v.string())),
-      pageContent: v.optional(v.nullable(v.string())),
+      slug: v.string(),
+      name: v.string(),
+      bio: v.nullable(v.string()),
+      imageUrl: v.nullable(v.string()),
+      githubUrl: v.nullable(v.string()),
+      twitterUrl: v.nullable(v.string()),
+      websiteUrl: v.nullable(v.string()),
+      pageContent: v.nullable(v.string()),
     }),
   }),
   async ({ id, data }) => {

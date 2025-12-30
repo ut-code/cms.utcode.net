@@ -59,6 +59,9 @@ members
 ├── name         TEXT NOT NULL
 ├── bio          TEXT
 ├── imageUrl     TEXT
+├── githubUrl    TEXT
+├── twitterUrl   TEXT
+├── websiteUrl   TEXT
 ├── pageContent  TEXT
 ├── viewCount    INTEGER NOT NULL DEFAULT 0
 ├── createdAt    INTEGER NOT NULL

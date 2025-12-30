@@ -5,7 +5,7 @@
 	import { triggerSubmit } from "$lib/utils/form";
 	import { onSaveShortcut } from "$lib/utils/keyboard";
 	import { snapshot } from "$lib/utils/snapshot.svelte";
-	import { ArticleEditor, ArticleFormHeader, ArticleSettings } from "./article-form";
+	import { ArticleEditor, ArticleFormHeader } from "./article-form";
 	import { confirm } from "$lib/components/confirm-modal.svelte";
 
 	let {
@@ -23,7 +23,6 @@
 		submitLabel = "Save",
 		isSubmitting = $bindable(false),
 		articleId = null,
-		viewCount = 0,
 	}: {
 		initialData?: ArticleData;
 		authors?: Author[];
@@ -32,12 +31,10 @@
 		submitLabel?: string;
 		isSubmitting?: boolean;
 		articleId?: string | null;
-		viewCount?: number;
 	} = $props();
 
 	let formData = $state(snapshot(() => initialData));
 	let errors = $state<Record<string, string>>({});
-	let showSettings = $state(false);
 	let saveSuccess = $state(false);
 	let createRedirect = $state(false);
 
@@ -64,8 +61,6 @@
 		errors = validator.getErrors();
 
 		if (validator.hasErrors()) {
-			// Show settings panel if there are errors in settings fields
-			if (errors.slug) showSettings = true;
 			return;
 		}
 
@@ -95,46 +90,33 @@
 			window.open(`/admin/articles/${articleId}/preview`, "_blank");
 		}
 	}
-
 </script>
 
 <svelte:window onkeydown={onSaveShortcut(() => triggerSubmit(handleSubmit, isSubmitting))} />
 
-<form onsubmit={handleSubmit} class="flex h-full flex-col">
+<form onsubmit={handleSubmit} class="flex min-h-screen flex-col">
 	<ArticleFormHeader
 		bind:published={formData.published}
-		bind:showSettings
+		bind:authorId={formData.authorId}
 		bind:saveSuccess
+		{authors}
 		{isSubmitting}
 		{submitLabel}
 		{articleId}
+		{onDelete}
 		onPreview={openPreviewPage}
 	/>
 
-	<div class="flex flex-1 overflow-hidden">
-		<ArticleEditor
-			bind:title={formData.title}
-			bind:content={formData.content}
-			slug={formData.slug}
-			coverUrl={formData.coverUrl}
-			titleError={errors["title"]}
-			contentError={errors["content"]}
-			onTitleChange={handleTitleChange}
-			onOpenSettings={() => (showSettings = true)}
-		/>
-
-		<ArticleSettings
-			bind:show={showSettings}
-			bind:published={formData.published}
-			bind:slug={formData.slug}
-			bind:authorId={formData.authorId}
-			bind:coverUrl={formData.coverUrl}
-			bind:createRedirect
-			initialSlug={initialData.slug}
-			{authors}
-			slugError={errors["slug"]}
-			{onDelete}
-			{viewCount}
-		/>
-	</div>
+	<ArticleEditor
+		bind:title={formData.title}
+		bind:content={formData.content}
+		bind:slug={formData.slug}
+		bind:coverUrl={formData.coverUrl}
+		bind:createRedirect
+		initialSlug={initialData.slug}
+		titleError={errors["title"]}
+		contentError={errors["content"]}
+		slugError={errors["slug"]}
+		onTitleChange={handleTitleChange}
+	/>
 </form>

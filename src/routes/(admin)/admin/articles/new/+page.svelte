@@ -48,7 +48,7 @@
 	<title>New Article - ut.code(); CMS</title>
 </svelte:head>
 
-<div class="h-[calc(100vh-4rem)]">
+<div>
 		<ArticleForm
 			initialData={{ slug: "", title: "", content: "", coverUrl: "", authorId: defaultAuthorId, published: false }}
 			{authors}

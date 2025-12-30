@@ -17,6 +17,9 @@
 		name: string;
 		bio: string;
 		imageUrl: string;
+		githubUrl: string;
+		twitterUrl: string;
+		websiteUrl: string;
 		pageContent: string;
 	}) {
 		if (!member) return;
@@ -39,6 +42,9 @@
 					name: data.name,
 					bio: data.bio || null,
 					imageUrl: data.imageUrl || null,
+					githubUrl: data.githubUrl || null,
+					twitterUrl: data.twitterUrl || null,
+					websiteUrl: data.websiteUrl || null,
 					pageContent: data.pageContent || null,
 				},
 			});
@@ -97,20 +103,22 @@
 			</a>
 		</div>
 	{:else}
-		<div class="h-[calc(100vh-4rem)]">
+		<div>
 			<MemberForm
 				initialData={{
 					slug: member.slug,
 					name: member.name,
 					bio: member.bio ?? "",
 					imageUrl: member.imageUrl ?? "",
+					githubUrl: member.githubUrl ?? "",
+					twitterUrl: member.twitterUrl ?? "",
+					websiteUrl: member.websiteUrl ?? "",
 					pageContent: member.pageContent ?? "",
 				}}
 				onSubmit={handleSubmit}
 				onDelete={handleDelete}
 				submitLabel="Save"
 				bind:isSubmitting
-				viewCount={member.viewCount}
 			/>
 		</div>
 {/if}

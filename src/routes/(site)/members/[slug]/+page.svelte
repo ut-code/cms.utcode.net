@@ -1,9 +1,13 @@
 <script lang="ts">
+	import { Github, Globe, Twitter } from "lucide-svelte";
 	import Markdown from "$lib/components/Markdown.svelte";
 	import type { PageData } from "./$types";
 
 	const { data }: { data: PageData } = $props();
-	
+
+	const hasSocialLinks = $derived(
+		data.member?.githubUrl || data.member?.twitterUrl || data.member?.websiteUrl,
+	);
 </script>
 
 <svelte:head>
@@ -51,6 +55,43 @@
 				<h1 class="mb-2 text-2xl font-bold sm:text-3xl">{data.member.name}</h1>
 				{#if data.member.bio}
 					<p class="text-sm text-zinc-500 sm:text-base">{data.member.bio}</p>
+				{/if}
+				{#if hasSocialLinks}
+					<div class="mt-3 flex gap-3">
+						{#if data.member.githubUrl}
+							<a
+								href={data.member.githubUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-zinc-400 transition-colors hover:text-zinc-900"
+								aria-label="GitHub"
+							>
+								<Github class="h-5 w-5" />
+							</a>
+						{/if}
+						{#if data.member.twitterUrl}
+							<a
+								href={data.member.twitterUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-zinc-400 transition-colors hover:text-zinc-900"
+								aria-label="Twitter"
+							>
+								<Twitter class="h-5 w-5" />
+							</a>
+						{/if}
+						{#if data.member.websiteUrl}
+							<a
+								href={data.member.websiteUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-zinc-400 transition-colors hover:text-zinc-900"
+								aria-label="Website"
+							>
+								<Globe class="h-5 w-5" />
+							</a>
+						{/if}
+					</div>
 				{/if}
 			</div>
 		</div>

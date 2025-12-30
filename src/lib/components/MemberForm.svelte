@@ -5,27 +5,33 @@
 	import { triggerSubmit } from "$lib/utils/form";
 	import { onSaveShortcut } from "$lib/utils/keyboard";
 	import { snapshot } from "$lib/utils/snapshot.svelte";
-	import { MemberEditor, MemberFormHeader, MemberSettings } from "./member-form";
+	import { MemberEditor, MemberFormHeader } from "./member-form";
 
 	let {
-		initialData = { slug: "", name: "", bio: "", imageUrl: "", pageContent: "" },
+		initialData = {
+			slug: "",
+			name: "",
+			bio: "",
+			imageUrl: "",
+			githubUrl: "",
+			twitterUrl: "",
+			websiteUrl: "",
+			pageContent: "",
+		},
 		onSubmit,
 		onDelete = null,
 		submitLabel = "Save",
 		isSubmitting = $bindable(false),
-		viewCount = 0,
 	}: {
 		initialData?: MemberData;
 		onSubmit: (data: MemberData) => Promise<void>;
 		onDelete?: (() => Promise<void>) | null;
 		submitLabel?: string;
 		isSubmitting?: boolean;
-		viewCount?: number;
 	} = $props();
 
 	let formData = $state(snapshot(() => initialData));
 	let errors = $state<Record<string, string>>({});
-	let showSettings = $state(false);
 
 	function handleNameChange() {
 		if (!formData.slug || formData.slug === generateSlug(initialData.name)) {
@@ -47,7 +53,6 @@
 		errors = validator.getErrors();
 
 		if (validator.hasErrors()) {
-			if (errors.slug) showSettings = true;
 			return;
 		}
 
@@ -62,32 +67,20 @@
 
 <svelte:window onkeydown={onSaveShortcut(() => triggerSubmit(handleSubmit, isSubmitting))} />
 
-<form onsubmit={handleSubmit} class="flex h-full flex-col">
-	<MemberFormHeader
-		bind:showSettings
-		{isSubmitting}
-		{submitLabel}
+<form onsubmit={handleSubmit} class="flex min-h-screen flex-col">
+	<MemberFormHeader {isSubmitting} {submitLabel} {onDelete} />
+
+	<MemberEditor
+		bind:name={formData.name}
+		bind:slug={formData.slug}
+		bind:bio={formData.bio}
+		bind:imageUrl={formData.imageUrl}
+		bind:githubUrl={formData.githubUrl}
+		bind:twitterUrl={formData.twitterUrl}
+		bind:websiteUrl={formData.websiteUrl}
+		bind:pageContent={formData.pageContent}
+		nameError={errors["name"]}
+		slugError={errors["slug"]}
+		onNameChange={handleNameChange}
 	/>
-
-	<div class="flex flex-1 overflow-hidden">
-		<MemberEditor
-			bind:name={formData.name}
-			bind:bio={formData.bio}
-			bind:pageContent={formData.pageContent}
-			slug={formData.slug}
-			imageUrl={formData.imageUrl}
-			nameError={errors["name"]}
-			onNameChange={handleNameChange}
-			onOpenSettings={() => (showSettings = true)}
-		/>
-
-		<MemberSettings
-			bind:show={showSettings}
-			bind:slug={formData.slug}
-			bind:imageUrl={formData.imageUrl}
-			slugError={errors["slug"]}
-			{viewCount}
-			{onDelete}
-		/>
-	</div>
 </form>

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { untrack } from "svelte";
 	import {
 		AlertTriangle,
 		CheckCircle,
@@ -11,27 +10,22 @@
 		XCircle,
 	} from "lucide-svelte";
 	import { confirm } from "$lib/components/confirm-modal.svelte";
-	import { cleanup, deleteAll, getStatus, reset, start } from "$lib/data/private/migration.remote";
+	import { cleanup, deleteAll, reset, start } from "$lib/data/private/migration.remote";
 	import type { MigrationState } from "$lib/shared/types/migration";
 
 	let migrationState: MigrationState | null = $state(null);
-	let pollInterval: ReturnType<typeof setInterval> | null = $state(null);
 	let logsContainer: HTMLPreElement | null = $state(null);
 	let isStarting = $state(false);
+	let connectionStatus: "connecting" | "connected" | "error" = $state("connecting");
 
 	const isRunning = $derived.by(() => migrationState?.status === "running");
 	const isDisabled = $derived.by(() => isStarting || isRunning);
 
-	async function fetchStatus() {
-		// Check if user is at bottom before fetch
-		const wasAtBottom = logsContainer
-			? logsContainer.scrollHeight - logsContainer.scrollTop <= logsContainer.clientHeight + 10
-			: true;
-
-		migrationState = await getStatus();
-
-		// Only auto-scroll if user was already at bottom
-		if (logsContainer && wasAtBottom) {
+	function scrollToBottomIfNeeded() {
+		if (!logsContainer) return;
+		const wasAtBottom =
+			logsContainer.scrollHeight - logsContainer.scrollTop <= logsContainer.clientHeight + 10;
+		if (wasAtBottom) {
 			logsContainer.scrollTop = logsContainer.scrollHeight;
 		}
 	}
@@ -40,10 +34,7 @@
 		if (isDisabled) return;
 		isStarting = true;
 		try {
-			const result = await start();
-			if (result.started) {
-				await fetchStatus();
-			}
+			await start();
 		} finally {
 			isStarting = false;
 		}
@@ -51,17 +42,13 @@
 
 	async function handleReset() {
 		await reset();
-		migrationState = await getStatus();
 	}
 
 	async function handleCleanup() {
 		if (isDisabled) return;
 		isStarting = true;
 		try {
-			const result = await cleanup();
-			if (result.started) {
-				await fetchStatus();
-			}
+			await cleanup();
 		} finally {
 			isStarting = false;
 		}
@@ -81,27 +68,41 @@
 
 		isStarting = true;
 		try {
-			const result = await deleteAll();
-			if (result.started) {
-				await fetchStatus();
-			}
+			await deleteAll();
 		} finally {
 			isStarting = false;
 		}
 	}
 
-	// Poll every 1s to keep status in sync, cleanup on unmount
-	// Use untrack to prevent infinite loop from migrationState changes
+	// SSE connection for real-time updates
 	$effect(() => {
-		// Initial fetch - wrapped in untrack to prevent reactive dependencies
-		untrack(() => {
-			fetchStatus().catch(console.error);
+		const eventSource = new EventSource("/api/migration/events");
+
+		eventSource.addEventListener("init", (event) => {
+			connectionStatus = "connected";
+			migrationState = JSON.parse(event.data);
+			scrollToBottomIfNeeded();
 		});
 
-		// Start polling
-		pollInterval = setInterval(fetchStatus, 1000);
+		eventSource.addEventListener("update", (event) => {
+			const update = JSON.parse(event.data);
+			migrationState = {
+				status: update.status,
+				startedAt: update.startedAt,
+				completedAt: update.completedAt,
+				result: update.result,
+				error: update.error,
+				logs: [...(migrationState?.logs ?? []), ...update.newLogs],
+			};
+			scrollToBottomIfNeeded();
+		});
+
+		eventSource.addEventListener("error", () => {
+			connectionStatus = "error";
+		});
+
 		return () => {
-			if (pollInterval) clearInterval(pollInterval);
+			eventSource.close();
 		};
 	});
 </script>
@@ -128,6 +129,25 @@
 					<h1 class="text-lg font-bold text-base-content sm:text-2xl">Legacy Data Migration</h1>
 					<p class="text-xs text-base-content/60 sm:text-sm">Import data from old utcode.net repository</p>
 				</div>
+			</div>
+			<!-- Connection status indicator -->
+			<div class="flex items-center gap-2">
+				{#if connectionStatus === "connecting"}
+					<span class="badge badge-ghost gap-1">
+						<span class="loading loading-xs loading-spinner"></span>
+						Connecting
+					</span>
+				{:else if connectionStatus === "connected"}
+					<span class="badge badge-success gap-1">
+						<span class="h-2 w-2 rounded-full bg-current"></span>
+						Live
+					</span>
+				{:else}
+					<span class="badge badge-error gap-1">
+						<XCircle class="h-3 w-3" />
+						Disconnected
+					</span>
+				{/if}
 			</div>
 		</div>
 	</header>
@@ -172,8 +192,12 @@
 			</div>
 
 			<!-- Action buttons -->
-			<div class="mb-4 grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
-				<button class="btn btn-sm gap-2 btn-warning sm:btn-md disabled:cursor-not-allowed disabled:opacity-50" onclick={handleStart} disabled={isDisabled}>
+			<div class="mb-4 flex flex-wrap gap-2">
+				<button
+					class="btn btn-warning gap-2 rounded-lg shadow-sm transition-all hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
+					onclick={handleStart}
+					disabled={isDisabled}
+				>
 					{#if isStarting}
 						<span class="loading loading-spinner loading-xs"></span>
 					{:else}
@@ -181,7 +205,11 @@
 					{/if}
 					Start Migration
 				</button>
-				<button class="btn btn-sm gap-2 btn-secondary sm:btn-md disabled:cursor-not-allowed disabled:opacity-50" onclick={handleCleanup} disabled={isDisabled}>
+				<button
+					class="btn btn-secondary gap-2 rounded-lg shadow-sm transition-all hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
+					onclick={handleCleanup}
+					disabled={isDisabled}
+				>
 					{#if isStarting}
 						<span class="loading loading-spinner loading-xs"></span>
 					{:else}
@@ -189,7 +217,11 @@
 					{/if}
 					Cleanup Invalid URLs
 				</button>
-				<button class="btn btn-sm gap-2 btn-error sm:btn-md disabled:cursor-not-allowed disabled:opacity-50" onclick={handleDeleteAll} disabled={isDisabled}>
+				<button
+					class="btn btn-error gap-2 rounded-lg shadow-sm transition-all hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
+					onclick={handleDeleteAll}
+					disabled={isDisabled}
+				>
 					{#if isStarting}
 						<span class="loading loading-spinner loading-xs"></span>
 					{:else}
@@ -198,7 +230,10 @@
 					Delete All Data
 				</button>
 				{#if migrationState?.status === "completed" || migrationState?.status === "error"}
-					<button class="btn btn-sm gap-2 btn-ghost sm:btn-md" onclick={handleReset}>
+					<button
+						class="btn btn-ghost gap-2 rounded-lg transition-all hover:bg-base-200"
+						onclick={handleReset}
+					>
 						<RotateCcw class="h-4 w-4" />
 						Reset
 					</button>
@@ -271,8 +306,8 @@
 					id="logs"
 					bind:this={logsContainer}
 					class="h-80 overflow-auto rounded-lg bg-base-300 p-4 font-mono text-xs whitespace-pre-wrap">{#if migrationState?.logs.length}{migrationState.logs.join(
-							"\n",
-						)}{:else}No logs yet. Click "Start Migration" to begin.{/if}</pre>
+						"\n",
+					)}{:else}No logs yet. Click "Start Migration" to begin.{/if}</pre>
 			</div>
 
 			<!-- Timestamps -->

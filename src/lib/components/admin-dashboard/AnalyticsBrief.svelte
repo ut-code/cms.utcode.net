@@ -2,25 +2,6 @@
 	import { ArrowRight, BarChart3, Eye, FileText, FolderKanban, Users } from "lucide-svelte";
 	import ViewTrendChart from "$lib/components/analytics/ViewTrendChart.svelte";
 
-	interface TopItem {
-		id: string;
-		slug: string;
-		viewCount: number;
-	}
-
-	interface TopArticle extends TopItem {
-		title: string;
-		author?: { name: string } | null;
-	}
-
-	interface TopProject extends TopItem {
-		name: string;
-	}
-
-	interface TopMember extends TopItem {
-		name: string;
-	}
-
 	interface ViewTrendData {
 		date: string;
 		count: number;
@@ -31,9 +12,6 @@
 		totalArticleViews: number;
 		totalProjectViews: number;
 		totalMemberViews: number;
-		topArticles: TopArticle[];
-		topProjects: TopProject[];
-		topMembers: TopMember[];
 		viewTrend?: ViewTrendData[];
 	}
 
@@ -42,25 +20,8 @@
 		totalArticleViews,
 		totalProjectViews,
 		totalMemberViews,
-		topArticles,
-		topProjects,
-		topMembers,
 		viewTrend = [],
 	}: Props = $props();
-
-	const topThreeArticles = $derived(topArticles.slice(0, 3));
-	const topThreeProjects = $derived(topProjects.slice(0, 3));
-	const topThreeMembers = $derived(topMembers.slice(0, 3));
-
-	const recentTrend = $derived(() => {
-		if (viewTrend.length < 2) return { value: 0, isPositive: true };
-		const recent = viewTrend.slice(-7);
-		const older = viewTrend.slice(-14, -7);
-		const recentSum = recent.reduce((sum, d) => sum + d.count, 0);
-		const olderSum = older.reduce((sum, d) => sum + d.count, 0);
-		const change = olderSum === 0 ? 0 : ((recentSum - olderSum) / olderSum) * 100;
-		return { value: Math.abs(change), isPositive: change >= 0 };
-	});
 </script>
 
 <section class="animate-fade-slide-in stagger-5 glow-soft rounded-2xl bg-base-100 p-4 sm:p-6">
@@ -119,96 +80,4 @@
 		</div>
 	{/if}
 
-	<!-- Top Content Lists -->
-	<div class="space-y-4">
-		<!-- Top Articles -->
-		{#if topThreeArticles.length > 0}
-			<div>
-				<h3 class="mb-2 text-xs font-semibold text-base-content/60">Top Articles</h3>
-				<div class="space-y-2">
-					{#each topThreeArticles as article, index (article.id)}
-						<a
-							href="/articles/{article.slug}"
-							target="_blank"
-							class="group flex items-center gap-2 rounded-lg border border-base-300/50 bg-base-200/50 p-2 transition-all hover:border-primary/30 hover:bg-primary/5"
-						>
-							<span
-								class="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-secondary/10 text-xs font-bold text-secondary"
-							>
-								{index + 1}
-							</span>
-							<div class="min-w-0 flex-1">
-								<p class="truncate text-sm font-medium">{article.title}</p>
-								{#if article.author}
-									<p class="text-xs text-base-content/40">{article.author.name}</p>
-								{/if}
-							</div>
-							<div class="flex items-center gap-1 text-xs text-base-content/60">
-								<Eye class="h-3 w-3" />
-								<span>{article.viewCount.toLocaleString()}</span>
-							</div>
-						</a>
-					{/each}
-				</div>
-			</div>
-		{/if}
-
-		<!-- Top Projects -->
-		{#if topThreeProjects.length > 0}
-			<div>
-				<h3 class="mb-2 text-xs font-semibold text-base-content/60">Top Projects</h3>
-				<div class="space-y-2">
-					{#each topThreeProjects as project, index (project.id)}
-						<a
-							href="/projects/{project.slug}"
-							target="_blank"
-							class="group flex items-center gap-2 rounded-lg border border-base-300/50 bg-base-200/50 p-2 transition-all hover:border-primary/30 hover:bg-primary/5"
-						>
-							<span
-								class="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-accent/10 text-xs font-bold text-accent"
-							>
-								{index + 1}
-							</span>
-							<div class="min-w-0 flex-1">
-								<p class="truncate text-sm font-medium">{project.name}</p>
-							</div>
-							<div class="flex items-center gap-1 text-xs text-base-content/60">
-								<Eye class="h-3 w-3" />
-								<span>{project.viewCount.toLocaleString()}</span>
-							</div>
-						</a>
-					{/each}
-				</div>
-			</div>
-		{/if}
-
-		<!-- Top Members -->
-		{#if topThreeMembers.length > 0}
-			<div>
-				<h3 class="mb-2 text-xs font-semibold text-base-content/60">Top Member Pages</h3>
-				<div class="space-y-2">
-					{#each topThreeMembers as member, index (member.id)}
-						<a
-							href="/members/{member.slug}"
-							target="_blank"
-							class="group flex items-center gap-2 rounded-lg border border-base-300/50 bg-base-200/50 p-2 transition-all hover:border-primary/30 hover:bg-primary/5"
-						>
-							<span
-								class="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-info/10 text-xs font-bold text-info"
-							>
-								{index + 1}
-							</span>
-							<div class="min-w-0 flex-1">
-								<p class="truncate text-sm font-medium">{member.name}</p>
-							</div>
-							<div class="flex items-center gap-1 text-xs text-base-content/60">
-								<Eye class="h-3 w-3" />
-								<span>{member.viewCount.toLocaleString()}</span>
-							</div>
-						</a>
-					{/each}
-				</div>
-			</div>
-		{/if}
-	</div>
 </section>
