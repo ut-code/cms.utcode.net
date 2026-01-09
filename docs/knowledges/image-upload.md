@@ -42,8 +42,38 @@ const MAX_BASE64_SIZE = Math.ceil(10 * 1024 * 1024 * 1.37);
 - Base64 adds ~37% overhead
 - 10MB file → ~13.7MB base64
 
+## S3 Key Format
+
+Keys follow the format: `{folder}/{uuid}-{filename}.{ext}`
+
+Example: `articles/a1b2c3d4-e5f6-7890-abcd-ef1234567890-cover.webp`
+
+Allowed folders: `images`, `uploads`, `covers`, `avatars`, `articles`, `members`, `projects`
+
+## S3 Cleanup
+
+When images are changed or removed, the old S3 file is automatically deleted:
+
+- **Change**: Old image deleted after new upload succeeds
+- **Remove**: Image deleted immediately when "Remove" button clicked
+- **External URLs**: Non-S3 URLs (different host) are ignored safely
+
+The `removeByUrl` command in `storage.remote.ts` handles URL-to-key conversion server-side.
+
+## User Input Methods
+
+The `ImageUpload` component supports:
+
+1. **Click**: Click to open file picker
+2. **Drag & Drop**: Drag image files onto the component
+3. **Paste (Ctrl+V)**: Paste from clipboard anywhere on the page
+
+Paste is handled globally via `svelte:window onpaste` and skips INPUT/TEXTAREA elements to avoid conflicts.
+
 ## Design Decisions
 
 - **Never reject user uploads**: Compress instead of refusing
 - **Quality over size**: Try high quality first, only reduce if needed
 - **GIF exception**: GIFs skip compression (animation would be lost)
+- **Clean up S3**: Delete old files on change/remove to avoid orphans
+- **Fire-and-forget cleanup**: S3 deletion errors don't block the UI

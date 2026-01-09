@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { AlertCircle, Loader2, RotateCw, Upload, X } from "lucide-svelte";
-	import { upload } from "$lib/data/private/storage.remote";
+	import { removeByUrl, upload } from "$lib/data/private/storage.remote";
 	import {
 		type AllowedFolder,
 		isAcceptedImageType,
@@ -55,6 +55,9 @@
 		// Compress image before upload
 		const processedFile = await compressImage(file);
 
+		// Store old URL to delete after successful upload
+		const oldUrl = value;
+
 		// Immediate preview
 		previewUrl = URL.createObjectURL(processedFile);
 		isUploading = true;
@@ -72,6 +75,11 @@
 			});
 			value = result.url;
 			lastFailedFile = null; // Clear on success
+
+			// Delete old S3 image after successful upload
+			if (oldUrl) {
+				removeByUrl(oldUrl).catch(console.error);
+			}
 		} catch {
 			error = "Upload failed. Please try again.";
 			previewUrl = null;
@@ -128,6 +136,10 @@
 	}
 
 	function clearImage() {
+		// Delete S3 image if it exists
+		if (value) {
+			removeByUrl(value).catch(console.error);
+		}
 		value = "";
 		previewUrl = null;
 		error = null;
