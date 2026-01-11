@@ -31,9 +31,11 @@ describe("env production guard", () => {
     process.env.UNSAFE_DISABLE_AUTH = "true";
 
     expect(() => {
-      // Force re-import to trigger validation
+      // Force re-import to clear cache and trigger fresh validation
       delete require.cache[require.resolve("./env.server.ts")];
-      require("./env.server.ts");
+      const { env } = require("./env.server.ts");
+      // Access env to trigger lazy evaluation
+      void env.DATABASE_URL;
     }).toThrow("UNSAFE_DISABLE_AUTH cannot be enabled in production");
   });
 
@@ -43,7 +45,8 @@ describe("env production guard", () => {
 
     expect(() => {
       delete require.cache[require.resolve("./env.server.ts")];
-      require("./env.server.ts");
+      const { env } = require("./env.server.ts");
+      void env.DATABASE_URL;
     }).not.toThrow();
   });
 
@@ -53,7 +56,8 @@ describe("env production guard", () => {
 
     expect(() => {
       delete require.cache[require.resolve("./env.server.ts")];
-      require("./env.server.ts");
+      const { env } = require("./env.server.ts");
+      void env.DATABASE_URL;
     }).not.toThrow();
   });
 });

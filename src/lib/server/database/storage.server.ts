@@ -1,5 +1,5 @@
 import { env } from "$lib/env/env.server";
-import { bucket, ensureBucket, s3 } from "$lib/server/drivers/s3";
+import { ensureBucket, getBucket, s3 } from "$lib/server/drivers/s3";
 
 export async function uploadBuffer(
   buffer: Buffer,
@@ -11,7 +11,7 @@ export async function uploadBuffer(
 
   const key = `${path}/${crypto.randomUUID()}-${fileName}`;
 
-  await s3.putObject(bucket, key, buffer, buffer.length, {
+  await s3.putObject(getBucket(), key, buffer, buffer.length, {
     "Content-Type": contentType,
   });
 
@@ -20,11 +20,11 @@ export async function uploadBuffer(
 }
 
 export async function deleteFile(key: string): Promise<void> {
-  await s3.removeObject(bucket, key);
+  await s3.removeObject(getBucket(), key);
 }
 
 export async function listFiles(prefix: string): Promise<string[]> {
-  const stream = s3.listObjects(bucket, prefix, true);
+  const stream = s3.listObjects(getBucket(), prefix, true);
   const keys: string[] = [];
 
   return new Promise((resolve, reject) => {
