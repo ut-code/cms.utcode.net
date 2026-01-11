@@ -1,58 +1,65 @@
 <script lang="ts">
+	import { Github, Globe, Twitter } from "lucide-svelte";
 	import Markdown from "../Markdown.svelte";
+	import ImageUpload from "../image-upload.svelte";
+	import { generateSlug, validateSlug } from "$lib/shared/logic/slugs";
 
 	let {
 		name = $bindable(""),
-		slug = "",
+		slug = $bindable(""),
 		bio = $bindable(""),
-		imageUrl = "",
+		imageUrl = $bindable(""),
+		githubUrl = $bindable(""),
+		twitterUrl = $bindable(""),
+		websiteUrl = $bindable(""),
 		pageContent = $bindable(""),
 		nameError = null,
+		slugError = null,
 		onNameChange,
-		onOpenSettings,
 	}: {
 		name?: string;
 		slug?: string;
 		bio?: string;
 		imageUrl?: string;
+		githubUrl?: string;
+		twitterUrl?: string;
+		websiteUrl?: string;
 		pageContent?: string;
 		nameError?: string | null;
+		slugError?: string | null;
 		onNameChange?: () => void;
-		onOpenSettings?: () => void;
 	} = $props();
 
 	let showPageContentPreview = $state(false);
+
+	// Real-time slug validation
+	let isSlugValid = $derived(slug.length === 0 || validateSlug(slug));
+	let validationError = $derived.by(() => {
+		if (slug.length === 0) return null;
+		if (!validateSlug(slug)) {
+			return "Lowercase letters, numbers, and hyphens only";
+		}
+		return null;
+	});
+	let displayError = $derived(slugError || validationError);
 
 	function handleNameInput() {
 		if (onNameChange) {
 			onNameChange();
 		}
 	}
+
+	function handleSlugInput(e: Event) {
+		const input = e.target as HTMLInputElement;
+		slug = generateSlug(input.value);
+	}
 </script>
 
-<main class="flex flex-1 flex-col overflow-y-auto bg-white">
+<main class="flex-1 bg-white">
 	<div class="mx-auto w-full max-w-2xl flex-1 px-4 py-8 sm:px-8">
 		<!-- Profile Image -->
 		<div class="mb-8 flex justify-center">
-			<button
-				type="button"
-				onclick={onOpenSettings}
-				class="group rounded-full transition-all hover:ring-4 hover:ring-primary/20"
-			>
-				{#if imageUrl}
-					<img
-						src={imageUrl}
-						alt={name || "Profile"}
-						class="h-32 w-32 rounded-full object-cover ring-4 ring-zinc-100 transition-opacity group-hover:opacity-90"
-					/>
-				{:else}
-					<div
-						class="flex h-32 w-32 items-center justify-center rounded-full bg-zinc-100 text-4xl font-bold text-zinc-300 transition-colors group-hover:bg-primary/10 group-hover:text-primary"
-					>
-						{name ? name.charAt(0).toUpperCase() : "?"}
-					</div>
-				{/if}
-			</button>
+			<ImageUpload bind:value={imageUrl} folder="members" label="Profile image" aspect="1/1" />
 		</div>
 
 		<!-- Name Input -->
@@ -69,16 +76,33 @@
 			<p class="mt-1 text-center text-sm text-red-500">{nameError}</p>
 		{/if}
 
-		<!-- Username -->
-		<button
-			type="button"
-			onclick={onOpenSettings}
-			class="mx-auto mt-2 block rounded-lg px-3 py-1 transition-colors hover:bg-primary/5"
-		>
-			<span class="text-sm text-zinc-500 hover:text-primary">
-				@{slug || "username"}
-			</span>
-		</button>
+		<!-- Username/Slug Input -->
+		<div class="mt-4 space-y-1">
+			<p
+				class="text-center font-mono text-sm"
+				class:text-red-500={displayError}
+				class:text-emerald-600={isSlugValid && slug.length > 0}
+				class:text-zinc-500={!displayError && !isSlugValid}
+			>
+				/members/{slug || "..."}
+			</p>
+			<div class="mx-auto flex max-w-xs rounded-lg border border-zinc-200 bg-white">
+				<span class="shrink-0 border-r border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-500">
+					@
+				</span>
+				<input
+					type="text"
+					value={slug}
+					oninput={handleSlugInput}
+					class="w-full rounded-r-lg border-none bg-transparent px-3 py-2 font-mono text-sm text-zinc-900 focus:ring-0 focus:outline-none"
+					class:text-red-600={displayError}
+					placeholder="username"
+				/>
+			</div>
+			{#if displayError}
+				<p class="text-center text-xs text-red-500">{displayError}</p>
+			{/if}
+		</div>
 
 		<!-- Bio -->
 		<div class="mt-8">
@@ -90,6 +114,40 @@
 				class="w-full resize-none rounded-lg border border-zinc-200 bg-white px-4 py-3 text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-0 focus:outline-none"
 				placeholder="A short bio about this member..."
 			></textarea>
+		</div>
+
+		<!-- Social Links -->
+		<div class="mt-8">
+			<p class="mb-3 text-sm font-medium text-zinc-700">Social Links</p>
+			<div class="space-y-3">
+				<div class="flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2">
+					<Github class="h-5 w-5 shrink-0 text-zinc-400" />
+					<input
+						type="url"
+						bind:value={githubUrl}
+						class="w-full border-none bg-transparent text-sm text-zinc-900 placeholder:text-zinc-400 focus:ring-0 focus:outline-none"
+						placeholder="https://github.com/username"
+					/>
+				</div>
+				<div class="flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2">
+					<Twitter class="h-5 w-5 shrink-0 text-zinc-400" />
+					<input
+						type="url"
+						bind:value={twitterUrl}
+						class="w-full border-none bg-transparent text-sm text-zinc-900 placeholder:text-zinc-400 focus:ring-0 focus:outline-none"
+						placeholder="https://x.com/username"
+					/>
+				</div>
+				<div class="flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2">
+					<Globe class="h-5 w-5 shrink-0 text-zinc-400" />
+					<input
+						type="url"
+						bind:value={websiteUrl}
+						class="w-full border-none bg-transparent text-sm text-zinc-900 placeholder:text-zinc-400 focus:ring-0 focus:outline-none"
+						placeholder="https://example.com"
+					/>
+				</div>
+			</div>
 		</div>
 
 		<!-- Page Content -->

@@ -105,7 +105,7 @@
 		</a>
 	</div>
 {:else}
-	<div class="h-[calc(100vh-4rem)]">
+	<div>
 		<ArticleForm
 			initialData={{
 				slug: article.slug,
@@ -121,7 +121,6 @@
 			submitLabel="Save"
 			bind:isSubmitting
 			articleId={article.id}
-			viewCount={article.viewCount}
 		/>
 	</div>
 {/if}

@@ -7,7 +7,6 @@
 	import { snapshot } from "$lib/utils/snapshot.svelte";
 	import ProjectEditor from "./project-form/ProjectEditor.svelte";
 	import ProjectFormHeader from "./project-form/ProjectFormHeader.svelte";
-	import ProjectSettings from "./project-form/ProjectSettings.svelte";
 
 	let {
 		initialData = {
@@ -27,7 +26,6 @@
 		submitLabel = "Save",
 		isSubmitting = $bindable(false),
 		isNew = false,
-		viewCount = 0,
 	}: {
 		initialData?: ProjectData;
 		members?: Member[];
@@ -36,12 +34,11 @@
 		submitLabel?: string;
 		isSubmitting?: boolean;
 		isNew?: boolean;
-		viewCount?: number;
 	} = $props();
 
 	let formData = $state(snapshot(() => initialData));
 	let errors = $state<Record<string, string>>({});
-	let showSettings = $state(false);
+	let saveSuccess = $state(false);
 
 	function handleNameChange() {
 		if (!formData.slug || formData.slug === generateSlug(initialData.name)) {
@@ -62,19 +59,19 @@
 
 		if (isNew && !formData.leadMemberId) {
 			validator.validate("leadMemberId", "", () => "Lead member is required");
-			showSettings = true;
 		}
 
 		errors = validator.getErrors();
 
 		if (validator.hasErrors()) {
-			if (errors.slug || errors.leadMemberId) showSettings = true;
 			return;
 		}
 
 		isSubmitting = true;
+		saveSuccess = false;
 		try {
 			await onSubmit(formData);
+			saveSuccess = true;
 		} finally {
 			isSubmitting = false;
 		}
@@ -83,41 +80,26 @@
 
 <svelte:window onkeydown={onSaveShortcut(() => triggerSubmit(handleSubmit, isSubmitting))} />
 
-<form onsubmit={handleSubmit} class="flex h-full flex-col">
+<form onsubmit={handleSubmit} class="flex min-h-screen flex-col">
 	<ProjectFormHeader
-		category={formData.category}
-		bind:showSettings
+		bind:leadMemberId={formData.leadMemberId}
+		bind:saveSuccess
+		{members}
 		{isSubmitting}
 		{submitLabel}
-		onToggleSettings={() => (showSettings = !showSettings)}
+		{onDelete}
 	/>
 
-	<div class="flex flex-1 overflow-hidden">
-		<ProjectEditor
-			bind:name={formData.name}
-			bind:description={formData.description}
-			bind:content={formData.content}
-			slug={formData.slug}
-			coverUrl={formData.coverUrl}
-			{errors}
-			onNameChange={handleNameChange}
-			onOpenSettings={() => (showSettings = true)}
-		/>
-
-		<ProjectSettings
-			show={showSettings}
-			bind:category={formData.category}
-			bind:slug={formData.slug}
-			bind:leadMemberId={formData.leadMemberId}
-			bind:coverUrl={formData.coverUrl}
-			bind:repoUrl={formData.repoUrl}
-			bind:demoUrl={formData.demoUrl}
-			{members}
-			{errors}
-			{isNew}
-			{viewCount}
-			onClose={() => (showSettings = false)}
-			{onDelete}
-		/>
-	</div>
+	<ProjectEditor
+		bind:name={formData.name}
+		bind:description={formData.description}
+		bind:content={formData.content}
+		bind:slug={formData.slug}
+		bind:coverUrl={formData.coverUrl}
+		bind:category={formData.category}
+		bind:repoUrl={formData.repoUrl}
+		bind:demoUrl={formData.demoUrl}
+		{errors}
+		onNameChange={handleNameChange}
+	/>
 </form>

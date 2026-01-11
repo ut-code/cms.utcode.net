@@ -1,16 +1,19 @@
 <script lang="ts">
-	import { ArrowLeft, Loader2, Settings } from "lucide-svelte";
+	import { ArrowLeft, Loader2, MoreHorizontal, Trash2 } from "lucide-svelte";
 	import { goto } from "$app/navigation";
+	import { DropdownMenu } from "bits-ui";
 
 	let {
-		showSettings = $bindable(false),
 		isSubmitting = false,
 		submitLabel = "Save",
+		onDelete = null,
 	}: {
-		showSettings?: boolean;
 		isSubmitting?: boolean;
 		submitLabel?: string;
+		onDelete?: (() => Promise<void>) | null;
 	} = $props();
+
+	let moreMenuOpen = $state(false);
 </script>
 
 <header
@@ -29,18 +32,30 @@
 	</div>
 
 	<div class="flex items-center gap-1 sm:gap-2">
-		<!-- Settings Toggle -->
-		<button
-			type="button"
-			onclick={() => (showSettings = !showSettings)}
-			class="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm transition-colors sm:px-3 sm:py-2 {showSettings
-				? 'bg-zinc-900 text-white'
-				: 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900'}"
-			aria-label="Toggle settings"
-		>
-			<Settings class="h-4 w-4" />
-			<span class="hidden sm:inline">Settings</span>
-		</button>
+		<!-- More Menu (Delete) -->
+		{#if onDelete}
+			<DropdownMenu.Root bind:open={moreMenuOpen}>
+				<DropdownMenu.Trigger
+					class="flex items-center rounded-lg p-1.5 text-zinc-600 transition-colors hover:bg-zinc-100 sm:p-2"
+					aria-label="More options"
+				>
+					<MoreHorizontal class="h-4 w-4" />
+				</DropdownMenu.Trigger>
+				<DropdownMenu.Content
+					class="z-50 mt-1 min-w-36 rounded-lg border border-zinc-200 bg-white p-1 shadow-lg"
+					sideOffset={4}
+					align="end"
+				>
+					<DropdownMenu.Item
+						class="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm text-red-600 transition-colors hover:bg-red-50"
+						onSelect={() => onDelete?.()}
+					>
+						<Trash2 class="h-4 w-4" />
+						Delete member
+					</DropdownMenu.Item>
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
+		{/if}
 
 		<!-- Save Button -->
 		<button

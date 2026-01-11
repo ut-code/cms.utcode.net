@@ -1,10 +1,11 @@
 import * as v from "valibot";
 import { command } from "$app/server";
+import { env } from "$lib/env/env.server";
 import { requireUtCodeMember } from "$lib/server/database/auth.server";
 import { compressImage } from "$lib/server/database/image.server";
 import { deleteFile, uploadBuffer } from "$lib/server/database/storage.server";
 import { ACCEPTED_IMAGE_TYPES, ALLOWED_FOLDERS } from "$lib/shared/logic/image";
-import { S3KeySchema } from "$lib/shared/logic/storage";
+import { extractS3KeyFromUrl, S3KeySchema } from "$lib/shared/logic/storage";
 
 /** Allowed folder paths for uploads */
 const FolderSchema = v.optional(v.picklist([...ALLOWED_FOLDERS]));
@@ -38,4 +39,22 @@ export const upload = command(UploadSchema, async ({ data, type, name, folder })
 export const remove = command(S3KeySchema, async (key) => {
   await requireUtCodeMember();
   await deleteFile(key);
+});
+
+/**
+ * Delete an image by its URL
+ * Only works for S3-hosted images (checks against S3_PUBLIC_URL)
+ * Returns true if deleted, false if URL was not an S3 image
+ */
+export const removeByUrl = command(v.string(), async (url) => {
+  await requireUtCodeMember();
+
+  const key = extractS3KeyFromUrl(url, env.S3_PUBLIC_URL);
+  if (!key) {
+    // Not an S3 URL or invalid key - nothing to delete
+    return false;
+  }
+
+  await deleteFile(key);
+  return true;
 });

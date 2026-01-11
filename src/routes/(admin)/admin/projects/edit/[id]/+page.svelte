@@ -185,7 +185,7 @@
 			</a>
 		</div>
 	{:else}
-		<div class="flex h-[calc(100vh-4rem)] flex-col">
+		<div class="flex flex-col">
 			<TeamMembersBar
 				projectMembers={project.projectMembers}
 				onAddClick={() => (showAddMember = true)}
@@ -225,7 +225,6 @@
 					onDelete={handleDelete}
 					submitLabel="Save"
 					bind:isSubmitting
-					viewCount={project.viewCount}
 				/>
 			</div>
 		</div>

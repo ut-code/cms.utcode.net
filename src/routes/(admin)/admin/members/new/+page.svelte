@@ -12,6 +12,9 @@
 		name: string;
 		bio: string;
 		imageUrl: string;
+		githubUrl: string;
+		twitterUrl: string;
+		websiteUrl: string;
 		pageContent: string;
 	}) {
 		try {
@@ -20,6 +23,9 @@
 				name: data.name,
 				bio: data.bio || null,
 				imageUrl: data.imageUrl || null,
+				githubUrl: data.githubUrl || null,
+				twitterUrl: data.twitterUrl || null,
+				websiteUrl: data.websiteUrl || null,
 				pageContent: data.pageContent || null,
 			});
 			if (result) {
@@ -40,6 +46,6 @@
 	<title>New Member - ut.code(); CMS</title>
 </svelte:head>
 
-<div class="h-[calc(100vh-4rem)]">
+<div>
 	<MemberForm onSubmit={handleSubmit} submitLabel="Create" bind:isSubmitting />
 </div>

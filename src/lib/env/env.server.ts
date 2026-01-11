@@ -18,9 +18,26 @@ const Env = v.object({
   CLOUDFLARE_API_TOKEN: v.optional(v.string()),
 });
 
-export const env = v.parse(Env, process.env);
+type EnvType = v.InferOutput<typeof Env>;
 
-// Production guard: UNSAFE_DISABLE_AUTH must never be enabled in production
-if (env.UNSAFE_DISABLE_AUTH === "true" && process.env.NODE_ENV === "production") {
-  throw new Error("UNSAFE_DISABLE_AUTH cannot be enabled in production");
+let _env: EnvType | null = null;
+
+function getEnv(): EnvType {
+  if (_env) return _env;
+
+  _env = v.parse(Env, process.env);
+
+  // Production guard: UNSAFE_DISABLE_AUTH must never be enabled in production
+  if (_env.UNSAFE_DISABLE_AUTH === "true" && process.env.NODE_ENV === "production") {
+    throw new Error("UNSAFE_DISABLE_AUTH cannot be enabled in production");
+  }
+
+  return _env;
 }
+
+// Lazy evaluation via Proxy - env is only parsed when accessed at runtime
+export const env: EnvType = new Proxy({} as EnvType, {
+  get(_, prop: string) {
+    return getEnv()[prop as keyof EnvType];
+  },
+});

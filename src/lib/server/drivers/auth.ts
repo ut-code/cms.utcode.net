@@ -4,19 +4,40 @@ import { env } from "$lib/env/env.server";
 import { db } from "$lib/server/drivers/db";
 import * as schema from "$lib/shared/models/schema";
 
-export const auth = betterAuth({
-  database: drizzleAdapter(db, {
-    provider: "pg",
-    schema,
-  }),
-  baseURL: env.BETTER_AUTH_URL,
-  secret: env.BETTER_AUTH_SECRET,
-  socialProviders: {
-    github: {
-      clientId: env.GITHUB_CLIENT_ID,
-      clientSecret: env.GITHUB_CLIENT_SECRET,
-      scope: ["read:user", "user:email", "read:org"],
-      disableDefaultScope: true,
-    },
+type AuthType = ReturnType<typeof betterAuth>;
+
+let _auth: AuthType | null = null;
+
+function getAuth(): AuthType {
+  if (!_auth) {
+    _auth = betterAuth({
+      database: drizzleAdapter(db, {
+        provider: "pg",
+        schema,
+      }),
+      baseURL: env.BETTER_AUTH_URL,
+      secret: env.BETTER_AUTH_SECRET,
+      socialProviders: {
+        github: {
+          clientId: env.GITHUB_CLIENT_ID,
+          clientSecret: env.GITHUB_CLIENT_SECRET,
+          scope: ["read:user", "user:email", "read:org"],
+          disableDefaultScope: true,
+        },
+      },
+    });
+  }
+  return _auth;
+}
+
+// Lazy-initialized auth instance via Proxy
+export const auth: AuthType = new Proxy({} as AuthType, {
+  get(_, prop) {
+    const instance = getAuth();
+    const value = instance[prop as keyof AuthType];
+    if (typeof value === "function") {
+      return (value as (...args: unknown[]) => unknown).bind(instance);
+    }
+    return value;
   },
 });

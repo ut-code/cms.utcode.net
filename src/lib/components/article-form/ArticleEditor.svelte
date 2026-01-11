@@ -1,27 +1,85 @@
 <script lang="ts">
 	import Markdown from "../Markdown.svelte";
+	import ImageUpload from "../image-upload.svelte";
+	import {
+		extractDateFromArticleSlug,
+		formatDateForSlug,
+		generateSlug,
+		validateArticleSlug,
+	} from "$lib/shared/logic/slugs";
 
 	let {
 		title = $bindable(""),
 		content = $bindable(""),
-		slug = "",
-		coverUrl = "",
+		slug = $bindable(""),
+		coverUrl = $bindable(""),
+		initialSlug = "",
+		createRedirect = $bindable(false),
 		titleError = null,
 		contentError = null,
+		slugError = null,
 		onTitleChange,
-		onOpenSettings,
 	}: {
 		title?: string;
 		content?: string;
 		slug?: string;
 		coverUrl?: string;
+		initialSlug?: string;
+		createRedirect?: boolean;
 		titleError?: string | null;
 		contentError?: string | null;
+		slugError?: string | null;
 		onTitleChange?: (title: string) => void;
-		onOpenSettings?: () => void;
 	} = $props();
 
 	let showPreview = $state(false);
+
+	// Real-time slug validation
+	let isSlugValid = $derived(slug.length === 0 || validateArticleSlug(slug));
+	let validationError = $derived.by(() => {
+		if (slug.length === 0) return null;
+		if (!validateArticleSlug(slug)) {
+			return "Slug must start with YYYY-MM-DD-";
+		}
+		return null;
+	});
+	let displayError = $derived(slugError || validationError);
+
+	// Extract date and title parts from slug
+	let slugDate = $derived.by(() => {
+		const extracted = extractDateFromArticleSlug(slug);
+		return extracted ?? new Date();
+	});
+
+	let slugTitle = $derived.by(() => {
+		if (slug.length === 0) return "";
+		const match = slug.match(/^\d{4}-\d{2}-\d{2}-(.*)$/);
+		return match ? match[1] : slug;
+	});
+
+	function updateSlugFromParts(date: Date, titlePart: string) {
+		const dateStr = formatDateForSlug(date);
+		const cleanTitle = generateSlug(titlePart);
+		slug = cleanTitle ? `${dateStr}-${cleanTitle}` : dateStr;
+	}
+
+	function handleDateChange(e: Event) {
+		const input = e.target as HTMLInputElement;
+		const newDate = new Date(input.value);
+		if (!Number.isNaN(newDate.getTime())) {
+			updateSlugFromParts(newDate, slugTitle ?? "");
+		}
+	}
+
+	function handleSlugTitleChange(e: Event) {
+		const input = e.target as HTMLInputElement;
+		const titleValue = input.value.trim();
+		if (titleValue === "") {
+			slug = "";
+		} else {
+			updateSlugFromParts(slugDate, titleValue);
+		}
+	}
 
 	function handleTitleInput() {
 		if (onTitleChange) {
@@ -30,35 +88,69 @@
 	}
 </script>
 
-<main class="flex flex-1 flex-col overflow-y-auto bg-white">
+<main class="flex-1 bg-white">
 	<div class="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-8">
-		<!-- Cover Image Preview -->
-		{#if coverUrl}
-			<button
-				type="button"
-				onclick={onOpenSettings}
-				class="group mb-6 w-full overflow-hidden rounded-xl transition-all hover:ring-2 hover:ring-primary/30"
-			>
-				<img
-					src={coverUrl}
-					alt="Cover"
-					class="h-48 w-full object-cover transition-opacity group-hover:opacity-90"
-				/>
-			</button>
-		{/if}
+		<!-- Cover Image -->
+		<div class="mb-6">
+			<ImageUpload bind:value={coverUrl} folder="articles" label="Cover image" aspect="5/3" />
+		</div>
 
-		<!-- Slug Preview -->
-		{#if slug}
-			<button
-				type="button"
-				onclick={onOpenSettings}
-				class="mb-4 flex items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-primary/5"
+		<!-- Slug Input -->
+		<div class="mb-6 space-y-2">
+			<p
+				class="break-all font-mono text-sm"
+				class:text-red-500={displayError}
+				class:text-emerald-600={isSlugValid && slug.length > 0}
+				class:text-zinc-500={!displayError && !isSlugValid}
 			>
-				<span class="font-mono text-sm text-zinc-500 hover:text-primary">
-					/articles/{slug}
-				</span>
-			</button>
-		{/if}
+				/articles/{slug || "..."}
+			</p>
+
+			<div class="flex gap-2">
+				<input
+					type="date"
+					value={formatDateForSlug(slugDate)}
+					oninput={handleDateChange}
+					class="w-32 shrink-0 rounded-lg border bg-white px-2 py-1.5 font-mono text-sm text-zinc-900 focus:ring-0 focus:outline-none"
+					class:border-zinc-200={!displayError && !isSlugValid}
+					class:border-emerald-500={isSlugValid && slug.length > 0}
+					class:border-red-300={displayError}
+				/>
+				<input
+					type="text"
+					value={slugTitle}
+					oninput={handleSlugTitleChange}
+					class="min-w-0 flex-1 rounded-lg border bg-white px-2 py-1.5 font-mono text-sm text-zinc-900 focus:ring-0 focus:outline-none"
+					class:border-zinc-200={!displayError && !isSlugValid}
+					class:border-emerald-500={isSlugValid && slug.length > 0}
+					class:border-red-300={displayError}
+					placeholder="title-slug"
+				/>
+			</div>
+
+			{#if displayError}
+				<p class="text-xs text-red-500">{displayError}</p>
+			{/if}
+
+			<!-- Redirect checkbox (only show when editing and slug has changed) -->
+			{#if initialSlug && slug !== initialSlug}
+				<label class="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3">
+					<input
+						type="checkbox"
+						bind:checked={createRedirect}
+						class="mt-0.5 h-4 w-4 rounded border-amber-300 text-amber-600 focus:ring-amber-500"
+					/>
+					<div class="flex-1">
+						<span class="block text-sm font-medium text-amber-900">
+							Leave redirect from old URL
+						</span>
+						<span class="mt-0.5 block text-xs text-amber-700">
+							Old links to <span class="font-mono">/articles/{initialSlug}</span> will redirect
+						</span>
+					</div>
+				</label>
+			{/if}
+		</div>
 
 		<!-- Title Input -->
 		<input

@@ -63,9 +63,6 @@
 			totalArticleViews={stats.analytics.totalArticleViews}
 			totalProjectViews={stats.analytics.totalProjectViews}
 			totalMemberViews={stats.analytics.totalMemberViews}
-			topArticles={stats.analytics.topArticles}
-			topProjects={stats.analytics.topProjects}
-			topMembers={stats.analytics.topMembers}
 			viewTrend={stats.analytics.viewTrend}
 		/>
 	</div>
