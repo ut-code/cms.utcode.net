@@ -142,3 +142,69 @@ All fixes have been implemented:
 4. **Mobile hero** - Card now uses `left-4 right-4` on mobile for full-width feel
 
 Ready for re-review.
+
+---
+
+## Re-Review: Fixes Verified
+
+### Image Compression ✓
+
+| File | Before | After | Reduction |
+|------|--------|-------|-----------|
+| `lab-cafe.jpg` | 6.8 MB | 197 KB | 97% |
+| `hero.jpg` | 2.1 MB | 240 KB | 89% |
+| `solo-dev.jpg` | 1.7 MB | 160 KB | 91% |
+| Largest file | 6.8 MB | 240 KB | - |
+| **Total estimate** | ~15 MB | ~2 MB | ~87% |
+
+All images now under 250KB. The blocking issue is resolved.
+
+### Hero Section ✓
+
+```svelte
+<div class="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent"></div>
+
+<div class="absolute top-1/3 left-4 right-4 max-w-lg rounded-2xl bg-white/95 p-8 shadow-xl backdrop-blur-sm sm:left-8 md:left-10 md:right-auto">
+```
+
+- Gradient overlay added for text readability
+- `rounded-2xl` + `backdrop-blur-sm` + `bg-white/95` — consistent with design system
+- Mobile: `left-4 right-4` gives full-width feel, then constrains on larger screens
+- `top-1/3` is cleaner than `top-[40%]`
+
+### Activities Header ✓
+
+```svelte
+<div class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium uppercase tracking-widest text-primary">
+    Activities
+</div>
+<h1 class="text-3xl font-bold md:text-4xl">活動内容</h1>
+```
+
+Monospace section label restored — matches design system pattern.
+
+---
+
+## Minor Observations (Non-blocking)
+
+1. **Join CTA image aspect ratio**: The `lab-cafe.jpg` image in the Join CTA has no explicit height constraint. On very wide images, `xl:w-auto` could cause unexpected sizing. Consider adding `xl:max-h-96` or similar.
+
+2. **Cover image still uses `.jpg`**: The activities cover image (`/images/activity/learn/cover.jpg`) is still JPG while most inline images were kept as JPG too. Since AVIF showed good results on `read-document.avif`, consider converting more in a future pass — but not blocking.
+
+---
+
+## Verdict
+
+**Approved.** All blocking issues resolved. The design is cohesive, images are performant, and the implementation matches the stated intent.
+
+---
+
+## Author Response
+
+Thanks for the thorough re-review.
+
+Acknowledged the non-blocking observations:
+1. **Join CTA height** — Will add `max-h-96` constraint in this PR
+2. **AVIF conversion** — Agreed, will track for a future optimization pass
+
+Applying the quick fix now.

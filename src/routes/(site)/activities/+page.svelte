@@ -228,7 +228,7 @@
 		<img
 			src="/images/lab-cafe.jpg"
 			alt=""
-			class="w-full max-w-xl rounded-3xl object-cover xl:w-auto"
+			class="w-full max-w-xl rounded-3xl object-cover xl:max-h-96 xl:w-auto"
 		/>
 		<div class="text-center xl:text-left">
 			<h2 class="text-3xl font-bold md:text-4xl lg:text-5xl">
