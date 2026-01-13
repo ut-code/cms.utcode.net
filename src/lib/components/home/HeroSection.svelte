@@ -2,39 +2,42 @@
 	import { ArrowRight } from "lucide-svelte";
 </script>
 
-<section class="bg-white py-32">
-	<div class="mx-auto max-w-6xl px-6">
-		<div class="mx-auto max-w-4xl text-center">
-			<div class="mb-6 font-mono text-sm font-medium uppercase tracking-widest text-primary">SINCE 2019</div>
+<!-- Full-height hero with background image -->
+<section class="relative h-screen">
+	<img
+		src="/images/headers/hero.jpg"
+		alt=""
+		class="absolute inset-0 h-full w-full object-cover"
+	/>
+	<!-- Gradient overlay for text readability -->
+	<div class="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent"></div>
 
-			<h1 class="mb-8 text-5xl font-bold leading-tight text-zinc-900 sm:text-6xl lg:text-7xl">
-				Build the <span class="text-primary">Future</span><br />
-				with Code<span class="text-primary">;</span>
-			</h1>
-
-			<p class="mb-4 text-xl leading-relaxed text-zinc-600">
-				東京大学のソフトウェアエンジニアリングサークル。
-			</p>
-			<p class="mb-12 text-lg font-medium leading-relaxed text-zinc-700">
-				学生が実際にプロダクトを作り、世に届ける。
-			</p>
-
-			<div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
-				<a
-					href="/join"
-					class="group inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-4 font-semibold text-white shadow-lg transition-all hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-				>
-					<span>参加する</span>
-					<ArrowRight class="h-5 w-5 transition-transform group-hover:translate-x-1" />
-				</a>
-				<a
-					href="/projects"
-					class="group inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-8 py-4 font-semibold text-white transition-all hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-				>
-					プロジェクトを見る
-					<ArrowRight class="h-5 w-5 transition-transform group-hover:translate-x-1" />
-				</a>
-			</div>
+	<div
+		class="absolute top-1/3 left-4 right-4 max-w-lg rounded-2xl bg-white/95 p-8 shadow-xl backdrop-blur-sm sm:left-8 md:left-10 md:right-auto"
+	>
+		<h1 class="text-2xl font-bold text-zinc-900 md:text-3xl">
+			東京大学のソフトウェア開発サークル
+		</h1>
+		<p class="mt-4 leading-relaxed text-zinc-600">
+			ut.code(); は、2019
+			年に発足した東京大学のソフトウェアエンジニアリングコミュニティ・プログラミングサークルです。
+			プログラミングの学習・教育から、実社会で役立つソフトウェア製作まで、幅広い活動を行っています。
+		</p>
+		<div class="mt-8 flex flex-wrap gap-4">
+			<a
+				href="/join"
+				class="group inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-white shadow-lg transition-all hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+			>
+				<span>参加する</span>
+				<ArrowRight class="h-5 w-5 transition-transform group-hover:translate-x-1" />
+			</a>
+			<a
+				href="/projects"
+				class="group inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-6 py-3 font-semibold text-white transition-all hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+			>
+				プロジェクトを見る
+				<ArrowRight class="h-5 w-5 transition-transform group-hover:translate-x-1" />
+			</a>
 		</div>
 	</div>
 </section>
