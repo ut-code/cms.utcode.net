@@ -18,12 +18,12 @@
 <!-- Title Section -->
 <section class="py-16">
 	<div class="container mx-auto px-6 lg:max-w-screen-lg">
-		<div class="flex items-center gap-4">
-			<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-zinc-900 text-white">
-				<BookOpen class="h-6 w-6" />
-			</div>
-			<h1 class="text-3xl font-bold md:text-4xl">活動内容</h1>
+		<div
+			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium uppercase tracking-widest text-primary"
+		>
+			Activities
 		</div>
+		<h1 class="text-3xl font-bold md:text-4xl">活動内容</h1>
 		<p class="mt-6 max-w-2xl text-lg leading-relaxed text-zinc-600">
 			ut.code();
 			は、全ての人にソフトウェア開発の魅力を伝えるべく、教材の作成から教育活動までを一貫して行っており、さらに高みを目指すための自学自習の機会も提供しています。充実した教材、気軽に質問できる環境、切磋琢磨する仲間、この3つの柱により、初心者から上級者まですべての人に新しい学びを提供します。
