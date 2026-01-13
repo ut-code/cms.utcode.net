@@ -5,6 +5,7 @@
 {Main work}
 {Run bun tidy / it muts return 0 warnings and errors}
 {Update knowledge database and CLAUDE.md as needed}
+{Log troubleshooting to .claude/troubleshooting/ if applicable}
 </workflow>
 
 # Knowledge Database
@@ -13,6 +14,16 @@ ALWAYS read relevant knowledges before you start working.
 
 ```sh
 ls ./docs/knowledges
+```
+
+# Troubleshooting
+
+When fixing non-obvious bugs, log the issue to `.claude/troubleshooting/` for future reference.
+
+Each file should include: **Keywords** (symptom-focused for greppability), **Symptom**, **Cause**, **Solution**.
+
+```sh
+ls .claude/troubleshooting
 ```
 
 # Available Tools

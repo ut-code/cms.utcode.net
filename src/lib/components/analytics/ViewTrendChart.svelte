@@ -1,29 +1,6 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import {
-		Chart,
-		LineController,
-		LineElement,
-		PointElement,
-		LinearScale,
-		CategoryScale,
-		Title,
-		Tooltip,
-		Legend,
-		Filler,
-	} from "chart.js";
-
-	Chart.register(
-		LineController,
-		LineElement,
-		PointElement,
-		LinearScale,
-		CategoryScale,
-		Title,
-		Tooltip,
-		Legend,
-		Filler,
-	);
+	import { onDestroy, onMount } from "svelte";
+	import type { Chart as ChartType } from "chart.js";
 
 	interface Props {
 		data: Array<{ date: string; count: number }>;
@@ -34,9 +11,36 @@
 	const { data, title = "View Trend", color = "#00D372" }: Props = $props();
 
 	let canvas: HTMLCanvasElement;
-	let chart: Chart | null = null;
+	let chart: ChartType | null = null;
 
-	onMount(() => {
+	onDestroy(() => chart?.destroy());
+
+	onMount(async () => {
+		const {
+			Chart,
+			LineController,
+			LineElement,
+			PointElement,
+			LinearScale,
+			CategoryScale,
+			Title,
+			Tooltip,
+			Legend,
+			Filler,
+		} = await import("chart.js");
+
+		Chart.register(
+			LineController,
+			LineElement,
+			PointElement,
+			LinearScale,
+			CategoryScale,
+			Title,
+			Tooltip,
+			Legend,
+			Filler,
+		);
+
 		const ctx = canvas.getContext("2d");
 		if (!ctx) return;
 
@@ -152,10 +156,6 @@
 				},
 			},
 		});
-
-		return () => {
-			chart?.destroy();
-		};
 	});
 </script>
 
