@@ -102,16 +102,32 @@
 									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">About</a
 								>
 								<a
+									href="/about/faq"
+									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">FAQ</a
+								>
+								<a
 									href="/activities"
 									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">Activities</a
 								>
+								<a
+									href="/donation"
+									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">Donation</a
+								>
+							</div>
+						</div>
+						<div class="flex flex-col items-center gap-2 md:items-start">
+							<span
+								class="font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-zinc-500 uppercase"
+								>Join</span
+							>
+							<div class="flex flex-col gap-2">
 								<a
 									href="/join"
 									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">Join</a
 								>
 								<a
-									href="/donation"
-									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">Donation</a
+									href="/join/welcome-events"
+									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">Welcome Events</a
 								>
 							</div>
 						</div>
@@ -177,7 +193,7 @@
 				<Search class="h-4 w-4" />
 				<span>検索...</span>
 			</button>
-			<ul class="space-y-2">
+			<ul class="space-y-1">
 				<li>
 					<a
 						href="/articles"
@@ -197,6 +213,51 @@
 						href="/members"
 						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
 						>Members</a
+					>
+				</li>
+			</ul>
+			<div class="my-4 border-t border-zinc-200"></div>
+			<ul class="space-y-1">
+				<li>
+					<a
+						href="/about"
+						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
+						>About</a
+					>
+				</li>
+				<li>
+					<a
+						href="/about/faq"
+						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
+						>FAQ</a
+					>
+				</li>
+				<li>
+					<a
+						href="/activities"
+						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
+						>Activities</a
+					>
+				</li>
+				<li>
+					<a
+						href="/join"
+						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
+						>Join</a
+					>
+				</li>
+				<li>
+					<a
+						href="/join/welcome-events"
+						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
+						>Welcome Events</a
+					>
+				</li>
+				<li>
+					<a
+						href="/donation"
+						class="block rounded-lg px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-primary/5 hover:text-primary"
+						>Donation</a
 					>
 				</li>
 			</ul>
