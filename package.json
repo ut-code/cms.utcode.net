@@ -12,7 +12,7 @@
     "down": "devenv processes down",
     "reload": "bun down && bun up",
     "attach": "devenv processes up",
-    "logs": "tail -f ./.devenv/processes.log",
+    "tail": "tail -f ./.devenv/processes.log",
     "check": "bun type-check && bun test-check && bun lint-check && bun format-check",
     "fix": "biome check --fix && prettier --write .",
     "tidy": "bun type-check && bun test-check && biome check --fix && prettier --write .",

@@ -37,15 +37,18 @@ ls .claude/troubleshooting
 **Principles**: Simplicity, minimalism, developer-focused aesthetics
 
 **Primary Color**: `#00D372` (oklch(76% 0.2 153)) — ut.code(); brand lime green
+
 - Use sparingly for emphasis: CTAs, labels, hover states
 - Background: white (#ffffff) with zinc-50 alternating sections
 - Text: zinc-900 primary, zinc-500 secondary
 
 **Typography**:
+
 - Body: DM Sans (clean, modern)
 - Code/Mono: JetBrains Mono (developer identity)
 
 **Key Rules**:
+
 1. Content-first: minimal decoration, readability priority
 2. High contrast: clear visual hierarchy
 3. Generous spacing: py-24 sections, max-w-6xl containers
@@ -105,6 +108,11 @@ bun lint-check # runs lint check
 bun format-check # runs format check
 bun fix # runs all automated fixes (format+lint)
 bun tidy # runs all automated checks and fixes as necessary (type+format+lint)
+
+# devenv controls
+bun up # spin up devenv server (usually already done by user)
+bun down # stop it
+bun tail # !important tail the logs
 ```
 
 # Bun Commands
@@ -131,6 +139,7 @@ run `bun tidy` after you finish your work. i.e. before commit
 - Never use `as` or `any`. Let TypeScript infer types properly.
 - Never just "fire and forget". it crashes the entire server. instead, catch `.catch(console.error)` then forget, if you want to dispatch the job.
 - **NEVER use `$derived(await ...)` in Svelte 5.** This causes infinite loops and memory leaks. Use top-level `await` instead:
+
   ```ts
   // ❌ WRONG - causes memory leak
   const data = $derived(await fetchData());
@@ -139,7 +148,7 @@ run `bun tidy` after you finish your work. i.e. before commit
   const data = await fetchData();
 
   // ✅ For reactive dependencies, use $derived without await
-  const filtered = $derived(data.filter(x => x.active));
+  const filtered = $derived(data.filter((x) => x.active));
   ```
 
 For detailed coding standards (import order, async patterns, naming conventions), see `docs/knowledges/coding-standards.md`.
