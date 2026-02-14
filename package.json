@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "db": "bun drizzle-kit",
-    "up": "sops exec-env secrets.dev.yaml 'bun db push --force' && devenv processes up -d",
+    "up": "devenv processes up -d && sleep 2 && sops exec-env secrets.dev.yaml 'bun db push --force'",
     "down": "devenv processes down",
     "reload": "bun down && bun up",
     "attach": "devenv processes up",
