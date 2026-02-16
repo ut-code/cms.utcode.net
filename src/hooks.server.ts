@@ -81,10 +81,14 @@ const handleCache: Handle = async ({ event, resolve }) => {
     return response;
   }
 
-  // Public pages: aggressive Cloudflare caching
-  // s-maxage=3600: CDN caches for 1 hour
-  // stale-while-revalidate=86400: serve stale for up to 1 day while revalidating
-  response.headers.set("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=86400");
+  // Public pages: layered caching
+  // max-age=120: browser caches for 2 minutes (snappy navigation)
+  // s-maxage=3600: CDN caches for 1 hour (purged on mutations)
+  // stale-while-revalidate=60: serve stale for up to 1 minute while revalidating
+  response.headers.set(
+    "Cache-Control",
+    "public, max-age=120, s-maxage=3600, stale-while-revalidate=60",
+  );
   return response;
 };
 
