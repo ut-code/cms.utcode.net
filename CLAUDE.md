@@ -112,7 +112,7 @@ bun tidy # runs all automated checks and fixes as necessary (type+format+lint)
 # devenv controls
 bun up # spin up devenv server (usually already done by user)
 bun down # stop it
-bun tail # !important tail the logs
+bun tail # tail LOCAL devenv logs only (not production)
 ```
 
 # Bun Commands
@@ -128,6 +128,10 @@ Always use `bun run <script>` to run `build` or `test`.
 
 The user (usually) uses devenv's process compose to manage processes.
 You may inspect `.devenv/processes.log` for the logs.
+
+# Production
+
+You have NO access to production logs. When you need to check prod logs, ask the user to check and copy-paste the relevant output.
 
 # Verification Rules
 
