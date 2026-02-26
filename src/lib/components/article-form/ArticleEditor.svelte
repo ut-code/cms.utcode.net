@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ImagePlus, Loader2 } from "lucide-svelte";
 	import Markdown from "../Markdown.svelte";
 	import ImageUpload from "../image-upload.svelte";
 	import {
@@ -7,6 +8,9 @@
 		generateSlug,
 		validateArticleSlug,
 	} from "$lib/shared/logic/slugs";
+	import { upload } from "$lib/data/private/storage.remote";
+	import { isAcceptedImageType, inferImageType } from "$lib/shared/logic/image";
+	import { arrayBufferToBase64, compressImage } from "$lib/shared/logic/image-processing";
 
 	let {
 		title = $bindable(""),
@@ -33,6 +37,91 @@
 	} = $props();
 
 	let showPreview = $state(false);
+	let textareaEl = $state<HTMLTextAreaElement | null>(null);
+	let imageUploading = $state(false);
+	let imageError = $state<string | null>(null);
+
+	/** Upload an image and insert markdown at the cursor position in the textarea */
+	async function uploadAndInsert(file: File) {
+		const resolvedType = isAcceptedImageType(file.type) ? file.type : inferImageType(file.name);
+		if (!resolvedType) {
+			imageError = "Unsupported image format";
+			return;
+		}
+
+		imageError = null;
+		imageUploading = true;
+
+		// Remember cursor position before async work
+		const cursorPos = textareaEl?.selectionStart ?? content.length;
+
+		// UUID-tagged placeholder so concurrent uploads never collide
+		const id = crypto.randomUUID();
+		const placeholder = `![Uploading...](upload:${id})`;
+		content = content.slice(0, cursorPos) + placeholder + content.slice(cursorPos);
+
+		try {
+			const processedFile = await compressImage(file);
+			const arrayBuffer = await processedFile.arrayBuffer();
+			const base64 = arrayBufferToBase64(arrayBuffer);
+			const uploadType = isAcceptedImageType(processedFile.type) ? processedFile.type : resolvedType;
+			const result = await upload({
+				data: base64,
+				type: uploadType,
+				name: processedFile.name,
+				folder: "articles",
+			});
+
+			// Replace this specific placeholder with actual markdown image
+			const markdown = `![](${result.url})`;
+			content = content.replace(placeholder, markdown);
+
+			// Move cursor after the inserted image
+			const newPos = content.indexOf(markdown, cursorPos) + markdown.length;
+			requestAnimationFrame(() => {
+				if (textareaEl) {
+					textareaEl.focus();
+					textareaEl.selectionStart = newPos;
+					textareaEl.selectionEnd = newPos;
+				}
+			});
+		} catch {
+			// Remove this specific placeholder on failure
+			content = content.replace(placeholder, "");
+			imageError = "Image upload failed. Please try again.";
+		} finally {
+			imageUploading = false;
+		}
+	}
+
+	function handleContentPaste(e: ClipboardEvent) {
+		const items = e.clipboardData?.items;
+		if (!items) return;
+		for (const item of items) {
+			if (item.type.startsWith("image/")) {
+				const file = item.getAsFile();
+				if (file) {
+					e.preventDefault();
+					uploadAndInsert(file).catch(console.error);
+					return;
+				}
+			}
+		}
+	}
+
+	let fileInputEl = $state<HTMLInputElement | null>(null);
+
+	function handleAttachClick() {
+		fileInputEl?.click();
+	}
+
+	function handleFileInput(e: Event) {
+		if (!(e.target instanceof HTMLInputElement)) return;
+		const file = e.target.files?.[0];
+		if (file) uploadAndInsert(file).catch(console.error);
+		// Reset so same file can be selected again
+		e.target.value = "";
+	}
 
 	// Real-time slug validation
 	let isSlugValid = $derived(slug.length === 0 || validateArticleSlug(slug));
@@ -186,7 +275,38 @@
 			>
 				Preview
 			</button>
-			<span class="ml-auto text-xs text-zinc-500">Markdown supported</span>
+
+			{#if !showPreview}
+				<button
+					type="button"
+					onclick={handleAttachClick}
+					disabled={imageUploading}
+					class="ml-2 flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 disabled:opacity-50"
+					title="Attach image"
+				>
+					{#if imageUploading}
+						<Loader2 class="h-4 w-4 animate-spin" />
+					{:else}
+						<ImagePlus class="h-4 w-4" />
+					{/if}
+					Attach image
+				</button>
+				<input
+					bind:this={fileInputEl}
+					type="file"
+					accept="image/*"
+					class="hidden"
+					oninput={handleFileInput}
+				/>
+			{/if}
+
+			<span class="ml-auto text-xs text-zinc-500">
+				{#if imageUploading}
+					Uploading image...
+				{:else}
+					Markdown supported
+				{/if}
+			</span>
 		</div>
 
 		<!-- Content Area -->
@@ -202,13 +322,18 @@
 			{:else}
 				<textarea
 					id="content"
+					bind:this={textareaEl}
 					bind:value={content}
+					onpaste={handleContentPaste}
 					class="min-h-[60vh] w-full resize-none border-none bg-transparent font-[JetBrains_Mono,monospace] text-base leading-relaxed text-zinc-900 placeholder:text-zinc-300 focus:ring-0 focus:outline-none"
 					class:text-red-600={contentError}
 					placeholder="Write your content here..."
 				></textarea>
 				{#if contentError}
 					<p class="text-sm text-red-500">{contentError}</p>
+				{/if}
+				{#if imageError}
+					<p class="text-sm text-red-500">{imageError}</p>
 				{/if}
 			{/if}
 		</div>
