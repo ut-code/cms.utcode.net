@@ -3,6 +3,7 @@
 	import { removeByUrl, upload } from "$lib/data/private/storage.remote";
 	import {
 		type AllowedFolder,
+		inferImageType,
 		isAcceptedImageType,
 		isAllowedFolder,
 	} from "$lib/shared/logic/image";
@@ -34,8 +35,10 @@
 	async function handleFile(file: File, fromPaste = false) {
 		error = null;
 
-		// Validate file type
-		if (!isAcceptedImageType(file.type)) {
+		// Resolve MIME type: use file.type, or infer from extension as fallback
+		// (some browsers report empty type for HEIC/HEIF)
+		const resolvedType = isAcceptedImageType(file.type) ? file.type : inferImageType(file.name);
+		if (!resolvedType) {
 			error = "Unsupported image format";
 			return;
 		}
@@ -65,8 +68,8 @@
 		try {
 			const arrayBuffer = await processedFile.arrayBuffer();
 			const base64 = arrayBufferToBase64(arrayBuffer);
-			// Use the validated original type - server will re-compress to WebP anyway
-			const uploadType = isAcceptedImageType(processedFile.type) ? processedFile.type : file.type;
+			// Use processed file's type if valid, otherwise fall back to resolved type
+			const uploadType = isAcceptedImageType(processedFile.type) ? processedFile.type : resolvedType;
 			const result = await upload({
 				data: base64,
 				type: uploadType,

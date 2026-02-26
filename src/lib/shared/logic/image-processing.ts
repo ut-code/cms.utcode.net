@@ -12,12 +12,14 @@ export function arrayBufferToBase64(buffer: ArrayBuffer): string {
 }
 
 export async function compressImage(file: File): Promise<File> {
-  // Skip if not an image that can be compressed
-  if (!file.type.startsWith("image/") || file.type === "image/gif") {
+  const SERVER_LIMIT = 10 * 1024 * 1024; // 10MB DoS protection limit
+
+  // Skip if not an image that can be compressed via canvas,
+  // or if already small enough (server handles format conversion anyway)
+  if (!file.type.startsWith("image/") || file.type === "image/gif" || file.size <= SERVER_LIMIT) {
     return file;
   }
 
-  const SERVER_LIMIT = 10 * 1024 * 1024; // 10MB DoS protection limit
   const QUALITY_STEPS = [0.9, 0.7, 0.5, 0.3];
   const DIMENSION_STEPS = [1920, 1440, 1080, 720];
 
