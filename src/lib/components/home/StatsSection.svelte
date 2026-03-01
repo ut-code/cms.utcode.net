@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { Users, Rocket, BookOpen, Calendar } from "lucide-svelte";
-
 	type Props = {
 		members: number;
 		projects: number;
@@ -9,73 +7,42 @@
 	};
 
 	const { members, projects, articles, years }: Props = $props();
+
+	const stats = $derived([
+		{ label: "Members", value: members, href: "/members" },
+		{ label: "Projects", value: projects, href: "/projects" },
+		{ label: "Articles", value: articles, href: "/articles" },
+		{ label: "Years", value: years, href: null },
+	]);
 </script>
 
-<section class="bg-zinc-50 py-24">
+<section class="border-b border-zinc-200 bg-white">
 	<div class="mx-auto max-w-6xl px-6">
-		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-			<a
-				href="/members"
-				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-primary/30 hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-			>
-				<div class="mb-4 flex items-center justify-between">
-					<div class="font-mono text-xs uppercase tracking-wider text-zinc-400">Members</div>
-					<Users class="h-5 w-5 text-primary" />
-				</div>
-				<div class="flex items-baseline gap-2">
-					<span class="text-5xl font-bold text-zinc-900">
-						{members}
-					</span>
-					<span class="text-2xl font-bold text-primary">+</span>
-				</div>
-			</a>
-
-			<a
-				href="/projects"
-				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-primary/30 hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-			>
-				<div class="mb-4 flex items-center justify-between">
-					<div class="font-mono text-xs uppercase tracking-wider text-zinc-400">Projects</div>
-					<Rocket class="h-5 w-5 text-primary" />
-				</div>
-				<div class="flex items-baseline gap-2">
-					<span class="text-5xl font-bold text-zinc-900">
-						{projects}
-					</span>
-					<span class="text-2xl font-bold text-primary">+</span>
-				</div>
-			</a>
-
-			<a
-				href="/articles"
-				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-primary/30 hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-			>
-				<div class="mb-4 flex items-center justify-between">
-					<div class="font-mono text-xs uppercase tracking-wider text-zinc-400">Articles</div>
-					<BookOpen class="h-5 w-5 text-primary" />
-				</div>
-				<div class="flex items-baseline gap-2">
-					<span class="text-5xl font-bold text-zinc-900">
-						{articles}
-					</span>
-					<span class="text-2xl font-bold text-primary">+</span>
-				</div>
-			</a>
-
-			<div
-				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-primary/30 hover:bg-primary/5"
-			>
-				<div class="mb-4 flex items-center justify-between">
-					<div class="font-mono text-xs uppercase tracking-wider text-zinc-400">Years Active</div>
-					<Calendar class="h-5 w-5 text-primary" />
-				</div>
-				<div class="flex items-baseline gap-2">
-					<span class="text-5xl font-bold text-zinc-900">
-						{years}
-					</span>
-					<span class="text-2xl font-bold text-primary">+</span>
-				</div>
-			</div>
+		<div class="grid grid-cols-2 divide-x divide-zinc-200 lg:grid-cols-4">
+			{#each stats as stat (stat.label)}
+				{#if stat.href}
+					<a
+						href={stat.href}
+						class="group flex flex-col items-center justify-center py-12 transition-colors hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary lg:py-16"
+					>
+						<span class="font-mono text-4xl font-bold text-zinc-900 transition-colors group-hover:text-primary sm:text-5xl">
+							{stat.value}<span class="text-primary">+</span>
+						</span>
+						<span class="mt-2 font-mono text-xs uppercase tracking-widest text-zinc-500">
+							{stat.label}
+						</span>
+					</a>
+				{:else}
+					<div class="flex flex-col items-center justify-center py-12 lg:py-16">
+						<span class="font-mono text-4xl font-bold text-zinc-900 sm:text-5xl">
+							{stat.value}<span class="text-primary">+</span>
+						</span>
+						<span class="mt-2 font-mono text-xs uppercase tracking-widest text-zinc-500">
+							{stat.label}
+						</span>
+					</div>
+				{/if}
+			{/each}
 		</div>
 	</div>
 </section>
