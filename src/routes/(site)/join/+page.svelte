@@ -43,7 +43,7 @@
 					活動はすべて Discord 上で行われています。イベント案内や部員登録もこちらから。
 				</p>
 				<a
-					href="https://discord.gg/q3w3gfZfjy"
+					href="https://discord.gg/JvhPrySrJE"
 					target="_blank"
 					rel="noopener noreferrer"
 					class="inline-flex items-center gap-2 rounded-lg bg-[#5865F2] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#4752C4]"
