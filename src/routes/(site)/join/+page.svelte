@@ -115,7 +115,7 @@
 		<p class="mb-6 text-zinc-600">ご質問があれば、SNS からお気軽にどうぞ。</p>
 		<div class="flex flex-wrap gap-4">
 			<a
-				href="https://twitter.com/utokyo_code"
+				href="https://x.com/utokyo_code"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:border-primary/30 hover:bg-primary/5 hover:text-primary"

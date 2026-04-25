@@ -12,6 +12,10 @@
 		Twitter,
 		Users,
 	} from "lucide-svelte";
+	import type { PageData } from "./$types";
+
+	const { data }: { data: PageData } = $props();
+	const fiscalYear = new Date().getFullYear();
 </script>
 
 <svelte:head>
@@ -69,7 +73,7 @@
 				</div>
 				<div class="flex-1">
 					<div class="text-sm text-zinc-500">構成人数</div>
-					<div class="font-semibold text-zinc-900">30 人程度</div>
+					<div class="font-semibold text-zinc-900">{data.memberCount} 人程度</div>
 				</div>
 			</div>
 			<div class="flex items-start gap-4">
@@ -96,7 +100,7 @@
 				</div>
 				<div class="flex-1">
 					<div class="text-sm text-zinc-500">所属</div>
-					<div class="font-semibold text-zinc-900">東京大学工学部丁友会 (2025年度)</div>
+					<div class="font-semibold text-zinc-900">東京大学工学部丁友会 ({fiscalYear}年度)</div>
 				</div>
 			</div>
 		</div>
@@ -295,6 +299,9 @@
 					</a>
 				</div>
 			</div>
+			<p class="mt-4 text-xs text-zinc-400">
+				※ 宣伝掲載は協賛企業・団体に限らせていただいております。協賛を伴わない宣伝依頼にはお応えできませんのでご了承ください。
+			</p>
 		</div>
 	</section>
 

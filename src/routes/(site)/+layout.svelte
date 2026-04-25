@@ -157,7 +157,7 @@
 									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">GitHub</a
 								>
 								<a
-									href="https://twitter.com/utokyo_code"
+									href="https://x.com/utokyo_code"
 									target="_blank"
 									rel="noopener noreferrer"
 									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">X</a

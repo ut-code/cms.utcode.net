@@ -21,7 +21,6 @@
 			2026 年の新歓イベントの日程は以下のとおりです。
 			興味がある方は、ぜひ気軽に参加してみてください！
 		</p>
-		<p class="mt-4 text-sm text-zinc-500">日時・場所の詳細は確定し次第追加します。</p>
 		<a href="/images/welcome/calendar.jpg" target="_blank">
 			<img
 				src="/images/welcome/calendar.jpg"
@@ -41,7 +40,7 @@
 				<p class="text-zinc-600">日時: 4/3 (金), 4/5 (日)</p>
 			</div>
 			<div>
-				<h3 class="mb-2 font-semibold">エンジニア系サークル合同新歓</h3>
+				<h3 class="mb-2 font-semibold">東大エンジニア系サークル合同新歓</h3>
 				<p class="text-zinc-600">日時: 4/9 (木), 4/15 (水)</p>
 			</div>
 		</div>
@@ -53,11 +52,20 @@
 		<div class="space-y-8">
 			<div>
 				<h3 class="mb-2 font-semibold">初学者講習会</h3>
-				<p class="text-zinc-600">日時: 4/12 (日), 4/18 (土)</p>
+				<p class="text-zinc-600">日時: 4/12 (日), 4/18 (土) 13:30〜17:30</p>
+				<p class="text-zinc-600">場所: 4/12 → 1311教室, 4/18 → 1331教室</p>
 				<p class="mt-2 text-zinc-600">
 					授業形式で HTML・CSS・JavaScript の基礎を学び、簡単な Web
 					アプリを公開できるようになります。
 				</p>
+				<a
+					href="https://forms.gle/HPi8Y73h4xFjQTAs5"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="mt-3 inline-flex items-center gap-1 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-primary/90"
+				>
+					参加登録はこちら →
+				</a>
 			</div>
 			<div>
 				<h3 class="mb-2 font-semibold">自主勉強会</h3>
@@ -65,6 +73,7 @@
 					日時: 4/7 (火), 4/10 (金), 4/14 (火), 4/17 (金), 4/21 (火), 4/24 (金), 4/28
 					(火), 5/8 (金)
 				</p>
+				<p class="text-zinc-600">場所: 学生会館 313B</p>
 				<p class="mt-2 text-zinc-600">途中参加・途中退出可。</p>
 				<p class="mt-2 text-zinc-600">
 					自分のペースでプログラミングを学び、プロジェクトに参加できるスキルをつけよう！
@@ -88,12 +97,28 @@
 					ut.code();
 					の新歓イベントとしては一番大きなものになります！部員や他の新入生とも交流できるいい機会になります！ぜひご参加ください！
 				</p>
+				<a
+					href="https://forms.gle/m2BV6YbAPkw4yXLq7"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="mt-3 inline-flex items-center gap-1 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-primary/90"
+				>
+					参加登録はこちら →
+				</a>
 			</div>
 			<div>
 				<h3 class="mb-2 font-semibold">新歓ハッカソン</h3>
 				<p class="text-zinc-600">キックオフ: 4/26 (日)</p>
 				<p class="text-zinc-600">作業会: 5/9 (土)</p>
 				<p class="text-zinc-600">発表会: 5/10 (日)</p>
+				<a
+					href="https://forms.gle/KCQsJc5RAURUkFW8A"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="mt-3 inline-flex items-center gap-1 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-primary/90"
+				>
+					参加登録はこちら →
+				</a>
 			</div>
 		</div>
 	</section>

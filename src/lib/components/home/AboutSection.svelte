@@ -39,7 +39,7 @@
 							<span>ut-code</span>
 						</a>
 						<a
-							href="https://twitter.com/utokyo_code"
+							href="https://x.com/utokyo_code"
 							target="_blank"
 							rel="noopener noreferrer"
 							class="group flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-zinc-700 transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
