@@ -19,7 +19,18 @@
 <svelte:head>
   <title>ut.code(); - 東京大学ソフトウェアエンジニアリングサークル</title>
   <meta property="og:title" content="ut.code(); - 東京大学ソフトウェアエンジニアリングサークル" />
-  <meta property="og:url" content="https://cms.utcode.net/" />
+  <meta name="description" content="ut.code();は東京大学のソフトウェアエンジニアリングサークルです。学習・交流・開発を通じてプログラミングの魅力を届けます。" />
+  <meta property="og:description" content="ut.code();は東京大学のソフトウェアエンジニアリングサークルです。学習・交流・開発を通じてプログラミングの魅力を届けます。" />
+  {@html `<script type="application/ld+json">${JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "ut.code();",
+    url: "https://cms.utcode.net",
+    logo: "https://cms.utcode.net/og-image.svg",
+    description: "東京大学のソフトウェアエンジニアリングサークル",
+    foundingDate: "2019",
+    sameAs: ["https://github.com/ut-code", "https://x.com/utokyo_code"],
+  })}</script>`}
 </svelte:head>
 
 <HeroSection />

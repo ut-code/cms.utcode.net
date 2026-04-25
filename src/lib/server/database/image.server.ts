@@ -1,3 +1,4 @@
+import DOMPurify from "isomorphic-dompurify";
 import sharp from "sharp";
 
 // Re-export shared types
@@ -33,9 +34,12 @@ export async function compressImage(
 ): Promise<{ buffer: Buffer; type: string; extension: string }> {
   const { maxSize = 1920, quality = 85 } = options;
 
-  // Pass through SVG as-is (vector format, no compression needed)
+  // Sanitize and pass through SVG (vector format, no compression needed)
   if (inputType === "image/svg+xml") {
-    return { buffer, type: "image/svg+xml", extension: "svg" };
+    const sanitized = DOMPurify.sanitize(buffer.toString("utf-8"), {
+      USE_PROFILES: { svg: true, svgFilters: true },
+    });
+    return { buffer: Buffer.from(sanitized), type: "image/svg+xml", extension: "svg" };
   }
 
   // Check if it's an animated GIF

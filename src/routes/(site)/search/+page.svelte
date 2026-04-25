@@ -1,12 +1,25 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
 	import { Search } from "lucide-svelte";
 	import type { PageData } from "./$types";
 
 	const { data }: { data: PageData } = $props();
 
+	let inputValue = $state(getQuery());
+
+	function getQuery() {
+		return data.query;
+	}
+
 	const articleResults = $derived(data.results.filter((r) => r.type === "article"));
 	const projectResults = $derived(data.results.filter((r) => r.type === "project"));
 	const memberResults = $derived(data.results.filter((r) => r.type === "member"));
+
+	function handleSubmit(e: SubmitEvent) {
+		e.preventDefault();
+		const trimmed = inputValue.trim();
+		if (trimmed) goto(`/search?q=${encodeURIComponent(trimmed)}`);
+	}
 </script>
 
 <svelte:head>
@@ -21,6 +34,18 @@
 		Search
 	</div>
 	<h1 class="mb-8 text-3xl font-bold">検索結果</h1>
+
+	<form onsubmit={handleSubmit} class="mb-8">
+		<div class="flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-4 py-3 transition-colors focus-within:border-primary/50">
+			<Search class="h-5 w-5 shrink-0 text-zinc-400" />
+			<input
+				type="text"
+				bind:value={inputValue}
+				placeholder="記事、プロジェクト、メンバーを検索..."
+				class="w-full bg-transparent text-sm outline-none placeholder:text-zinc-400"
+			/>
+		</div>
+	</form>
 
 	{#if !data.query}
 		<div class="flex flex-col items-center gap-4 py-16 text-center">

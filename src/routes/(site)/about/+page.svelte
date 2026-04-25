@@ -21,6 +21,7 @@
 		name="description"
 		content="ut.code();は2019年に発足した東京大学のソフトウェアエンジニアリングサークルです。約30名のメンバーが学習・交流・開発の三軸で活動しています。"
 	/>
+	<meta property="og:description" content="ut.code();は2019年に発足した東京大学のソフトウェアエンジニアリングサークルです。約30名のメンバーが学習・交流・開発の三軸で活動しています。" />
 </svelte:head>
 
 <!-- Header -->
@@ -244,7 +245,7 @@
 				title="ut.code(); 紹介動画"
 				class="aspect-video w-full"
 				src="https://www.youtube-nocookie.com/embed/aUoa1AyfbMA?rel=0"
-				loading="lazy"
+				style="border:0"
 				allow="picture-in-picture; web-share"
 				allowfullscreen
 			></iframe>

@@ -10,14 +10,42 @@
 	{#if data.article}
 		<title>{data.article.title} | ut.code();</title>
 		<meta property="og:title" content={data.article.title} />
+		<meta property="og:type" content="article" />
 		{#if data.article.excerpt}
 			<meta name="description" content={data.article.excerpt} />
 			<meta property="og:description" content={data.article.excerpt} />
+			<meta name="twitter:description" content={data.article.excerpt} />
 		{/if}
 		{#if data.article.coverUrl}
 			<meta property="og:image" content={data.article.coverUrl} />
+			<meta name="twitter:image" content={data.article.coverUrl} />
 		{/if}
-		<meta property="og:type" content="article" />
+		<meta name="twitter:title" content={data.article.title} />
+		{#if data.article.publishedAt}
+			<meta property="article:published_time" content={data.article.publishedAt.toISOString()} />
+		{/if}
+		{@html `<script type="application/ld+json">${JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "Article",
+			headline: data.article.title,
+			...(data.article.excerpt && { description: data.article.excerpt }),
+			...(data.article.coverUrl && { image: data.article.coverUrl }),
+			...(data.article.publishedAt && { datePublished: data.article.publishedAt.toISOString() }),
+			dateModified: data.article.updatedAt.toISOString(),
+			...(data.article.author && {
+				author: {
+					"@type": "Person",
+					name: data.article.author.name,
+					url: `https://cms.utcode.net/members/${data.article.author.slug}`,
+				},
+			}),
+			publisher: {
+				"@type": "Organization",
+				name: "ut.code();",
+				logo: { "@type": "ImageObject", url: "https://cms.utcode.net/og-image.svg" },
+			},
+			mainEntityOfPage: `https://cms.utcode.net/articles/${data.article.slug}`,
+		})}</script>`}
 	{/if}
 </svelte:head>
 

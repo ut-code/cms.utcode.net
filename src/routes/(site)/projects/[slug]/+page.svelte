@@ -11,13 +11,16 @@
 <svelte:head>
 	{#if data.project}
 		<title>{data.project.name} | ut.code();</title>
-		<meta property="og:title" content={data.project.name} />
+		<meta property="og:title" content="{data.project.name} | ut.code();" />
+		<meta name="twitter:title" content="{data.project.name} | ut.code();" />
 		{#if data.project.description}
 			<meta name="description" content={data.project.description} />
 			<meta property="og:description" content={data.project.description} />
+			<meta name="twitter:description" content={data.project.description} />
 		{/if}
 		{#if data.project.coverUrl}
 			<meta property="og:image" content={data.project.coverUrl} />
+			<meta name="twitter:image" content={data.project.coverUrl} />
 		{/if}
 	{/if}
 </svelte:head>
@@ -35,7 +38,7 @@
 			<img
 				src={data.project.coverUrl}
 				alt={data.project.name}
-				class="mb-6 aspect-[5/3] w-full rounded-xl object-cover sm:mb-8"
+				class="mb-6 w-full rounded-xl sm:mb-8"
 				loading="lazy"
 			/>
 		{/if}

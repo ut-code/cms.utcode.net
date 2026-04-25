@@ -10,6 +10,36 @@ import { db } from "$lib/server/drivers/db";
 import { escapeLikePattern } from "$lib/shared/logic/sql-escape";
 import { article } from "$lib/shared/models/schema";
 
+/**
+ * Simple sliding-window rate limiter.
+ * Tracks request timestamps per IP and rejects when the window limit is exceeded.
+ */
+function createRateLimiter(windowMs: number, maxRequests: number) {
+  const requests = new Map<string, number[]>();
+
+  // Periodic cleanup to prevent memory leak
+  setInterval(() => {
+    const now = Date.now();
+    for (const [ip, timestamps] of requests) {
+      const valid = timestamps.filter((t) => now - t < windowMs);
+      if (valid.length === 0) requests.delete(ip);
+      else requests.set(ip, valid);
+    }
+  }, windowMs);
+
+  return (ip: string): boolean => {
+    const now = Date.now();
+    const timestamps = (requests.get(ip) ?? []).filter((t) => now - t < windowMs);
+    if (timestamps.length >= maxRequests) return false;
+    timestamps.push(now);
+    requests.set(ip, timestamps);
+    return true;
+  };
+}
+
+const authLimiter = createRateLimiter(60_000, 15);
+const mutationLimiter = createRateLimiter(60_000, 60);
+
 const handleAuth: Handle = async ({ event, resolve }) => {
   return await svelteKitHandler({ event, resolve, auth, building });
 };
@@ -66,6 +96,28 @@ const handleRedirect: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
+const handleRateLimit: Handle = async ({ event, resolve }) => {
+  const ip = event.getClientAddress();
+  const path = event.url.pathname;
+
+  if (path.startsWith("/api/auth")) {
+    if (!authLimiter(ip)) error(429, "Too many requests");
+  } else if (event.request.method === "POST") {
+    if (!mutationLimiter(ip)) error(429, "Too many requests");
+  }
+
+  return resolve(event);
+};
+
+const handleSecurityHeaders: Handle = async ({ event, resolve }) => {
+  const response = await resolve(event);
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  response.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  return response;
+};
+
 const handleCache: Handle = async ({ event, resolve }) => {
   const response = await resolve(event);
   const path = event.url.pathname;
@@ -92,4 +144,10 @@ const handleCache: Handle = async ({ event, resolve }) => {
   return response;
 };
 
-export const handle = sequence(handleRedirect, handleAuth, handleCache);
+export const handle = sequence(
+  handleRedirect,
+  handleRateLimit,
+  handleAuth,
+  handleSecurityHeaders,
+  handleCache,
+);

@@ -9,6 +9,7 @@
 		name="description"
 		content="ut.code();への寄付・協賛をお願いしております。皆様のご支援により、より多くの方にソフトウェア開発の魅力を届けることができます。"
 	/>
+	<meta property="og:description" content="ut.code();への寄付・協賛をお願いしております。皆様のご支援により、より多くの方にソフトウェア開発の魅力を届けることができます。" />
 </svelte:head>
 
 <!-- Header -->

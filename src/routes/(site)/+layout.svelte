@@ -1,22 +1,27 @@
 <script lang="ts">
+	import { page } from "$app/stores";
 	import { Menu, Search } from "lucide-svelte";
 	import logo from "$lib/assets/logo.svg";
 	import SiteSearchModal, { openSearch } from "$lib/components/site-search-modal.svelte";
-	import { env } from "$env/dynamic/public";
-
 	let { children } = $props();
 
-	const showDevBanner = env.PUBLIC_SHOW_DEV_BANNER === "true";
+	const SITE = "https://cms.utcode.net";
+	const canonicalUrl = $derived(`${SITE}${$page.url.pathname}`);
 </script>
 
 <svelte:head>
+	<link rel="canonical" href={canonicalUrl} />
 	<meta name="description" content="東京大学のソフトウェアエンジニアリングサークル ut.code();" />
 	<meta property="og:site_name" content="ut.code();" />
 	<meta property="og:type" content="website" />
-	<meta property="og:image" content="https://cms.utcode.net/og-image.svg" />
-	<meta property="og:url" content="https://cms.utcode.net" />
+	<meta property="og:title" content="ut.code(); - 東京大学ソフトウェアエンジニアリングサークル" />
+	<meta property="og:description" content="東京大学のソフトウェアエンジニアリングサークル ut.code();" />
+	<meta property="og:image" content="{SITE}/og-image.svg" />
+	<meta property="og:url" content={canonicalUrl} />
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:image" content="https://cms.utcode.net/og-image.svg" />
+	<meta name="twitter:title" content="ut.code(); - 東京大学ソフトウェアエンジニアリングサークル" />
+	<meta name="twitter:description" content="東京大学のソフトウェアエンジニアリングサークル ut.code();" />
+	<meta name="twitter:image" content="{SITE}/og-image.svg" />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
 	<link
@@ -28,20 +33,8 @@
 <div class="drawer min-h-screen bg-white font-[DM_Sans,system-ui,sans-serif] text-zinc-900">
 	<input id="site-drawer" type="checkbox" class="drawer-toggle" />
 	<div class="drawer-content">
-		<!-- Development Alert -->
-		{#if showDevBanner}
-			<div
-				role="alert"
-				class="alert fixed top-0 right-0 left-0 z-50 rounded-none border-b-2 border-orange-600 bg-gradient-to-r from-orange-500 to-amber-500 py-4 text-center shadow-lg"
-			>
-				<span class="font-[JetBrains_Mono,monospace] text-base font-semibold text-white drop-shadow-md">
-					⚠️ このサイトは開発中です
-				</span>
-			</div>
-		{/if}
-
 		<nav
-			class="sticky {showDevBanner ? 'top-14' : 'top-0'} right-0 left-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-md"
+			class="sticky top-0 right-0 left-0 z-50 border-b border-zinc-200 bg-white/80 backdrop-blur-md"
 		>
 			<div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
 				<div class="flex items-center gap-4">

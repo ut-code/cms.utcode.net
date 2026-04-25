@@ -18,6 +18,8 @@
 <svelte:head>
 	<title>メンバー一覧 | ut.code();</title>
 	<meta property="og:title" content="メンバー一覧 | ut.code();" />
+	<meta name="description" content="ut.code(); で活動する仲間たちを紹介します。" />
+	<meta property="og:description" content="ut.code(); で活動する仲間たちを紹介します。" />
 </svelte:head>
 
 <!-- Header -->
@@ -61,7 +63,7 @@
 							</span>
 						</div>
 					{/if}
-					<h2 class="font-semibold transition-colors group-hover:text-primary">{member.name}</h2>
+					<h2 class="truncate font-semibold transition-colors group-hover:text-primary">{member.name}</h2>
 					{#if member.bio}
 						<p class="mt-2 line-clamp-2 text-sm leading-relaxed text-zinc-500">{member.bio}</p>
 					{/if}

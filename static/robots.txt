@@ -1,3 +1,8 @@
-# disallow all crawling (internal CMS tool)
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /admin
+Disallow: /login
+Disallow: /api/
+Disallow: /search
+
+Sitemap: https://cms.utcode.net/sitemap.xml

@@ -12,6 +12,7 @@
 		name="description"
 		content="ut.code();への参加方法をご案内します。プログラミングに興味がある学生を広く歓迎しています。"
 	/>
+	<meta property="og:description" content="ut.code();への参加方法をご案内します。プログラミングに興味がある学生を広く歓迎しています。" />
 </svelte:head>
 
 <section class="border-b border-zinc-200 bg-zinc-50/50 py-16">

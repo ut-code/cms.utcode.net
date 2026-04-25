@@ -72,6 +72,16 @@
 		name="description"
 		content="ut.code(); についてよくある質問とその回答をまとめました。入部方法、活動内容、参加条件などについてご確認いただけます。"
 	/>
+	<meta property="og:description" content="ut.code(); についてよくある質問とその回答をまとめました。入部方法、活動内容、参加条件などについてご確認いただけます。" />
+	{@html `<script type="application/ld+json">${JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "FAQPage",
+		mainEntity: faqs.map((faq) => ({
+			"@type": "Question",
+			name: faq.question,
+			acceptedAnswer: { "@type": "Answer", text: faq.answer },
+		})),
+	})}</script>`}
 </svelte:head>
 
 <!-- Header -->

@@ -36,6 +36,8 @@
 <svelte:head>
 	<title>プロジェクト一覧 | ut.code();</title>
 	<meta property="og:title" content="プロジェクト一覧 | ut.code();" />
+	<meta name="description" content="ut.code(); が手がける様々なソフトウェアプロジェクト。" />
+	<meta property="og:description" content="ut.code(); が手がける様々なソフトウェアプロジェクト。" />
 </svelte:head>
 
 <!-- Header -->

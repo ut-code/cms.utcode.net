@@ -6,6 +6,8 @@
 <svelte:head>
 	<title>活動内容 | ut.code();</title>
 	<meta property="og:title" content="活動内容 | ut.code();" />
+	<meta name="description" content="ut.code(); の活動内容を紹介します。学習・交流・開発の三軸で活動しています。" />
+	<meta property="og:description" content="ut.code(); の活動内容を紹介します。学習・交流・開発の三軸で活動しています。" />
 </svelte:head>
 
 <!-- Cover Image Header -->

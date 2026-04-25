@@ -13,14 +13,27 @@
 <svelte:head>
 	{#if data.member}
 		<title>{data.member.name} | ut.code();</title>
-		<meta property="og:title" content={data.member.name} />
+		<meta property="og:title" content="{data.member.name} | ut.code();" />
+		<meta name="twitter:title" content="{data.member.name} | ut.code();" />
 		{#if data.member.bio}
 			<meta name="description" content={data.member.bio} />
 			<meta property="og:description" content={data.member.bio} />
+			<meta name="twitter:description" content={data.member.bio} />
 		{/if}
 		{#if data.member.imageUrl}
 			<meta property="og:image" content={data.member.imageUrl} />
+			<meta name="twitter:image" content={data.member.imageUrl} />
 		{/if}
+		{@html `<script type="application/ld+json">${JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "Person",
+			name: data.member.name,
+			...(data.member.bio && { description: data.member.bio }),
+			...(data.member.imageUrl && { image: data.member.imageUrl }),
+			url: `https://cms.utcode.net/members/${data.member.slug}`,
+			memberOf: { "@type": "Organization", name: "ut.code();" },
+			...(data.member.githubUrl && { sameAs: [data.member.githubUrl, data.member.twitterUrl, data.member.websiteUrl].filter(Boolean) }),
+		})}</script>`}
 	{/if}
 </svelte:head>
 

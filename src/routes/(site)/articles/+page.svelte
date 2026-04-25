@@ -18,6 +18,8 @@
 <svelte:head>
 	<title>記事一覧 | ut.code();</title>
 	<meta property="og:title" content="記事一覧 | ut.code();" />
+	<meta name="description" content="ut.code(); メンバーが執筆した記事やニュースをお届けします。" />
+	<meta property="og:description" content="ut.code(); メンバーが執筆した記事やニュースをお届けします。" />
 </svelte:head>
 
 <!-- Header -->
