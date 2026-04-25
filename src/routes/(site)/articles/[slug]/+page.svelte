@@ -1,9 +1,10 @@
 <script lang="ts">
 	import Markdown from "$lib/components/Markdown.svelte";
+	import { safeJsonLd } from "$lib/shared/logic/json-ld";
 	import type { PageData } from "./$types";
 
 	const { data }: { data: PageData } = $props();
-	
+
 </script>
 
 <svelte:head>
@@ -24,7 +25,7 @@
 		{#if data.article.publishedAt}
 			<meta property="article:published_time" content={data.article.publishedAt.toISOString()} />
 		{/if}
-		{@html `<script type="application/ld+json">${JSON.stringify({
+		{@html `<script type="application/ld+json">${safeJsonLd({
 			"@context": "https://schema.org",
 			"@type": "Article",
 			headline: data.article.title,

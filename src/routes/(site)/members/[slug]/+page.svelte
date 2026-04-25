@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Github, Globe, Twitter } from "lucide-svelte";
 	import Markdown from "$lib/components/Markdown.svelte";
+	import { safeJsonLd } from "$lib/shared/logic/json-ld";
 	import type { PageData } from "./$types";
 
 	const { data }: { data: PageData } = $props();
@@ -24,7 +25,7 @@
 			<meta property="og:image" content={data.member.imageUrl} />
 			<meta name="twitter:image" content={data.member.imageUrl} />
 		{/if}
-		{@html `<script type="application/ld+json">${JSON.stringify({
+		{@html `<script type="application/ld+json">${safeJsonLd({
 			"@context": "https://schema.org",
 			"@type": "Person",
 			name: data.member.name,

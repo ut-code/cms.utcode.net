@@ -97,14 +97,7 @@
 					ut.code();
 					の新歓イベントとしては一番大きなものになります！部員や他の新入生とも交流できるいい機会になります！ぜひご参加ください！
 				</p>
-				<a
-					href="https://forms.gle/m2BV6YbAPkw4yXLq7"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="mt-3 inline-flex items-center gap-1 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-primary/90"
-				>
-					参加登録はこちら →
-				</a>
+				<p class="mt-3 text-sm text-zinc-400">※ 参加登録は締め切りました</p>
 			</div>
 			<div>
 				<h3 class="mb-2 font-semibold">新歓ハッカソン</h3>

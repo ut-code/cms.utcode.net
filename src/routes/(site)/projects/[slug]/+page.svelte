@@ -82,6 +82,7 @@
 			<Markdown content={data.project.content} />
 		{/if}
 
+		{#if data.project.projectMembers.length > 0}
 		<section class="mt-8 border-t border-zinc-200 pt-6 sm:mt-12 sm:pt-8">
 			<h2 class="mb-3 text-lg font-semibold sm:mb-4 sm:text-xl">メンバー</h2>
 			<div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
@@ -114,6 +115,7 @@
 				{/each}
 			</div>
 		</section>
+		{/if}
 	</article>
 {:else}
 	<div class="mx-auto max-w-3xl px-6 py-16 text-center">

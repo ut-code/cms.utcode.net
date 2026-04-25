@@ -8,6 +8,7 @@
   import SponsorsSection from "$lib/components/home/SponsorsSection.svelte";
   import StatsSection from "$lib/components/home/StatsSection.svelte";
   import { UTCODE_FOUNDING_YEAR } from "$lib/shared/constants";
+  import { safeJsonLd } from "$lib/shared/logic/json-ld";
   import type { PageData } from "./$types";
 
   const { data }: { data: PageData } = $props();
@@ -21,7 +22,7 @@
   <meta property="og:title" content="ut.code(); - 東京大学ソフトウェアエンジニアリングサークル" />
   <meta name="description" content="ut.code();は東京大学のソフトウェアエンジニアリングサークルです。学習・交流・開発を通じてプログラミングの魅力を届けます。" />
   <meta property="og:description" content="ut.code();は東京大学のソフトウェアエンジニアリングサークルです。学習・交流・開発を通じてプログラミングの魅力を届けます。" />
-  {@html `<script type="application/ld+json">${JSON.stringify({
+  {@html `<script type="application/ld+json">${safeJsonLd({
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "ut.code();",
