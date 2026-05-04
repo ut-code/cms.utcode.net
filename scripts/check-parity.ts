@@ -206,9 +206,11 @@ async function checkSoft404() {
 // === 3. SEO メタタグ ===
 async function checkMeta() {
   const r = await fetchFollow("/");
-  const ogLocale = /(?:property|name)=["']og:locale["'][^>]*content=["']ja_JP["']/i.test(r.body) ||
+  const ogLocale =
+    /(?:property|name)=["']og:locale["'][^>]*content=["']ja_JP["']/i.test(r.body) ||
     /content=["']ja_JP["'][^>]*(?:property|name)=["']og:locale["']/i.test(r.body);
-  const twitterSite = /name=["']twitter:site["'][^>]*content=["']@[^"']+["']/i.test(r.body) ||
+  const twitterSite =
+    /name=["']twitter:site["'][^>]*content=["']@[^"']+["']/i.test(r.body) ||
     /content=["']@[^"']+["'][^>]*name=["']twitter:site["']/i.test(r.body);
   record("META", "og:locale=ja_JP", ogLocale, ogLocale ? "found" : "missing on /");
   record("META", "twitter:site", twitterSite, twitterSite ? "found" : "missing on /");
@@ -229,7 +231,8 @@ async function checkNoImage() {
       record("NO_IMAGE", path, false, `article not reachable (status=${r.status})`);
       continue;
     }
-    const broken = r.body.includes("+/images/no-image.svg") ||
+    const broken =
+      r.body.includes("+/images/no-image.svg") ||
       r.body.includes("%2B/images/no-image.svg") ||
       r.body.includes("+%2Fimages%2Fno-image.svg");
     record("NO_IMAGE", path, !broken, broken ? "found broken `+/images/no-image.svg`" : "ok");
@@ -239,7 +242,8 @@ async function checkNoImage() {
 // === 5. 認可ガード ===
 async function checkAuth() {
   const admin = await fetchManual("/admin");
-  const adminOk = (admin.status === 302 || admin.status === 303 || admin.status === 307) &&
+  const adminOk =
+    (admin.status === 302 || admin.status === 303 || admin.status === 307) &&
     /\/login/.test(admin.location ?? "");
   record(
     "AUTH",
@@ -281,7 +285,9 @@ async function checkSitemapSamples() {
   const buckets: Record<string, string[]> = {};
   for (const p of allPaths) {
     const key = p.split("/").slice(0, 3).join("/") || "/";
-    (buckets[key] ??= []).push(p);
+    const bucket = buckets[key] ?? [];
+    bucket.push(p);
+    buckets[key] = bucket;
   }
   const sampled: string[] = [];
   for (const paths of Object.values(buckets)) {
@@ -299,7 +305,9 @@ async function checkSitemapSamples() {
       continue;
     }
     if (r.status === 301 || r.status === 308) {
-      const followUrl = r.location?.startsWith("http") ? r.location : `${NEW_BASE}${r.location ?? ""}`;
+      const followUrl = r.location?.startsWith("http")
+        ? r.location
+        : `${NEW_BASE}${r.location ?? ""}`;
       try {
         const followed = await fetch(followUrl, { redirect: "follow" });
         if (followed.ok) {
@@ -319,9 +327,16 @@ async function checkSitemapSamples() {
   }
 
   const detail = `${pass}/${sampled.length} reachable${
-    failed.length > 0 ? `\n    - ${failed.slice(0, 20).join("\n    - ")}${failed.length > 20 ? `\n    - ... (${failed.length - 20} more)` : ""}` : ""
+    failed.length > 0
+      ? `\n    - ${failed.slice(0, 20).join("\n    - ")}${failed.length > 20 ? `\n    - ... (${failed.length - 20} more)` : ""}`
+      : ""
   }`;
-  record("SITEMAP_SAMPLE", `${sampled.length} URLs across ${Object.keys(buckets).length} buckets`, fail === 0, detail);
+  record(
+    "SITEMAP_SAMPLE",
+    `${sampled.length} URLs across ${Object.keys(buckets).length} buckets`,
+    fail === 0,
+    detail,
+  );
 }
 
 async function main() {
