@@ -11,18 +11,19 @@
 	import {
 		addMember,
 		editProject,
-		getMembers,
 		getProject,
 		removeMember,
 		removeProject,
 		transferLead,
 	} from "$lib/data/private/projects.remote";
 	import type { ProjectCategory } from "$lib/shared/models/schema";
+	import type { PageData } from "./$types";
 
+	const { data }: { data: PageData } = $props();
 	const toast = useToast();
 	const id = page.params.id ?? "";
-	const project = await getProject(id);
-	const members = await getMembers();
+	const project = $derived(data.project);
+	const members = $derived(data.members);
 	let isSubmitting = $state(false);
 	let showAddMember = $state(false);
 	let showTransferLead = $state(false);

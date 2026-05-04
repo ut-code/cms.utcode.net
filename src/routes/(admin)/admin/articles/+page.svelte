@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { Calendar, Check, ChevronRight, Eye, FileText, Plus, Search, SquarePen, X } from "lucide-svelte";
 	import { page } from "$app/state";
-	import { getArticles } from "$lib/data/private/articles.remote";
+	import type { PageData } from "./$types";
 
-	const allArticles = await getArticles();
+	const { data }: { data: PageData } = $props();
+	const allArticles = $derived(data.allArticles);
 	const statusFilter = $derived(page.url.searchParams.get("status"));
 	let searchQuery = $state("");
 

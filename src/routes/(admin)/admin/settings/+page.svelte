@@ -1,17 +1,15 @@
 <script lang="ts">
 	import { Settings } from "lucide-svelte";
+	import { untrack } from "svelte";
 	import { useToast } from "$lib/components/toast/controls.svelte";
-	import { getMembers } from "$lib/data/private/members.remote";
-	import {
-		getMyPreference,
-		updateDefaultAuthor,
-	} from "$lib/data/private/user-preferences.remote";
+	import { updateDefaultAuthor } from "$lib/data/private/user-preferences.remote";
+	import type { PageData } from "./$types";
 
+	const { data }: { data: PageData } = $props();
 	const toast = useToast();
-	const members = await getMembers();
-	const preference = await getMyPreference();
+	const members = $derived(data.members);
 
-	let defaultAuthorId = $state(preference?.defaultAuthorId ?? null);
+	let defaultAuthorId = $state(untrack(() => data.preference?.defaultAuthorId ?? null));
 	let isSubmitting = $state(false);
 
 	async function handleSubmit() {

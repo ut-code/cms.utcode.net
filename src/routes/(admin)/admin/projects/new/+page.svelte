@@ -2,11 +2,13 @@
 	import { goto } from "$app/navigation";
 	import ProjectForm from "$lib/components/ProjectForm.svelte";
 	import { useToast } from "$lib/components/toast/controls.svelte";
-	import { getMembers, saveProject } from "$lib/data/private/projects.remote";
+	import { saveProject } from "$lib/data/private/projects.remote";
 	import type { ProjectCategory } from "$lib/shared/models/schema";
+	import type { PageData } from "./$types";
 
+	const { data }: { data: PageData } = $props();
 	const toast = useToast();
-	const members = await getMembers();
+	const members = $derived(data.members);
 	let isSubmitting = $state(false);
 
 	async function handleSubmit(data: {

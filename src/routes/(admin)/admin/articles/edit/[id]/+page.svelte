@@ -5,14 +5,15 @@
 	import ArticleForm from "$lib/components/ArticleForm.svelte";
 	import { confirm } from "$lib/components/confirm-modal.svelte";
 	import { useToast } from "$lib/components/toast/controls.svelte";
-	import { getMembers } from "$lib/data/private/members.remote";
-	import { editArticle, getArticle, removeArticle } from "$lib/data/private/articles.remote";
+	import { editArticle, removeArticle } from "$lib/data/private/articles.remote";
+	import type { PageData } from "./$types";
 
 	const toast = useToast();
 
+	const { data }: { data: PageData } = $props();
 	const id = page.params.id ?? "";
-	const article = await getArticle(id);
-	const authors = await getMembers();
+	const article = $derived(data.article);
+	const authors = $derived(data.authors);
 	let isSubmitting = $state(false);
 
 	async function handleSubmit(data: {

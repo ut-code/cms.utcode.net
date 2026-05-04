@@ -4,12 +4,11 @@
 	import NeedsAttention from "$lib/components/admin-dashboard/NeedsAttention.svelte";
 	import QuickActions from "$lib/components/admin-dashboard/QuickActions.svelte";
 	import StatsGrid from "$lib/components/admin-dashboard/StatsGrid.svelte";
-	import { getAdminStats } from "$lib/data/private/stats.remote";
 	import { ITEMS_PER_PAGE } from "$lib/shared/constants";
 	import type { PageData } from "./$types";
 
 	const { data }: { data: PageData } = $props();
-	const stats = await getAdminStats();
+	const stats = $derived(data.stats);
 
 	const totalPages = $derived(Math.ceil(stats.draftArticles.length / ITEMS_PER_PAGE));
 	const paginatedDrafts = $derived(
