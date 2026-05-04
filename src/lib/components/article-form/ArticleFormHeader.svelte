@@ -3,15 +3,18 @@
 		ArrowLeft,
 		Check,
 		ChevronDown,
+		ChevronsUpDown,
 		ExternalLink,
 		Eye,
 		EyeOff,
 		Loader2,
 		MoreHorizontal,
+		Search,
 		Trash2,
+		UserCircle2,
 	} from "lucide-svelte";
 	import { goto } from "$app/navigation";
-	import { DropdownMenu } from "bits-ui";
+	import { Combobox, DropdownMenu } from "bits-ui";
 
 	type Author = {
 		id: string;
@@ -45,6 +48,7 @@
 	let successTimeout: ReturnType<typeof setTimeout> | null = null;
 	let authorMenuOpen = $state(false);
 	let moreMenuOpen = $state(false);
+	let authorSearch = $state("");
 
 	$effect(() => {
 		if (saveSuccess) {
@@ -71,6 +75,21 @@
 	}
 
 	const selectedAuthor = $derived(authors.find((a) => a.id === authorId));
+
+	// Combobox uses string values; we map "" <-> null for "No author".
+	const authorComboValue = $derived(authorId ?? "");
+	function handleAuthorChange(value: string) {
+		authorId = value === "" ? null : value;
+	}
+
+	const filteredAuthors = $derived(
+		authorSearch.trim() === ""
+			? authors
+			: authors.filter((a) => {
+					const q = authorSearch.toLowerCase();
+					return a.name.toLowerCase().includes(q) || a.slug.toLowerCase().includes(q);
+				}),
+	);
 </script>
 
 <header
@@ -87,61 +106,96 @@
 			<span class="hidden sm:inline">Articles</span>
 		</button>
 
-		<!-- Visibility Toggle -->
+		<!-- Visibility Toggle (looks like a switch button: bordered, with chevron + clear hover affordance) -->
 		<button
 			type="button"
 			onclick={() => (published = !published)}
-			class="flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium transition-colors sm:px-2.5 sm:py-1 {published
-				? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
-				: 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'}"
+			aria-pressed={published}
+			title={published ? "Click to unpublish" : "Click to publish"}
+			class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium shadow-sm transition-all hover:shadow-md active:scale-[0.98] sm:px-3 sm:py-1.5 {published
+				? 'border-emerald-300 bg-emerald-50 text-emerald-700 hover:border-emerald-400 hover:bg-emerald-100'
+				: 'border-zinc-300 bg-white text-zinc-700 hover:border-zinc-400 hover:bg-zinc-50'}"
 		>
 			{#if published}
-				<Eye class="h-3 w-3" />
-				<span class="hidden sm:inline">Public</span>
+				<Eye class="h-3.5 w-3.5" />
+				<span>Public</span>
 			{:else}
-				<EyeOff class="h-3 w-3" />
-				<span class="hidden sm:inline">Draft</span>
+				<EyeOff class="h-3.5 w-3.5" />
+				<span>Draft</span>
 			{/if}
+			<ChevronsUpDown class="h-3 w-3 opacity-60" />
 		</button>
 
-		<!-- Author Dropdown -->
-		<DropdownMenu.Root bind:open={authorMenuOpen}>
-			<DropdownMenu.Trigger
-				class="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-zinc-600 transition-colors hover:bg-zinc-100 sm:px-3"
+		<!-- Author Combobox (searchable) -->
+		<Combobox.Root
+			type="single"
+			value={authorComboValue}
+			onValueChange={handleAuthorChange}
+			bind:open={authorMenuOpen}
+			onOpenChangeComplete={(o) => {
+				if (!o) authorSearch = "";
+			}}
+		>
+			<Combobox.Trigger
+				class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-2 py-1.5 text-sm text-zinc-700 shadow-sm transition-colors hover:border-primary/30 hover:bg-primary/5 sm:px-3"
+				aria-label="Select author"
 			>
+				<UserCircle2 class="h-3.5 w-3.5 text-zinc-400" />
 				{#if selectedAuthor}
 					<span class="max-w-24 truncate sm:max-w-32">{selectedAuthor.name}</span>
 				{:else}
 					<span class="text-zinc-400">No author</span>
 				{/if}
 				<ChevronDown class="h-3 w-3 {authorMenuOpen ? 'rotate-180' : ''} transition-transform" />
-			</DropdownMenu.Trigger>
-			<DropdownMenu.Content
-				class="z-50 mt-1 max-h-60 min-w-40 overflow-auto rounded-lg border border-zinc-200 bg-white p-1 shadow-lg"
-				sideOffset={4}
-			>
-				<DropdownMenu.Item
-					class="cursor-pointer rounded-md px-3 py-2 text-sm text-zinc-500 transition-colors hover:bg-zinc-100"
-					onSelect={() => (authorId = null)}
+			</Combobox.Trigger>
+			<Combobox.Portal>
+				<Combobox.Content
+					class="z-50 mt-1 w-64 overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-lg"
+					sideOffset={4}
 				>
-					No author
-				</DropdownMenu.Item>
-				{#each authors as author (author.id)}
-					<DropdownMenu.Item
-						class="cursor-pointer rounded-md px-3 py-2 text-sm text-zinc-900 transition-colors hover:bg-zinc-100 {author.id ===
-						authorId
-							? 'bg-primary/5 font-medium'
-							: ''}"
-						onSelect={() => (authorId = author.id)}
-					>
-						<div class="flex flex-col">
-							<span>{author.name}</span>
-							<span class="text-xs text-zinc-500">@{author.slug}</span>
-						</div>
-					</DropdownMenu.Item>
-				{/each}
-			</DropdownMenu.Content>
-		</DropdownMenu.Root>
+					<div class="relative border-b border-zinc-100">
+						<Search class="pointer-events-none absolute top-1/2 left-2.5 h-3.5 w-3.5 -translate-y-1/2 text-zinc-400" />
+						<Combobox.Input
+							oninput={(e) => (authorSearch = e.currentTarget.value)}
+							class="w-full bg-transparent py-2 pr-3 pl-8 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none"
+							placeholder="Search authors..."
+							aria-label="Search authors"
+						/>
+					</div>
+					<Combobox.Viewport class="max-h-60 overflow-auto p-1">
+						{#if authorSearch.trim() === ""}
+							<Combobox.Item
+								value=""
+								label="No author"
+								class="data-highlighted:bg-zinc-100 flex cursor-pointer items-center rounded-md px-3 py-2 text-sm text-zinc-500 outline-none {authorId ===
+								null
+									? 'bg-primary/5 font-medium'
+									: ''}"
+							>
+								No author
+							</Combobox.Item>
+						{/if}
+						{#each filteredAuthors as author (author.id)}
+							<Combobox.Item
+								value={author.id}
+								label={author.name}
+								class="data-highlighted:bg-zinc-100 flex cursor-pointer items-center rounded-md px-3 py-2 text-sm text-zinc-900 outline-none {author.id ===
+								authorId
+									? 'bg-primary/5 font-medium'
+									: ''}"
+							>
+								<div class="flex flex-col">
+									<span>{author.name}</span>
+									<span class="text-xs text-zinc-500">@{author.slug}</span>
+								</div>
+							</Combobox.Item>
+						{:else}
+							<div class="px-3 py-2 text-sm text-zinc-400">No matches</div>
+						{/each}
+					</Combobox.Viewport>
+				</Combobox.Content>
+			</Combobox.Portal>
+		</Combobox.Root>
 	</div>
 
 	<div class="flex items-center gap-1 sm:gap-2">
