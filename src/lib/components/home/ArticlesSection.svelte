@@ -1,12 +1,18 @@
 <script lang="ts">
 	import { ArrowRight, Calendar, User } from "lucide-svelte";
 	import type { getPublicArticles } from "$lib/data/public/index.remote";
+	import { resolveCoverUrl } from "$lib/shared/logic/image";
 
 	type Props = {
 		articles: Awaited<ReturnType<typeof getPublicArticles>>;
 	};
 
 	const { articles }: Props = $props();
+
+	// Treat legacy `+/...` URLs (migration artifact) as missing.
+	function hasUsableCover(url: string | null | undefined): url is string {
+		return !!url && !url.startsWith("+/");
+	}
 </script>
 
 <section class="bg-white py-24">
@@ -33,9 +39,9 @@
 						href="/articles/{article.slug}"
 						class="group overflow-hidden rounded-2xl border border-zinc-200 bg-white transition-all hover:border-primary/30 hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
 					>
-						{#if article.coverUrl}
+						{#if hasUsableCover(article.coverUrl)}
 							<img
-								src={article.coverUrl}
+								src={resolveCoverUrl(article.coverUrl)}
 								alt={article.title}
 								class="aspect-[5/3] w-full object-cover"
 								loading="lazy"

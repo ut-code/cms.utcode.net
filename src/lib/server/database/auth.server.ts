@@ -7,7 +7,12 @@ import { auth } from "$lib/server/drivers/auth";
 import { db } from "$lib/server/drivers/db";
 import { user } from "$lib/shared/models/schema";
 
-const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+// 組織脱退から最大 1h でアクセス権限が無効化される。
+// GitHub API レート制限 (5000 req/h) とのバランスで決定。
+// NOTE: ネガティブキャッシュ (非メンバー判定の短期キャッシュ) は未実装。
+// session cleanup で再ログインを強制するため、繰り返し API を叩くケースは多くないと想定。
+// 必要が出たら 5-15 分のネガティブキャッシュを user テーブルに追加検討。
+const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
 export type Session = typeof auth.$Infer.Session;
 
@@ -64,6 +69,21 @@ export async function requireUtCodeMember(): Promise<Session> {
   return session;
 }
 
+/**
+ * 現在のセッションを revoke する。better-auth の sign-out エンドポイントを呼び、
+ * cookie とサーバー側 session を同時に削除する。
+ * 非メンバーが admin にアクセスしてきた際の cleanup 用途。
+ */
+export async function signOutCurrentSession(): Promise<void> {
+  if (env.UNSAFE_DISABLE_AUTH === "true") return;
+  try {
+    await auth.api.signOut({ headers: getRequest().headers });
+  } catch (err) {
+    // signOut の失敗は致命的ではないので呼び出し側で error() を継続させる。
+    console.error("[auth] signOut failed:", err);
+  }
+}
+
 async function checkUtCodeMembership(userId: string): Promise<boolean> {
   const dbUser = await db.query.user.findFirst({
     where: eq(user.id, userId),
@@ -87,7 +107,8 @@ async function checkUtCodeMembership(userId: string): Promise<boolean> {
   return isMember;
 }
 
-const GitHubOrgSchema = v.array(v.object({ login: v.string() }));
+const GitHubUserSchema = v.object({ login: v.string() });
+const GitHubMembershipSchema = v.object({ state: v.string() });
 
 async function verifyUtCodeMemberViaGitHub(userId: string): Promise<boolean> {
   const account = await db.query.account.findFirst({
@@ -96,20 +117,49 @@ async function verifyUtCodeMemberViaGitHub(userId: string): Promise<boolean> {
 
   if (!account?.accessToken) return false;
 
-  const res = await fetch("https://api.github.com/user/orgs", {
-    headers: {
-      Authorization: `Bearer ${account.accessToken}`,
-      Accept: "application/vnd.github+json",
-    },
-  });
+  const headers = {
+    Authorization: `Bearer ${account.accessToken}`,
+    Accept: "application/vnd.github+json",
+  };
 
-  if (!res.ok) return false;
-
-  try {
-    const data = await res.json();
-    const orgs = v.parse(GitHubOrgSchema, data);
-    return orgs.some((org) => org.login === "ut-code");
-  } catch {
+  // 1. Get authenticated user's login.
+  // /user/orgs だと public membership しか返さないため、/orgs/{org}/memberships/{username}
+  // を使う。これには username が必要なので、まず /user で login を取得する。
+  const userRes = await fetch("https://api.github.com/user", { headers });
+  if (!userRes.ok) {
+    // 401/403 はトークン期限切れ等。ログだけ残して false。
+    if (userRes.status === 401 || userRes.status === 403) {
+      console.warn(`[auth] GitHub /user returned ${userRes.status} for user ${userId}`);
+    }
     return false;
   }
+
+  const userData = await userRes.json().catch(() => null);
+  const userParsed = v.safeParse(GitHubUserSchema, userData);
+  if (!userParsed.success) return false;
+  const login = userParsed.output.login;
+
+  // 2. Check active membership in ut-code org.
+  // private membership や private org でも、read:org scope があれば 200 で返る。
+  const memRes = await fetch(
+    `https://api.github.com/orgs/ut-code/memberships/${encodeURIComponent(login)}`,
+    { headers },
+  );
+
+  if (memRes.status === 404) return false;
+  if (!memRes.ok) {
+    if (memRes.status === 401 || memRes.status === 403) {
+      console.warn(
+        `[auth] GitHub /orgs/ut-code/memberships returned ${memRes.status} for ${login}`,
+      );
+    }
+    return false;
+  }
+
+  const memData = await memRes.json().catch(() => null);
+  const memParsed = v.safeParse(GitHubMembershipSchema, memData);
+  if (!memParsed.success) return false;
+
+  // state は "active" | "pending"。pending は招待中なのでメンバー扱いしない。
+  return memParsed.output.state === "active";
 }

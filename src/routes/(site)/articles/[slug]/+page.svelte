@@ -1,10 +1,14 @@
 <script lang="ts">
 	import Markdown from "$lib/components/Markdown.svelte";
+	import { resolveCoverUrl } from "$lib/shared/logic/image";
 	import { safeJsonLd } from "$lib/shared/logic/json-ld";
 	import type { PageData } from "./$types";
 
 	const { data }: { data: PageData } = $props();
 
+	// Normalize cover URL (handles legacy `+/...` migration values and nulls).
+	// See `resolveCoverUrl` for context.
+	const coverUrl = $derived(data.article ? resolveCoverUrl(data.article.coverUrl) : null);
 </script>
 
 <svelte:head>
@@ -17,9 +21,9 @@
 			<meta property="og:description" content={data.article.excerpt} />
 			<meta name="twitter:description" content={data.article.excerpt} />
 		{/if}
-		{#if data.article.coverUrl}
-			<meta property="og:image" content={data.article.coverUrl} />
-			<meta name="twitter:image" content={data.article.coverUrl} />
+		{#if coverUrl}
+			<meta property="og:image" content={coverUrl} />
+			<meta name="twitter:image" content={coverUrl} />
 		{/if}
 		<meta name="twitter:title" content={data.article.title} />
 		{#if data.article.publishedAt}
@@ -30,7 +34,7 @@
 			"@type": "Article",
 			headline: data.article.title,
 			...(data.article.excerpt && { description: data.article.excerpt }),
-			...(data.article.coverUrl && { image: data.article.coverUrl }),
+			...(coverUrl && { image: coverUrl }),
 			...(data.article.publishedAt && { datePublished: data.article.publishedAt.toISOString() }),
 			dateModified: data.article.updatedAt.toISOString(),
 			...(data.article.author && {
@@ -59,9 +63,9 @@
 			← 記事一覧
 		</a>
 
-		{#if data.article.coverUrl}
+		{#if coverUrl}
 			<img
-				src={data.article.coverUrl}
+				src={coverUrl}
 				alt={data.article.title}
 				class="mb-6 aspect-[5/3] w-full rounded-xl object-cover sm:mb-8"
 				loading="lazy"
@@ -107,14 +111,12 @@
 							href="/articles/{relatedArticle.slug}"
 							class="group rounded-xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-4 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-md"
 						>
-							{#if relatedArticle.coverUrl}
-								<img
-									src={relatedArticle.coverUrl}
-									alt={relatedArticle.title}
-									class="mb-3 aspect-[5/3] w-full rounded-lg object-cover"
-									loading="lazy"
-								/>
-							{/if}
+							<img
+								src={resolveCoverUrl(relatedArticle.coverUrl)}
+								alt={relatedArticle.title}
+								class="mb-3 aspect-[5/3] w-full rounded-lg object-cover"
+								loading="lazy"
+							/>
 							<h3 class="mb-2 font-semibold group-hover:text-primary">
 								{relatedArticle.title}
 							</h3>

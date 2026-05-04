@@ -1,9 +1,15 @@
 <script lang="ts">
 	import Pagination from "$lib/components/Pagination.svelte";
 	import { ITEMS_PER_PAGE } from "$lib/shared/constants";
+	import { resolveCoverUrl } from "$lib/shared/logic/image";
 	import type { PageData } from "./$types";
 
 	const { data }: { data: PageData } = $props();
+
+	// Treat legacy `+/...` URLs as missing so the No-Image placeholder kicks in.
+	function hasUsableCover(url: string | null | undefined): url is string {
+		return !!url && !url.startsWith("+/");
+	}
 
 	const totalPages = $derived(Math.ceil(data.articles.length / ITEMS_PER_PAGE));
 	const paginatedArticles = $derived(
@@ -45,9 +51,9 @@
 					href="/articles/{article.slug}"
 					class="group rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
 				>
-					{#if article.coverUrl}
+					{#if hasUsableCover(article.coverUrl)}
 						<img
-							src={article.coverUrl}
+							src={resolveCoverUrl(article.coverUrl)}
 							alt={article.title}
 							class="mb-4 aspect-[5/3] w-full rounded-xl object-cover"
 							loading="lazy"

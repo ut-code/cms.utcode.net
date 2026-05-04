@@ -1,5 +1,13 @@
 /**
  * Article migration worker
+ *
+ * One-shot fix-up for existing prod rows that already migrated with broken
+ * `+/...` cover URLs (28 rows as of 2026-05). Run manually after deploy:
+ *
+ *   UPDATE article SET cover_url = NULL WHERE cover_url LIKE '+/%';
+ *
+ * The rendering layer also tolerates `+/...` via `resolveCoverUrl`, so the
+ * UPDATE is purely cosmetic / for clean data.
  */
 import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
@@ -63,11 +71,18 @@ export async function migrateArticles(repoPath: string, log: Logger): Promise<Mi
       const dirPath = dirname(file);
       const processedBody = await processContentImages(body, dirPath, "articles", log);
 
+      // Legacy utcode.net (Astro) used the path alias `+/` to mean project
+      // root, so frontmatter values like `+/images/no-image.svg` were valid
+      // there. SvelteKit has no such alias — store NULL instead so the UI
+      // falls back to the placeholder via `resolveCoverUrl`.
+      const rawCover = frontmatter.thumbnail?.src;
+      const coverUrl = rawCover && !rawCover.startsWith("+/") ? rawCover : null;
+
       await db.insert(article).values({
         slug,
         title: frontmatter.title,
         content: processedBody,
-        coverUrl: frontmatter.thumbnail?.src ?? null,
+        coverUrl,
         authorId,
         published: true,
         publishedAt: new Date(frontmatter.date),

@@ -3,6 +3,11 @@
 	import { Menu, Search } from "lucide-svelte";
 	import logo from "$lib/assets/logo.svg";
 	import SiteSearchModal, { openSearch } from "$lib/components/site-search-modal.svelte";
+	import {
+		SITE_KEYWORDS,
+		SITE_LOCALE,
+		UTCODE_TWITTER_HANDLE,
+	} from "$lib/shared/constants";
 	let { children } = $props();
 
 	const SITE = "https://cms.utcode.net";
@@ -12,13 +17,16 @@
 <svelte:head>
 	<link rel="canonical" href={canonicalUrl} />
 	<meta name="description" content="東京大学のソフトウェアエンジニアリングサークル ut.code();" />
+	<meta name="keywords" content={SITE_KEYWORDS.join(",")} />
 	<meta property="og:site_name" content="ut.code();" />
 	<meta property="og:type" content="website" />
+	<meta property="og:locale" content={SITE_LOCALE} />
 	<meta property="og:title" content="ut.code(); - 東京大学ソフトウェアエンジニアリングサークル" />
 	<meta property="og:description" content="東京大学のソフトウェアエンジニアリングサークル ut.code();" />
 	<meta property="og:image" content="{SITE}/og-image.svg" />
 	<meta property="og:url" content={canonicalUrl} />
 	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:site" content={UTCODE_TWITTER_HANDLE} />
 	<meta name="twitter:title" content="ut.code(); - 東京大学ソフトウェアエンジニアリングサークル" />
 	<meta name="twitter:description" content="東京大学のソフトウェアエンジニアリングサークル ut.code();" />
 	<meta name="twitter:image" content="{SITE}/og-image.svg" />

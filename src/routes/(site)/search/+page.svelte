@@ -1,9 +1,15 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { Search } from "lucide-svelte";
+	import { resolveCoverUrl } from "$lib/shared/logic/image";
 	import type { PageData } from "./$types";
 
 	const { data }: { data: PageData } = $props();
+
+	// Treat legacy `+/...` URLs (migration artifact) as missing.
+	function hasUsableCover(url: string | null | undefined): url is string {
+		return !!url && !url.startsWith("+/");
+	}
 
 	let inputValue = $state(getQuery());
 
@@ -71,9 +77,9 @@
 							href="/articles/{article.slug}"
 							class="group rounded-xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-md"
 						>
-							{#if article.coverUrl}
+							{#if hasUsableCover(article.coverUrl)}
 								<img
-									src={article.coverUrl}
+									src={resolveCoverUrl(article.coverUrl)}
 									alt={article.title}
 									class="mb-4 aspect-[5/3] w-full rounded-lg object-cover"
 									loading="lazy"

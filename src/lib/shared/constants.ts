@@ -24,6 +24,21 @@ export const MS_PER_DAY = 1000 * 60 * 60 * 24;
 // Organization
 export const UTCODE_FOUNDING_YEAR = 2019;
 
+// Social handles (used in meta tags). Twitter/X handle of the official
+// ut.code(); account; matches the link in the site footer.
+export const UTCODE_TWITTER_HANDLE = "@utokyo_code";
+
+// SEO defaults shared across the public site.
+export const SITE_LOCALE = "ja_JP";
+export const SITE_KEYWORDS = [
+  "プログラミング",
+  "サークル",
+  "東京大学",
+  "Web開発",
+  "ソフトウェアエンジニアリング",
+  "ユーティーコード",
+];
+
 export const CATEGORY_COLORS: Record<ProjectCategory, string> = {
   active: "bg-emerald-100 text-emerald-700 border-emerald-200",
   ended: "bg-zinc-100 text-zinc-600 border-zinc-200",

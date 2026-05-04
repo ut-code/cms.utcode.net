@@ -47,11 +47,83 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 // Global rate limiter for DB lookup redirects (1 request per second)
 let lastDbLookup = 0;
 
+// Old project category names -> new query param values.
+// long-term は旧サイト固有なので /projects 全件にフォールバック（クエリ無し）。
+const OLD_PROJECT_KIND_TO_CATEGORY: Record<string, string | null> = {
+  festival: "festival",
+  hackathon: "hackathon",
+  personal: "personal",
+  "long-term": null,
+  all: null,
+};
+
 const handleRedirect: Handle = async ({ event, resolve }) => {
   const path = event.url.pathname;
 
-  // Format 2: /articles/YYYY/MM-DD_slug -> /articles/YYYY-MM-DD-slug
-  const format2Pattern = /^\/articles\/(\d{4})\/(\d{2}-\d{2})_(.+?)\/?$/;
+  // ---------------------------------------------------------------------------
+  // 旧 utcode.net 互換リダイレクト (静的パターン)
+  // ---------------------------------------------------------------------------
+
+  // 旧 sitemap URL: 検索エンジン再クロール促進のため新 sitemap.xml に流す
+  if (path === "/sitemap-index.xml" || path === "/sitemap-0.xml") {
+    redirect(301, "/sitemap.xml");
+  }
+
+  // 旧メンバー詳細: /members/YYYY/<slug>/ -> /members/<slug>
+  const oldMemberMatch = path.match(/^\/members\/\d{4}\/([^/]+)\/?$/);
+  if (oldMemberMatch?.[1]) {
+    redirect(301, `/members/${oldMemberMatch[1]}`);
+  }
+
+  // 旧プロジェクトのマルチセグメント URL:
+  //   /projects/festival/<event>/<slug>/    -> /projects/<slug>
+  //   /projects/hackathon/<date>/<slug>/    -> /projects/<slug>
+  // 新 DB に slug が無い場合は /projects/[slug] が 404 を返す (過剰な lookup はしない)
+  const oldProjectMultiMatch = path.match(
+    /^\/projects\/(?:festival|hackathon)\/[^/]+\/([^/]+)\/?$/,
+  );
+  if (oldProjectMultiMatch?.[1]) {
+    redirect(301, `/projects/${oldProjectMultiMatch[1]}`);
+  }
+
+  // 旧プロジェクトのカテゴリ一覧: /projects/<kind>/ -> /projects?category=<kind>
+  // 末尾 / は SvelteKit の trailing slash 削除で剥がれる前提
+  const oldProjectKindMatch = path.match(
+    /^\/projects\/(festival|hackathon|long-term|personal|all)\/?$/,
+  );
+  if (oldProjectKindMatch?.[1]) {
+    const newCategory = OLD_PROJECT_KIND_TO_CATEGORY[oldProjectKindMatch[1]];
+    redirect(301, newCategory ? `/projects?category=${newCategory}` : "/projects");
+  }
+
+  // 旧 contact: 新サイトに contact ページ無し。最も近い /about へ
+  if (path === "/contact" || path === "/contact/") {
+    redirect(301, "/about");
+  }
+
+  // 旧 welcome-events 各種 -> /join/welcome-events
+  if (
+    path === "/welcome-events" ||
+    path === "/welcome-events/" ||
+    path === "/welcome-events-2025-summer" ||
+    path === "/welcome-events-2025-summer/"
+  ) {
+    redirect(301, "/join/welcome-events");
+  }
+
+  // 旧 activities サブカテゴリ: /activities/(learn|share|develop)/ -> /activities
+  if (/^\/activities\/(learn|share|develop)\/?$/.test(path)) {
+    redirect(301, "/activities");
+  }
+
+  // ---------------------------------------------------------------------------
+  // 旧記事 URL のリダイレクト
+  // ---------------------------------------------------------------------------
+
+  // Format 2: /articles/YYYY/MM-DD[_-]slug -> /articles/YYYY-MM-DD-slug
+  // 区切りは旧 URL によって `_` だったり `-` だったりするので両方受ける
+  // 例: /articles/2024/05-14-may-festival/ も拾う
+  const format2Pattern = /^\/articles\/(\d{4})\/(\d{2}-\d{2})[_-](.+?)\/?$/;
   const format2Match = path.match(format2Pattern);
   if (format2Match) {
     const [, year, monthDay, slug] = format2Match;
@@ -66,6 +138,12 @@ const handleRedirect: Handle = async ({ event, resolve }) => {
     const oldSlug = format1Match[1];
     // Skip if already in new format (YYYY-MM-DD-slug)
     if (/^\d{4}-\d{2}-\d{2}-/.test(oldSlug)) {
+      return resolve(event);
+    }
+    // 旧サイトのページネーション URL (/articles/2/ 〜 /articles/8/ など) を保護。
+    // 純数字で `like '%-2'` を実行すると末尾 `-2` の記事に誤マッチするので
+    // ここで弾いて /articles/[slug] のロード (getPublicArticleBySlug) に 404 させる。
+    if (/^\d+$/.test(oldSlug)) {
       return resolve(event);
     }
 
