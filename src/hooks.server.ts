@@ -48,12 +48,13 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 let lastDbLookup = 0;
 
 // Old project category names -> new query param values.
-// long-term は旧サイト固有なので /projects 全件にフォールバック（クエリ無し）。
+// 新仕様 (Issue #9) では long-term/festival/hackathon が公開側 kind フィルタの値となる。
+// personal/all は新サイトに対応する kind が無いので /projects 全件にフォールバック (クエリ無し)。
 const OLD_PROJECT_KIND_TO_CATEGORY: Record<string, string | null> = {
   festival: "festival",
   hackathon: "hackathon",
-  personal: "personal",
-  "long-term": null,
+  "long-term": "long-term",
+  personal: null,
   all: null,
 };
 

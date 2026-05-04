@@ -23,10 +23,10 @@ export { getMembers } from "./members.remote";
 // Category and role values as const arrays
 const PROJECT_CATEGORY_VALUES = [
   "active",
-  "ended",
-  "hackathon",
+  "paused",
+  "completed",
   "festival",
-  "personal",
+  "hackathon",
 ] as const satisfies readonly ProjectCategory[];
 
 const PROJECT_ROLE_VALUES = ["lead", "member"] as const satisfies readonly ProjectRole[];

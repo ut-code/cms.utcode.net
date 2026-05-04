@@ -104,13 +104,38 @@ projects
 
 ## Project Categories
 
-| Key         | Label              |
-| ----------- | ------------------ |
-| `active`    | 稼働中プロジェクト |
-| `ended`     | 終了済みプロジェクト |
-| `hackathon` | ハッカソン         |
-| `festival`  | 学園祭             |
-| `personal`  | 個人プロジェクト   |
+カテゴリは「長期プロジェクトのステータス」と「単発イベント種別」を 1 つの列に
+集約する flat な enum で表現する。これは Issue #9 (2026-05-04) の決定。
+
+| Key          | Label              | Kind         |
+| ------------ | ------------------ | ------------ |
+| `active`     | 稼働中プロジェクト | long-term    |
+| `paused`     | 休止中プロジェクト | long-term    |
+| `completed`  | 完了プロジェクト   | long-term    |
+| `festival`   | 学園祭プロジェクト | festival     |
+| `hackathon`  | ハッカソン         | hackathon    |
+
+### 設計判断 (Issue #9)
+
+**選んだ案**: 単一 `category` 列で `active|paused|completed|festival|hackathon` を表現。
+
+**根拠**:
+- 学園祭/ハッカソン は単発イベントで「ステータス」概念を持たないが、
+  分離 (kind + status) すると null 制約と picklist 分岐が複雑化する
+- 公開側の「長期プロジェクト」フィルタは `category in (active, paused, completed)`
+  でシンプルに表現できる
+- 既存スキーマと最小差分で済み、マイグレーションも値のリネーム/再分類のみ
+- CMS UI の表示順や色付けも従来の `Record<ProjectCategory, ...>` パターンを維持できる
+
+**移行**:
+- `ended` → `completed` にリネーム
+- `personal` は廃止し既存データは `completed` に振り分ける
+- `paused` は新規追加 (既存値なし)
+
+**公開フィルタ**:
+- `?category=long-term` の meta 値は引き続き `/projects/long-term` リダイレクト先
+  として全件 (`/projects`) にフォールバックさせる (旧 utcode.net 互換)
+- viewer 側のフィルタ UI は kind 単位 (すべて / 長期 / 学園祭 / ハッカソン)
 
 projectMembers
 ├── projectId    TEXT FK → projects.id  ┐

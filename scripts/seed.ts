@@ -135,7 +135,7 @@ async function seed() {
       name: "Meibo",
       description: "サークル名簿管理システム",
       repoUrl: "https://github.com/ut-code/meibo",
-      category: "ended",
+      category: "completed",
     },
   ] satisfies ProjectInsert[];
   const projects = await db.insert(schema.project).values(projectData).returning();

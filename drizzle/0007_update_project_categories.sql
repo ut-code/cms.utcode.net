@@ -1,0 +1,12 @@
+-- Issue #9: プロジェクトの分類方法の最適化
+--
+-- カテゴリの値を以下のように再編成する:
+--   active     -> active     (変更なし: 稼働中プロジェクト)
+--   ended      -> completed  (リネーム: 完了プロジェクト)
+--   personal   -> completed  (廃止して完了プロジェクトへ統合)
+--   festival   -> festival   (変更なし: 学園祭プロジェクト)
+--   hackathon  -> hackathon  (変更なし: ハッカソン)
+--   ※新規追加: paused (休止中プロジェクト) — マイグレーション時点では該当データなし
+--
+-- カラム型自体は text のままなので ALTER TABLE は不要。値の UPDATE のみ実施する。
+UPDATE "project" SET "category" = 'completed' WHERE "category" IN ('ended', 'personal');
