@@ -218,12 +218,34 @@ async function checkMeta() {
 
 // === 4. no-image fallback ===
 async function checkNoImage() {
-  // 旧 28 件のうち代表サンプル
+  // 旧 28 件のうち代表サンプル。
+  // SvelteKit の hydration payload には生データ (`coverUrl: "+/images/..."`) が含まれることがあるが、
+  // それは描画には使われない。実際にレンダリングされる属性 (img[src], meta[content], JSON-LD) のみ検査する。
   const samples = [
     "/articles/2019-11-03-utcode-lectures-01",
     "/articles/2021-09-24-tuk-programming-workshop",
     "/articles/2022-07-15-summer-events",
     "/articles/2019-09-30-2019a-schedule",
+  ];
+  const brokenPattern = /\+\/images\/no-image\.svg/;
+  const renderingChecks: Array<{ name: string; re: RegExp }> = [
+    { name: "img[src]", re: /<img\b[^>]*\bsrc\s*=\s*["'][^"']*\+\/images\/no-image\.svg/i },
+    {
+      name: "og:image",
+      re: /<meta\b[^>]*\bproperty\s*=\s*["']og:image["'][^>]*\bcontent\s*=\s*["'][^"']*\+\/images\/no-image\.svg/i,
+    },
+    {
+      name: "og:image (reverse)",
+      re: /<meta\b[^>]*\bcontent\s*=\s*["'][^"']*\+\/images\/no-image\.svg["'][^>]*\bproperty\s*=\s*["']og:image["']/i,
+    },
+    {
+      name: "twitter:image",
+      re: /<meta\b[^>]*\bname\s*=\s*["']twitter:image["'][^>]*\bcontent\s*=\s*["'][^"']*\+\/images\/no-image\.svg/i,
+    },
+    {
+      name: "twitter:image (reverse)",
+      re: /<meta\b[^>]*\bcontent\s*=\s*["'][^"']*\+\/images\/no-image\.svg["'][^>]*\bname\s*=\s*["']twitter:image["']/i,
+    },
   ];
   for (const path of samples) {
     const r = await fetchFollow(path);
@@ -231,11 +253,22 @@ async function checkNoImage() {
       record("NO_IMAGE", path, false, `article not reachable (status=${r.status})`);
       continue;
     }
-    const broken =
-      r.body.includes("+/images/no-image.svg") ||
-      r.body.includes("%2B/images/no-image.svg") ||
-      r.body.includes("+%2Fimages%2Fno-image.svg");
-    record("NO_IMAGE", path, !broken, broken ? "found broken `+/images/no-image.svg`" : "ok");
+    const failures = renderingChecks.filter((c) => c.re.test(r.body)).map((c) => c.name);
+    // JSON-LD inside <script type="application/ld+json"> の image フィールドも検査
+    const ldJsonMatch = r.body.match(
+      /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/i,
+    );
+    if (ldJsonMatch?.[1]) {
+      const imageMatch = ldJsonMatch[1].match(/"image"\s*:\s*"([^"]+)"/);
+      if (imageMatch?.[1] && brokenPattern.test(imageMatch[1])) {
+        failures.push("ld+json image");
+      }
+    }
+    if (failures.length > 0) {
+      record("NO_IMAGE", path, false, `broken in: ${failures.join(", ")}`);
+    } else {
+      record("NO_IMAGE", path, true, "ok");
+    }
   }
 }
 
