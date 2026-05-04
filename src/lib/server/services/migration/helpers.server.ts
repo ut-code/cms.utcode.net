@@ -2,7 +2,7 @@
  * Helper functions for migration
  */
 import { readdir, stat } from "node:fs/promises";
-import { extname, join } from "node:path";
+import { basename, dirname, extname, join } from "node:path";
 import * as v from "valibot";
 import { parse as parseYaml } from "yaml";
 import type { ProjectCategory } from "$lib/shared/models/schema";
@@ -24,7 +24,20 @@ export function parseFrontmatter<T>(
   return { frontmatter, body: bodyStr.trim() };
 }
 
-export async function findMarkdownFiles(basePath: string): Promise<string[]> {
+/**
+ * Walk `basePath` and collect markdown files.
+ *
+ * - `pattern: "index"` (default): only `index.md` / `index.mdx`. Used for the
+ *   directory-per-entry layout (members, articles, project form A like
+ *   `coursemate/index.md`).
+ * - `pattern: "all"`: every `.md` / `.mdx`. Used for project form B
+ *   (`hackathon/<date>/<slug>.md`) where multiple flat files share a parent
+ *   directory. See migrate-projects.server.ts for slug derivation.
+ */
+export async function findMarkdownFiles(
+  basePath: string,
+  pattern: "index" | "all" = "index",
+): Promise<string[]> {
   const files: string[] = [];
   async function walk(dir: string): Promise<void> {
     try {
@@ -33,7 +46,7 @@ export async function findMarkdownFiles(basePath: string): Promise<string[]> {
         const fullPath = join(dir, entry.name);
         if (entry.isDirectory()) {
           await walk(fullPath);
-        } else if (entry.name === "index.md" || entry.name === "index.mdx") {
+        } else if (matchesPattern(entry.name, pattern)) {
           files.push(fullPath);
         }
       }
@@ -43,6 +56,36 @@ export async function findMarkdownFiles(basePath: string): Promise<string[]> {
   }
   await walk(basePath);
   return files.sort();
+}
+
+function matchesPattern(name: string, pattern: "index" | "all"): boolean {
+  switch (pattern) {
+    case "index":
+      return name === "index.md" || name === "index.mdx";
+    case "all":
+      return name.endsWith(".md") || name.endsWith(".mdx");
+    default:
+      return pattern satisfies never;
+  }
+}
+
+/**
+ * Derive project slug from a markdown file path.
+ *
+ * Legacy content has two layouts:
+ * - Form A: `<slug>/index.md` (e.g. `coursemate/index.md`) -> parent dir name
+ * - Form B: `hackathon/<date>/<slug>.md` (e.g. `hackathon/2023-08-17/call-paper.md`) -> file basename
+ *
+ * Previously slug was always `basename(dirname(file))`, which collapsed all
+ * Form B siblings under one date dir into the same slug and silently skipped
+ * 9 projects on prod migration.
+ */
+export function deriveProjectSlug(file: string): string {
+  const filename = basename(file);
+  if (filename === "index.md" || filename === "index.mdx") {
+    return basename(dirname(file));
+  }
+  return basename(file, extname(file));
 }
 
 export function generateArticleSlug(dirPath: string): string {

@@ -11,6 +11,7 @@ import { db } from "$lib/server/drivers/db";
 import { article, member, project } from "$lib/shared/models/schema";
 import type { MigrationResult } from "$lib/shared/types/migration";
 import {
+  deriveProjectSlug,
   fileExists,
   findMarkdownFiles,
   generateArticleSlug,
@@ -165,11 +166,13 @@ export async function migrateImages(repoPath: string, log: Logger): Promise<Migr
   // Project images
   log("Processing project images...");
   const projectsPath = join(repoPath, "contents/projects");
-  const projectFiles = await findMarkdownFiles(projectsPath);
+  // Match migrate-projects.server.ts: walk all .md/.mdx so flat layouts
+  // (e.g. hackathon/<date>/<slug>.md) are picked up too.
+  const projectFiles = await findMarkdownFiles(projectsPath, "all");
 
   for (const file of projectFiles) {
     const dirPath = dirname(file);
-    const slug = basename(dirPath);
+    const slug = deriveProjectSlug(file);
 
     try {
       const content = await readFile(file, "utf-8");

@@ -2,19 +2,25 @@
  * Project migration worker
  */
 import { readFile } from "node:fs/promises";
-import { basename, dirname, join } from "node:path";
+import { dirname, join } from "node:path";
 import { eq } from "drizzle-orm";
 import { db } from "$lib/server/drivers/db";
 import { member, project, projectMember } from "$lib/shared/models/schema";
 import type { MigrationResult } from "$lib/shared/types/migration";
-import { findMarkdownFiles, type Logger, mapCategory, parseFrontmatter } from "./helpers.server";
+import {
+  deriveProjectSlug,
+  findMarkdownFiles,
+  type Logger,
+  mapCategory,
+  parseFrontmatter,
+} from "./helpers.server";
 import { processContentImages } from "./image-processor.server";
 import { ProjectFrontmatterSchema } from "./schemas.server";
 
 export async function migrateProjects(repoPath: string, log: Logger): Promise<MigrationResult> {
   log("--- Migrating Projects ---");
   const projectsPath = join(repoPath, "contents/projects");
-  const files = await findMarkdownFiles(projectsPath);
+  const files = await findMarkdownFiles(projectsPath, "all");
   log(`Found ${files.length} project files`);
 
   let created = 0;
@@ -23,7 +29,7 @@ export async function migrateProjects(repoPath: string, log: Logger): Promise<Mi
 
   for (const file of files) {
     const dirPath = dirname(file);
-    const slug = basename(dirPath);
+    const slug = deriveProjectSlug(file);
 
     try {
       const content = await readFile(file, "utf-8");
