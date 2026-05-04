@@ -20,11 +20,10 @@ RUN bun install --frozen-lockfile
 COPY . .
 RUN bun run prepare
 
-# Build with sops secrets
+# SOPS_AGE_KEY: ARG only (no ENV) — ENV bakes the value into image history and build logs.
 ARG SOPS_AGE_KEY
 ARG SECRETS_FILE=secrets.prod.yaml
-ENV SOPS_AGE_KEY=${SOPS_AGE_KEY}
-RUN sops exec-env ${SECRETS_FILE} 'bun run build'
+RUN sops exec-env "$SECRETS_FILE" 'bun run build'
 
 FROM base AS executor
 WORKDIR /app
