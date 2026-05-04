@@ -3,19 +3,26 @@
 	import { CATEGORY_COLORS, ITEMS_PER_PAGE } from "$lib/shared/constants";
 	import {
 		PROJECT_CATEGORIES,
-		PROJECT_CATEGORY_KEYS,
-		type ProjectCategory,
+		PROJECT_KIND_KEYS,
+		PROJECT_KIND_LABELS,
+		projectCategoryToKind,
+		type ProjectKind,
 	} from "$lib/shared/models/schema";
 	import type { PageData } from "./$types";
 
 	const { data }: { data: PageData } = $props();
 
-	const selectedCategory = $derived(
-		PROJECT_CATEGORY_KEYS.find((k) => k === data.categoryParam) ?? "all",
+	// 公開側はカテゴリ単体ではなく上位 kind (long-term / festival / hackathon) でフィルタする。
+	// long-term は active/paused/completed の集合。
+	// 旧 utcode.net 互換: ?category=festival|hackathon|long-term をそのまま受ける。
+	const selectedKind = $derived<ProjectKind | "all">(
+		PROJECT_KIND_KEYS.find((k) => k === data.kindParam) ?? "all",
 	);
 
 	const filteredProjects = $derived(
-		selectedCategory === "all" ? data.projects : data.projects.filter((p) => p.category === selectedCategory),
+		selectedKind === "all"
+			? data.projects
+			: data.projects.filter((p) => projectCategoryToKind(p.category) === selectedKind),
 	);
 
 	const totalPages = $derived(Math.ceil(filteredProjects.length / ITEMS_PER_PAGE));
@@ -23,13 +30,13 @@
 		filteredProjects.slice((data.currentPage - 1) * ITEMS_PER_PAGE, data.currentPage * ITEMS_PER_PAGE),
 	);
 
-	function categoryUrl(category: ProjectCategory | "all"): string {
-		return category === "all" ? "/projects" : `/projects?category=${category}`;
+	function kindUrl(kind: ProjectKind | "all"): string {
+		return kind === "all" ? "/projects" : `/projects?category=${kind}`;
 	}
 
 	function pageUrl(pageNum: number): string {
-		const base = data.categoryParam ? `/projects?category=${data.categoryParam}` : "/projects";
-		return pageNum === 1 ? base : `${base}${data.categoryParam ? "&" : "?"}page=${pageNum}`;
+		const base = data.kindParam ? `/projects?category=${data.kindParam}` : "/projects";
+		return pageNum === 1 ? base : `${base}${data.kindParam ? "&" : "?"}page=${pageNum}`;
 	}
 </script>
 
@@ -54,24 +61,24 @@
 </section>
 
 <div class="mx-auto max-w-6xl px-6 py-12">
-	<!-- Category filter -->
+	<!-- Kind filter (すべて / 長期 / 学園祭 / ハッカソン) -->
 	<div class="mb-8 flex flex-wrap gap-2">
 		<a
-			href={categoryUrl("all")}
-			class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-all hover:bg-primary/5 {selectedCategory === 'all'
+			href={kindUrl("all")}
+			class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-all hover:bg-primary/5 {selectedKind === 'all'
 				? 'border-primary bg-primary text-white'
 				: 'border-zinc-200 bg-white text-zinc-700 hover:border-primary/30'}"
 		>
-			すべて
+			すべてのプロジェクト
 		</a>
-		{#each PROJECT_CATEGORY_KEYS as key (key)}
+		{#each PROJECT_KIND_KEYS as key (key)}
 			<a
-				href={categoryUrl(key)}
-				class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-all hover:bg-primary/5 {selectedCategory === key
+				href={kindUrl(key)}
+				class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-all hover:bg-primary/5 {selectedKind === key
 					? 'border-primary bg-primary text-white'
 					: 'border-zinc-200 bg-white text-zinc-700 hover:border-primary/30'}"
 			>
-				{PROJECT_CATEGORIES[key]}
+				{PROJECT_KIND_LABELS[key]}
 			</a>
 		{/each}
 	</div>

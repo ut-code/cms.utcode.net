@@ -188,23 +188,58 @@ export const articleSlugRedirect = pgTable(
 );
 
 // Project categories - keys defined first for type-safe iteration
+// 単一 category 列で「長期プロジェクトのステータス」と「単発イベント種別」を表現する。
+// active/paused/completed は長期プロジェクトのステータス、festival/hackathon は単発イベント種別。
 export const PROJECT_CATEGORY_KEYS = [
   "active",
-  "ended",
-  "hackathon",
+  "paused",
+  "completed",
   "festival",
-  "personal",
+  "hackathon",
 ] as const;
 
 export type ProjectCategory = (typeof PROJECT_CATEGORY_KEYS)[number];
 
 export const PROJECT_CATEGORIES: Record<ProjectCategory, string> = {
   active: "稼働中プロジェクト",
-  ended: "終了済みプロジェクト",
+  paused: "休止中プロジェクト",
+  completed: "完了プロジェクト",
+  festival: "学園祭プロジェクト",
   hackathon: "ハッカソン",
-  festival: "学園祭",
-  personal: "個人プロジェクト",
 };
+
+// 公開側の上位フィルタ (kind)。長期プロジェクトは active/paused/completed をまとめて 1 つの kind として扱う。
+export const PROJECT_KIND_KEYS = ["long-term", "festival", "hackathon"] as const;
+
+export type ProjectKind = (typeof PROJECT_KIND_KEYS)[number];
+
+export const PROJECT_KIND_LABELS: Record<ProjectKind, string> = {
+  "long-term": "長期プロジェクト",
+  festival: "学園祭プロジェクト",
+  hackathon: "ハッカソン",
+};
+
+export const LONG_TERM_PROJECT_CATEGORIES = [
+  "active",
+  "paused",
+  "completed",
+] as const satisfies readonly ProjectCategory[];
+
+export type LongTermProjectCategory = (typeof LONG_TERM_PROJECT_CATEGORIES)[number];
+
+/**
+ * カテゴリ key からその上位 kind を返す。
+ */
+export function projectCategoryToKind(category: ProjectCategory): ProjectKind {
+  switch (category) {
+    case "festival":
+      return "festival";
+    case "hackathon":
+      return "hackathon";
+    default:
+      return "long-term";
+  }
+}
 
 // Project roles - keys defined first for type-safe iteration
 export const PROJECT_ROLE_KEYS = ["lead", "member"] as const;

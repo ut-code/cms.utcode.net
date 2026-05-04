@@ -21,10 +21,10 @@
 
 	const categoryColors: Record<ProjectCategory, { bg: string; text: string }> = {
 		active: { bg: "bg-emerald-500/10", text: "text-emerald-600" },
-		ended: { bg: "bg-zinc-500/10", text: "text-zinc-600" },
-		hackathon: { bg: "bg-purple-500/10", text: "text-purple-600" },
+		paused: { bg: "bg-amber-500/10", text: "text-amber-600" },
+		completed: { bg: "bg-zinc-500/10", text: "text-zinc-600" },
 		festival: { bg: "bg-pink-500/10", text: "text-pink-600" },
-		personal: { bg: "bg-amber-500/10", text: "text-amber-600" },
+		hackathon: { bg: "bg-purple-500/10", text: "text-purple-600" },
 	};
 </script>
 

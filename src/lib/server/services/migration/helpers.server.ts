@@ -120,7 +120,8 @@ export function mapCategory(kind: string | undefined): ProjectCategory {
     case "festival":
       return "festival";
     case "personal":
-      return "personal";
+      // 旧 utcode.net の "personal" は新仕様では完了プロジェクトに統合する。
+      return "completed";
     default:
       return "active";
   }
