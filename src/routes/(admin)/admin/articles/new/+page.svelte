@@ -2,14 +2,13 @@
 	import { goto } from "$app/navigation";
 	import ArticleForm from "$lib/components/ArticleForm.svelte";
 	import { useToast } from "$lib/components/toast/controls.svelte";
-	import { getMembers } from "$lib/data/private/members.remote";
 	import { saveArticle } from "$lib/data/private/articles.remote";
-	import { getMyPreference } from "$lib/data/private/user-preferences.remote";
+	import type { PageData } from "./$types";
 
+	const { data }: { data: PageData } = $props();
 	const toast = useToast();
-	const authors = await getMembers();
-	const preference = await getMyPreference();
-	const defaultAuthorId = $derived(preference?.defaultAuthorId ?? null);
+	const authors = $derived(data.authors);
+	const defaultAuthorId = $derived(data.preference?.defaultAuthorId ?? null);
 	let isSubmitting = $state(false);
 
 	async function handleSubmit(data: {

@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { User } from "lucide-svelte";
 	import { goto } from "$app/navigation";
-	import { page } from "$app/state";
 	import { confirm } from "$lib/components/confirm-modal.svelte";
 	import MemberForm from "$lib/components/MemberForm.svelte";
 	import { useToast } from "$lib/components/toast/controls.svelte";
-	import { editMember, getMember, removeMember } from "$lib/data/private/members.remote";
+	import { editMember, removeMember } from "$lib/data/private/members.remote";
+	import type { PageData } from "./$types";
 
+	const { data }: { data: PageData } = $props();
 	const toast = useToast();
-	const id = page.params.id ?? "";
-	const member = await getMember(id);
+	const member = $derived(data.member);
 	let isSubmitting = $state(false);
 
 	async function handleSubmit(data: {

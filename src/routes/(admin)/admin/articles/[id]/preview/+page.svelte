@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { page } from "$app/state";
 	import Markdown from "$lib/components/Markdown.svelte";
-	import { getArticle } from "$lib/data/private/articles.remote";
+	import type { PageData } from "./$types";
 
-	const article = await getArticle(page.params.id ?? "");
+	const { data }: { data: PageData } = $props();
+	const article = $derived(data.article);
 </script>
 
 <svelte:head>

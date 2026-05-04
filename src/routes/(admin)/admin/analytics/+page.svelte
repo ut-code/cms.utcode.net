@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { Eye, FileText, FolderKanban, TrendingUp, Users } from "lucide-svelte";
-	import { getAnalytics, getViewTrend } from "$lib/data/private/analytics.remote";
 	import ViewTrendChart from "$lib/components/analytics/ViewTrendChart.svelte";
+	import type { PageData } from "./$types";
 
-	const analytics = await getAnalytics();
-	const viewTrend = await getViewTrend(30);
+	const { data }: { data: PageData } = $props();
+	const analytics = $derived(data.analytics);
+	const viewTrend = $derived(data.viewTrend);
 </script>
 
 <svelte:head>

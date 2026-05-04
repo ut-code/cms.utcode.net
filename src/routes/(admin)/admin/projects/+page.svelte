@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { ChevronRight, ExternalLink, Folder, Github, Plus, Search, Users, X } from "lucide-svelte";
-	import { getProjects } from "$lib/data/private/projects.remote";
 	import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
+	import type { PageData } from "./$types";
 
-	const allProjects = await getProjects();
+	const { data }: { data: PageData } = $props();
+	const allProjects = $derived(data.allProjects);
 	let searchQuery = $state("");
 
 	const projects = $derived(

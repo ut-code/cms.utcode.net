@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { ChevronRight, Link2, Plus, Search, Sparkles, Users, X } from "lucide-svelte";
-	import { getMembers } from "$lib/data/private/members.remote";
+	import type { PageData } from "./$types";
 
-	const allMembers = await getMembers();
+	const { data }: { data: PageData } = $props();
+	const allMembers = $derived(data.allMembers);
 	let searchQuery = $state("");
 
 	const members = $derived(
