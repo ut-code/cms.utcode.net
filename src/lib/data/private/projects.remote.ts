@@ -55,6 +55,7 @@ export const saveProject = command(
       repoUrl: v.nullable(v.string()),
       demoUrl: v.nullable(v.string()),
       category: categorySchema,
+      createdAt: v.optional(v.date()),
     }),
     leadMemberId: v.string(),
   }),
@@ -78,6 +79,7 @@ export const editProject = command(
       repoUrl: v.optional(v.nullable(v.string())),
       demoUrl: v.optional(v.nullable(v.string())),
       category: v.optional(categorySchema),
+      createdAt: v.optional(v.date()),
     }),
   }),
   async ({ id, data }) => {

@@ -20,6 +20,7 @@
 		repoUrl: string;
 		demoUrl: string;
 		category: ProjectCategory;
+		createdAt: Date;
 		leadMemberId: string | null;
 	}) {
 		if (!data.leadMemberId) return;
@@ -35,6 +36,7 @@
 					repoUrl: data.repoUrl || null,
 					demoUrl: data.demoUrl || null,
 					category: data.category,
+					createdAt: data.createdAt,
 				},
 				leadMemberId: data.leadMemberId,
 			});

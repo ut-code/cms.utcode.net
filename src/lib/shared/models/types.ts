@@ -22,6 +22,7 @@ export type ProjectData = {
   repoUrl: string;
   demoUrl: string;
   category: ProjectCategory;
+  createdAt: Date;
   leadMemberId: string | null;
 };
 

@@ -8,7 +8,9 @@ export type NewProject = typeof project.$inferInsert;
 
 export async function listProjects(limit: number) {
   return db.query.project.findMany({
-    orderBy: (t, { desc }) => desc(t.createdAt),
+    // id is a deterministic tiebreaker so rows sharing createdAt (e.g. bulk-migrated
+    // records) keep a stable order between requests.
+    orderBy: (t, { desc }) => [desc(t.createdAt), desc(t.id)],
     limit,
     with: {
       projectMembers: { with: { member: true } },
@@ -116,7 +118,7 @@ export async function searchProjects(query: string, limit: number) {
       like(project.description, searchPattern),
       like(project.content, searchPattern),
     ),
-    orderBy: (t, { desc }) => desc(t.createdAt),
+    orderBy: (t, { desc }) => [desc(t.createdAt), desc(t.id)],
     limit,
     with: {
       projectMembers: { with: { member: true } },
@@ -138,7 +140,7 @@ export async function getRecentProjects(limit: number) {
 
 export async function listRecentProjects(limit: number) {
   return db.query.project.findMany({
-    orderBy: (t, { desc }) => desc(t.createdAt),
+    orderBy: (t, { desc }) => [desc(t.createdAt), desc(t.id)],
     limit,
     with: {
       projectMembers: { with: { member: true } },

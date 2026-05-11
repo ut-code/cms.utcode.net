@@ -38,6 +38,16 @@
 		const base = data.kindParam ? `/projects?category=${data.kindParam}` : "/projects";
 		return pageNum === 1 ? base : `${base}${data.kindParam ? "&" : "?"}page=${pageNum}`;
 	}
+
+	const updatedAtFormatter = new Intl.DateTimeFormat("ja-JP", {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	});
+
+	function formatUpdatedAt(d: Date): string {
+		return updatedAtFormatter.format(d);
+	}
 </script>
 
 <svelte:head>
@@ -141,6 +151,9 @@
 							</span>
 						{/if}
 					</div>
+					<p class="mt-4 font-[JetBrains_Mono,monospace] text-[11px] text-zinc-400">
+						最終更新: {formatUpdatedAt(project.updatedAt)}
+					</p>
 				</a>
 			{/each}
 		</div>

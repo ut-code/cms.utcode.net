@@ -17,6 +17,7 @@
 		category = $bindable<ProjectCategory>("active"),
 		repoUrl = $bindable(""),
 		demoUrl = $bindable(""),
+		createdAt = $bindable<Date>(new Date()),
 		errors,
 		onNameChange,
 	}: {
@@ -28,11 +29,31 @@
 		category?: ProjectCategory;
 		repoUrl?: string;
 		demoUrl?: string;
+		createdAt?: Date;
 		errors: Record<string, string>;
 		onNameChange: () => void;
 	} = $props();
 
 	let showPreview = $state(false);
+
+	function toDateInputValue(d: Date): string {
+		const y = d.getFullYear();
+		const m = String(d.getMonth() + 1).padStart(2, "0");
+		const day = String(d.getDate()).padStart(2, "0");
+		return `${y}-${m}-${day}`;
+	}
+
+	function handleDateChange(event: Event & { currentTarget: HTMLInputElement }) {
+		const raw = event.currentTarget.value;
+		if (!raw) return;
+		const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(raw);
+		if (!match) return;
+		const y = Number(match[1]);
+		const m = Number(match[2]);
+		const d = Number(match[3]);
+		// Local midnight matches what the picker shows; sort precision is day-level.
+		createdAt = new Date(y, m - 1, d);
+	}
 </script>
 
 <main class="flex-1 bg-white">
@@ -91,6 +112,21 @@
 					</button>
 				{/each}
 			</div>
+		</div>
+
+		<!-- Page Creation Date -->
+		<div class="mb-6 space-y-2">
+			<label for="createdAt" class="text-sm font-medium text-zinc-700">
+				ページ作成日
+				<span class="ml-1 font-normal text-zinc-400">(一覧の並び順に使われます)</span>
+			</label>
+			<input
+				type="date"
+				id="createdAt"
+				value={toDateInputValue(createdAt)}
+				onchange={handleDateChange}
+				class="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
+			/>
 		</div>
 
 		<!-- Name Input -->

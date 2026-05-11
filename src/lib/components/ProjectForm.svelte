@@ -18,6 +18,7 @@
 			repoUrl: "",
 			demoUrl: "",
 			category: "active",
+			createdAt: new Date(),
 			leadMemberId: null,
 		},
 		members = [],
@@ -99,6 +100,7 @@
 		bind:category={formData.category}
 		bind:repoUrl={formData.repoUrl}
 		bind:demoUrl={formData.demoUrl}
+		bind:createdAt={formData.createdAt}
 		{errors}
 		onNameChange={handleNameChange}
 	/>

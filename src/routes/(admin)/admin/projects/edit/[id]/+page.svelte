@@ -41,6 +41,7 @@
 		repoUrl: string;
 		demoUrl: string;
 		category: ProjectCategory;
+		createdAt: Date;
 		leadMemberId: string | null;
 	}) {
 		if (!project) return;
@@ -67,6 +68,7 @@
 					repoUrl: data.repoUrl || null,
 					demoUrl: data.demoUrl || null,
 					category: data.category,
+					createdAt: data.createdAt,
 				},
 			});
 			toast.show("Saved", "success");
@@ -219,6 +221,7 @@
 						repoUrl: project.repoUrl ?? "",
 						demoUrl: project.demoUrl ?? "",
 						category: project.category,
+						createdAt: project.createdAt,
 						leadMemberId: null,
 					}}
 					{members}
