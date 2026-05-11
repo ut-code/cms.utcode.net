@@ -1,0 +1,67 @@
+# Local verification stack for cms.utcode.net.
+#
+# Usage:
+#   podman compose -f compose.local.yml up --build
+#   open http://localhost:3000
+#   open http://localhost:9001  # MinIO console (minioadmin / minioadmin)
+#
+# Auth is disabled via UNSAFE_DISABLE_AUTH=true, so NODE_ENV must be development.
+
+services:
+  db:
+    image: docker.io/library/postgres:17-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cms
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d cms"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  minio:
+    image: docker.io/minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgres://postgres:postgres@db:5432/cms
+      BETTER_AUTH_SECRET: local-verification-secret-not-for-production
+      BETTER_AUTH_URL: http://localhost:3000
+      S3_ENDPOINT: http://minio:9000
+      S3_ACCESS_KEY: minioadmin
+      S3_SECRET_KEY: minioadmin
+      S3_BUCKET: local
+      S3_PUBLIC_URL: http://localhost:9000/local
+      GITHUB_CLIENT_ID: ""
+      GITHUB_CLIENT_SECRET: ""
+      UNSAFE_DISABLE_AUTH: "true"
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+      minio:
+        condition: service_started
+
+volumes:
+  db-data:
+  minio-data:
