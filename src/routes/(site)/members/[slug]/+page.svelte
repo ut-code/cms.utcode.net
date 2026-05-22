@@ -54,6 +54,7 @@
 					alt={data.member.name}
 					class="mb-4 aspect-square h-16 w-16 rounded-full object-cover sm:mb-6 sm:mr-6 sm:h-20 sm:w-20 md:mb-0"
 					loading="lazy"
+					decoding="async"
 				/>
 			{:else}
 				<div
@@ -68,7 +69,7 @@
 			<div>
 				<h1 class="mb-2 text-2xl font-bold sm:text-3xl">{data.member.name}</h1>
 				{#if data.member.bio}
-					<p class="text-sm text-zinc-500 sm:text-base">{data.member.bio}</p>
+					<p class="text-sm text-zinc-500 break-words sm:text-base">{data.member.bio}</p>
 				{/if}
 				{#if hasSocialLinks}
 					<div class="mt-3 flex gap-3">

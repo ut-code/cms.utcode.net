@@ -18,7 +18,8 @@
 	</div>
 
 	<!-- Total Views Summary -->
-	<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+	<p class="font-mono text-xs uppercase tracking-widest text-primary">Views Summary</p>
+	<div class="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
 		<div class="card bg-base-100 shadow-md">
 			<div class="card-body">
 				<div class="flex items-center justify-between">
@@ -76,7 +77,14 @@
 				<h2 class="text-xl font-bold">全体の訪問数推移</h2>
 			</div>
 			<p class="mb-4 text-sm text-zinc-500">過去30日間の訪問数の推移を表示しています</p>
-			<ViewTrendChart data={viewTrend} />
+			{#if viewTrend.length === 0}
+				<div class="rounded-lg border-2 border-dashed border-base-300 bg-base-200/50 p-12 text-center">
+					<TrendingUp class="mx-auto h-10 w-10 text-base-content/30" />
+					<p class="mt-3 text-sm text-base-content/60">No view data yet</p>
+				</div>
+			{:else}
+				<ViewTrendChart data={viewTrend} />
+			{/if}
 		</div>
 	</div>
 </div>

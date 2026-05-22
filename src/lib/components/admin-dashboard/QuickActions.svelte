@@ -12,21 +12,21 @@
 	<div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
 		<a
 			href="/admin/members/new"
-			class="btn btn-sm gap-2 border-base-300 bg-base-100 font-medium transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-primary sm:btn-md"
+			class="btn btn-sm gap-2 border-base-300 bg-base-100 font-medium transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:btn-md"
 		>
 			<UserPlus class="h-4 w-4" />
 			Add Member
 		</a>
 		<a
 			href="/admin/articles/new"
-			class="btn btn-sm gap-2 border-base-300 bg-base-100 font-medium transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-primary sm:btn-md"
+			class="btn btn-sm gap-2 border-base-300 bg-base-100 font-medium transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:btn-md"
 		>
 			<Pencil class="h-4 w-4" />
 			New Article
 		</a>
 		<a
 			href="/admin/projects/new"
-			class="btn btn-sm gap-2 border-base-300 bg-base-100 font-medium transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-primary sm:btn-md"
+			class="btn btn-sm gap-2 border-base-300 bg-base-100 font-medium transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:btn-md"
 		>
 			<Folder class="h-4 w-4" />
 			New Project

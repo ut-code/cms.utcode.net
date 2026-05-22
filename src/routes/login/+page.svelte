@@ -16,7 +16,10 @@
 			<p class="mt-2 text-sm text-zinc-500">Sign in to access the admin panel</p>
 		</div>
 
-		<button onclick={loginWithGitHub} class="btn w-full gap-2 btn-neutral">
+		<button
+			onclick={loginWithGitHub}
+			class="btn w-full gap-2 btn-neutral focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+		>
 			<Github class="h-5 w-5" />
 			Continue with GitHub
 		</button>

@@ -206,7 +206,7 @@
 	{:else}
 		<!-- Empty/drop state -->
 		<label
-			class="relative flex max-w-xs cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-dashed transition-all duration-200
+			class="relative flex max-w-xs cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-dashed transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2
         {dragOver
 				? 'scale-[1.02] border-primary bg-primary/10'
 				: pasteFlash

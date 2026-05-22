@@ -242,7 +242,7 @@
 
 			<!-- Results summary -->
 			{#if migrationState?.result}
-				<div class="mb-4 grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-4">
+				<div class="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-4">
 					<div class="stat rounded-lg bg-base-200 p-3 sm:p-4">
 						<div class="stat-title text-xs sm:text-sm">Members</div>
 						<div class="stat-value text-base text-success sm:text-lg">

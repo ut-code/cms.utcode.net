@@ -13,7 +13,7 @@
 <!-- Cover Image Header -->
 <img
 	src="/images/activity/learn/cover.jpg"
-	alt=""
+	alt="ut.code(); の学習活動の様子"
 	class="h-72 w-full object-cover md:h-96"
 />
 
@@ -25,7 +25,7 @@
 		>
 			Activities
 		</div>
-		<h1 class="text-3xl font-bold md:text-4xl">活動内容</h1>
+		<h1 class="text-2xl font-bold sm:text-3xl md:text-4xl">活動内容</h1>
 		<p class="mt-6 max-w-2xl text-lg leading-relaxed text-zinc-600">
 			ut.code();
 			は、全ての人にソフトウェア開発の魅力を伝えるべく、教材の作成から教育活動までを一貫して行っており、さらに高みを目指すための自学自習の機会も提供しています。充実した教材、気軽に質問できる環境、切磋琢磨する仲間、この3つの柱により、初心者から上級者まですべての人に新しい学びを提供します。
@@ -229,7 +229,7 @@
 	<div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-12 px-6 xl:flex-row">
 		<img
 			src="/images/lab-cafe.jpg"
-			alt=""
+			alt="ut.code(); の活動拠点であるラボカフェの様子"
 			class="w-full max-w-xl rounded-3xl object-cover xl:max-h-96 xl:w-auto"
 		/>
 		<div class="text-center xl:text-left">

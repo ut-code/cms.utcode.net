@@ -59,7 +59,9 @@
 						{/if}
 					{/each}
 				{:else}
-					<div class="text-center">
+					<div
+						class="rounded-2xl border border-zinc-200 bg-white/80 p-12 text-center backdrop-blur-md md:p-16"
+					>
 						<p class="mb-6 text-xl text-zinc-600">協賛企業を募集中です</p>
 						<a
 							href="/donation"

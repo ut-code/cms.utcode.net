@@ -37,7 +37,7 @@
 			successTimeout = setTimeout(() => {
 				saveSuccess = false;
 				successTimeout = null;
-			}, 2000);
+			}, 3500);
 		}
 
 		return () => {

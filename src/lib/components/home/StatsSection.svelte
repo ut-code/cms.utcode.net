@@ -13,7 +13,7 @@
 
 <section class="bg-zinc-50 py-24">
 	<div class="mx-auto max-w-6xl px-6">
-		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+		<div class="grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4 lg:gap-8">
 			<a
 				href="/members"
 				class="group rounded-2xl border border-zinc-200 bg-white p-8 transition-all hover:border-primary/30 hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"

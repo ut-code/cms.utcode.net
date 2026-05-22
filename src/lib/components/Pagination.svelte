@@ -13,7 +13,7 @@
 		{#if currentPage > 1}
 			<a
 				href={pageUrl(currentPage - 1)}
-				class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:bg-primary/5 hover:border-primary/30 hover:text-primary focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 sm:w-auto"
+				class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:bg-primary/5 hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 sm:w-auto"
 			>
 				前へ
 			</a>
@@ -30,7 +30,7 @@
 				{#if totalPages <= 7 || pageNum === 1 || pageNum === totalPages || Math.abs(pageNum - currentPage) <= 1}
 					<a
 						href={pageUrl(pageNum)}
-						class="min-w-[2.5rem] rounded-lg border px-3 py-2 text-center text-sm font-medium transition-colors focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 {currentPage ===
+						class="min-w-[2.5rem] rounded-lg border px-3 py-2 text-center text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 {currentPage ===
 						pageNum
 							? 'border-primary bg-primary text-white'
 							: 'border-zinc-200 bg-white hover:bg-primary/5 hover:border-primary/30 hover:text-primary'}"
@@ -46,7 +46,7 @@
 		{#if currentPage < totalPages}
 			<a
 				href={pageUrl(currentPage + 1)}
-				class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:bg-primary/5 hover:border-primary/30 hover:text-primary focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 sm:w-auto"
+				class="w-full rounded-lg border border-zinc-200 bg-white px-4 py-2 text-center text-sm font-medium transition-colors hover:bg-primary/5 hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 sm:w-auto"
 			>
 				次へ
 			</a>

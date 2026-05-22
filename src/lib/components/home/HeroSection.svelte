@@ -7,6 +7,7 @@
 	<img
 		src="/images/headers/hero.jpg"
 		alt=""
+		role="presentation"
 		class="absolute inset-0 h-full w-full object-cover"
 	/>
 	<!-- Gradient overlay for text readability -->

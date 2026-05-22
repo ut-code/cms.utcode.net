@@ -188,7 +188,7 @@
 					>
 						<!-- Cover thumbnail -->
 						{#if article.coverUrl}
-							<figure class="aspect-[5/3] w-full shrink-0 overflow-hidden rounded-xl bg-base-200 sm:h-24 sm:w-36 sm:aspect-auto">
+							<figure class="aspect-[5/3] max-h-32 w-full shrink-0 overflow-hidden rounded-xl bg-base-200 sm:h-24 sm:max-h-none sm:w-36 sm:aspect-auto">
 								<img
 									src={article.coverUrl}
 									alt={article.title}
@@ -198,7 +198,7 @@
 							</figure>
 						{:else}
 							<div
-								class="flex aspect-[5/3] w-full shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-base-200 to-base-300 sm:h-24 sm:w-36 sm:aspect-auto"
+								class="flex aspect-[5/3] max-h-32 w-full shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-base-200 to-base-300 sm:h-24 sm:max-h-none sm:w-36 sm:aspect-auto"
 							>
 								<FileText class="h-8 w-8 text-base-content/20" />
 							</div>

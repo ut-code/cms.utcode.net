@@ -53,7 +53,7 @@
 					<select
 						id="defaultAuthor"
 						bind:value={defaultAuthorId}
-						class="select select-bordered w-full"
+						class="select select-bordered w-full focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
 					>
 						<option value={null}>None</option>
 						{#each members as member}
@@ -68,7 +68,7 @@
 				</div>
 
 				<div class="card-actions">
-					<button type="submit" class="btn btn-primary" disabled={isSubmitting}>
+					<button type="submit" class="btn btn-primary disabled:cursor-not-allowed disabled:opacity-50" disabled={isSubmitting}>
 						{isSubmitting ? "Saving..." : "Save"}
 					</button>
 				</div>

@@ -20,7 +20,13 @@
 				? 'lg:rounded-r-2xl'
 				: 'lg:ml-auto lg:rounded-l-2xl'}"
 		>
-			<img src={image} alt={imageAlt} class="h-full w-full object-cover" />
+			<img
+				src={image}
+				alt={imageAlt}
+				loading="lazy"
+				decoding="async"
+				class="h-full w-full object-cover"
+			/>
 		</div>
 	</div>
 	<div style:grid-area="1 / 1" class="container mx-auto lg:max-w-screen-lg">

@@ -71,7 +71,7 @@
 					href={data.project.demoUrl}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm text-zinc-900 hover:bg-primary/90"
+					class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-zinc-900 hover:bg-primary/90"
 				>
 					Demo →
 				</a>
@@ -89,7 +89,7 @@
 				{#each data.project.projectMembers as pm (pm.memberId)}
 					<a
 						href="/members/{pm.member.slug}"
-						class="flex items-center gap-3 rounded-lg border border-zinc-200 px-4 py-3 transition-all hover:bg-primary/5 hover:border-primary/30"
+						class="flex items-center gap-3 rounded-lg border border-zinc-200 px-4 py-3 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-md hover:shadow-primary/5"
 					>
 						{#if pm.member.imageUrl}
 							<img

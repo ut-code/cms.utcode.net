@@ -60,8 +60,9 @@
 		</div>
 	{:else if data.results.length === 0}
 		<div class="flex flex-col items-center gap-4 py-16 text-center">
-			<Search class="h-12 w-12 text-zinc-300" />
-			<p class="text-zinc-500">「{data.query}」に一致する結果が見つかりませんでした</p>
+			<Search class="h-12 w-12 text-zinc-400" />
+			<p class="font-medium text-zinc-700">「{data.query}」に一致する結果が見つかりませんでした</p>
+			<p class="text-sm text-zinc-500">別のキーワードで検索してみてください</p>
 		</div>
 	{:else}
 		<p class="mb-6 text-sm text-zinc-500">
@@ -75,7 +76,7 @@
 					{#each articleResults as article (article.id)}
 						<a
 							href="/articles/{article.slug}"
-							class="group rounded-xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-md"
+							class="group rounded-xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
 						>
 							{#if hasUsableCover(article.coverUrl)}
 								<img
@@ -121,7 +122,7 @@
 					{#each projectResults as project (project.id)}
 						<a
 							href="/projects/{project.slug}"
-							class="group rounded-xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-md"
+							class="group rounded-xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
 						>
 							{#if project.coverUrl}
 								<img
@@ -156,7 +157,7 @@
 					{#each memberResults as member (member.id)}
 						<a
 							href="/members/{member.slug}"
-							class="group rounded-xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-md"
+							class="group rounded-xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-6 transition-all hover:bg-primary/5 hover:border-primary/30 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
 						>
 							<h3 class="mb-2 font-semibold group-hover:text-primary">{member.name}</h3>
 							{#if member.bio}

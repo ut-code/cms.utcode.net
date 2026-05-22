@@ -82,9 +82,9 @@
 					class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-base-200 text-base-content/40"
 				>
 					{#if searchQuery}
-						<Search class="h-8 w-8" />
+						<Search class="h-10 w-10" />
 					{:else}
-						<Users class="h-8 w-8" />
+						<Users class="h-10 w-10" />
 					{/if}
 				</div>
 				{#if searchQuery}
@@ -105,7 +105,7 @@
 			</div>
 		{:else}
 			<!-- Members grid -->
-			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
 				{#each members as member, i (member.id)}
 					<a
 						href="/admin/members/edit/{member.id}"
