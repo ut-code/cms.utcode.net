@@ -10,26 +10,49 @@
 	<meta property="og:description" content="ut.code(); の活動内容を紹介します。学習・交流・開発の三軸で活動しています。" />
 </svelte:head>
 
-<!-- Cover Image Header -->
-<img
-	src="/images/activity/learn/cover.jpg"
-	alt="ut.code(); の学習活動の様子"
-	class="h-72 w-full object-cover md:h-96"
-/>
+<!--
+	activities page —
+	Hero: cover image + overlaid title card with corner ticks.
+	Body: three activity pillars, each with a labeled chapter header.
+-->
 
-<!-- Title Section -->
-<section class="py-16">
-	<div class="container mx-auto px-6 lg:max-w-screen-lg">
-		<div
-			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium uppercase tracking-widest text-primary"
-		>
-			Activities
+<!-- Hero Cover -->
+<section class="relative h-[60vh] min-h-[420px] overflow-hidden bg-zinc-900">
+	<img
+		src="/images/activity/learn/cover.jpg"
+		alt="ut.code(); の学習活動の様子"
+		class="absolute inset-0 h-full w-full object-cover opacity-75"
+	/>
+	<div
+		class="absolute inset-0 bg-gradient-to-tr from-black/70 via-black/30 to-transparent"
+		aria-hidden="true"
+	></div>
+
+	<!-- mono coordinate stamp -->
+	<div
+		class="pointer-events-none absolute top-6 left-4 hidden font-mono text-[11px] tracking-widest text-white/70 sm:left-8 md:block"
+		aria-hidden="true"
+	>
+		<span class="text-primary">●</span>
+		<span class="ml-2">/activities</span>
+	</div>
+
+	<div class="relative mx-auto flex h-full max-w-6xl items-end px-6 pb-12 lg:pb-20">
+		<div class="max-w-2xl">
+			<div
+				class="mb-3 inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-3 py-1 font-mono text-[11px] tracking-widest text-white backdrop-blur-md uppercase"
+			>
+				<span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
+				<span>// activities</span>
+			</div>
+			<h1 class="text-4xl leading-[1.1] font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
+				活動内容
+			</h1>
+			<p class="mt-5 max-w-xl text-base leading-relaxed text-zinc-200 sm:text-lg">
+				ut.code();
+				は、全ての人にソフトウェア開発の魅力を伝えるべく、教材の作成から教育活動までを一貫して行っており、さらに高みを目指すための自学自習の機会も提供しています。充実した教材、気軽に質問できる環境、切磋琢磨する仲間、この3つの柱により、初心者から上級者まですべての人に新しい学びを提供します。
+			</p>
 		</div>
-		<h1 class="text-2xl font-bold sm:text-3xl md:text-4xl">活動内容</h1>
-		<p class="mt-6 max-w-2xl text-lg leading-relaxed text-zinc-600">
-			ut.code();
-			は、全ての人にソフトウェア開発の魅力を伝えるべく、教材の作成から教育活動までを一貫して行っており、さらに高みを目指すための自学自習の機会も提供しています。充実した教材、気軽に質問できる環境、切磋琢磨する仲間、この3つの柱により、初心者から上級者まですべての人に新しい学びを提供します。
-		</p>
 	</div>
 </section>
 
@@ -37,13 +60,20 @@
 <section class="bg-zinc-50" id="learn">
 	<div class="py-16">
 		<div class="container mx-auto px-6 lg:max-w-screen-lg">
-			<div class="flex items-center gap-4">
-				<div class="flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-zinc-900">
+			<div class="flex items-center gap-5">
+				<div
+					class="flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-zinc-950"
+				>
 					<BookOpen class="h-7 w-7" />
 				</div>
 				<div>
-					<h2 class="text-2xl font-bold">学習・教育</h2>
-					<p class="text-zinc-500">Learn & Educate</p>
+					<div
+						class="font-mono text-[10px] tracking-[0.2em] text-zinc-400"
+					>
+						01 / 03 · <span class="text-primary">LEARN</span>
+					</div>
+					<h2 class="text-2xl font-bold tracking-tight">学習・教育</h2>
+					<p class="text-sm text-zinc-500">Learn &amp; Educate</p>
 				</div>
 			</div>
 		</div>
@@ -64,7 +94,7 @@
 		</p>
 		<a
 			href="/projects/utcode-learn"
-			class="mt-4 inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary hover:text-zinc-900"
+			class="mt-4 inline-flex min-h-11 items-center gap-2 rounded-lg bg-zinc-900 px-6 py-3 text-sm font-medium text-white transition-all hover:bg-zinc-800 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:outline-none"
 		>
 			詳しく見る
 			<ArrowRight class="h-4 w-4" />
@@ -100,13 +130,18 @@
 <!-- Develop Section -->
 <section class="py-16" id="develop">
 	<div class="container mx-auto px-6 lg:max-w-screen-lg">
-		<div class="flex items-center gap-4">
-			<div class="flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-zinc-900">
+		<div class="flex items-center gap-5">
+			<div
+				class="flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-zinc-950"
+			>
 				<Box class="h-7 w-7" />
 			</div>
 			<div>
-				<h2 class="text-2xl font-bold">開発</h2>
-				<p class="text-zinc-500">Develop</p>
+				<div class="font-mono text-[10px] tracking-[0.2em] text-zinc-400">
+					02 / 03 · <span class="text-primary">DEVELOP</span>
+				</div>
+				<h2 class="text-2xl font-bold tracking-tight">開発</h2>
+				<p class="text-sm text-zinc-500">Develop</p>
 			</div>
 		</div>
 		<p class="mt-6 max-w-2xl text-lg leading-relaxed text-zinc-600">
@@ -130,7 +165,7 @@
 		</p>
 		<a
 			href="/projects"
-			class="mt-4 inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary hover:text-zinc-900"
+			class="mt-4 inline-flex min-h-11 items-center gap-2 rounded-lg bg-zinc-900 px-6 py-3 text-sm font-medium text-white transition-all hover:bg-zinc-800 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:outline-none"
 		>
 			すべてのプロジェクト
 			<ArrowRight class="h-4 w-4" />
@@ -165,13 +200,18 @@
 <!-- Share Section -->
 <section class="bg-zinc-50 py-16" id="share">
 	<div class="container mx-auto px-6 lg:max-w-screen-lg">
-		<div class="flex items-center gap-4">
-			<div class="flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-zinc-900">
+		<div class="flex items-center gap-5">
+			<div
+				class="flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-zinc-950"
+			>
 				<MessageSquare class="h-7 w-7" />
 			</div>
 			<div>
-				<h2 class="text-2xl font-bold">交流</h2>
-				<p class="text-zinc-500">Share & Connect</p>
+				<div class="font-mono text-[10px] tracking-[0.2em] text-zinc-400">
+					03 / 03 · <span class="text-primary">SHARE</span>
+				</div>
+				<h2 class="text-2xl font-bold tracking-tight">交流</h2>
+				<p class="text-sm text-zinc-500">Share &amp; Connect</p>
 			</div>
 		</div>
 		<p class="mt-6 max-w-2xl text-lg leading-relaxed text-zinc-600">
@@ -225,25 +265,44 @@
 </section>
 
 <!-- Join CTA -->
-<section class="bg-zinc-900 py-20 text-white">
-	<div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-12 px-6 xl:flex-row">
+<section class="relative overflow-hidden bg-zinc-950 py-20 text-white">
+	<div
+		class="pointer-events-none absolute inset-0 opacity-[0.15]"
+		style="background-image: radial-gradient(circle, rgb(255 255 255 / 0.6) 1px, transparent 1px); background-size: 28px 28px;"
+		aria-hidden="true"
+	></div>
+	<div
+		class="pointer-events-none absolute -right-32 -bottom-32 h-96 w-96 rounded-full"
+		style="background: radial-gradient(circle, oklch(76% 0.2 153 / 0.25) 0%, transparent 60%);"
+		aria-hidden="true"
+	></div>
+
+	<div
+		class="relative mx-auto flex max-w-6xl flex-col items-center justify-between gap-12 px-6 xl:flex-row"
+	>
 		<img
 			src="/images/lab-cafe.jpg"
 			alt="ut.code(); の活動拠点であるラボカフェの様子"
-			class="w-full max-w-xl rounded-3xl object-cover xl:max-h-96 xl:w-auto"
+			class="w-full max-w-xl rounded-3xl object-cover shadow-2xl shadow-black/40 xl:max-h-96 xl:w-auto"
 		/>
 		<div class="text-center xl:text-left">
-			<h2 class="text-3xl font-bold md:text-4xl lg:text-5xl">
+			<div
+				class="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 font-mono text-[11px] tracking-widest text-primary backdrop-blur uppercase"
+			>
+				<span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
+				join us
+			</div>
+			<h2 class="text-3xl leading-tight font-bold tracking-tight md:text-4xl lg:text-5xl">
 				<span class="bg-white px-2 text-zinc-900">未来のソフトウェア</span>を<br />
 				<span class="mt-2 inline-block">デザインしよう</span>
 			</h2>
-			<p class="mt-6 text-lg text-zinc-300">
-				ut.code(); で一緒にワクワクするソフトウェアを作りませんか？
+			<p class="mt-6 text-lg leading-relaxed text-zinc-300">
+				ut.code(); で一緒にワクワクするソフトウェアを作りませんか?
 				初心者から実務経験者、学年を問わずどなたでも大歓迎です。
 			</p>
 			<a
 				href="/join"
-				class="mt-8 inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-4 font-semibold text-zinc-900 transition-all hover:bg-primary/90"
+				class="mt-8 inline-flex min-h-11 items-center gap-2 rounded-lg bg-primary px-8 py-4 font-semibold text-zinc-950 shadow-lg shadow-primary/30 transition-all hover:shadow-xl hover:shadow-primary/40 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-zinc-950 focus:outline-none"
 			>
 				JOIN US
 				<ArrowRight class="h-5 w-5" />
