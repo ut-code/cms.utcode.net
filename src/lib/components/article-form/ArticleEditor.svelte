@@ -196,30 +196,40 @@
 			</p>
 
 			<div class="flex gap-2">
-				<input
-					type="date"
-					value={formatDateForSlug(slugDate)}
-					oninput={handleDateChange}
-					class="w-32 shrink-0 rounded-lg border bg-white px-2 py-1.5 font-mono text-sm text-zinc-900 focus:ring-0 focus:outline-none"
-					class:border-zinc-200={!displayError && !isSlugValid}
-					class:border-emerald-500={isSlugValid && slug.length > 0}
-					class:border-red-300={displayError}
-				/>
-				<input
-					type="text"
-					value={slugTitle}
-					oninput={handleSlugTitleChange}
-					class="min-w-0 flex-1 rounded-lg border bg-white px-2 py-1.5 font-mono text-sm text-zinc-900 focus:ring-0 focus:outline-none"
-					class:border-zinc-200={!displayError && !isSlugValid}
-					class:border-emerald-500={isSlugValid && slug.length > 0}
-					class:border-red-300={displayError}
-					placeholder="title-slug"
-				/>
+				<div class="flex w-32 shrink-0 flex-col gap-1">
+					<label for="slug-date" class="text-xs font-medium text-zinc-500">公開日</label>
+					<input
+						type="date"
+						id="slug-date"
+						value={formatDateForSlug(slugDate)}
+						oninput={handleDateChange}
+						class="w-full rounded-lg border bg-white px-2 py-1.5 font-mono text-sm text-zinc-900 focus:ring-0 focus:outline-none"
+						class:border-zinc-200={!displayError && !isSlugValid}
+						class:border-emerald-500={isSlugValid && slug.length > 0}
+						class:border-red-300={displayError}
+					/>
+				</div>
+				<div class="flex min-w-0 flex-1 flex-col gap-1">
+					<label for="slug-title" class="text-xs font-medium text-zinc-500">スラッグタイトル</label>
+					<input
+						type="text"
+						id="slug-title"
+						value={slugTitle}
+						oninput={handleSlugTitleChange}
+						class="w-full rounded-lg border bg-white px-2 py-1.5 font-mono text-sm text-zinc-900 focus:ring-0 focus:outline-none"
+						class:border-zinc-200={!displayError && !isSlugValid}
+						class:border-emerald-500={isSlugValid && slug.length > 0}
+						class:border-red-300={displayError}
+						placeholder="title-slug"
+					/>
+				</div>
 			</div>
 
-			{#if displayError}
-				<p class="text-xs text-red-500">{displayError}</p>
-			{/if}
+			<div aria-live="polite">
+				{#if displayError}
+					<p class="text-xs text-red-500">{displayError}</p>
+				{/if}
+			</div>
 
 			<!-- Redirect checkbox (only show when editing and slug has changed) -->
 			{#if initialSlug && slug !== initialSlug}

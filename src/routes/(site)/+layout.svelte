@@ -46,7 +46,10 @@
 		>
 			<div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
 				<div class="flex items-center gap-4">
-					<label for="site-drawer" class="btn btn-ghost btn-sm md:hidden">
+					<label
+						for="site-drawer"
+						class="btn btn-ghost btn-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:hidden"
+					>
 						<Menu class="h-5 w-5" />
 					</label>
 					<a href="/" class="flex items-center">
@@ -57,7 +60,7 @@
 					<button
 						type="button"
 						onclick={openSearch}
-						class="flex w-48 items-center gap-2 rounded-lg border border-zinc-200 bg-white py-1.5 pr-3 pl-2.5 text-left text-sm text-zinc-400 transition-colors hover:border-primary/30 hover:text-primary"
+						class="flex w-48 items-center gap-2 rounded-lg border border-zinc-200 bg-white py-1.5 pr-3 pl-2.5 text-left text-sm text-zinc-400 transition-colors hover:bg-primary/5 hover:border-primary/30 hover:text-primary"
 					>
 						<Search class="h-4 w-4" />
 						<span class="flex-1">検索...</span>
@@ -162,13 +165,13 @@
 									href="https://github.com/ut-code"
 									target="_blank"
 									rel="noopener noreferrer"
-									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">GitHub</a
+									class="text-sm text-zinc-500 transition-colors hover:text-primary">GitHub</a
 								>
 								<a
 									href="https://x.com/utokyo_code"
 									target="_blank"
 									rel="noopener noreferrer"
-									class="text-sm text-zinc-500 transition-colors hover:text-zinc-900">X</a
+									class="text-sm text-zinc-500 transition-colors hover:text-primary">X</a
 								>
 							</div>
 						</div>
@@ -186,10 +189,11 @@
 		<label for="site-drawer" class="drawer-overlay"></label>
 		<div class="min-h-full w-64 bg-white p-4">
 			<img src={logo} alt="ut.code();" class="mb-6 h-8" />
+			<h2 class="sr-only">Navigation</h2>
 			<button
 				type="button"
 				onclick={openSearch}
-				class="mb-4 flex w-full items-center gap-2 rounded-lg border border-zinc-200 bg-white py-2 pr-3 pl-2.5 text-left text-sm text-zinc-400 transition-colors hover:border-primary/30"
+				class="mb-4 flex w-full items-center gap-2 rounded-lg border border-zinc-200 bg-white py-2 pr-3 pl-2.5 text-left text-sm text-zinc-400 transition-colors hover:bg-primary/5 hover:border-primary/30 hover:text-primary"
 			>
 				<Search class="h-4 w-4" />
 				<span>検索...</span>

@@ -112,10 +112,10 @@
             <li>
               <a
                 href={item.href}
-                class="group flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all duration-200
+                class="group flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900
                   {active
                   ? 'nav-active bg-white/10 text-white'
-                  : 'text-white/60 hover:bg-white/5 hover:text-white/90'}"
+                  : 'text-white/60 hover:bg-primary/10 hover:text-primary'}"
               >
                 <div
                   class="flex h-8 w-8 items-center justify-center rounded-lg transition-all duration-200
@@ -171,8 +171,9 @@
           </a>
           <a
             href="/api/auth/sign-out"
-            class="btn btn-circle text-white/40 btn-ghost btn-sm hover:bg-white/10 hover:text-white"
+            class="btn btn-circle text-white/40 btn-ghost btn-sm hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900"
             title="Sign out"
+            aria-label="Sign out"
           >
             <LogOut class="h-4 w-4" />
           </a>

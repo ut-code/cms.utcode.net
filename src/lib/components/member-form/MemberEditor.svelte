@@ -68,12 +68,14 @@
 			id="name"
 			bind:value={name}
 			oninput={handleNameInput}
+			aria-invalid={!!nameError}
+			aria-describedby={nameError ? "name-error" : undefined}
 			class="w-full border-none bg-transparent text-center text-3xl font-bold text-zinc-900 placeholder:text-zinc-300 focus:ring-0 focus:outline-none"
 			class:text-red-600={nameError}
 			placeholder="Name"
 		/>
 		{#if nameError}
-			<p class="mt-1 text-center text-sm text-red-500">{nameError}</p>
+			<p id="name-error" class="mt-1 text-center text-sm text-red-500">{nameError}</p>
 		{/if}
 
 		<!-- Username/Slug Input -->
@@ -92,21 +94,24 @@
 				</span>
 				<input
 					type="text"
+					id="slug"
 					value={slug}
 					oninput={handleSlugInput}
+					aria-invalid={!!displayError}
+					aria-describedby={displayError ? "slug-error" : undefined}
 					class="w-full rounded-r-lg border-none bg-transparent px-3 py-2 font-mono text-sm text-zinc-900 focus:ring-0 focus:outline-none"
 					class:text-red-600={displayError}
 					placeholder="username"
 				/>
 			</div>
 			{#if displayError}
-				<p class="text-center text-xs text-red-500">{displayError}</p>
+				<p id="slug-error" class="text-center text-xs text-red-500">{displayError}</p>
 			{/if}
 		</div>
 
 		<!-- Bio -->
 		<div class="mt-8">
-			<label for="bio" class="mb-2 block text-sm font-medium text-zinc-700">Bio</label>
+			<label for="bio" class="mb-2 block text-sm font-semibold text-zinc-700">Bio</label>
 			<textarea
 				id="bio"
 				bind:value={bio}
@@ -118,7 +123,7 @@
 
 		<!-- Social Links -->
 		<div class="mt-8">
-			<p class="mb-3 text-sm font-medium text-zinc-700">Social Links</p>
+			<p class="mb-2 text-sm font-semibold text-zinc-700">Social Links</p>
 			<div class="space-y-3">
 				<div class="flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2">
 					<Github class="h-5 w-5 shrink-0 text-zinc-400" />
@@ -153,7 +158,7 @@
 		<!-- Page Content -->
 		<div class="mt-8 border-t border-zinc-200 pt-8">
 			<div class="mb-4 flex items-center justify-between">
-				<label for="pageContent" class="block text-sm font-medium text-zinc-700">
+				<label for="pageContent" class="mb-2 block text-sm font-semibold text-zinc-700">
 					自己紹介ページ
 				</label>
 				<div class="flex items-center gap-2">

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ChevronRight, ExternalLink, Folder, Github, Plus, Search, Users, X } from "lucide-svelte";
-	import { PROJECT_CATEGORIES, type ProjectCategory } from "$lib/shared/models/schema";
+	import { PROJECT_CATEGORIES } from "$lib/shared/models/schema";
 	import type { PageData } from "./$types";
 
 	const { data }: { data: PageData } = $props();
@@ -19,14 +19,6 @@
 					);
 				}),
 	);
-
-	const categoryColors: Record<ProjectCategory, { bg: string; text: string }> = {
-		active: { bg: "bg-emerald-500/10", text: "text-emerald-600" },
-		paused: { bg: "bg-amber-500/10", text: "text-amber-600" },
-		completed: { bg: "bg-zinc-500/10", text: "text-zinc-600" },
-		festival: { bg: "bg-pink-500/10", text: "text-pink-600" },
-		hackathon: { bg: "bg-purple-500/10", text: "text-purple-600" },
-	};
 </script>
 
 <svelte:head>
@@ -130,7 +122,7 @@
 								<img
 									src={project.coverUrl}
 									alt={project.name}
-									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 									loading="lazy"
 								/>
 								<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
@@ -148,9 +140,7 @@
 
 						<!-- Category badge overlaid -->
 						<span
-							class="absolute top-3 right-3 rounded-lg px-2.5 py-1 text-xs font-semibold backdrop-blur-sm {categoryColors[
-								project.category
-							].bg} {categoryColors[project.category].text}"
+							class="absolute top-3 right-3 rounded-lg bg-black/40 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-sm"
 						>
 							{PROJECT_CATEGORIES[project.category]}
 						</span>

@@ -58,7 +58,7 @@
 			successTimeout = setTimeout(() => {
 				saveSuccess = false;
 				successTimeout = null;
-			}, 2000);
+			}, 3500);
 		}
 
 		return () => {
@@ -93,9 +93,9 @@
 </script>
 
 <header
-	class="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-2 border-b border-zinc-200 bg-white px-3 py-2 sm:px-4 sm:py-3"
+	class="sticky top-0 z-20 flex flex-col gap-3 border-b border-zinc-200 bg-white px-3 py-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 sm:px-4 sm:py-3"
 >
-	<div class="flex items-center gap-2 sm:gap-4">
+	<div class="flex flex-wrap items-center gap-2 sm:gap-4">
 		<button
 			type="button"
 			onclick={() => goto("/admin/articles")}
@@ -142,7 +142,7 @@
 			>
 				<UserCircle2 class="h-3.5 w-3.5 text-zinc-400" />
 				{#if selectedAuthor}
-					<span class="max-w-24 truncate sm:max-w-32">{selectedAuthor.name}</span>
+					<span class="max-w-24 truncate sm:max-w-32" title={selectedAuthor.name}>{selectedAuthor.name}</span>
 				{:else}
 					<span class="text-zinc-400">No author</span>
 				{/if}
@@ -198,7 +198,7 @@
 		</Combobox.Root>
 	</div>
 
-	<div class="flex items-center gap-1 sm:gap-2">
+	<div class="flex w-full items-center gap-1 sm:w-auto sm:gap-2">
 		<!-- Preview Button -->
 		{#if articleId}
 			<button
@@ -241,7 +241,7 @@
 		<button
 			type="submit"
 			disabled={isSubmitting || saveSuccess}
-			class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-white transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 sm:gap-2 sm:px-4 sm:py-2 {published
+			class="inline-flex w-full items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-white transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:gap-2 sm:px-4 sm:py-2 {published
 				? 'bg-emerald-600 hover:bg-emerald-700'
 				: 'bg-zinc-900 hover:bg-zinc-800'}"
 		>

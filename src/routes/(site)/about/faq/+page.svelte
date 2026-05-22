@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { HelpCircle } from "lucide-svelte";
+	import { HelpCircle, MessageCircle } from "lucide-svelte";
 	import { safeJsonLd } from "$lib/shared/logic/json-ld";
 
 	type FAQ = {
@@ -73,7 +73,10 @@
 		name="description"
 		content="ut.code(); についてよくある質問とその回答をまとめました。入部方法、活動内容、参加条件などについてご確認いただけます。"
 	/>
-	<meta property="og:description" content="ut.code(); についてよくある質問とその回答をまとめました。入部方法、活動内容、参加条件などについてご確認いただけます。" />
+	<meta
+		property="og:description"
+		content="ut.code(); についてよくある質問とその回答をまとめました。入部方法、活動内容、参加条件などについてご確認いただけます。"
+	/>
 	{@html `<script type="application/ld+json">${safeJsonLd({
 		"@context": "https://schema.org",
 		"@type": "FAQPage",
@@ -85,26 +88,55 @@
 	})}</script>`}
 </svelte:head>
 
+<!--
+	faq page — page with accordion of Q&A.
+	Header has dot-grid backdrop + mono coordinate label.
+	Each item uses mono "Q. / A." prefixes for a technical doc feel.
+-->
+
 <!-- Header -->
-<section class="border-b border-zinc-200 bg-zinc-50/50 py-16">
-	<div class="mx-auto max-w-6xl px-6">
+<section class="relative overflow-hidden border-b border-zinc-200 bg-zinc-50/60 py-20">
+	<div
+		class="pointer-events-none absolute inset-0 opacity-50"
+		style="background-image: radial-gradient(circle, rgb(24 24 27 / 0.08) 1px, transparent 1px); background-size: 24px 24px;"
+		aria-hidden="true"
+	></div>
+	<div class="relative mx-auto max-w-6xl px-6">
 		<div
-			class="mb-3 font-[JetBrains_Mono,monospace] text-xs font-medium tracking-widest text-primary uppercase"
+			class="mb-3 flex items-center gap-3 font-mono text-[11px] tracking-widest text-primary uppercase"
 		>
-			FAQ
+			<span class="inline-block h-px w-6 bg-primary"></span>
+			<span>// faq</span>
+			<span class="text-zinc-400">· {faqs.length} questions</span>
 		</div>
-		<h1 class="mb-2 text-3xl font-bold">よくある質問</h1>
-		<p class="text-zinc-500">ut.code(); についてよくある質問とその回答をまとめました。</p>
+		<h1 class="text-4xl leading-tight font-bold tracking-tight text-zinc-900 sm:text-5xl">
+			よくある質問
+		</h1>
+		<p class="mt-4 max-w-2xl text-lg text-zinc-600">
+			ut.code(); についてよくある質問とその回答をまとめました。
+		</p>
 	</div>
 </section>
 
 <div class="mx-auto max-w-4xl px-6 py-12">
 	<!-- Introduction -->
-	<div class="mb-12 rounded-2xl border border-primary/20 bg-primary/5 p-8">
+	<div
+		class="relative mb-10 overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-primary/[0.04] to-transparent p-8"
+	>
+		<span
+			class="pointer-events-none absolute top-0 left-0 h-3 w-3 border-t border-l border-primary"
+			aria-hidden="true"
+		></span>
+		<span
+			class="pointer-events-none absolute right-0 bottom-0 h-3 w-3 border-r border-b border-primary"
+			aria-hidden="true"
+		></span>
 		<div class="flex items-start gap-4">
 			<HelpCircle class="h-6 w-6 shrink-0 text-primary" />
 			<div>
-				<h2 class="mb-2 text-xl font-bold">お探しの情報が見つかりませんか?</h2>
+				<h2 class="mb-2 text-xl font-bold tracking-tight">
+					お探しの情報が見つかりませんか?
+				</h2>
 				<p class="text-zinc-700">
 					このページで解決しない疑問や質問がありましたら、GitHub や X (Twitter)
 					からお気軽にお問い合わせください。
@@ -114,36 +146,51 @@
 	</div>
 
 	<!-- FAQ Items -->
-	<div class="space-y-3">
+	<div class="space-y-2">
 		{#each faqs as faq, i (i)}
-			<div class="collapse-plus collapse rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md">
+			<div
+				class="collapse-plus collapse rounded-2xl border border-zinc-200 bg-white transition-colors hover:border-primary/30"
+			>
 				<input type="radio" name="faq-accordion" />
-				<div class="collapse-title text-lg font-semibold">
+				<div class="collapse-title text-base font-semibold sm:text-lg">
+					<span class="mr-3 font-mono text-xs tracking-widest text-primary">
+						Q{String(i + 1).padStart(2, "0")}.
+					</span>
 					{faq.question}
 				</div>
 				<div class="collapse-content">
-					<p class="leading-relaxed text-zinc-700">
-						{faq.answer}
-					</p>
+					<div class="flex gap-3 pt-2">
+						<span class="font-mono text-xs tracking-widest text-zinc-400">A.</span>
+						<p class="leading-relaxed text-zinc-700">{faq.answer}</p>
+					</div>
 				</div>
 			</div>
 		{/each}
 	</div>
 
 	<!-- CTA -->
-	<div class="mt-12 rounded-2xl border border-zinc-200/50 bg-white/80 backdrop-blur-md p-8 text-center">
-		<h2 class="mb-4 text-xl font-bold">他にご質問はありますか?</h2>
-		<p class="mb-6 text-zinc-500">お気軽にお問い合わせください。メンバー一同、お待ちしています。</p>
-		<div class="flex flex-wrap justify-center gap-4">
+	<div
+		class="relative mt-12 overflow-hidden rounded-2xl border border-zinc-200 bg-white p-8 text-center"
+	>
+		<div
+			class="mx-auto mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10"
+		>
+			<MessageCircle class="h-6 w-6 text-primary" />
+		</div>
+		<h2 class="mb-3 text-xl font-bold tracking-tight">他にご質問はありますか?</h2>
+		<p class="mb-6 text-zinc-500">
+			お気軽にお問い合わせください。メンバー一同、お待ちしています。
+		</p>
+		<div class="flex flex-wrap justify-center gap-3">
 			<a
 				href="/join"
-				class="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-zinc-900 transition-all hover:bg-primary/90"
+				class="inline-flex min-h-11 items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-zinc-950 transition-all hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:outline-none"
 			>
 				入部案内を見る
 			</a>
 			<a
 				href="/"
-				class="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-6 py-3 font-semibold text-zinc-700 transition-colors hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
+				class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-zinc-200 bg-white px-6 py-3 font-semibold text-zinc-700 transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:outline-none"
 			>
 				トップページへ
 			</a>

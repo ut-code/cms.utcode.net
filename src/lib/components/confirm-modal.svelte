@@ -115,7 +115,7 @@
 			onkeydown={handleModalKeydown}
 			role="dialog"
 			aria-modal="true"
-			aria-labelledby="modal-title"
+			aria-labelledby="confirm-modal-title"
 			tabindex="-1"
 		>
 			<!-- Icon -->
@@ -130,7 +130,7 @@
 			</div>
 
 			<!-- Title -->
-			<h3 id="modal-title" class="mt-4 text-center text-base font-semibold text-zinc-900">
+			<h3 id="confirm-modal-title" class="mt-4 text-center text-base font-semibold text-zinc-900">
 				{opts.title}
 			</h3>
 
